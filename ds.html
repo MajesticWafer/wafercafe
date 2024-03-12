@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>DSP | Redirect</title>
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500&display=swap" rel="stylesheet">
+ <link rel="icon" type="image/jpeg" href="IMG_0085.jpeg">
+ <style>
+   body {
+    background-color: #3929a3;
+   font-family: 'Lexend', sans-serif;
+   color: white;
+   margin: 0;
+   overflow: hidden; /* disable scrolling */
+ }
+ h1 {
+   text-align: center;
+   font-style: italic;
+   margin-top: 0;
+ }
+ #header {
+   background-color: #2b1f7a;
+   height: 75px;
+   display: flex;
+   justify-content: space-between;
+   align-items: center;
+   padding: 0 20px;
+   position: relative;
+ }
+ #header h1 {
+   margin: 0;
+ }
+ #header h1 a {
+   color: white;
+   text-decoration: none;
+ }
+ .button-container {
+   position: absolute;
+   top: 100px; /* Spaced below the header */
+   left: 20px; /* Spaced from the left of the screen */
+   display: flex;
+   flex-wrap: wrap; /* Allow buttons to wrap into multiple rows */
+   flex-direction: row; /* Align buttons horizontally */
+ }
+ .button-container button {
+   border-radius: 10px;
+   border: none;
+   padding: 12.5px 20px; /* Keep the original button size */
+   color: white;
+   background-color: #0b1d42;
+   margin: 12.5px; /* Add margin between buttons */
+   transition: transform 0.2s, background-color 0.2s; /* Add transition for hover and click effects */
+ }
+ .img-container {
+   position: absolute;
+   top: 200px; /* Spaced below the header */
+   left: 47.5px; /* Spaced from the left of the screen */
+   display: flex;
+   flex-wrap: wrap; /* Allow buttons to wrap into multiple rows */
+   flex-direction: row; /* Align buttons horizontally */
+ }
+ img {
+  border-radius: 6.25%;
+ }
+  </style>
+</head>
+<body>
+ <div id="header">
+    <h1>DSP | Redirect Page</h1>
+    <p>Press "ROMS" to get roms, "Instructions" to learn how to use the tool, and "DS Player" to open the emulator.</p>
+ </div>
+ <div class="button-container">
+  <button onclick="window.location.href='https://github.com/MajesticWafer/majesticwafer.github.io/tree/main/roms'">ROMS</button>
+  <button onclick="window.location.href='https://github.com/MajesticWafer/majesticwafer.github.io/tree/main/roms/README.md'">Instructions</button>
+  <button onclick="window.location.href='https://majesticwafer.github.io/dsp'">DS Player</button>
+ </div>
+ <div class="img-container">
+  <img src="assets/image/sm64ds-1.jpeg" alt="SM64 DS Gameplay 1" style="width:17.5%;height:17.5%;">
+  <img src="assets/image/sm64ds-2.jpeg" alt="SM64 DS Gameplay 2" style="width:17.5%;height:17.5%;">
+  <img src="assets/image/sm64ds-3.jpeg" alt="SM64 DS Gameplay 3" style="width:17.5%;height:17.5%;">
+ </div>
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Emulators</title>
+  <style>
+    body {
+      background-color: #3929a3;
+      font-family: 'Lexend', sans-serif;
+      color: white;
+      margin: 0;
+      overflow: hidden; /* disable scrolling */
+    }
+    h1 {
+      text-align: center;
+      font-style: italic;
+      margin-top: 0;
+    }
+    #header {
+      background-color: #2b1f7a;
+      height: 75px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+      position: relative;
+    }
+    #header h1 {
+      margin: 0;
+    }
+    #header h1 a {
+      color: white;
+      text-decoration: none;
+    }
+    #content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: calc(100vh - 200px); /* Adjust height as needed */
+    }
+    .back-button {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background-color: #0b1d42;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: transform 0.2s, background-color 0.2s;
+    }
+    .back-button:hover {
+      background-color: #0d2e5b;
+      transform: scale(1.05);
+    }
+    .featured-games {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .featured-games ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    .featured-games li {
+      margin: 10px 0;
+    }
+    .featured-games a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.2s;
+    }
+    .featured-games a:hover {
+      color: #0d2e5b;
+    }
+  </style>
+</head>
+<body>
+  <div id="header">
+    <h1><a href="#">Emulators</a></h1>
+  </div>
+  <div id="content">
+    <div class="featured-games">
+      <h2>Emulators:</h2>
+      <ul>
+        <li><a href="ds.html">DS Player</a></li>
+        <li><a href="https://majesticwafer.github.io/N64Wasm/">N64Wasm</a></li>
+      </ul>
+    </div>
+    <a class="back-button" href="index.html">Back to Games</a>
+  </div>
+</body>
+</html>
