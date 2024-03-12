@@ -1,14 +1,13 @@
 # 𝐓𝐡𝐞 𝐖𝐚𝐟𝐞𝐫 𝐂𝐚𝐟𝐞
 
-A simple, yet fun-packed game center.
+A simple, yet fun-packed g4me center.
 
 ## New Additions
 
 none lmao ;-;
 
 Features
-- Game sorting (beta)
-- Totally W interface no 🧢 not trippin'
+- G4me sorting
 
 ## Info
 
