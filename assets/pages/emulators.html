@@ -8,14 +8,74 @@
   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500&display=swap" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
+    body {
+      background-color: #222222;
+      font-family: 'Lexend', sans-serif;
+      color: white;
+      margin: 0;
+      overflow-x: hidden; /* no horizontal scrolling */
+      overflow-y: hidden; /* no vertical scrolling */
+    }
+    h1 {
+      text-align: center;
+      font-style: italic;
+      margin-top: 0;
+    }
+    #header {
+      background-color: #323232;
+      height: 75px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 20px;
+      position: relative;
+    }
+    #header h1 {
+      margin: 0;
+    }
+    #header h1 a {
+      color: white;
+      text-decoration: none;
+    }
     #emulators {
       text-align: center;
-      margin-top: 50px;
+      margin-top: 50px; /* Adjust as needed */
+    }
+    .button-container {
+      border-radius: 10px;
+      border: none;
+      padding: 12.5px 20px; /* button sizing */
+      color: white;
+      background-color: #414141;
+      margin: 12.5px;
+      transition: transform 0.2s, background-color 0.2s;
+      width: 135px;
+      height: 90px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+    }
+    .button-container:hover {
+      background-color: #3E3E3E;
+      transform: scale(1.05);
     }
     #back-button {
       position: fixed;
       bottom: 10px;
       right: 10px;
+      border-radius: 10px;
+      border: none;
+      padding: 12.5px 20px; /* button sizing */
+      color: white;
+      background-color: #414141;
+      transition: transform 0.2s, background-color 0.2s;
+    }
+    #back-button:hover {
+      background-color: #3E3E3E;
+      transform: scale(1.05);
     }
   </style>
 </head>
@@ -26,9 +86,9 @@
 
   <div id="emulators">
     <h2>Emulators:</h2>
-    <button onclick="window.location.href='/ds_player.html'">DS Player</button>
-    <button onclick="window.location.href='/vba_player.html'">VBA Player</button>
-    <button onclick="window.location.href='/n64_wasm.html'">N64 Wasm</button>
+    <button class="button-container" onclick="window.location.href='/ds_player.html'">DS Player</button>
+    <button class="button-container" onclick="window.location.href='/vba_player.html'">VBA Player</button>
+    <button class="button-container" onclick="window.location.href='/n64_wasm.html'">N64 Wasm</button>
   </div>
 
   <button id="back-button" onclick="window.location.href='/index.html'">Back</button>
