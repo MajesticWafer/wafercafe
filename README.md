@@ -1,17 +1,21 @@
 # 𝐓𝐡𝐞 𝐖𝐚𝐟𝐞𝐫 𝐂𝐚𝐟𝐞
 
-A simple, yet fun-packed g4me center.
+A simple, yet fun-packed gam̷e center.
 
 ## New Additions
 
-none lmao ;-;
+- Cookie Clicker
+- Knife Hit
 
 Features
-- G4me sorting
+- Simple GUI
+- Gam̷e and Em̷ulator sorting
 
 ## Info
 
 Please star if you fork or find this useful.
+
+Made by MajesticWafer, 2023-2024
 
 ## Contribution
 
