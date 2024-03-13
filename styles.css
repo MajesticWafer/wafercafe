@@ -4,8 +4,8 @@
       font-family: 'Lexend', sans-serif;
       color: white;
       margin: 0;
-      overflow-x: hidden; /* Disable horizontal scrolling */
-      overflow-y: hidden; /* Disable vertical scrolling */
+      overflow-x: hidden; /* no horizontal scrolling */
+      overflow-y: hidden; /* no vertical scrolling */
     }
     h1 {
       text-align: center;
@@ -31,56 +31,56 @@
     }
     .container {
       position: absolute;
-      top: 100px; /* Spaced below the header */
-      left: 20px; /* Spaced from the left of the screen */
+      top: 100px;
+      left: 20px;
       display: flex;
       margin-right: 165px;
-      flex-wrap: wrap; /* Allow buttons to wrap into multiple rows */
-      flex-direction: row; /* Align buttons horizontally */
+      flex-wrap: wrap;
+      flex-direction: row;
     }
     .button-container {
       border-radius: 10px;
       border: none;
-      padding: 12.5px 20px; /* Keep the original button size */
+      padding: 12.5px 20px; /* button sizing */
       color: white;
       background-color: #0b1d42;
-      margin: 12.5px; /* Add margin between buttons */
-      transition: transform 0.2s, background-color 0.2s; /* Add transition for hover and click effects */
+      margin: 12.5px;
+      transition: transform 0.2s, background-color 0.2s;
       width: 135px;
       height: 90px;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center; /* Add this line to center the content vertically */
+      justify-content: center;
       text-align: center;
       box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
     }
     .button-container img {
-      width: calc(100% - 25px); /* Subtract the desired margin from the width */
+      width: calc(100% - 25px);
       height: calc(100% - 25px);
       object-fit: contain;
-      margin-bottom: 6px; /* Add the desired margin */
-      border-radius: 10px;
+      margin-bottom: 6px;
+      border-radius: 10vh;
     }
     .button-list .button-text {
-      transform: translateY(-35%); /* Vertically center the text */
+      transform: translateY(-35%);
     }
     .button-container-header {
       position: absolute;
       top: 5px;
-      right: 20px; /* Spaced from the left of the screen */
+      right: 20px;
       display: flex;
-      flex-wrap: wrap; /* Allow buttons to wrap into multiple rows */
-      flex-direction: row; /* Align buttons horizontally */
+      flex-wrap: wrap;
+      flex-direction: row;
     }
     .button-container-header button {
       border-radius: 10px;
       border: none;
-      padding: 12.5px 20px; /* Keep the original button size */
+      padding: 12.5px 20px; /* button sizing */
       color: white;
       background-color: #0b1d42;
-      margin: 12.5px; /* Add margin between buttons */
-      transition: transform 0.2s, background-color 0.2s; /* Add transition for hover and click effects */
+      margin: 12.5px;
+      transition: transform 0.2s, background-color 0.2s;
     }
     #button-container button:hover {
       background-color: #0d2e5b;
@@ -92,23 +92,23 @@
     }
     #sidebar {
       position: absolute;
-      top: 100px; /* Spaced below the header */
-      right: -250px; /* Initially off the screen */
-      background-color: #2b1f7a; /* Box color between header and body */
+      top: 100px;
+      right: -250px;
+      background-color: #2b1f7a;
       padding: 10px;
-      border-radius: 10px; /* Rounded corners for the box */
+      border-radius: 10px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      width: 125px; /* Narrower width */
-      height: 200px; /* Shorter height */
-      transition: right 0.5s; /* Add transition for smooth sliding */
+      width: 125px;
+      height: 200px;
+      transition: right 0.5s;
     }
     #sidebar.open {
-      right: 20px; /* Slide into open position */
-      overflow-x: hidden; /* Disable horizontal scrolling */
-      overflow-y: hidden; /* Disable vertical scrolling */
+      right: 20px;
+      overflow-x: hidden;
+      overflow-y: hidden;
     }
     #sidebar h2 {
       color: white;
@@ -120,13 +120,13 @@
       display: block;
       border: none;
       border-radius: 10px;
-      padding: 10px 30px; /* Wider buttons */
-      margin: 10px 0; /* Add margin between buttons */
+      padding: 10px 30px;
+      margin: 10px 0;
       background-color: #0b1d42;
       color: white;
       text-align: center;
       text-decoration: none;
-      transition: transform 0.2s, background-color 0.2s; /* Add transition for hover and click effects */
+      transition: transform 0.2s, background-color 0.2s;
     }
     #sidebar button:hover {
       background-color: #0d2e5b;
@@ -137,5 +137,5 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: calc(100vh - 200px); /* Adjust height as needed */
+      height: calc(100vh - 200px);
     }
