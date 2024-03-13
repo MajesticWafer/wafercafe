@@ -62,18 +62,6 @@
       margin-bottom: 6px; /* Add the desired margin */
       border-radius: 10px;
     }
-    .kb {
-      position: relative;
-      bottom: 0;
-      right: 0;
-      scale: 5%;
-    }
-    .gp {
-      position: relative;
-      bottom: 0;
-      right: 0;
-      scale: 11%;
-    }
     .button-list .button-text {
       transform: translateY(-35%); /* Vertically center the text */
     }
