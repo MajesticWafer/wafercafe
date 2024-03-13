@@ -44,13 +44,12 @@
     .button-container {
       border-radius: 10px;
       border: none;
-      padding: 12.5px 20px; /* button sizing */
+      padding: 8px 16px; /* button sizing */
       color: white;
       background-color: #414141;
       margin: 12.5px;
       transition: transform 0.2s, background-color 0.2s;
-      width: 135px;
-      height: 90px;
+      width: 28%;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -86,9 +85,9 @@
 
   <div id="emulators">
     <h2>Emulators:</h2>
-    <button class="button-container" onclick="window.location.href='/ds_player.html'">DS Player</button>
-    <button class="button-container" onclick="window.location.href='/vba_player.html'">VBA Player</button>
-    <button class="button-container" onclick="window.location.href='/n64_wasm.html'">N64 Wasm</button>
+    <button class="button-container" onclick="window.location.href='https://dsp-wc.vercel.app'">DS Player</button>
+    <button class="button-container" onclick="window.location.href='https://vba-wc.vercel.app'">VBA Player</button>
+    <button class="button-container" onclick="window.location.href='https://n64w-wc.vercel.app'">N64 Wasm</button>
   </div>
 
   <button id="back-button" onclick="window.location.href='/index.html'">Back</button>
