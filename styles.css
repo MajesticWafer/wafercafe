@@ -66,6 +66,7 @@
       position: absolute;
       bottom: 0;
       right: 0;
+      scale: 22%;
     }
     .button-list .button-text {
       transform: translateY(-35%); /* Vertically center the text */
