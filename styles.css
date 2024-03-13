@@ -60,6 +60,12 @@
       height: calc(100% - 25px);
       object-fit: contain;
       margin-bottom: 6px; /* Add the desired margin */
+      border-radius: 10px;
+    }
+    .small-image {
+      position: absolute;
+      bottom: 0;
+      right: 0;
     }
     .button-list .button-text {
       transform: translateY(-35%); /* Vertically center the text */
