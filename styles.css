@@ -1,6 +1,6 @@
      body {
       background-color: #222222;
-      background-image: linear-gradient(to bottom right, #2C2C2C 0%, #222222 100%);
+      background-image: linear-gradient(85deg, #2C2C2C, #222222);
       font-family: 'Lexend', sans-serif;
       color: white;
       margin: 0;
@@ -14,7 +14,7 @@
     }
     #header {
       background-color: #323232;
-      background-image: linear-gradient(to bottom right, #3F3F3F 0%, #323232 100%);
+      background-image: linear-gradient(85deg, #3F3F3F, #323232);
       height: 75px;
       display: flex;
       justify-content: space-between;
