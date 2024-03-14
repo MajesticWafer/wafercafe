@@ -60,7 +60,7 @@
       height: calc(100% - 25px);
       object-fit: contain;
       margin-bottom: 6px;
-      border-radius: 5% / 10%;
+      border-radius: 5vh / 10vh;
     }
     .button-list .button-text {
       transform: translateY(-35%);
