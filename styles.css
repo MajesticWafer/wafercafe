@@ -1,5 +1,6 @@
      body {
       background-color: #222222;
+      background-image: linear-gradient(to bottom right, #2C2C2C, #222222);
       font-family: 'Lexend', sans-serif;
       color: white;
       margin: 0;
@@ -13,6 +14,7 @@
     }
     #header {
       background-color: #323232;
+      background-image: linear-gradient(to bottom right, #3F3F3F, #323232);
       height: 75px;
       display: flex;
       justify-content: space-between;
@@ -58,7 +60,7 @@
       height: calc(100% - 25px);
       object-fit: contain;
       margin-bottom: 6px;
-      border-radius: 10vh;
+      border-radius: 5% / 10%;
     }
     .button-list .button-text {
       transform: translateY(-35%);
