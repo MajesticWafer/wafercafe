@@ -59,7 +59,7 @@
       height: calc(100% - 25px);
       object-fit: contain;
       margin-bottom: 6px;
-      border-radius: 10vh / 5vh;
+      border-radius: 5% / 15%;
       box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
     }
     .button-list .button-text {
