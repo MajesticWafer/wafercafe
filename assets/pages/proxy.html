@@ -10,9 +10,14 @@
 	  function run() { 
 	    const textToCopy='https://www.purposegames.com/game/western-europe-map-quiz-quiz';
 	    navigator.clipboard.writeText(textToCopy);
-	  }
-	  
-	  alert("The URL https://www.purposegames.com/game/western-europe-map-quiz-quiz has been copied to your clipboard. Paste it into the searchbar and hit return.")
+	      .then(() => {
+                console.log('Text copied successfully');
+              })
+              .catch((error) => {
+                alert('Error copying text: ', error);
+              });
+	    alert("The URL https://www.purposegames.com/game/western-europe-map-quiz-quiz has been copied to your clipboard. Paste it into the searchbar and hit return.");
+            }
         </script>
 </body>
 </html>
