@@ -17,6 +17,18 @@
     function toggleDropDown() {
       var dropdown = document.getElementById("dropdown");
       dropdown.classList.toggle("open");
+      var button = document.getElementById("toggleDropDown");
+
+      var isText1 = true;
+	    
+      button.addEventListener("click", function() {
+      if (isText1) {
+        button.textContent = "⌃ Gam̷e Filtering ⌃";
+      } else {
+        button.textContent = "⌄ Gam̷e Filtering ⌄";
+      }
+      isText1 = !isText1;
+  });
     }
   </script>
 </head>
@@ -24,7 +36,7 @@
   <div id="header">
     <h1><a href="#">The Wafer Café</a></h1>
     <div class="button-container-header">
-      <button onclick="toggleDropDown()">Gam̷e Filtering</button>
+      <button id="toggleDropDown" onclick="toggleDropDown()">⌄ Gam̷e Filtering ⌄</button>
     </div>
   </div>
   <div class="container">
