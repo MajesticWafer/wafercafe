@@ -19,15 +19,21 @@
       sidebar.classList.toggle("open");
     }
   </script>
+  <script>
+    function catAnim() {
+      var cat = document.getElementById("cat");
+      cat.classList.add("show");
+    }
+  </script>
 </head>
-<body>
+<body onload="catAnim()>
   <div id="header">
     <h1><a href="#">The Wafer Café</a></h1>
     <div class="button-container-header">
       <button onclick="toggleSidebar()">Sidebar</button>
     </div>
   </div>
-  <div class="container">
+  <div id="cat" class="container">
     <div class="button-container" onclick="location.href='assets/pages/monkeymart.html'">
 	<img src="/assets/icon/monkey-mart.jpeg" alt="Monkey Mart">
 	<span class="button-text">Monkey Mart</span>
