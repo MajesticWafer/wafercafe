@@ -110,7 +110,7 @@
     }
     #dropdown.open {
       opacity: 1;
-      top: 20px;
+      top: 40px;
       overflow-x: hidden;
       overflow-y: hidden;
     }
