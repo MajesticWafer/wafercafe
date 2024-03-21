@@ -28,21 +28,21 @@
       text-decoration: none;
     }
     #container {
+      position: absolute;
+      top: 100px;
       opacity: 0;
       left: -1000px;
+      display: flex;
+      margin-right: 165px;
+      flex-wrap: wrap;
+      flex-direction: row;
     }
     #container.show {
       opacity: 1;
       left: 20px;
     }
     .container {
-      position: absolute;
-      top: 100px;
-      left: 20px;
-      display: flex;
-      margin-right: 165px;
-      flex-wrap: wrap;
-      flex-direction: row;
+      
     }
     .button-container {
       border-radius: 10px;
