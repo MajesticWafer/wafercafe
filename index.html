@@ -14,9 +14,9 @@
    <link rel="manifest" href="/manifest.json">
    <link rel="stylesheet" href="styles.css">
    <script>
-    function toggleSidebar() {
-      var sidebar = document.getElementById("sidebar");
-      sidebar.classList.toggle("open");
+    function toggleDropDown() {
+      var dropdown = document.getElementById("dropdown");
+      dropdown.classList.toggle("open");
     }
   </script>
 </head>
@@ -24,7 +24,7 @@
   <div id="header">
     <h1><a href="#">The Wafer Café</a></h1>
     <div class="button-container-header">
-      <button onclick="toggleSidebar()">Gam̷e Filtering</button>
+      <button onclick="toggleDropDown()">Gam̷e Filtering</button>
     </div>
   </div>
   <div class="container">
@@ -70,9 +70,9 @@
     </div>
     <!-- Add more buttons here as needed -->
   </div>
-  <div id="sidebar">
+  <div id="dropdown">
     <h2>Sort By</h2>
-    <button onclick="location.href='/'"><b>Games</b></button>
+    <button onclick="location.href='/'"><i>Games</i></button>
     <button onclick="location.href='assets/pages/emulators.html'">Emulators</button>
   </div>
 </body>
