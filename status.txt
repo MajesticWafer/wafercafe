@@ -1,0 +1,30 @@
+games {
+
+monkey-mart
+jetpack-joyride
+google-solitare
+sm64
+basket-bros
+crossy-road
+blumgi-rocket
+cookie-clicker
+knife-hit
+tiny-fishing
+burrito-bison
+
+}
+
+status {
+
+old
+old
+old
+old
+old
+old
+old
+old
+old
+new
+
+}
