@@ -1,7 +1,7 @@
      body {
       background-color: #222222;
       background-image: linear-gradient(85deg, #323232, #222222);
-      font-family: 'Lexend', sans-serif;
+      font-family: "Rubik Scribble", system-ui;
       color: white;
       margin: 0;
       overflow-x: hidden; /* no horizontal scrolling */
@@ -53,6 +53,7 @@
       justify-content: center;
       text-align: center;
       box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+      font-family: "Rubik Scribble", system-ui;
     }
     .button-container img {
       width: calc(100% - 25px);
@@ -60,6 +61,7 @@
       object-fit: contain;
       margin-bottom: 6px;
       box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+      border-radius: 20% / 5%;
     }
     .button-list .button-text {
       transform: translateY(-35%);
