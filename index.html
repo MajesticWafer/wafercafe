@@ -2,52 +2,21 @@
 <html>
 <head>
   <title>Wafer Café</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-title" content="Wafer Cafe">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  <link rel="manifest" href="/manifest.json">
-  <link rel="stylesheet" href="styles.css">
-      <script>
+   <link rel="preconnect" href="https://fonts.googleapis.com">
+   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+   <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500&display=swap" rel="stylesheet">
+   <link rel="icon" type="image/jpeg" href="assets/icon/favicon.jpeg"
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <meta name="apple-mobile-web-app-capable" content="yes">
+   <meta name="apple-mobile-web-app-title" content="Wafer Cafe">
+   <meta name="apple-mobile-web-app-status-bar-style" content="black">
+   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+   <link rel="manifest" href="/manifest.json">
+   <link rel="stylesheet" href="styles.css">
+   <script>
     function toggleDropDown() {
       var dropdown = document.getElementById("dropdown");
       dropdown.classList.toggle("open");
-    }
-
-    window.onload = function() {
-      fetch('status.txt')
-        .then(response => response.text())
-        .then(text => {
-          var gameStatus = {};
-          var lines = text.trim().split('\n');
-          lines.forEach(line => {
-            var parts = line.trim().split(',');
-            if (parts.length === 2) {
-              gameStatus[parts[0].replace(/"/g, '').trim()] = parts[1].replace(/"/g, '').trim();
-            }
-          });
-          updateButtonStatus(gameStatus);
-        })
-        .catch(error => console.error('Error fetching status:', error));
-    };
-
-    function updateButtonStatus(gameStatus) {
-      for (var gameId in gameStatus) {
-        if (gameStatus.hasOwnProperty(gameId)) {
-          var buttonContainer = document.getElementById(gameId);
-          if (buttonContainer) {
-            var gameNameElement = buttonContainer.querySelector('.button-text');
-            var gameName = gameNameElement.textContent.trim();
-            if (gameStatus[gameId] === 'new') {
-              gameNameElement.textContent = gameName + ' (NEW!)';
-            }
-          }
-        }
-      }
     }
   </script>
 </head>
@@ -61,47 +30,43 @@
   <div class="container">
     <div class="button-container" onclick="location.href='assets/pages/monkeymart.html'">
 	<img src="/assets/icon/monkey-mart.jpeg" alt="Monkey Mart">
-	<span id="monkey-mart" class="button-text">Monkey Mart</span>
+	<span class="button-text">Monkey Mart</span>
     </div>
     <div class="button-container" onclick="location.href='assets/pages/jetpackjoyride.html'">
 	<img src="/assets/icon/jetpack-joyride.jpeg" alt="Jetpack Joyride">
-	<span id="jetpack-joyride" class="button-text">Jetpack Joyride</span>
+	<span class="button-text">Jetpack Joyride</span>
     </div>
     <div class="button-container" onclick="location.href='assets/pages/googlesolitaire.html'">
 	<img src="/assets/icon/google-solitaire.jpeg" alt="Google Solitaire">
-	<span id="google-solitare" class="button-text">Google Solitaire</span>
+	<span class="button-text">Google Solitaire</span>
     </div>
     <div class="button-container" onclick="location.href='assets/game/sm64js/index.html'">
         <img src="/assets/icon/sm64.jpeg" alt="Super Mario 64">
-        <span id="sm64" class="button-text">Super Mario 64</span>
+        <span class="button-text">Super Mario 64</span>
     </div>
     <div class="button-container" onclick="location.href='assets/game/basket-bros/index.html'">
 	<img src="/assets/icon/basket-bros.jpeg" alt="Basket Bros">
-	<span id="basket-bros" class="button-text">Basket Bros</span>
+	<span class="button-text">Basket Bros</span>
     </div>
     <div class="button-container" onclick="location.href='assets/pages/crossyroad.html'">
 	<img src="/assets/icon/crossy-road.jpeg" alt="Crossy Road">
-	<span id="crossy-road" class="button-text">Crossy Road</span>
+	<span class="button-text">Crossy Road</span>
     </div>
     <div class="button-container" onclick="location.href='assets/game/blumgi-rocket/index.html'">
 	<img src="/assets/icon/blumgi-rocket.jpeg" alt="Blumgi Rocket">
-	<span id="blumgi-rocket" class="button-text">Blumgi Rocket</span>
+	<span class="button-text">Blumgi Rocket</span>
     </div>
     <div class="button-container" onclick="location.href='assets/pages/cookie-clicker.html'">
 	<img src="/assets/icon/cookie-clicker.jpeg" alt="Cookie Clicker">
-	<span id="cookie-clicker" class="button-text">Cookie Clicker</span>
+	<span class="button-text">Cookie Clicker</span>
     </div>
     <div class="button-container" onclick="location.href='assets/pages/knifehit.html'">
 	<img src="/assets/icon/knifehit.jpeg" alt="Cookie Clicker">
-	<span id="knife-hit" class="button-text">Knife Hit</span>
+	<span class="button-text">Knife Hit</span>
     </div>
     <div class="button-container" onclick="location.href='assets/game/tiny-fishing/index.html'">
 	<img src="/assets/icon/tiny-fishing.jpeg" alt="Tiny Fishing">
-	<span id="tiny-fishing" class="button-text">Tiny Fishing</span>
-    </div>
-    <div class="button-container" onclick="location.href='assets/pages/burritobison.html'">
-	<img src="/assets/icon/burrito-bison.jpeg" alt="Burrito Bison">
-	<span id="burrito-bison" class="button-text">Burrito Bison</span>
+	<span class="button-text">Tiny Fishing</span>
     </div>
     <!-- Add more buttons here as needed -->
   </div>
