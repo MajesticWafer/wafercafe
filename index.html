@@ -12,7 +12,7 @@
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.json">
   <link rel="stylesheet" href="styles.css">
-    <script>
+      <script>
     function toggleDropDown() {
       var dropdown = document.getElementById("dropdown");
       dropdown.classList.toggle("open");
@@ -22,14 +22,12 @@
       fetch('status.txt')
         .then(response => response.text())
         .then(text => {
-          var lines = text.trim().split('\n');
           var gameStatus = {};
-          var currentGame = '';
+          var lines = text.trim().split('\n');
           lines.forEach(line => {
-            if (line.startsWith('game {')) {
-              currentGame = line.substring(6, line.length - 2).trim();
-            } else if (line.startsWith('*')) {
-              gameStatus[line.substring(1).trim()] = currentGame;
+            var parts = line.trim().split(',');
+            if (parts.length === 2) {
+              gameStatus[parts[0].replace(/"/g, '').trim()] = parts[1].replace(/"/g, '').trim();
             }
           });
           updateButtonStatus(gameStatus);
