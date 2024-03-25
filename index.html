@@ -12,7 +12,7 @@
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="manifest" href="/manifest.json">
   <link rel="stylesheet" href="styles.css">
-   <script>
+    <script>
     function toggleDropDown() {
       var dropdown = document.getElementById("dropdown");
       dropdown.classList.toggle("open");
@@ -29,7 +29,7 @@
             if (line.startsWith('game {')) {
               currentGame = line.substring(6, line.length - 2).trim();
             } else if (line.startsWith('*')) {
-              gameStatus[currentGame] = line.substring(1).trim();
+              gameStatus[line.substring(1).trim()] = currentGame;
             }
           });
           updateButtonStatus(gameStatus);
@@ -38,15 +38,17 @@
     };
 
     function updateButtonStatus(gameStatus) {
-      var buttons = document.querySelectorAll('.button-container .button-text');
-      buttons.forEach(button => {
-        var gameId = button.textContent.trim();
+      for (var gameId in gameStatus) {
         if (gameStatus.hasOwnProperty(gameId)) {
-          if (gameStatus[gameId] === 'new') {
-            button.textContent += ' (NEW!)';
+          var button = document.getElementById(gameId);
+          if (button) {
+            var gameName = button.textContent.trim();
+            if (gameStatus[gameId] === 'new') {
+              button.textContent = gameName + ' (NEW!)';
+            }
           }
         }
-      });
+      }
     }
   </script>
 </head>
@@ -60,47 +62,47 @@
   <div class="container">
     <div class="button-container" onclick="location.href='assets/pages/monkeymart.html'">
 	<img src="/assets/icon/monkey-mart.jpeg" alt="Monkey Mart">
-	<span class="button-text">Monkey Mart</span>
+	<span id="monkey-mart" class="button-text">Monkey Mart</span>
     </div>
     <div class="button-container" onclick="location.href='assets/pages/jetpackjoyride.html'">
 	<img src="/assets/icon/jetpack-joyride.jpeg" alt="Jetpack Joyride">
-	<span class="button-text">Jetpack Joyride</span>
+	<span id="jetpack-joyride" class="button-text">Jetpack Joyride</span>
     </div>
     <div class="button-container" onclick="location.href='assets/pages/googlesolitaire.html'">
 	<img src="/assets/icon/google-solitaire.jpeg" alt="Google Solitaire">
-	<span class="button-text">Google Solitaire</span>
+	<span id="google-solitare" class="button-text">Google Solitaire</span>
     </div>
     <div class="button-container" onclick="location.href='assets/game/sm64js/index.html'">
         <img src="/assets/icon/sm64.jpeg" alt="Super Mario 64">
-        <span class="button-text">Super Mario 64</span>
+        <span id="sm64" class="button-text">Super Mario 64</span>
     </div>
     <div class="button-container" onclick="location.href='assets/game/basket-bros/index.html'">
 	<img src="/assets/icon/basket-bros.jpeg" alt="Basket Bros">
-	<span class="button-text">Basket Bros</span>
+	<span id="basket-bros" class="button-text">Basket Bros</span>
     </div>
     <div class="button-container" onclick="location.href='assets/pages/crossyroad.html'">
 	<img src="/assets/icon/crossy-road.jpeg" alt="Crossy Road">
-	<span class="button-text">Crossy Road</span>
+	<span id="crossy-road" class="button-text">Crossy Road</span>
     </div>
     <div class="button-container" onclick="location.href='assets/game/blumgi-rocket/index.html'">
 	<img src="/assets/icon/blumgi-rocket.jpeg" alt="Blumgi Rocket">
-	<span class="button-text">Blumgi Rocket</span>
+	<span id="blumgi-rocket" class="button-text">Blumgi Rocket</span>
     </div>
     <div class="button-container" onclick="location.href='assets/pages/cookie-clicker.html'">
 	<img src="/assets/icon/cookie-clicker.jpeg" alt="Cookie Clicker">
-	<span class="button-text">Cookie Clicker</span>
+	<span id="cookie-clicker" class="button-text">Cookie Clicker</span>
     </div>
     <div class="button-container" onclick="location.href='assets/pages/knifehit.html'">
 	<img src="/assets/icon/knifehit.jpeg" alt="Cookie Clicker">
-	<span class="button-text">Knife Hit</span>
+	<span id="knife-hit" class="button-text">Knife Hit</span>
     </div>
     <div class="button-container" onclick="location.href='assets/game/tiny-fishing/index.html'">
 	<img src="/assets/icon/tiny-fishing.jpeg" alt="Tiny Fishing">
-	<span class="button-text">Tiny Fishing</span>
+	<span id="tiny-fishing" class="button-text">Tiny Fishing</span>
     </div>
     <div class="button-container" onclick="location.href='assets/pages/burritobison.html'">
 	<img src="/assets/icon/burrito-bison.jpeg" alt="Burrito Bison">
-	<span class="button-text">Burrito Bison</span>
+	<span id="burrito-bison" class="button-text">Burrito Bison</span>
     </div>
     <!-- Add more buttons here as needed -->
   </div>
