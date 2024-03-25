@@ -1,30 +1,31 @@
 games {
 
-monkey-mart
-jetpack-joyride
-google-solitare
-sm64
-basket-bros
-crossy-road
-blumgi-rocket
-cookie-clicker
-knife-hit
-tiny-fishing
-burrito-bison
+"monkey-mart", 1;
+"jetpack-joyride", 2;
+"google-solitare", 3;
+"sm64", 4;
+"basket-bros", 5;
+"crossy-road", 6;
+"blumgi-rocket", 7;
+"cookie-clicker", 8;
+"knife-hit", 9;
+"tiny-fishing", 10;
+"burrito-bison", 11;
 
 }
 
 status {
 
-old
-old
-old
-old
-old
-old
-old
-old
-old
-new
+"old", 1;
+"old", 2;
+"old", 3;
+"old", 4;
+"old", 5;
+"old", 6;
+"old", 7;
+"old", 8;
+"old", 9;
+"old", 10;
+"new", 11;
 
 }
