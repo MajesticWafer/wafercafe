@@ -38,11 +38,12 @@
     function updateButtonStatus(gameStatus) {
       for (var gameId in gameStatus) {
         if (gameStatus.hasOwnProperty(gameId)) {
-          var button = document.getElementById(gameId);
-          if (button) {
-            var gameName = button.textContent.trim();
+          var buttonContainer = document.getElementById(gameId);
+          if (buttonContainer) {
+            var gameNameElement = buttonContainer.querySelector('.button-text');
+            var gameName = gameNameElement.textContent.trim();
             if (gameStatus[gameId] === 'new') {
-              button.textContent = gameName + ' (NEW!)';
+              gameNameElement.textContent = gameName + ' (NEW!)';
             }
           }
         }
