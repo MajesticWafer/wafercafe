@@ -17,6 +17,37 @@
       var dropdown = document.getElementById("dropdown");
       dropdown.classList.toggle("open");
     }
+
+    window.onload = function() {
+      fetch('status.txt')
+        .then(response => response.text())
+        .then(text => {
+          var lines = text.trim().split('\n');
+          var gameStatus = {};
+          var currentGame = '';
+          lines.forEach(line => {
+            if (line.startsWith('game {')) {
+              currentGame = line.substring(6, line.length - 2).trim();
+            } else if (line.startsWith('*')) {
+              gameStatus[currentGame] = line.substring(1).trim();
+            }
+          });
+          updateButtonStatus(gameStatus);
+        })
+        .catch(error => console.error('Error fetching status:', error));
+    };
+
+    function updateButtonStatus(gameStatus) {
+      var buttons = document.querySelectorAll('.button-container .button-text');
+      buttons.forEach(button => {
+        var gameId = button.textContent.trim();
+        if (gameStatus.hasOwnProperty(gameId)) {
+          if (gameStatus[gameId] === 'new') {
+            button.textContent += ' (NEW!)';
+          }
+        }
+      });
+    }
   </script>
 </head>
 <body>
