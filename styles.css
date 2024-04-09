@@ -7,6 +7,7 @@ body {
   color: white;
   margin: 0;
   overflow-x: hidden;
+  transition: background-color 0.5s ease;
 }
 
 body.dark-theme {
