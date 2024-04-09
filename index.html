@@ -79,5 +79,47 @@
       <button onclick="location.href='/'"><i>Games</i></button>
       <button onclick="location.href='assets/pages/emulators.html'">Emulators</button>
   </div>
+  <div id="info-button" class="info-button">
+    <div class="info-content">
+      <a href="#" class="info-item" onclick="openPage('about')">About</a>
+      <a href="#" class="info-item" onclick="openPage('contact')">Contact</a>
+      <a href="#" class="info-item" onclick="openPage('github')">GitHub</a>
+    </div>
+  </div>
+  <script>
+    const infoButton = document.getElementById('info-button');
+const infoContent = document.querySelector('.info-content');
+
+infoButton.addEventListener('click', toggleInfo);
+
+function toggleInfo() {
+  infoContent.style.display = infoContent.style.display === 'block' ? 'none' : 'block';
+}
+
+document.addEventListener('click', function(event) {
+  const isClickInside = infoButton.contains(event.target) || infoContent.contains(event.target);
+  
+  if (!isClickInside) {
+    infoContent.style.display = 'none';
+  }
+});
+
+function openPage(page) {
+  switch (page) {
+    case 'about':
+      location.href = 'about.html';
+      break;
+    case 'contact':
+      location.href = 'contact.html';
+      break;
+    case 'github':
+      window.location.href = 'https://github.com/MajesticWafer/wafercafe';
+      break;
+    default:
+      break;
+  }
+}
+
+  </script>
 </body>
 </html>
