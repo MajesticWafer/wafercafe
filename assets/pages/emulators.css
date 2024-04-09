@@ -47,60 +47,53 @@ h1 {
   text-decoration: none;
 }
 
-.container {
-  position: absolute;
-  top: 100px;
-  left: 20px;
-  display: flex;
-  margin-right: 165px;
-  flex-wrap: wrap;
-  flex-direction: row;
+#emulators {
+  text-align: center;
+  margin-top: 50px;
 }
 
 .button-container {
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  margin: 0;
+  border-radius: 10px;
+  padding: 8px 16px; /* button sizing */
+  color: white;
+  background-color: #d6caff;
+  margin: 12.5px;
+  transition: transform 0.2s, background-color 0.2s;
+  width: 28%;
+  height: 28%;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+  left: 22%;
 }
 
-.button-container button {
+.button-container:hover {
+  background-color: #d0c2ff;
+  transform: scale(1.05);
+}
+
+#back-button {
+  position: fixed;
+  bottom: 10px;
+  right: 10px;
   border-radius: 10px;
   border: none;
   padding: 12.5px 20px; /* button sizing */
   color: white;
   background-color: #d6caff;
-  margin: 12.5px;
   transition: transform 0.2s, background-color 0.2s;
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
-  font-family: "Poppins", sans-serif;
-  font-weight: 500;
 }
 
-
-.button-container back {
-  right: 0;
-  bottom: 0;
-  margin: 1em !important;
+#back-button:hover {
+  background-color: #d0c2ff;
+  transform: scale(1.05);
 }
 
 .button-list .button-text {
   transform: translateY(-35%);
-}
-
-#button-container button:hover {
-  background-color: #d0c2ff;
-  transform: scale(1.05);
-}
-
-#button-container-header button:hover {
-  background-color: #d0c2ff;
-  transform: scale(1.05);
 }
 
 #content {
