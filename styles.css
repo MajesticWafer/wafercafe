@@ -1,12 +1,12 @@
 body {
     background-color: #222222;
-    background-image: linear-gradient(85deg, #555555, #222222);
+    background-image: linear-gradient(85deg, #444444, #222222);
     background-size: 400% 400%; /* Increase the size of the background to create space for animation */
-    animation: gradientAnimation 10s ease infinite; /* Adjust the animation duration as per your preference */
+    animation: gradientAnimation 3s ease infinite;
     font-family: "Poppins", sans-serif;
     color: white;
     margin: 0;
-    overflow-x: hidden; /* no horizontal scrolling */
+    overflow-x: hidden;
 }
 
 @keyframes gradientAnimation {
