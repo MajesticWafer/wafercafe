@@ -9,6 +9,17 @@ body {
   overflow-x: hidden;
 }
 
+body.dark-theme {
+  background-color: #222222;
+  background-image: linear-gradient(85deg, #454545, #222222);
+  background-size: 400% 400%; /* Increase the size of the background to create space for animation */
+  animation: gradientAnimation 4.5s ease infinite;
+  font-family: "Poppins", sans-serif;
+  color: white;
+  margin: 0;
+  overflow-x: hidden;
+}
+
 @keyframes gradientAnimation {
   0% {
     background-position: 0% 50%;
