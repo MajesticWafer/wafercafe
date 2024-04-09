@@ -20,7 +20,7 @@
     }
   </script>
 </head>
-<body
+<body>
   <div id="header">
     <h1><a href="#">The Wafer Café</a></h1>
     <div class="button-container-header">
@@ -86,14 +86,13 @@
   <script>
     const themeToggle = document.getElementById('themeToggle');
 
-themeToggle.addEventListener('change', function() {
-    if (this.checked) {
-        document.body.classList.add('dark-theme');
-    } else {
-        document.body.classList.remove('dark-theme');
-    }
-});
-
+    themeToggle.addEventListener('change', function() {
+        if (this.checked) {
+            document.body.classList.add('dark-theme');
+        } else {
+            document.body.classList.remove('dark-theme');
+        }
+    });
   </script>
 </body>
 </html>
