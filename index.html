@@ -83,20 +83,17 @@
       <button onclick="location.href='/'"><i>Games</i></button>
       <button onclick="location.href='assets/pages/emulators.html'">Emulators</button>
   </div>
-  <div id="overlay"></div>
   <script>
     const themeToggle = document.getElementById('themeToggle');
-const body = document.body;
+    const body = document.body;
 
-themeToggle.addEventListener('change', function() {
-    if (this.checked) {
-        body.classList.add('dark-theme');
-        body.classList.remove('light-theme');
-    } else {
-        body.classList.add('light-theme');
-        body.classList.remove('dark-theme');
-    }
-});
+    themeToggle.addEventListener('change', function() {
+        if (this.checked) {
+            body.classList.add('dark-theme');
+        } else {
+            body.classList.remove('dark-theme');
+        }
+    });
   </script>
 </body>
 </html>
