@@ -171,10 +171,10 @@ h1 {
   position: fixed;
   bottom: 20px;
   left: 20px;
-  background-color: #333;
+  background-color: #999;
   color: #fff;
   padding: 10px;
-  border-radius: 5px;
+  border-radius: 50%;
   cursor: pointer;
 }
 
@@ -184,7 +184,7 @@ h1 {
   bottom: 100%;
   left: 0;
   width: 150px;
-  background-color: #333;
+  background-color: #888;
   border-radius: 5px;
   padding: 10px;
 }
