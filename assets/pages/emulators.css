@@ -57,7 +57,7 @@ h1 {
   padding: 8px 16px; /* button sizing */
   color: white;
   background-color: #d6caff;
-  margin: 12.5px;
+  margin: 12.5px auto;
   transition: transform 0.2s, background-color 0.2s;
   width: 28%;
   height: 28%;
