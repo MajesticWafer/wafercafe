@@ -59,7 +59,6 @@ h1 {
 
 .button-container {
   border-radius: 10px;
-  border: none;
   padding: 12.5px 20px; /* button sizing */
   color: white;
   background-color: #d6caff;
@@ -99,7 +98,6 @@ h1 {
 
 .button-container-header button {
   border-radius: 10px;
-  border: none;
   padding: 12.5px 20px; /* button sizing */
   color: white;
   background-color: #d6caff;
