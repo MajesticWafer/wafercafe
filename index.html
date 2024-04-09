@@ -85,15 +85,15 @@
   </div>
   <script>
     const themeToggle = document.getElementById('themeToggle');
-    const body = document.body;
 
-    themeToggle.addEventListener('change', function() {
-        if (this.checked) {
-            body.classList.add('dark-theme');
-        } else {
-            body.classList.remove('dark-theme');
-        }
-    });
+themeToggle.addEventListener('change', function() {
+    if (this.checked) {
+        document.body.classList.add('dark-theme');
+    } else {
+        document.body.classList.remove('dark-theme');
+    }
+});
+
   </script>
 </body>
 </html>
