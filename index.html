@@ -21,6 +21,7 @@
   </script>
 </head>
 <body>
+  <div id="overlay"></div>
   <div id="header">
     <h1><a href="#">The Wafer Café</a></h1>
     <div class="button-container-header">
@@ -85,14 +86,17 @@
   </div>
   <script>
     const themeToggle = document.getElementById('themeToggle');
+const body = document.body;
 
-    themeToggle.addEventListener('change', function() {
-        if (this.checked) {
-            document.body.classList.add('dark-theme');
-        } else {
-            document.body.classList.remove('dark-theme');
-        }
-    });
+themeToggle.addEventListener('change', function() {
+    if (this.checked) {
+        body.classList.add('dark-theme');
+        body.classList.remove('light-theme');
+    } else {
+        body.classList.add('light-theme');
+        body.classList.remove('dark-theme');
+    }
+});
   </script>
 </body>
 </html>
