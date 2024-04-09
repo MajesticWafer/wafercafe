@@ -24,6 +24,10 @@
   <div id="header">
     <h1><a href="#">The Wafer Café</a></h1>
     <div class="button-container-header">
+      <label class="switch">
+        <input type="checkbox" id="themeToggle">
+        <span class="slider"></span>
+      </label>
       <button id="toggleDropDown" onclick="toggleDropDown()">Gam̷e Filtering</button>
     </div>
   </div>
@@ -79,5 +83,17 @@
       <button onclick="location.href='/'"><i>Games</i></button>
       <button onclick="location.href='assets/pages/emulators.html'">Emulators</button>
   </div>
+  <script>
+    const themeToggle = document.getElementById('themeToggle');
+    const styleLink = document.getElementById('styleLink');
+
+    themeToggle.addEventListener('change', function() {
+        if (this.checked) {
+            styleLink.href = 'styles-dark.css';
+        } else {
+            styleLink.href = 'styles.css';
+        }
+    });
+  </script
 </body>
 </html>
