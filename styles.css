@@ -27,8 +27,8 @@ h1 {
 }
 
 #header {
-  background-color: #c9b9ff;
-  background-image: linear-gradient(85deg, #d8cdff, #c9b9ff);
+  background-color: #d1c3ff;
+  background-image: linear-gradient(85deg, #d8cdff, #d1c3ff);
   height: 75px;
   display: flex;
   justify-content: space-between;
