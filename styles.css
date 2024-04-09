@@ -7,7 +7,7 @@ body {
   color: white;
   margin: 0;
   overflow-x: hidden;
-  transition: background 0.5s ease;
+  transition: background-image 0.5s ease;
 }
 
 body.dark-theme {
@@ -19,7 +19,7 @@ body.dark-theme {
   color: white;
   margin: 0;
   overflow-x: hidden;
-  transition: background 0.5s ease;
+  transition: background-image 0.5s ease;
 }
 
 @keyframes gradientAnimation {
