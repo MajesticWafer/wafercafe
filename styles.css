@@ -1,6 +1,6 @@
 body {
-  background-color: #222222;
-  background-image: linear-gradient(85deg, #444444, #222222);
+  background-color: #c9b9ff;
+  background-image: linear-gradient(85deg, #d8cdff, #c9b9ff);
   background-size: 400% 400%; /* Increase the size of the background to create space for animation */
   animation: gradientAnimation 4.5s ease infinite;
   font-family: "Poppins", sans-serif;
@@ -27,8 +27,8 @@ h1 {
 }
 
 #header {
-  background-color: #323232;
-  background-image: linear-gradient(85deg, #3F3F3F, #323232);
+  background-color: #c9b9ff;
+  background-image: linear-gradient(85deg, #d8cdff, #c9b9ff);
   height: 75px;
   display: flex;
   justify-content: space-between;
@@ -62,7 +62,7 @@ h1 {
   border: none;
   padding: 12.5px 20px; /* button sizing */
   color: white;
-  background-color: #414141;
+  background-color: #d6caff;
   margin: 12.5px;
   transition: transform 0.2s, background-color 0.2s;
   width: 135px;
@@ -102,19 +102,19 @@ h1 {
   border: none;
   padding: 12.5px 20px; /* button sizing */
   color: white;
-  background-color: #414141;
+  background-color: #d6caff;
   margin: 12.5px;
   transition: transform 0.2s, background-color 0.2s;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
 }
 
 #button-container button:hover {
-  background-color: #3E3E3E;
+  background-color: #d0c2ff;
   transform: scale(1.05);
 }
 
 #button-container-header button:hover {
-  background-color: #3E3E3E;
+  background-color: #d0c2ff;
   transform: scale(1.05);
 }
 
@@ -123,7 +123,7 @@ h1 {
   position: absolute;
   top: -250px;
   right: 20px;
-  background-color: #323232;
+  background-color: #d6caff;
   padding: 10px;
   border-radius: 10px;
   display: flex;
@@ -157,7 +157,7 @@ h1 {
   border-radius: 10px;
   padding: 10px 30px;
   margin: 10px 0;
-  background-color: #414141;
+  background-color: #d6caff;
   color: white;
   text-align: center;
   text-decoration: none;
@@ -165,7 +165,7 @@ h1 {
 }
 
 #dropdown button:hover {
-  background-color: #3E3E3E;
+  background-color: #d0c2ff;
   transform: scale(1.05);
 }
 
