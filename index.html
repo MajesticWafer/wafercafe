@@ -85,16 +85,14 @@
   </div>
   <script>
     const themeToggle = document.getElementById('themeToggle');
-const styleLink = document.getElementById('styleLink');
 
-themeToggle.addEventListener('change', function() {
-    if (this.checked) {
-        styleLink.href = 'styles-dark.css?' + new Date().getTime(); // Append timestamp
-    } else {
-        styleLink.href = 'styles.css?' + new Date().getTime(); // Append timestamp
-    }
-});
-
+    themeToggle.addEventListener('change', function() {
+        if (this.checked) {
+            document.body.classList.add('dark-theme');
+        } else {
+            document.body.classList.remove('dark-theme');
+        }
+    });
   </script>
 </body>
 </html>
