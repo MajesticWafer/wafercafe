@@ -167,6 +167,39 @@ h1 {
   transform: scale(1.05);
 }
 
+.info-button {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background-color: #333;
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.info-content {
+  display: none;
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  width: 150px;
+  background-color: #333;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.info-item {
+  display: block;
+  color: #fff;
+  text-decoration: none;
+  margin-bottom: 5px;
+}
+
+.info-item:hover {
+  text-decoration: underline;
+}
+
 #content {
   display: flex;
   flex-direction: column;
