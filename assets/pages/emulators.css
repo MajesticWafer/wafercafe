@@ -58,6 +58,13 @@ h1 {
 }
 
 .button-container {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  margin: 0;
+}
+
+.button-container button {
   border-radius: 10px;
   border: none;
   padding: 12.5px 20px; /* button sizing */
@@ -65,16 +72,7 @@ h1 {
   background-color: #d6caff;
   margin: 12.5px;
   transition: transform 0.2s, background-color 0.2s;
-  width: 160px;
-  height: 85px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
-  font-family: "Poppins", sans-serif;
-  font-weight: 500;
 }
 
 .button-container back {
