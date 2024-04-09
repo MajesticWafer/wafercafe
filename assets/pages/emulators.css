@@ -53,6 +53,12 @@ h1 {
 }
 
 .button-container {
+  margin: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.button-container button {
   border-radius: 10px;
   padding: 8px 16px; /* button sizing */
   color: white;
@@ -67,10 +73,9 @@ h1 {
   justify-content: center;
   text-align: center;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
-  left: 22%;
 }
 
-.button-container:hover {
+.button-container button:hover {
   background-color: #d0c2ff;
   transform: scale(1.05);
 }
@@ -86,6 +91,7 @@ h1 {
   color: white;
   background-color: #d6caff;
   transition: transform 0.2s, background-color 0.2s;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
 }
 
 #back-button:hover {
