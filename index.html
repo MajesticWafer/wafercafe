@@ -85,14 +85,22 @@
   </div>
   <script>
     const themeToggle = document.getElementById('themeToggle');
+const buttonContainers = document.querySelectorAll('.button-container');
 
-    themeToggle.addEventListener('change', function() {
-        if (this.checked) {
-            document.body.classList.add('dark-theme');
-        } else {
-            document.body.classList.remove('dark-theme');
-        }
-    });
+themeToggle.addEventListener('change', function() {
+    if (this.checked) {
+        document.body.classList.add('dark-theme');
+        buttonContainers.forEach(container => {
+            container.classList.add('dark-theme');
+        });
+    } else {
+        document.body.classList.remove('dark-theme');
+        buttonContainers.forEach(container => {
+            container.classList.remove('dark-theme');
+        });
+    }
+});
+
   </script>
 </body>
 </html>
