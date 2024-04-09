@@ -24,10 +24,6 @@
   <div id="header">
     <h1><a href="#">The Wafer Café</a></h1>
     <div class="button-container-header">
-      <label class="switch">
-        <input type="checkbox" id="themeToggle">
-        <span class="slider"></span>
-      </label>
       <button id="toggleDropDown" onclick="toggleDropDown()">Gam̷e Filtering</button>
     </div>
   </div>
@@ -83,24 +79,5 @@
       <button onclick="location.href='/'"><i>Games</i></button>
       <button onclick="location.href='assets/pages/emulators.html'">Emulators</button>
   </div>
-  <script>
-    const themeToggle = document.getElementById('themeToggle');
-const buttonContainers = document.querySelectorAll('.button-container');
-
-themeToggle.addEventListener('change', function() {
-    if (this.checked) {
-        document.body.classList.add('dark-theme');
-        buttonContainers.forEach(container => {
-            container.classList.add('dark-theme');
-        });
-    } else {
-        document.body.classList.remove('dark-theme');
-        buttonContainers.forEach(container => {
-            container.classList.remove('dark-theme');
-        });
-    }
-});
-
-  </script>
 </body>
 </html>
