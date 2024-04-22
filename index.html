@@ -80,6 +80,19 @@
       <button onclick="location.href='assets/pages/emulators.html'">Emulators</button>
   </div>
   <script>
+   // Function to reset the "allowed_for_day" flag at midnight
+   function resetAllowedForDay() {
+       var now = new Date();
+       var midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
+       var millisecondsUntilMidnight = midnight.getTime() - now.getTime();
+       setTimeout(function() {
+           localStorage.removeItem('allowed_for_day');
+       }, millisecondsUntilMidnight);
+   }
+
+   // Call the function to reset the flag at midnight
+   resetAllowedForDay();
+
    // Get the current time
    var now = new Date();
    var currentHour = now.getHours();
