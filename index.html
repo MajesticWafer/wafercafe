@@ -79,22 +79,18 @@
       <button onclick="location.href='/'"><i>Games</i></button>
       <button onclick="location.href='assets/pages/emulators.html'">Emulators</button>
   </div>
-  <script>
-// Function to decode the passkey
-function decodePasskey(encodedPasskey) {
-    // Example decoding techniques: reverse string, base64 decoding, rot13
-    var decodedPasskey = atob(encodedPasskey.split('').reverse().join(''));
-    decodedPasskey = decodedPasskey.split('').map(function (c) {
-        return String.fromCharCode(c.charCodeAt(0) + 13);
-    }).join('');
-    return decodedPasskey;
+  <script>// Function to encode the passkey
+function encodePasskey(passkey) {
+    // Example encoding techniques: reverse string, base64 encoding, rot13
+    var encodedPasskey = btoa(passkey.split('').map(function (c) {
+        return String.fromCharCode(c.charCodeAt(0) - 13);
+    }).join(''));
+    encodedPasskey = encodedPasskey.split('').reverse().join('');
+    return encodedPasskey;
 }
 
-// Encoded passkey (encoded multiple times)
-var encodedPasskey = "MzYtNGMzLTM5ZC0yMDMtMzQw"; // Example encoded passkey (multiple encoding techniques)
-
-// Decode the passkey
-var passkey = decodePasskey(encodedPasskey);
+// Encode the new passkey
+var encodedPasskey = encodePasskey("newpasskey"); // Encode the new passkey here
 
 // Get the current time
 var now = new Date();
@@ -105,15 +101,15 @@ var currentMinute = now.getMinutes();
 if ((currentHour > 7 || (currentHour === 7 && currentMinute >= 55)) && (currentHour < 14 || (currentHour === 14 && currentMinute <= 45))) {
     // Check if the user has already entered the correct passkey today
     var passkeyEntered = localStorage.getItem('allowed_for_day');
-    if (passkeyEntered === passkey) {
+    if (passkeyEntered === decodePasskey(encodedPasskey)) {
         // User has already entered the correct passkey today, no need to prompt again
         console.log('User already entered the correct passkey today.');
     } else {
         // Prompt the user for a passkey
         var userInput = prompt('School is now in hours. You will need a passkey to continue.');
-        if (userInput === passkey) {
+        if (userInput === decodePasskey(encodedPasskey)) {
             // User entered the correct passkey, save to localStorage
-            localStorage.setItem('allowed_for_day', passkey);
+            localStorage.setItem('allowed_for_day', encodePasskey("newpasskey")); // Store the encoded passkey
             console.log('User entered correct passkey.');
         } else {
             // Incorrect passkey entered, reload the page
