@@ -18,6 +18,14 @@
       var dropdown = document.getElementById("dropdown");
       dropdown.classList.toggle("open");
     }
+    
+    function encodePasskey(passkey) {
+      return btoa(passkey);
+    }
+
+    function decodePasskey(encodedPasskey) {
+      return atob(encodedPasskey);
+    }
   </script>
 </head>
 <body>
@@ -88,8 +96,8 @@
    // Check if the current time falls within the specified range (7:55 to 14:45)
    if ((currentHour > 7 || (currentHour === 7 && currentMinute >= 55)) && (currentHour < 14 || (currentHour === 14 && currentMinute <= 45))) {
        // Check if the user has already entered the correct passkey today
-       var passkeyEntered = localStorage.getItem('allowed_for_day');
-       if (passkeyEntered === 'tx3') {
+       var passkeyEnteredEncoded = localStorage.getItem('allowed_for_day');
+       if (passkeyEnteredEncoded === encodePasskey('tx3')) {
            // User has already entered the correct passkey today, no need to prompt again
            console.log('User already entered the correct passkey today.');
        } else {
@@ -97,7 +105,7 @@
            var passkey = prompt('School is now in hours. You will need a passkey to continue.');
            if (passkey === 'tx3') {
                // User entered the correct passkey, save to localStorage
-               localStorage.setItem('allowed_for_day', 'tx3');
+               localStorage.setItem('allowed_for_day', encodePasskey('tx3'));
                console.log('User entered correct passkey.');
            } else {
                // Incorrect passkey entered, reload the page
