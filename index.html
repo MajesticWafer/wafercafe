@@ -104,8 +104,8 @@
                localStorage.setItem('allowed_for_day', encodedPasskey);
                console.log('User entered correct passkey.');
            } else {
-               alert('Incorrect passkey. Reloading prompt.');
-               location.reload();
+               alert('Incorrect passkey. Redirecting to registration.');
+               location.href('assets/pages/register.html');
            }
        }
    } else {
