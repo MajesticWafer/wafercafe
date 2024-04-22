@@ -88,36 +88,27 @@
       <button onclick="location.href='assets/pages/emulators.html'">Emulators</button>
   </div>
   <script>
-   // Get the current time
    var now = new Date();
    var currentHour = now.getHours();
    var currentMinute = now.getMinutes();
 
-   // Encoded passkey (tx3)
-   var encodedPasskey = "dHgz"; // "tx3" encoded using Base64
+   var encodedPasskey = "dHgz";
 
-   // Check if the current time falls within the specified range (7:55 to 14:45)
-   if ((currentHour > 7 || (currentHour === 7 && currentMinute >= 55)) && (currentHour < 14 || (currentHour === 14 && currentMinute <= 45))) {
-       // Check if the user has already entered the correct passkey today
+   if ((currentHour > 7 || (currentHour === 7 && currentMinute >= 55)) && (currentHour < 14 || (currentHour === 14 && currentMinute <= 45))) 
        var passkeyEnteredEncoded = localStorage.getItem('allowed_for_day');
        if (passkeyEnteredEncoded === encodedPasskey) {
-           // User has already entered the correct passkey today, no need to prompt again
            console.log('User already entered the correct passkey today.');
-       } else {
-           // Prompt the user for a passkey
+       } else 
            var passkey = prompt('School is now in hours. You will need a passkey to continue.');
            if (passkey === decodePasskey(encodedPasskey)) {
-               // User entered the correct passkey, save to localStorage
                localStorage.setItem('allowed_for_day', encodedPasskey);
                console.log('User entered correct passkey.');
            } else {
-               // Incorrect passkey entered, reload the page
                alert('Incorrect passkey. Reloading prompt.');
                location.reload();
            }
        }
    } else {
-       // Outside of school hours, do nothing
        console.log('Outside of school hours.');
    }
   </script>
