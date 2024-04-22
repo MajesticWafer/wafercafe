@@ -1,0 +1,20 @@
+{
+  "name": "Wafer Café",
+  "short_name": "Waf-Caf",
+  "description": "Play classic games online, such as Tiny Fishing and Knife Hit, or classic Nintendo 64, GBA, and DS games!",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#c9b9ff",
+  "icons": [
+    {
+      "src": "icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
