@@ -1,2 +1,0 @@
-# Basket-Bros
-The Game
