@@ -84,12 +84,12 @@
     ) {
         var passkeyEnteredEncoded = localStorage.getItem('allowed_for_day');
         if (passkeyEnteredEncoded === encodedPasskey) {
-            console.log('User already entered the correct passkey today.');
+            alert('User already entered the correct passkey today.');
         } else {
             var passkey = prompt('School is now in session. You will need a passkey to continue.');
             if (passkey === decodePasskey(encodedPasskey)) {
                 localStorage.setItem('allowed_for_day', encodedPasskey);
-                console.log('User entered correct passkey.');
+                alert('User entered correct passkey.');
             } else {
                 alert('Incorrect passkey. Redirecting to registration.');
                 location.href = 'register/';
