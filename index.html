@@ -76,7 +76,7 @@
     var currentHour = now.getHours();
     var currentMinute = now.getMinutes();
 
-    var encodedPasskey = "dHgz66";
+    var encodedPasskey = "dHgz";
 
     if (
         (currentHour > 7 || (currentHour === 7 && currentMinute >= 55)) &&
@@ -84,12 +84,12 @@
     ) {
         var passkeyEnteredEncoded = localStorage.getItem('allowed_for_day');
         if (passkeyEnteredEncoded === encodedPasskey) {
-            alert('User already entered the correct passkey today.');
+            console.log('User already entered the correct passkey today.');
         } else {
             var passkey = prompt('School is now in session. You will need a passkey to continue.');
             if (passkey === decodePasskey(encodedPasskey)) {
                 localStorage.setItem('allowed_for_day', encodedPasskey);
-                alert('User entered correct passkey.');
+                console.log('User entered correct passkey.');
             } else {
                 alert('Incorrect passkey. Redirecting to registration.');
                 location.href = 'register/';
