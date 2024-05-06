@@ -50,14 +50,14 @@ function executeScript(location){
                     console.log('User entered correct passkey.');
                 } else {
                     alert('Incorrect passkey. Redirecting to registration.');
-                    location.href = 'register/';
+                    location.href = 'register/index.html';
                 }
             }
         } else {
             console.log('Outside of school hours.');
         }
     } else {
-        console.log("User is not in Ohio. Dismissing the script.");
+        console.log('User is not in Ohio. Dismissing the script.');
     }
 }
 
