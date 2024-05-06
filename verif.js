@@ -50,6 +50,8 @@ function executeScript(location){
                     console.log('User entered correct passkey.');
                 } else {
                     alert('Incorrect passkey. Redirecting to registration.');
+                    console.log("Redirecting to registration page...");
+                    alert("Redirecting to registration page...");
                     location.href = 'register/index.html';
                 }
             }
