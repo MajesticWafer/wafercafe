@@ -46,23 +46,19 @@
     </div>
 
     <script>
-        // GitHub API URL for fetching contents of a repository
         const repoUrl = 'https://api.github.com/repos/MajesticWafer/wafercafe/contents/db/';
 
-        // Function to fetch contents of a directory from GitHub repository
         async function fetchContents(url) {
             const response = await fetch(url);
             const data = await response.json();
             return data;
         }
 
-        // Function to populate folders and files
         async function populateFoldersAndFiles() {
             const foldersContainer = document.querySelector('.folders');
             const filesContainer = document.querySelector('.files');
             const backButton = document.querySelector('.back');
 
-            // Fetch contents of the repository's root directory
             const rootContents = await fetchContents(repoUrl);
 
             rootContents.forEach(content => {
@@ -71,25 +67,20 @@
                     folder.textContent = content.name;
                     folder.classList.add('folder');
                     folder.addEventListener('click', async () => {
-                        // Fetch contents of the selected folder
                         const folderContents = await fetchContents(content.url);
-                        // Clear previous files
                         filesContainer.innerHTML = '';
-                        // Populate files list
                         folderContents.forEach(item => {
                             if (item.type === 'file') {
                                 const file = document.createElement('li');
-                                file.textContent = item.name;
-                                file.classList.add('file');
-                                file.addEventListener('click', () => {
-                                    // Placeholder for downloading file
-                                    console.log('Downloading:', item.download_url);
-                                    // You can implement file download logic here
-                                });
+                                const fileLink = document.createElement('a');
+                                fileLink.textContent = item.name;
+                                fileLink.href = item.download_url;
+                                fileLink.setAttribute('download', '');
+                                fileLink.classList.add('file');
+                                file.appendChild(fileLink);
                                 filesContainer.appendChild(file);
                             }
                         });
-                        // Show files container and hide folders container
                         foldersContainer.style.display = 'none';
                         filesContainer.style.display = 'block';
                         backButton.style.display = 'block';
@@ -98,7 +89,6 @@
                 }
             });
 
-            // Event listener for back button
             backButton.addEventListener('click', () => {
                 foldersContainer.style.display = 'block';
                 filesContainer.style.display = 'none';
@@ -106,7 +96,6 @@
             });
         }
 
-        // Call the function to populate folders and files
         populateFoldersAndFiles();
     </script>
 </body>
