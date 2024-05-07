@@ -4,11 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dragon's Bookmarklets</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
     <style>
         body {
             background-color: #ffffff;
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
         }
         .container {
             width: 80%;
@@ -17,6 +18,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 20px;
             border-radius: 10px;
+            transition: transform 0.3s ease-in-out;
         }
         .title {
             margin-bottom: 20px;
@@ -25,10 +27,14 @@
         .folders, .files {
             list-style-type: none;
             padding: 0;
+            transition: opacity 0.3s ease-in-out;
         }
         .back {
             display: none;
             margin-bottom: 20px;
+            cursor: pointer;
+        }
+        .folder, .file {
             cursor: pointer;
         }
     </style>
@@ -55,9 +61,13 @@
         }
 
         async function populateFoldersAndFiles() {
+            const container = document.querySelector('.container');
             const foldersContainer = document.querySelector('.folders');
             const filesContainer = document.querySelector('.files');
             const backButton = document.querySelector('.back');
+
+            container.style.transform = 'translateX(0)';
+            foldersContainer.style.opacity = '1';
 
             const rootContents = await fetchContents(repoUrl);
 
@@ -81,8 +91,8 @@
                                 filesContainer.appendChild(file);
                             }
                         });
-                        foldersContainer.style.display = 'none';
-                        filesContainer.style.display = 'block';
+                        container.style.transform = 'translateX(-100%)';
+                        foldersContainer.style.opacity = '0';
                         backButton.style.display = 'block';
                     });
                     foldersContainer.appendChild(folder);
@@ -90,8 +100,8 @@
             });
 
             backButton.addEventListener('click', () => {
-                foldersContainer.style.display = 'block';
-                filesContainer.style.display = 'none';
+                container.style.transform = 'translateX(0)';
+                foldersContainer.style.opacity = '1';
                 backButton.style.display = 'none';
             });
         }
