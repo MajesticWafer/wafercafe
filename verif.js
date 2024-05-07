@@ -30,7 +30,6 @@ function getLocation(ipAddress, callback){
 // Function to execute the script if user is in Ohio
 function executeScript(location){
     if(location.region == "Ohio"){
-        alert("OH")
         var now = new Date();
         var currentHour = now.getHours();
         var currentMinute = now.getMinutes();
@@ -58,7 +57,6 @@ function executeScript(location){
             console.log('Outside of school hours.');
         }
     } else {
-        alert("Not OH")
         console.log('User is not in Ohio. Dismissing the script.');
     }
 }
