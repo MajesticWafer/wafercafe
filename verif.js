@@ -58,6 +58,7 @@ function executeScript(location){
             console.log('Outside of school hours.');
         }
     } else {
+        alert("Not OH")
         console.log('User is not in Ohio. Dismissing the script.');
     }
 }
