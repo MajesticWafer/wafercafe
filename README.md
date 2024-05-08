@@ -1,11 +1,10 @@
-# 𝐓𝐡𝐞 𝐖𝐚𝐟𝐞𝐫 𝐂𝐚𝐟𝐞
+# The Wafer Café
 
 A simple, yet fun-packed gam̷e center.
 
-## New Additions
+## About
 
-- Cookie Clicker
-- Knife Hit
+The Wafer Café strives to fun games in the browser, while maintaining educational status of the users. Most games use web assembly to run, and some are made with JavaScript.
 
 Features
 - Simple GUI
