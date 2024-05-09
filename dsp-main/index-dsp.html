@@ -1,0 +1,282 @@
+<!DOCTYPE html><html><head>
+    <meta charset="utf-8">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="images/icon.png">
+    <link href="css/dark.css" rel="stylesheet">
+    <title>DS Player</title>
+    <!-- Add hint for search engine -->
+    <meta name="description" content="DS Player is a web emulator for playing NDS and GBA games, designed for iOS(iPhone and iPad) and also workable for other devices.">
+    <meta name="keywords" content="NDS, GBA, iOS, iPhone, iPad, emulator, DS, Safari, online, PWA">
+    <meta name="author" content="44670">
+</head>
+
+<body>
+    <style>
+        html,
+        body {
+            overflow-x: hidden;
+            -webkit-user-select: none;
+            user-select: none;
+            -webkit-touch-callout: none;
+            cursor: inherit;
+        }
+
+        body {
+            background-color: black;
+            color: white;
+            padding: 0;
+            margin: 0;
+            width: 100vw;
+            height: 100vh;
+            font-family: 'Myriad Set Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        }
+
+        canvas {
+            position: absolute;
+            z-index: 1;
+        }
+
+        #msg-layer {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            top: 40vh;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 3;
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+        }
+
+        #vk-layer {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            touch-action: none;
+            opacity: 0.3;
+        }
+
+        #menu {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 4;
+            overflow: hidden scroll;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(3px);
+            -webkit-backdrop-filter: blur(3px);
+        }
+
+        #menu button {
+            background: transparent;
+        }
+
+        #menu button:active {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        a,
+        a:visited {
+            color: white;
+
+        }
+
+        .vk-round {
+            text-align: center;
+            vertical-align: middle;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .vk-round-rect {
+            border-radius: 0.5em;
+            display: inline-block;
+        }
+
+
+        .vk {
+            color: #000;
+            background-color: #fff;
+            position: absolute;
+            z-index: 1;
+            text-align: center;
+            vertical-align: middle;
+            display: inline-block;
+        }
+
+
+
+
+        .vk-touched {}
+
+        .link {
+            text-decoration: underline;
+        }
+
+        hr {
+            border: 1px solid #fff;
+            height: 0;
+        }
+    </style>
+    <div id="welcome" class="menu">
+        <h1>DS Player</h1>
+        <div id="loading">Loading...</div>
+        <div id="loadrom" hidden="">
+            <input id="rom" type="file" hidden="">
+            <button style="width:calc(100% - 2em);margin: 1em;" id="btn-choose-file">Choose File (or
+                drag/drop)...</button><br>
+        </div>
+        <p style="color: #888;">
+            Your files are processed locally and won't be uploaded to any server.<br>
+            This software should not be used to play games you have not legally obtained.<br>
+            "Nintendo DS" is a trademark of Nintendo Co., Ltd. This site is not affiliated with Nintendo in any way.
+        </p>
+        <hr>
+        <p><span id="ver-info"></span><a onclick="whatsNew()" id="whats-new" href="#">What's New</a>�&nbsp;|�&nbsp;<a href="#" onclick="uiSwitchTo('menu')">⚙ Settings...</a></p>
+        <p id="p-sns">
+            <a href="/gba/">GBA Player</a>
+        </p>
+        <p>
+            <a href="https://github.com/44670/desmume-wasm#desmume-wasm">FAQ</a>�&nbsp;|�&nbsp;<a href="#" id="a-gamepad">No
+                Gamepad</a>
+        </p>
+        <p>
+            Powered by <a href="https://github.com/44670/desmume-wasm">desmume-wasm.</a>�&nbsp;|�&nbsp;https://ds.44670.org<br>
+        </p>
+
+
+        <div id="pro" style="background-color: #333">
+        </div>
+        <p id="ios-power-hint" hidden="">
+            Please <b>turn off "Low Power Mode"</b> in iOS Control Center for better performance.
+        </p>
+        <div id="mac-warning" hidden="">
+            WARNING:<br>
+            It looks like you are using an outdate version of macOS Safari.<br>
+            Due to macOS Safari <a href="https://webkit.org/tracking-prevention/">limitations</a>, ALL of you save data
+            will be LOST after 7 days of inactivity.<br>
+            For this reason, it is highly recommended to upgrade to latest macOS or use a different browser. (For example: <a href="https://www.google.com/chrome/">Chrome</a>)
+        </div>
+    </div>
+    <div id="ios-hint" hidden="">
+        <h1>DS Player</h1>
+        Due to iOS limitations, please open this site(https://ds.44670.org) in <b>Safari</b>, and add it to your
+        <b>Home Screen</b> by <b>Share Menu</b> to continue.
+        <p style="text-align: center;">⬇⬇⬇</p>
+    </div>
+    <div id="vk-layer" hidden="">
+        <div class="vk-rect vk" data-k="menu" id="vk-menu">M</div>
+        <div class="vk-rect vk" data-k="l">L</div>
+        <div class="vk-rect vk" data-k="r">R</div>
+        <div class="vk-round vk" data-k="a">A</div>
+        <div class="vk-round vk" data-k="b">B</div>
+        <div class="vk-round vk" data-k="x">X</div>
+        <div class="vk-round vk" data-k="y">Y</div>
+        <div class="vk-rect vk" data-k="select">SE</div>
+        <div class="vk-rect vk" data-k="start">ST</div>
+        <div class="vk-round vk" data-k="stick" id="vk-stick"></div>
+        <div id="vk-dpad-1" class="vk vk-round-rect"></div>
+        <div id="vk-dpad-2" class="vk vk-round-rect"></div>
+    </div>
+    <div style="z-index: 2;position: absolute;bottom: 20px;" id="fps"></div>
+    <div id="msg-layer" hidden="">
+        <p id="msg-text"></p>
+    </div>
+    <div id="menu" hidden="">
+        <button onclick="uiMenuBack()">❮ Back</button>
+        <hr>
+        <div id="cfg-ea" hidden="">
+            <b>Early Access features</b><br>
+            Please note that these features are experimental and may not be stable.<br>
+
+            <input type="checkbox" id="cfg-turbo">
+            <label for="cfg-turbo">Turbo mode</label><br>
+            <br>
+            <label for="cfg-scale-mode">Screen filter(restart required)</label>
+            <select id="cfg-scale-mode" value="">
+                <option value="0">Pixelated</option>
+                <option value="1">Smooth</option>
+                <option value="2">XBRZ</option>
+            </select><br>
+
+
+        </div>
+        <hr>
+        <input type="checkbox" id="cfg-opt">
+        <label for="cfg-opt">Use experimental optimization</label><br>
+        <input type="checkbox" id="power-save">
+        <label for="power-save">30FPS limit</label><br>
+        <input type="checkbox" id="vk-enabled">
+        <label for="vk-enabled">Virtual gamepad</label><br>
+        <input type="checkbox" id="cfg-mute-sound">
+        <label for="cfg-mute-sound">Mute sound</label><br>
+        <label for="vk-direction">Virtual gamepad Style</label>
+        <select id="vk-direction" value="">
+            <option value="0">Circle-Pad</option>
+            <option value="1">D-Pad</option>
+        </select><br>
+        <label for="cfg-ls-layout">Landscape Screen Layout</label>
+        <select id="cfg-ls-layout" value="">
+            <option value="0">TB</option>
+            <option value="1">LR 1:1</option>
+            <option value="2">LR X:1</option>
+        </select><br>
+        <label for="cfg-lang">Firmware Language</label>
+        <select id="cfg-lang">
+            <option value="0">Japanese</option>
+            <option value="1">English</option>
+            <option value="2">French</option>
+            <option value="3">German</option>
+            <option value="4">Italian</option>
+            <option value="5">Spanish</option>
+        </select><br>
+        <input type="checkbox" id="cfg-swap-abxy">
+        <label for="cfg-swap-abxy">Gamepad: Swap A/B and X/Y</label><br>
+        <input type="checkbox" id="lid-closed" onchange="window.lidClosed = this.checked">
+        <label for="lid-closed">Close the lid</label><br>
+        <hr>
+        <div id="menu-savegame" hidden="">
+            <input type="file" id="restore-file" onchange="uiSaveRestore()" hidden="">
+            Savegame Management:<br><button onclick="uiSaveExport()">Backup</button>|<button onclick="$id('restore-file').click()">Restore</button><br>
+
+        </div>
+        <hr>
+        <div id="menu-cloud-save" hidden="">
+            Cloud Save:<span id="span-cloud-id"></span><br>
+            <button onclick="dpOnConnectButtonClicked()" id="btn-dp-connect">Connect Dropbox</button><br>
+            <button onclick="dpManualBtn(true)">↑ Upload</button>|<button onclick="dpManualBtn(false)">↓
+                Download</button><br>
+        </div>
+    </div>
+    <div id="player" hidden="">
+        <canvas id="top" width="256" height="192"></canvas>
+        <canvas id="bottom" width="256" height="192"></canvas>
+    </div>
+    <script src="js/localforage.js"></script>
+    <script src="js/pako.min.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        var jsFile = "build/nds.js";
+        if (localStorage) {
+            if (localStorage['simd'] == "1") {
+                jsFile = "build-simd/nds.js";
+            }
+            if (localStorage['showEA'] == "1") {
+                $id('cfg-ea').hidden = false;
+            }
+        }
+        var script = document.createElement('script');
+        script.src = jsFile;
+        document.body.appendChild(script);
+    </script><script src="js/nds.js"></script>
+
+
+
+</body></html>
