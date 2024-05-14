@@ -77,11 +77,18 @@ h1 {
 
 .button-container .download {
   padding: 8px 8px; /* button sizing */
+  width: 14%;
+  display: inline;
 }
 
 .button-container .download:before {
   content: "\21E9"; /* Unicode character for download icon */
   padding-right: 5px;
+}
+
+.button-container .download:hover {
+  background-color: #d0c2ff;
+  transform: scale(1.05);
 }
 
 #back-button {
