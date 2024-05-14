@@ -17,19 +17,39 @@
     <h2>Emulators:</h2>
     <div class="button-container">
       <button class="button" onclick="location.href='ds/'">DS Player</button>
-      <a href="mc-down/ds.mobileconfig" download="ds-autoInstall.mobileconfig"><button class="download-button">Download</button></a>
+    </div>
+    <!-- Download -->
+    <div class="button-container">
+      <button class="button download" onclick="downloadFile('mc-down/ds.mobileconfig')">Download</button>
     </div>
     <div class="button-container">
       <button class="button" onclick="location.href='vba/'">VBA Player</button>
-      <a href="mc-down/vba.mobileconfig" download="vba-autoInstall.mobileconfig"><button class="download-button">Download</button></a>
+    </div>
+    <!-- Download -->
+    <div class="button-container">
+      <button class="button download" onclick="downloadFile('mc-down/vba.mobileconfig')">Download</button>
     </div>
     <div class="button-container">
       <button class="button" onclick="location.href='n64/'">N64 Wasm</button>
-      <a href="mc-down/n64.mobileconfig" download="n64-autoInstall.mobileconfig"><button class="download-button">Download</button></a>
+    </div>
+    <!-- Download -->
+    <div class="button-container">
+      <button class="button download" onclick="downloadFile('mc-down/n64.mobileconfig')">Download</button>
     </div>
   </div>
 
   <button id="back-button" onclick="window.location.href='/index.html'">Back</button>
   <script src="../verif.js"></script>
+  <script>
+    function downloadFile(url) {
+      // temp anchor element
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = url.split('/').pop(); // Download attribute to the file name
+      document.body.appendChild(a);
+      a.click(); // Click to trigger download
+      document.body.removeChild(a); // Del temp element
+    }
+  </script>
 </body>
 </html>
