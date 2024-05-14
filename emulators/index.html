@@ -15,9 +15,18 @@
 
   <div id="emulators">
     <h2>Emulators:</h2>
-    <button class="button-container button" onclick="location.href='ds/'">DS Player</button>
-    <button class="button-container button" onclick="location.href='vba/'">VBA Player</button>
-    <button class="button-container button" onclick="location.href='n64/'">N64 Wasm</button>
+    <div class="button-container">
+      <button class="button" onclick="location.href='ds/'">DS Player</button>
+      <a href="mc-down/ds.mobileconfig" download><button class="download-button">Download</button></a>
+    </div>
+    <div class="button-container">
+      <button class="button" onclick="location.href='vba/'">VBA Player</button>
+      <a href="mc-down/vba.mobileconfig" download><button class="download-button">Download</button></a>
+    </div>
+    <div class="button-container">
+      <button class="button" onclick="location.href='n64/'">N64 Wasm</button>
+      <a href="mc-down/n64.mobileconfig" download><button class="download-button">Download</button></a>
+    </div>
   </div>
 
   <button id="back-button" onclick="window.location.href='/index.html'">Back</button>
