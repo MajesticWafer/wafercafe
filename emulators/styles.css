@@ -75,7 +75,7 @@ h1 {
 
 .button-container .download {
   border-radius: 10px;
-  padding: 8px 16px;
+  padding: 8px 1px !important;
   color: white;
   background-color: #d6caff;
   transition: transform 0.2s, background-color 0.2s;
