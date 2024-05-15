@@ -111,7 +111,7 @@ h1 {
 #info {
   position: absolute;
   bottom: 0px;
-  right: 25px;
+  right: 100px;
   margin: 1em;
   border-radius: 10px;
   padding: 12.5px 20px; /* button sizing */
@@ -139,7 +139,7 @@ h1 {
 }
 
 #info-panel {
-  display: none;
+  display: block;
   margin: 0 auto;
   width: 45%;
   background-color: #d6caff;
