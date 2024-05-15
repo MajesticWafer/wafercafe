@@ -49,7 +49,6 @@ h1 {
   text-decoration: none;
 }
 
-/* Button styles */
 #emulators {
   text-align: center;
   margin-top: 50px;
@@ -73,25 +72,22 @@ h1 {
   transform: scale(1.05);
 }
 
-.button-container .download {
+.download {
   border-radius: 10px;
-  padding: 8px; /* Adjusted padding */
+  padding: 8px;
   color: white;
   background-color: #d6caff;
+  margin: 12.5px auto;
   transition: transform 0.2s, background-color 0.2s;
-  width: 50px; /* Adjusted width */
-  height: 50px; /* Make it a square */
+  width: 10px;
+  display: inline-block;
   text-align: center;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
 }
 
-.button-container .download:hover {
+.download:hover {
   background-color: #d0c2ff;
   transform: scale(1.05);
-}
-
-.button-container .download:before {
-  content: "\21E9"; /* Unicode character for download icon */
 }
 
 #back-button {
