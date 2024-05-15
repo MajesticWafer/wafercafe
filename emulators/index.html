@@ -63,13 +63,14 @@
   <script>
     document.getElementById('info').addEventListener('click', function() {
       document.getElementById('info-panel').classList.toggle('active');
+      infoPanel.style.display('block');
     });
 
     document.addEventListener('click', function(event) {
       const infoPanel = document.getElementById('info-panel');
       if (!infoPanel.contains(event.target) && event.target !== document.getElementById('info')) {
         infoPanel.classList.remove('active');
-        infoPanel.style.opacity('0%');
+        infoPanel.style.display('none');
       }
     });
   </script>
