@@ -139,13 +139,14 @@ h1 {
 }
 
 #info-panel {
-    margin: 0 auto;
-    width: 100%;
-    background-color: #d6caff;
-    padding: 20px;
-    transition: transform 0.3s ease;
-    transform: translateY(100%);
-  }
+  display: none;
+  margin: 0 auto;
+  width: 100%;
+  background-color: #d6caff;
+  padding: 20px;
+  transition: transform 0.3s ease;
+  transform: translateY(100%);
+}
 
   #info-panel.active {
     transform: translateY(0);
