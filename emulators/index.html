@@ -44,12 +44,19 @@
   </script>
   <script>
       var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      var isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+      var maxTouchPoints = navigator.maxTouchPoints || navigator.msMaxTouchPoints;
       var ds = document.getElementById("ios-ds");
       var vba = document.getElementById("ios-vba");
       var n64 = document.getElementById("ios-n64");
         
       if(isIOS) {
           // iOS device
+          // ds.style.display = "block";
+          // vba.style.display = "block";
+          // n64.style.display = "block";
+      } else if (isMac && maxTouchPoints >= 2) {
+          // iOS device spoofing as MAC
           // ds.style.display = "block";
           // vba.style.display = "block";
           // n64.style.display = "block";
