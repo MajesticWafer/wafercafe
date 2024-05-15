@@ -140,15 +140,14 @@ h1 {
 
 #info-panel {
     display: none;
-    position: fixed;
-    bottom: 0;
-    left: 0;
+    margin: 0 auto;
     width: 100%;
-    background-color: #f0f0f0;
+    background-color: #d6caff;
     padding: 20px;
     transition: transform 0.3s ease;
     transform: translateY(100%);
   }
+
   #info-panel.active {
     transform: translateY(0);
   }
