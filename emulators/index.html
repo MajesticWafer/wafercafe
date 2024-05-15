@@ -26,6 +26,10 @@
   <button id="back-button" onclick="window.location.href='/index.html'">Back</button>
   <button id="info">Back</button>
   <div id="info-panel">
+    <h1>Download Info</h1>
+    <p>The download buttons next to the emulator buttons only appear if you are on iOS. They download configuration files onto your device for easier installation and access to the emulators.</p> <br>
+    <p>To install them, download the configuration file and go to settings. You should see that a profile has been downloaded, called Wafer Café (Console Name). Install it, and you should be all set!</p>
+  </div>
   <script src="../verif.js"></script>
   <script>
     function downloadFile(url) {
@@ -55,6 +59,18 @@
           vba.style.display = "none";
           n64.style.display = "none";
       }
+  </script>
+  <script>
+    document.getElementById('info').addEventListener('click', function() {
+      document.getElementById('info-panel').classList.toggle('active');
+    });
+
+    document.addEventListener('click', function(event) {
+      const infoPanel = document.getElementById('info-panel');
+      if (!infoPanel.contains(event.target) && event.target !== document.getElementById('info')) {
+        infoPanel.classList.remove('active');
+      }
+    });
   </script>
 </body>
 </html>
