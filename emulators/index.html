@@ -62,6 +62,7 @@
   </script>
   <script>
     document.getElementById('info').addEventListener('click', function() {
+      infoPanel.classList.remove('deactive');
       document.getElementById('info-panel').classList.toggle('active');
       infoPanel.style.display('block');
     });
@@ -70,6 +71,7 @@
       const infoPanel = document.getElementById('info-panel');
       if (!infoPanel.contains(event.target) && event.target !== document.getElementById('info')) {
         infoPanel.classList.remove('active');
+        infoPanel.classList.add('deactive');
         infoPanel.style.display('none');
       }
     });
