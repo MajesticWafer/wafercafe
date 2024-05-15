@@ -155,3 +155,8 @@ h1 {
   transform: translateY(0);
   opacity: 100%;
 }
+
+#info-panel.deactive {
+  transform: translateY(100vh);
+  opacity: 0%;
+}
