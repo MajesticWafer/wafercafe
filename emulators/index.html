@@ -69,6 +69,7 @@
       const infoPanel = document.getElementById('info-panel');
       if (!infoPanel.contains(event.target) && event.target !== document.getElementById('info')) {
         infoPanel.classList.remove('active');
+        infoPanel.style.display('none');
       }
     });
   </script>
