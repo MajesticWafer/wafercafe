@@ -16,11 +16,11 @@
   <div id="emulators">
     <h2>Emulators:</h2>
     <button class="button-container button" onclick="location.href='ds/'"><b>DS Player</b></button>
-    <button class="download button" onclick="downloadFile('mc-down/ds.mobileconfig')"><b>&#8681;</b></button> <br>
+    <button id="ios-download" class="download button" onclick="downloadFile('mc-down/ds.mobileconfig')"><b>&#8681;</b></button> <br>
     <button class="button-container button" onclick="location.href='vba/'"><b>VBA Player</b></button>
-    <button class="download button" onclick="downloadFile('mc-down/vba.mobileconfig')"><b>&#8681;</b></button> <br>
+    <button id="ios-download" class="download button" onclick="downloadFile('mc-down/vba.mobileconfig')"><b>&#8681;</b></button> <br>
     <button class="button-container button" onclick="location.href='n64/'"><b>N64 Wasm</b></button>
-    <button class="download button" onclick="downloadFile('mc-down/n64.mobileconfig')"><b>&#8681;</b></button>
+    <button id="ios-download" class="download button" onclick="downloadFile('mc-down/n64.mobileconfig')"><b>&#8681;</b></button>
   </div>
 
   <button id="back-button" onclick="window.location.href='/index.html'">Back</button>
@@ -35,6 +35,18 @@
       a.click(); // Click to trigger download
       document.body.removeChild(a); // Del temp element
     }
+  </script>
+  <script>
+      var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+      var elements = document.getElementByID("ios-download");
+        
+      if(isIOS) {
+          // iOS device
+          elements.style.display = "block";
+      } else {
+          // non iOS device
+          elements.style.display = "none";
+      }
   </script>
 </body>
 </html>
