@@ -140,7 +140,6 @@ h1 {
 
 #info-panel {
   opacity: 0%;
-  display: none;
   margin: 1em auto;
   width: 45%;
   background-color: #d6caff;
@@ -155,5 +154,4 @@ h1 {
 #info-panel.active {
   transform: translateY(0);
   opacity: 100%;
-  display: block;
 }
