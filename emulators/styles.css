@@ -141,7 +141,6 @@ h1 {
 #info-panel {
   display: none;
   transition: transform 0.8s ease;
-  transition: display 1.2s ease;
   margin: 1em auto;
   width: 45%;
   background-color: #d6caff;
