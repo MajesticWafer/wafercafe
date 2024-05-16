@@ -69,8 +69,11 @@
   </script>
   <script>
     document.getElementById('info').addEventListener('click', function() {
-      document.getElementById('info-panel').style.display = 'block';
-      document.getElementById('info-panel').classList.toggle('active');
+      const infoPanel = document.getElementById('info-panel');
+      if (!infoPanel.classList.contains('active')) {
+        infoPanel.style.display = 'block';
+        infoPanel.classList.add('active');
+      }
     });
 
     document.addEventListener('click', function(event) {
@@ -78,7 +81,7 @@
       if (!infoPanel.contains(event.target) && event.target !== document.getElementById('info')) {
         infoPanel.classList.remove('active');
         setTimeout(function() {
-          document.getElementById('info-panel').style.display = 'none';
+          infoPanel.style.display = 'none';
         }, 800);
       }
     });
