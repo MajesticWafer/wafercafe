@@ -24,7 +24,7 @@
   </div>
 
   <button id="back-button" onclick="window.location.href='/index.html'">Back</button>
-  <button id="info">Info</button>
+  <button id="info" onclick="toggleInfo()">Info</button>
   <div id="info-panel">
     <h1>Download Info</h1>
     <p>The download buttons next to the emulator buttons only appear if you are on iOS. They download configuration files onto your device for easier installation and access to the emulators.</p> <br>
@@ -68,7 +68,7 @@
       }
   </script>
   <script>
-    function toggleDropDown() {
+    function toggleInfo() {
       var infoPanel = document.getElementById("info-panel");
       infoPanel.classList.toggle("active");
     }
