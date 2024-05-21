@@ -9,7 +9,7 @@ function showMenu() {
     listItem.textContent = `Course ${id}`;
     listItem.style.cursor = 'pointer';
     listItem.addEventListener('click', function() {
-      window.location.href = `https://canvas.instructure.com/courses/${id}`;
+      window.location.href = `https://hilliard.instructure.com/courses/${id}`;
     });
     courseList.appendChild(listItem);
   });
