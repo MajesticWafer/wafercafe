@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team Scoreboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        h1 {
+            margin-bottom: 20px;
+        }
+        table {
+            width: 80%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+            text-align: center;
+        }
+        th {
+            background-color: #e0e0e0;
+        }
+        input[type="number"], input[type="text"] {
+            width: 80px;
+        }
+        .form-container {
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Team Scoreboard</h1>
+    <div class="form-container">
+        <input type="text" id="teamName" placeholder="Team Name">
+        <input type="number" id="correctlyAnalyzed" placeholder="Correct">
+        <input type="number" id="incorrectlyAnalyzed" placeholder="Incorrect">
+        <input type="text" id="timeTaken" placeholder="Time (min:sec:millisec)">
+        <button onclick="addTeam()">Add Team</button>
+    </div>
+    <table id="scoreboard">
+        <thead>
+            <tr>
+                <th>Rank</th>
+                <th>Team Name</th>
+                <th>Correctly Analyzed</th>
+                <th>Time Taken</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Teams will be added here dynamically -->
+        </tbody>
+    </table>
+
+    <script>
+        let teams = [];
+
+        function addTeam() {
+            const teamName = document.getElementById('teamName').value;
+            const correctlyAnalyzed = parseInt(document.getElementById('correctlyAnalyzed').value);
+            const incorrectlyAnalyzed = parseInt(document.getElementById('incorrectlyAnalyzed').value);
+            const timeTaken = document.getElementById('timeTaken').value;
+
+            if (teamName && !isNaN(correctlyAnalyzed) && !isNaN(incorrectlyAnalyzed) && timeTaken) {
+                const correctCount = correctlyAnalyzed - incorrectlyAnalyzed;
+                const timeParts = timeTaken.split(':').map(part => parseFloat(part));
+                const timeInSeconds = timeParts[0] * 60 + timeParts[1] + timeParts[2] / 1000;
+
+                teams.push({
+                    name: teamName,
+                    correct: correctCount,
+                    time: timeInSeconds
+                });
+
+                updateScoreboard();
+            }
+        }
+
+        function updateScoreboard() {
+            teams.sort((a, b) => b.correct - a.correct || a.time - b.time);
+
+            const tbody = document.getElementById('scoreboard').querySelector('tbody');
+            tbody.innerHTML = '';
+
+            teams.forEach((team, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${team.name}</td>
+                    <td>${team.correct}</td>
+                    <td>${formatTime(team.time)}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function formatTime(timeInSeconds) {
+            const minutes = Math.floor(timeInSeconds / 60);
+            const seconds = Math.floor(timeInSeconds % 60);
+            const millisec = Math.floor((timeInSeconds - Math.floor(timeInSeconds)) * 1000);
+            return `${minutes}:${seconds}:${millisec}`;
+        }
+    </script>
+</body>
+</html>
