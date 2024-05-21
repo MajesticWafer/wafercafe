@@ -9,6 +9,7 @@ function showMenu() {
     listItem.textContent = `Course ${id}`;
     listItem.style.cursor = 'pointer';
     listItem.addEventListener('click', function() {
+      // Redirect to the course URL using the course ID
       window.location.href = `https://hilliard.instructure.com/courses/${id}`;
     });
     courseList.appendChild(listItem);
