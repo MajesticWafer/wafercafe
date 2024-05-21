@@ -23,10 +23,9 @@ function createMenu() {
 
     .menu {
       position: fixed;
-      top: 50%;
+      top: calc(50% + 40px); /* Adjusted top position */
       right: 10px;
-      transform: translateY(-50%);
-      background-color: rgba(217, 205, 255, 0.9); /* Match background color */
+      background-color: #d9cdff; /* Changed background color */
       padding: 20px;
       border-radius: 10px;
       box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
@@ -65,6 +64,43 @@ function createMenu() {
       background-color: #d0c2ff;
       transform: scale(1.05);
     }
+
+    /* Hamburger icon styles */
+    .hamburger-icon {
+      display: inline-block;
+      width: 30px;
+      height: 3px;
+      background-color: white;
+      margin: 6px 0;
+      transition: transform 0.2s, opacity 0.2s;
+    }
+
+    .hamburger-icon.middle {
+      margin: 6px 0;
+    }
+
+    /* Closed state */
+    #show-menu.closed .line1,
+    #show-menu.closed .line3 {
+      transform: translateY(6px) rotate(0deg);
+    }
+
+    #show-menu.closed .line2 {
+      opacity: 1;
+    }
+
+    /* Open state */
+    #show-menu.opened .line1 {
+      transform: translateY(9px) rotate(45deg);
+    }
+
+    #show-menu.opened .line2 {
+      opacity: 0;
+    }
+
+    #show-menu.opened .line3 {
+      transform: translateY(-9px) rotate(-45deg);
+    }
   `;
   document.head.appendChild(style);
 
@@ -73,7 +109,11 @@ function createMenu() {
       <h2>Courses</h2>
       <ul id="course-list"></ul>
     </div>
-    <button id="show-menu" class="floating-button"><b>Show Courses</b></button>
+    <button id="show-menu" class="floating-button closed">
+      <span class="hamburger-icon line1"></span>
+      <span class="hamburger-icon line2 middle"></span>
+      <span class="hamburger-icon line3"></span>
+    </button>
   `;
 
   document.body.insertAdjacentHTML('beforeend', menuHtml);
@@ -103,10 +143,15 @@ function showMenu() {
 // Toggle the menu visibility
 function toggleMenu() {
   const menu = document.getElementById('menu');
+  const showMenuButton = document.getElementById('show-menu');
   if (menu.style.display === 'none' || !menu.style.display) {
     showMenu();
+    showMenuButton.classList.remove('closed');
+    showMenuButton.classList.add('opened');
   } else {
     menu.style.display = 'none';
+    showMenuButton.classList.remove('opened');
+    showMenuButton.classList.add('closed');
   }
 }
 
