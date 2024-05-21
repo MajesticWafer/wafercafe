@@ -75,10 +75,6 @@ function createMenu() {
       transition: transform 0.2s, opacity 0.2s;
     }
 
-    .hamburger-icon.middle {
-      margin: 6px 0;
-    }
-
     /* Closed state */
     #show-menu.closed .line1,
     #show-menu.closed .line3 {
@@ -111,58 +107,10 @@ function createMenu() {
     </div>
     <button id="show-menu" class="floating-button closed">
       <span class="hamburger-icon line1"></span>
-      <span class="hamburger-icon line2 middle"></span>
+      <span class="hamburger-icon line2"></span>
       <span class="hamburger-icon line3"></span>
     </button>
   `;
 
   document.body.insertAdjacentHTML('beforeend', menuHtml);
 }
-
-// Show the menu and populate it with course links
-function showMenu() {
-  const menu = document.getElementById('menu');
-  const courseList = document.getElementById('course-list');
-  const courseIds = JSON.parse(localStorage.getItem('courseIds')) || [];
-
-  courseList.innerHTML = '';  // Clear previous list
-  courseIds.forEach(id => {
-    const listItem = document.createElement('li');
-    const button = document.createElement('button');
-    button.textContent = `Go to Course ${id}`;
-    button.addEventListener('click', function() {
-      window.location.href = id;
-    });
-    listItem.appendChild(button);
-    courseList.appendChild(listItem);
-  });
-
-  menu.style.display = 'block';
-}
-
-// Toggle the menu visibility
-function toggleMenu() {
-  const menu = document.getElementById('menu');
-  const showMenuButton = document.getElementById('show-menu');
-  if (menu.style.display === 'none' || !menu.style.display) {
-    showMenu();
-    showMenuButton.classList.remove('closed');
-    showMenuButton.classList.add('opened');
-  } else {
-    menu.style.display = 'none';
-    showMenuButton.classList.remove('opened');
-    showMenuButton.classList.add('closed');
-  }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-  createMenu();
-
-  document.getElementById('show-menu').addEventListener('click', toggleMenu);
-
-  document.addEventListener('keydown', function(event) {
-    if (event.ctrlKey && event.key === 'e') {
-      toggleMenu();
-    }
-  });
-});
