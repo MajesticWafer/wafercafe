@@ -39,7 +39,7 @@
             margin-bottom: 20px;
         }
         .nested-row {
-            padding-left: 30px;
+            background-color: #f9f9f9;
         }
     </style>
 </head>
@@ -57,10 +57,10 @@
             <tr>
                 <th>Rank</th>
                 <th>Team Name</th>
-                <th>Total Correct</th>
-                <th>Total Incorrect</th>
+                <th>Correct</th>
+                <th>Incorrect</th>
                 <th>Difference</th>
-                <th>Total Time</th>
+                <th>Time</th>
             </tr>
         </thead>
         <tbody>
@@ -130,7 +130,7 @@
                 const teamRow = document.createElement('tr');
                 teamRow.innerHTML = `
                     <td>${index + 1}</td>
-                    <td>${team.name}</td>
+                    <td>${team.name} (Total)</td>
                     <td>${team.totalCorrect}</td>
                     <td>${team.totalIncorrect}</td>
                     <td>${team.totalCorrect - team.totalIncorrect}</td>
