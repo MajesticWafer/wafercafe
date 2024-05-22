@@ -33,10 +33,13 @@
             background-color: #e0e0e0;
         }
         input[type="number"], input[type="text"] {
-            width: 80px;
+            width: 100px;
         }
         .form-container {
             margin-bottom: 20px;
+        }
+        .nested-row {
+            padding-left: 30px;
         }
     </style>
 </head>
@@ -54,8 +57,10 @@
             <tr>
                 <th>Rank</th>
                 <th>Team Name</th>
-                <th>Correctly Analyzed</th>
-                <th>Time Taken</th>
+                <th>Total Correct</th>
+                <th>Total Incorrect</th>
+                <th>Difference</th>
+                <th>Total Time</th>
             </tr>
         </thead>
         <tbody>
@@ -70,38 +75,82 @@
             const teamName = document.getElementById('teamName').value;
             const correctlyAnalyzed = parseInt(document.getElementById('correctlyAnalyzed').value);
             const incorrectlyAnalyzed = parseInt(document.getElementById('incorrectlyAnalyzed').value);
-            const timeTaken = document.getElementById('timeTaken').value;
+            let timeTaken = document.getElementById('timeTaken').value;
 
             if (teamName && !isNaN(correctlyAnalyzed) && !isNaN(incorrectlyAnalyzed) && timeTaken) {
+                timeTaken = formatTimeInput(timeTaken);
                 const correctCount = correctlyAnalyzed - incorrectlyAnalyzed;
                 const timeParts = timeTaken.split(':').map(part => parseFloat(part));
                 const timeInSeconds = timeParts[0] * 60 + timeParts[1] + timeParts[2] / 1000;
 
-                teams.push({
-                    name: teamName,
-                    correct: correctCount,
-                    time: timeInSeconds
-                });
+                let existingTeam = teams.find(team => team.name === teamName);
+
+                if (existingTeam) {
+                    existingTeam.rounds.push({
+                        correct: correctlyAnalyzed,
+                        incorrect: incorrectlyAnalyzed,
+                        time: timeInSeconds
+                    });
+                    existingTeam.totalCorrect += correctlyAnalyzed;
+                    existingTeam.totalIncorrect += incorrectlyAnalyzed;
+                    existingTeam.totalTime += timeInSeconds;
+                } else {
+                    teams.push({
+                        name: teamName,
+                        totalCorrect: correctlyAnalyzed,
+                        totalIncorrect: incorrectlyAnalyzed,
+                        totalTime: timeInSeconds,
+                        rounds: [{
+                            correct: correctlyAnalyzed,
+                            incorrect: incorrectlyAnalyzed,
+                            time: timeInSeconds
+                        }]
+                    });
+                }
 
                 updateScoreboard();
             }
         }
 
+        function formatTimeInput(time) {
+            let [minutes, seconds, millisec] = time.split(':');
+            minutes = minutes.padStart(1, '0');
+            seconds = seconds.padStart(2, '0');
+            millisec = millisec.padStart(3, '0');
+            return `${minutes}:${seconds}:${millisec}`;
+        }
+
         function updateScoreboard() {
-            teams.sort((a, b) => b.correct - a.correct || a.time - b.time);
+            teams.sort((a, b) => (b.totalCorrect - b.totalIncorrect) - (a.totalCorrect - a.totalIncorrect) || a.totalTime - b.totalTime);
 
             const tbody = document.getElementById('scoreboard').querySelector('tbody');
             tbody.innerHTML = '';
 
             teams.forEach((team, index) => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
+                const teamRow = document.createElement('tr');
+                teamRow.innerHTML = `
                     <td>${index + 1}</td>
                     <td>${team.name}</td>
-                    <td>${team.correct}</td>
-                    <td>${formatTime(team.time)}</td>
+                    <td>${team.totalCorrect}</td>
+                    <td>${team.totalIncorrect}</td>
+                    <td>${team.totalCorrect - team.totalIncorrect}</td>
+                    <td>${formatTime(team.totalTime)}</td>
                 `;
-                tbody.appendChild(row);
+                tbody.appendChild(teamRow);
+
+                team.rounds.forEach((round, roundIndex) => {
+                    const roundRow = document.createElement('tr');
+                    roundRow.classList.add('nested-row');
+                    roundRow.innerHTML = `
+                        <td></td>
+                        <td>Round ${roundIndex + 1}</td>
+                        <td>${round.correct}</td>
+                        <td>${round.incorrect}</td>
+                        <td>${round.correct - round.incorrect}</td>
+                        <td>${formatTime(round.time)}</td>
+                    `;
+                    tbody.appendChild(roundRow);
+                });
             });
         }
 
@@ -109,7 +158,7 @@
             const minutes = Math.floor(timeInSeconds / 60);
             const seconds = Math.floor(timeInSeconds % 60);
             const millisec = Math.floor((timeInSeconds - Math.floor(timeInSeconds)) * 1000);
-            return `${minutes}:${seconds}:${millisec}`;
+            return `${minutes}:${seconds.toString().padStart(2, '0')}:${millisec.toString().padStart(3, '0')}`;
         }
     </script>
 </body>
