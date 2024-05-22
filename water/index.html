@@ -11,7 +11,7 @@
             padding: 0;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start; /* Align items to the top */
             flex-direction: column;
             height: 100vh;
             background-color: #f0f0f0;
@@ -23,11 +23,13 @@
             width: 80%;
             border-collapse: collapse;
             margin-bottom: 20px;
+            table-layout: fixed; /* Prevent table from expanding */
         }
         th, td {
             padding: 10px;
             border: 1px solid #ccc;
             text-align: center;
+            white-space: nowrap; /* Prevent line breaks */
         }
         th {
             background-color: #e0e0e0;
@@ -124,11 +126,15 @@
             teams.sort((a, b) => (b.totalCorrect - b.totalIncorrect) - (a.totalCorrect - a.totalIncorrect) || a.totalTime - b.totalTime);
 
             const tbody = document.getElementById('scoreboard').querySelector('tbody');
-            tbody.innerHTML = '';
 
             teams.forEach((team, index) => {
-                const teamRow = document.createElement('tr');
-                teamRow.innerHTML = `
+                let row = tbody.querySelector(`tr[data-name="${team.name}"]`);
+                if (!row) {
+                    row = document.createElement('tr');
+                    row.setAttribute('data-name', team.name);
+                    tbody.appendChild(row);
+                }
+                row.innerHTML = `
                     <td>${index + 1}</td>
                     <td>${team.name} (Total)</td>
                     <td>${team.totalCorrect}</td>
@@ -136,7 +142,6 @@
                     <td>${team.totalCorrect - team.totalIncorrect}</td>
                     <td>${formatTime(team.totalTime)}</td>
                 `;
-                tbody.appendChild(teamRow);
 
                 team.rounds.forEach((round, roundIndex) => {
                     const roundRow = document.createElement('tr');
