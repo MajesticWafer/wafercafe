@@ -143,7 +143,6 @@
             let [minutes, seconds, millisec] = time.split(':');
             minutes = minutes.padStart(1, '0');
             seconds = seconds.padStart(2, '0');
-            millisec = millisec.padStart(3, '0').slice(0, 3); // Ensure three digits and truncate if more
             return `${minutes}:${seconds}:${millisec}`;
         }
 
@@ -185,7 +184,7 @@
             const minutes = Math.floor(timeInSeconds / 60);
             const seconds = Math.floor(timeInSeconds % 60);
             const millisec = Math.floor((timeInSeconds - Math.floor(timeInSeconds)) * 1000);
-            return `${minutes}:${seconds.toString().padStart(2, '0')}:${millisec.toString().padStart(3, '0')}`;
+            return `${minutes}:${seconds.toString().padStart(2, '0')}:${millisec}`;
         }
     </script>
 </body>
