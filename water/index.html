@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Team Scoreboard</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
             display: flex;
             justify-content: center;
-            align-items: flex-start; /* Align items to the top */
+            align-items: center;
             flex-direction: column;
             height: 100vh;
             background-color: #f0f0f0;
@@ -23,22 +24,44 @@
             width: 80%;
             border-collapse: collapse;
             margin-bottom: 20px;
-            table-layout: fixed; /* Prevent table from expanding */
         }
         th, td {
             padding: 10px;
             border: 1px solid #ccc;
             text-align: center;
-            white-space: nowrap; /* Prevent line breaks */
         }
         th {
             background-color: #e0e0e0;
         }
-        input[type="number"], input[type="text"] {
-            width: 100px;
-        }
         .form-container {
             margin-bottom: 20px;
+        }
+        .input-group {
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+        }
+        .input-group input[type="text"],
+        .input-group input[type="number"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right: 10px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 16px;
+        }
+        .input-group button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #4caf50;
+            color: white;
+            font-family: 'Roboto', sans-serif;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .input-group button:hover {
+            background-color: #45a049;
         }
         .nested-row {
             background-color: #f9f9f9;
@@ -48,11 +71,13 @@
 <body>
     <h1>Team Scoreboard</h1>
     <div class="form-container">
-        <input type="text" id="teamName" placeholder="Team Name">
-        <input type="number" id="correctlyAnalyzed" placeholder="Correct">
-        <input type="number" id="incorrectlyAnalyzed" placeholder="Incorrect">
-        <input type="text" id="timeTaken" placeholder="Time (min:sec:millisec)">
-        <button onclick="addTeam()">Add Team</button>
+        <div class="input-group">
+            <input type="text" id="teamName" placeholder="Team Name">
+            <input type="number" id="correctlyAnalyzed" placeholder="Correct">
+            <input type="number" id="incorrectlyAnalyzed" placeholder="Incorrect">
+            <input type="text" id="timeTaken" placeholder="Time (min:sec:millisec)">
+            <button onclick="addTeam()">Add Team</button>
+        </div>
     </div>
     <table id="scoreboard">
         <thead>
@@ -118,7 +143,7 @@
             let [minutes, seconds, millisec] = time.split(':');
             minutes = minutes.padStart(1, '0');
             seconds = seconds.padStart(2, '0');
-            millisec = millisec.padStart(3, '0');
+            millisec = millisec.padStart(3, '0').slice(0, 3); // Ensure three digits and truncate if more
             return `${minutes}:${seconds}:${millisec}`;
         }
 
@@ -126,15 +151,11 @@
             teams.sort((a, b) => (b.totalCorrect - b.totalIncorrect) - (a.totalCorrect - a.totalIncorrect) || a.totalTime - b.totalTime);
 
             const tbody = document.getElementById('scoreboard').querySelector('tbody');
+            tbody.innerHTML = '';
 
             teams.forEach((team, index) => {
-                let row = tbody.querySelector(`tr[data-name="${team.name}"]`);
-                if (!row) {
-                    row = document.createElement('tr');
-                    row.setAttribute('data-name', team.name);
-                    tbody.appendChild(row);
-                }
-                row.innerHTML = `
+                const teamRow = document.createElement('tr');
+                teamRow.innerHTML = `
                     <td>${index + 1}</td>
                     <td>${team.name} (Total)</td>
                     <td>${team.totalCorrect}</td>
@@ -142,6 +163,7 @@
                     <td>${team.totalCorrect - team.totalIncorrect}</td>
                     <td>${formatTime(team.totalTime)}</td>
                 `;
+                tbody.appendChild(teamRow);
 
                 team.rounds.forEach((round, roundIndex) => {
                     const roundRow = document.createElement('tr');
