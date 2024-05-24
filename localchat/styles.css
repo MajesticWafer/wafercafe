@@ -8,7 +8,7 @@ body {
     margin: 0;
 }
 
-#chat-container {
+#menu-container, #chat-container {
     background: #fff;
     padding: 20px;
     border-radius: 5px;
@@ -16,12 +16,14 @@ body {
     width: 300px;
     display: flex;
     flex-direction: column;
+    align-items: center;
 }
 
 #messages {
     flex: 1;
     overflow-y: auto;
     margin-bottom: 10px;
+    width: 100%;
 }
 
 #message-input {
@@ -29,6 +31,7 @@ body {
     border: 1px solid #ccc;
     border-radius: 5px;
     margin-bottom: 10px;
+    width: 100%;
 }
 
 #send-button {
@@ -38,6 +41,7 @@ body {
     border: none;
     border-radius: 5px;
     cursor: pointer;
+    width: 100%;
 }
 
 #send-button:hover {
