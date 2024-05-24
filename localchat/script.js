@@ -10,25 +10,25 @@ document.addEventListener('DOMContentLoaded', () => {
         consoleDiv.scrollTop = consoleDiv.scrollHeight;
     }
 
-    function setupConnection() {
+    function setupConnection(connection) {
         logToConsole('Setting up connection');
         
-        conn.on('data', (data) => {
+        connection.on('data', (data) => {
             logToConsole('Received data: ' + data);
             displayMessage('Friend', data);
         });
 
-        conn.on('open', () => {
+        connection.on('open', () => {
             logToConsole('Connection opened');
             enableChat();
         });
 
-        conn.on('close', () => {
+        connection.on('close', () => {
             logToConsole('Connection closed');
             disableChat();
         });
 
-        conn.on('error', (err) => {
+        connection.on('error', (err) => {
             logToConsole('Connection error: ' + err);
             disableChat();
         });
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     peer.on('connection', (connection) => {
         logToConsole('Received connection');
         conn = connection;
-        setupConnection();
+        setupConnection(conn);
     });
 
     const menuContainer = document.getElementById('menu-container');
@@ -88,10 +88,6 @@ document.addEventListener('DOMContentLoaded', () => {
         logToConsole('Friend ID: ' + friendId);
         if (friendId) {
             conn = peer.connect(friendId);
-            conn.on('open', () => {
-                logToConsole('Connection to host opened');
-                setupConnection();
-            });
         }
         menuContainer.style.display = 'none';
         chatContainer.style.display = 'flex';
