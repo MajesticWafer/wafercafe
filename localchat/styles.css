@@ -43,3 +43,19 @@ body {
 #send-button:hover {
     background-color: #0056b3;
 }
+
+#console {
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    max-height: 150px;
+    overflow-y: auto;
+    width: calc(100% - 20px);
+    box-sizing: border-box;
+    font-size: 12px;
+    z-index: 1000;
+}
