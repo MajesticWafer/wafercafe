@@ -46,7 +46,10 @@ document.addEventListener('DOMContentLoaded', () => {
         logToConsole('Friend ID: ' + friendId);
         if (friendId) {
             conn = peer.connect(friendId);
-            conn.on('open', setupConnection);
+            conn.on('open', () => {
+                logToConsole('Connection to host opened');
+                setupConnection();
+            });
         }
         menuContainer.style.display = 'none';
         chatContainer.style.display = 'flex';
@@ -69,6 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function setupConnection() {
         logToConsole('Setting up connection');
+        
         conn.on('data', (data) => {
             logToConsole('Received data: ' + data);
             displayMessage('Friend', data);
