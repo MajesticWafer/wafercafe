@@ -1,15 +1,22 @@
-<script src="https://cdn.jsdelivr.net/npm/peerjs@1.3.1/dist/peerjs.min.js"></script>
-<script>
 document.addEventListener('DOMContentLoaded', () => {
     const peer = new Peer();
     let conn;
 
+    function logToConsole(message) {
+        const consoleDiv = document.getElementById('console');
+        const messageElement = document.createElement('div');
+        messageElement.textContent = message;
+        consoleDiv.appendChild(messageElement);
+        consoleDiv.scrollTop = consoleDiv.scrollHeight;
+    }
+
     peer.on('open', (id) => {
-        console.log('My peer ID is: ' + id);
+        logToConsole('My peer ID is: ' + id);
         alert('Share this ID with your friend: ' + id);
     });
 
     peer.on('connection', (connection) => {
+        logToConsole('Received connection');
         conn = connection;
         setupConnection();
     });
@@ -34,20 +41,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function setupConnection() {
+        logToConsole('Setting up connection');
         conn.on('data', (data) => {
+            logToConsole('Received data: ' + data);
             displayMessage('Friend', data);
         });
 
         conn.on('open', () => {
+            logToConsole('Connection opened');
             sendButton.disabled = false;
             messageInput.disabled = false;
         });
     }
 
     const friendId = prompt('Enter your friend\'s ID:');
+    logToConsole('Friend ID: ' + friendId);
     if (friendId) {
         conn = peer.connect(friendId);
         conn.on('open', setupConnection);
     }
 });
-</script>
