@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    enableChat();
     const peer = new Peer();
     let conn;
 
@@ -42,8 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function disableChat() {
-        // sendButton.disabled = true;
-        // messageInput.disabled = true;
+        sendButton.disabled = false;
+        messageInput.disabled = false;
         logToConsole('Chat disabled: send button and message input are now inactive.');
     }
 
@@ -80,11 +79,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     joinButton.addEventListener('click', () => {
+        enableChat();
         joinIdInput.style.display = 'block';
         joinIdButton.style.display = 'block';
     });
 
     joinIdButton.addEventListener('click', () => {
+        enableChat();
         const friendId = joinIdInput.value;
         logToConsole('Friend ID: ' + friendId);
         if (friendId) {
@@ -99,6 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     sendButton.addEventListener('click', () => {
+        enableChat();
         const message = messageInput.value;
         if (message) {
             displayMessage('You', message);
