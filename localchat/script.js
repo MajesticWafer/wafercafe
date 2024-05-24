@@ -1,43 +1,38 @@
 const context = new (window.AudioContext || window.webkitAudioContext)();
 const output = document.getElementById('output');
+let microphone, analyser, dataArray, source;
+let isListening = false;
 
 document.getElementById('initialize').addEventListener('click', initialize);
 document.getElementById('send').addEventListener('click', sendMessage);
 
+navigator.mediaDevices.getUserMedia({ audio: true })
+    .then(stream => {
+        microphone = context.createMediaStreamSource(stream);
+        analyser = context.createAnalyser();
+        analyser.fftSize = 2048;
+        dataArray = new Uint8Array(analyser.frequencyBinCount);
+        microphone.connect(analyser);
+        source = context.createBufferSource();
+        isListening = true;
+        listenForResponse();
+    })
+    .catch(err => {
+        console.error('Error accessing microphone:', err);
+        output.textContent = 'Error accessing microphone: ' + err.message;
+    });
+
 function initialize() {
     sendSignal('111111');
-    listenForResponse(5000, response => {
-        if (response === 'null') {
-            output.textContent = 'No users found.';
-        } else if (response.startsWith('111111')) {
-            output.textContent = 'One or more users found.';
-        } else {
-            output.textContent = 'Unknown error!';
-        }
-    });
 }
 
 function sendMessage() {
     const message = document.getElementById('message').value;
     const encodedMessage = encodeMessage(message);
     sendSignal(encodedMessage);
-    listenForResponse(1000, response => {
-        if (response === 'null') {
-            console.log('Message sent.');
-        } else if (response.startsWith('111111')) {
-            const parts = response.split(',');
-            const result = parts[2];
-            if (result === 'a') {
-                sendSignal(encodedMessage);
-            } else {
-                output.textContent = 'Unknown error.';
-            }
-        }
-    });
 }
 
 function encodeMessage(message) {
-    // Convert message to binary string and pad to 6 bits
     return message.split('').map(char => {
         let code = char.charCodeAt(0) - 'a'.charCodeAt(0);
         return code.toString(2).padStart(6, '0');
@@ -61,11 +56,28 @@ function playTone(frequency, duration) {
     oscillator.stop(context.currentTime + duration);
 }
 
-function listenForResponse(timeout, callback) {
-    // Simulate response listening with a timeout
-    setTimeout(() => {
-        // Here you would normally have code to detect the received signal
-        // For demonstration purposes, we'll simulate a 'null' response
-        callback('null');
-    }, timeout);
+function listenForResponse() {
+    if (!isListening) return;
+    analyser.getByteFrequencyData(dataArray);
+    const maxAmplitudeIndex = dataArray.indexOf(Math.max(...dataArray));
+    const frequency = maxAmplitudeIndex * context.sampleRate / analyser.fftSize;
+    
+    if (frequency >= 17900 && frequency <= 18100) {
+        processSignal('0');
+    } else if (frequency >= 19900 && frequency <= 20100) {
+        processSignal('1');
+    }
+
+    requestAnimationFrame(listenForResponse);
+}
+
+let receivedBits = '';
+function processSignal(bit) {
+    receivedBits += bit;
+    if (receivedBits.length === 6) {
+        const charCode = parseInt(receivedBits, 2) + 'a'.charCodeAt(0);
+        const char = String.fromCharCode(charCode);
+        output.textContent += char;
+        receivedBits = '';
+    }
 }
