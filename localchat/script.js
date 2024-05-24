@@ -10,9 +10,21 @@ document.addEventListener('DOMContentLoaded', () => {
         consoleDiv.scrollTop = consoleDiv.scrollHeight;
     }
 
-    function setupConnection() {
+    function enableChat() {
+        sendButton.disabled = false;
+        messageInput.disabled = false;
+        logToConsole('Chat enabled: send button and message input are now active.');
+    }
+
+    function disableChat() {
+        sendButton.disabled = true;
+        messageInput.disabled = true;
+        logToConsole('Chat disabled: send button and message input are now inactive.');
+    }
+
+    function setupConnection(connection) {
         logToConsole('Setting up connection');
-        
+        conn = connection;
         conn.on('data', (data) => {
             logToConsole('Received data: ' + data);
             displayMessage('Friend', data);
@@ -32,18 +44,10 @@ document.addEventListener('DOMContentLoaded', () => {
             logToConsole('Connection error: ' + err);
             disableChat();
         });
-    }
 
-    function enableChat() {
-        sendButton.disabled = false;
-        messageInput.disabled = false;
-        logToConsole('Chat enabled: send button and message input are now active.');
-    }
-
-    function disableChat() {
-        sendButton.disabled = true;
-        messageInput.disabled = true;
-        logToConsole('Chat disabled: send button and message input are now inactive.');
+        if (conn.open) {
+            enableChat();
+        }
     }
 
     function displayMessage(sender, message) {
@@ -58,8 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     peer.on('connection', (connection) => {
         logToConsole('Received connection');
-        conn = connection;
-        setupConnection();
+        setupConnection(connection);
     });
 
     const menuContainer = document.getElementById('menu-container');
@@ -87,10 +90,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const friendId = joinIdInput.value;
         logToConsole('Friend ID: ' + friendId);
         if (friendId) {
-            conn = peer.connect(friendId);
-            conn.on('open', () => {
+            const connection = peer.connect(friendId);
+            connection.on('open', () => {
                 logToConsole('Connection to host opened');
-                setupConnection();
+                setupConnection(connection);
+            });
+            connection.on('error', (err) => {
+                logToConsole('Connection error: ' + err);
             });
         }
         menuContainer.style.display = 'none';
