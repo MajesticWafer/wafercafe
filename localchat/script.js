@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     peer.on('open', (id) => {
         logToConsole('My peer ID is: ' + id);
-        alert('Share this ID with your friend: ' + id);
     });
 
     peer.on('connection', (connection) => {
@@ -21,9 +20,37 @@ document.addEventListener('DOMContentLoaded', () => {
         setupConnection();
     });
 
+    const menuContainer = document.getElementById('menu-container');
+    const chatContainer = document.getElementById('chat-container');
+    const hostButton = document.getElementById('host-button');
+    const joinButton = document.getElementById('join-button');
+    const joinIdInput = document.getElementById('join-id-input');
+    const joinIdButton = document.getElementById('join-id-button');
     const sendButton = document.getElementById('send-button');
     const messageInput = document.getElementById('message-input');
     const messagesDiv = document.getElementById('messages');
+
+    hostButton.addEventListener('click', () => {
+        menuContainer.style.display = 'none';
+        chatContainer.style.display = 'flex';
+        alert('Your room ID is: ' + peer.id);
+    });
+
+    joinButton.addEventListener('click', () => {
+        joinIdInput.style.display = 'block';
+        joinIdButton.style.display = 'block';
+    });
+
+    joinIdButton.addEventListener('click', () => {
+        const friendId = joinIdInput.value;
+        logToConsole('Friend ID: ' + friendId);
+        if (friendId) {
+            conn = peer.connect(friendId);
+            conn.on('open', setupConnection);
+        }
+        menuContainer.style.display = 'none';
+        chatContainer.style.display = 'flex';
+    });
 
     sendButton.addEventListener('click', () => {
         const message = messageInput.value;
@@ -52,12 +79,5 @@ document.addEventListener('DOMContentLoaded', () => {
             sendButton.disabled = false;
             messageInput.disabled = false;
         });
-    }
-
-    const friendId = prompt('Enter your friend\'s ID:');
-    logToConsole('Friend ID: ' + friendId);
-    if (friendId) {
-        conn = peer.connect(friendId);
-        conn.on('open', setupConnection);
     }
 });
