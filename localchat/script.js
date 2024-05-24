@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
         messageElement.textContent = message;
         consoleDiv.appendChild(messageElement);
         consoleDiv.scrollTop = consoleDiv.scrollHeight;
+        console.log(message); // Also log to browser console for easier debugging on mobile
     }
 
     function enableChat() {
@@ -56,6 +57,12 @@ document.addEventListener('DOMContentLoaded', () => {
         messagesDiv.appendChild(messageElement);
     }
 
+    function checkWebRTCSupport() {
+        const supported = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+        logToConsole('WebRTC supported: ' + supported);
+        return supported;
+    }
+
     peer.on('open', (id) => {
         logToConsole('My peer ID is: ' + id);
     });
@@ -76,9 +83,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const messagesDiv = document.getElementById('messages');
 
     hostButton.addEventListener('click', () => {
-        menuContainer.style.display = 'none';
-        chatContainer.style.display = 'flex';
-        alert('Your room ID is: ' + peer.id);
+        if (checkWebRTCSupport()) {
+            menuContainer.style.display = 'none';
+            chatContainer.style.display = 'flex';
+            alert('Your room ID is: ' + peer.id);
+        } else {
+            alert('WebRTC is not supported in this browser.');
+        }
     });
 
     joinButton.addEventListener('click', () => {
