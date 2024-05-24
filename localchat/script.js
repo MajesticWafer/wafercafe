@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+    enableChat();
     const peer = new Peer();
     let conn;
 
