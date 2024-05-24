@@ -10,6 +10,48 @@ document.addEventListener('DOMContentLoaded', () => {
         consoleDiv.scrollTop = consoleDiv.scrollHeight;
     }
 
+    function setupConnection() {
+        logToConsole('Setting up connection');
+        
+        conn.on('data', (data) => {
+            logToConsole('Received data: ' + data);
+            displayMessage('Friend', data);
+        });
+
+        conn.on('open', () => {
+            logToConsole('Connection opened');
+            enableChat();
+        });
+
+        conn.on('close', () => {
+            logToConsole('Connection closed');
+            disableChat();
+        });
+
+        conn.on('error', (err) => {
+            logToConsole('Connection error: ' + err);
+            disableChat();
+        });
+    }
+
+    function enableChat() {
+        sendButton.disabled = false;
+        messageInput.disabled = false;
+        logToConsole('Chat enabled: send button and message input are now active.');
+    }
+
+    function disableChat() {
+        sendButton.disabled = true;
+        messageInput.disabled = true;
+        logToConsole('Chat disabled: send button and message input are now inactive.');
+    }
+
+    function displayMessage(sender, message) {
+        const messageElement = document.createElement('div');
+        messageElement.textContent = `${sender}: ${message}`;
+        messagesDiv.appendChild(messageElement);
+    }
+
     peer.on('open', (id) => {
         logToConsole('My peer ID is: ' + id);
     });
@@ -63,36 +105,4 @@ document.addEventListener('DOMContentLoaded', () => {
             messageInput.value = '';
         }
     });
-
-    function displayMessage(sender, message) {
-        const messageElement = document.createElement('div');
-        messageElement.textContent = `${sender}: ${message}`;
-        messagesDiv.appendChild(messageElement);
-    }
-
-    function setupConnection() {
-        logToConsole('Setting up connection');
-        
-        conn.on('data', (data) => {
-            logToConsole('Received data: ' + data);
-            displayMessage('Friend', data);
-        });
-
-        conn.on('open', () => {
-            logToConsole('Connection opened');
-            sendButton.disabled = false;
-            messageInput.disabled = false;
-            logToConsole('Send button and message input are now enabled.');
-        });
-
-        conn.on('close', () => {
-            logToConsole('Connection closed');
-            sendButton.disabled = true;
-            messageInput.disabled = true;
-        });
-
-        conn.on('error', (err) => {
-            logToConsole('Connection error: ' + err);
-        });
-    }
 });
