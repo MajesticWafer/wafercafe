@@ -41,8 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function disableChat() {
-        sendButton.disabled = true;
-        messageInput.disabled = true;
+        // sendButton.disabled = true;
+        // messageInput.disabled = true;
         logToConsole('Chat disabled: send button and message input are now inactive.');
     }
 
