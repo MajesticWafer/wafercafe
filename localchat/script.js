@@ -78,6 +78,17 @@ document.addEventListener('DOMContentLoaded', () => {
             logToConsole('Connection opened');
             sendButton.disabled = false;
             messageInput.disabled = false;
+            logToConsole('Send button and message input are now enabled.');
+        });
+
+        conn.on('close', () => {
+            logToConsole('Connection closed');
+            sendButton.disabled = true;
+            messageInput.disabled = true;
+        });
+
+        conn.on('error', (err) => {
+            logToConsole('Connection error: ' + err);
         });
     }
 });
