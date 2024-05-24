@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function setupConnection(connection) {
         logToConsole('Setting up connection');
-        
+
         connection.on('data', (data) => {
             logToConsole('Received data: ' + data);
             displayMessage('Friend', data);
@@ -32,6 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
             logToConsole('Connection error: ' + err);
             disableChat();
         });
+
+        conn = connection;
     }
 
     function enableChat() {
@@ -58,8 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     peer.on('connection', (connection) => {
         logToConsole('Received connection');
-        conn = connection;
-        setupConnection(conn);
+        setupConnection(connection);
     });
 
     const menuContainer = document.getElementById('menu-container');
@@ -87,7 +88,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const friendId = joinIdInput.value;
         logToConsole('Friend ID: ' + friendId);
         if (friendId) {
-            conn = peer.connect(friendId);
+            const connection = peer.connect(friendId);
+            setupConnection(connection);
         }
         menuContainer.style.display = 'none';
         chatContainer.style.display = 'flex';
