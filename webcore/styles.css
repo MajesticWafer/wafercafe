@@ -58,6 +58,11 @@ h1 {
   flex-direction: row;
 }
 
+.button-row {
+  display: flex;
+  gap: 10px;
+}
+
 .button-container {
   border-radius: 10px;
   padding: 12.5px 20px;
