@@ -50,6 +50,7 @@ h1 {
 
 h2 {
   margin: 3px 0;
+  margin-left: 0px;
   display: flex;
   flex-wrap: wrap;
   flex-direction: column;
