@@ -62,7 +62,12 @@ h2 {
   display: flex;
   margin-right: 165px;
   flex-wrap: wrap;
-  flex-direction: row;
+  flex-direction: column;
+}
+
+.item {
+  margin-bottom: 20px;
+  text-align: center;
 }
 
 .button-container {
@@ -83,7 +88,7 @@ h2 {
   font-family: "Poppins", sans-serif;
   font-weight: 500;
   margin-top: 10px;
-  gap: 10px;
+  gap: 20px;
   flex-wrap: wrap;
 }
 
