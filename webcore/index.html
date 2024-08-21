@@ -6,7 +6,7 @@
   <title>WebCore</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
@@ -16,17 +16,21 @@
   <div class="container">
     <div class="item">
       <h2>Consoles</h2>
-      <div class="button-container" id="n64" onclick="location.href='n64/'">
-        <img src="n64.png" alt="N64">
+      <div class="button-container">
+        <div class="button" id="n64" onclick="location.href='n64/'">
+          <img src="n64.png" alt="N64">
+        </div>
       </div>
     </div>
     <div class="item">
       <h2>Handhelds</h2>
-      <div class="button-container" id="gba" onclick="location.href='gba/'">
-        <img src="gba.png" alt="GBA">
-      </div>
-      <div class="button-container" id="nds" onclick="location.href='nds/'">
-        <img src="nds.png" alt="NDS">
+      <div class="button-container">
+        <div class="button" id="gba" onclick="location.href='gba/'">
+          <img src="gba.png" alt="GBA">
+        </div>
+        <div class="button" id="nds" onclick="location.href='nds/'">
+          <img src="nds.png" alt="NDS">
+        </div>
       </div>
     </div>
   </div>
