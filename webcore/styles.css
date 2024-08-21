@@ -1,0 +1,102 @@
+body {
+  background-color: #c9b9ff;
+  background-image: linear-gradient(85deg, #d8cdff, #c9b9ff);
+  background-size: 400% 400%; /* Increase the size of the background to create space for animation */
+  animation: gradientAnimation 4.5s ease infinite;
+  font-family: "Poppins", sans-serif;
+  color: white;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+h1 {
+  text-align: center;
+  margin-top: 0;
+}
+
+#header {
+  background-color: #c9b9ff;
+  background-image: linear-gradient(85deg, #d8cdff, #c9b9ff);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  height: 75px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  position: relative;
+  z-index: 3;
+}
+
+#header h1 {
+  margin: 0;
+}
+
+#header h1 a {
+  color: white;
+  text-decoration: none;
+}
+
+.container {
+  position: absolute;
+  top: 100px;
+  left: 20px;
+  display: flex;
+  margin-right: 165px;
+  flex-wrap: wrap;
+  flex-direction: row;
+}
+
+.button-container {
+  border-radius: 10px;
+  padding: 12.5px 20px; /* button sizing */
+  color: white;
+  background-color: #d6caff;
+  margin: 12.5px;
+  transition: transform 0.2s, background-color 0.2s;
+  width: 135px;
+  height: 110px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+}
+
+.button-container img {
+  width: calc(100% - 25px);
+  height: calc(100% - 25px);
+  object-fit: contain;
+  margin-bottom: 6px;
+}
+
+.button-list .button-text {
+  transform: translateY(-35%);
+}
+
+#button-container button:hover {
+  background-color: #d0c2ff;
+  transform: scale(1.05);
+}
+
+#content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: calc(100vh - 200px);
+}
