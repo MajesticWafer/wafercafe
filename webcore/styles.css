@@ -82,7 +82,7 @@ h2 {
   width: 135px;
   height: 110px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   text-align: center;
