@@ -82,7 +82,7 @@ h2 {
   width: 135px;
   height: 110px;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
@@ -92,6 +92,10 @@ h2 {
   margin-top: 10px;
   gap: 20px;
   flex-wrap: wrap;
+}
+
+.flex-row {
+  flex-direction: row !important;
 }
 
 .button-container img {
