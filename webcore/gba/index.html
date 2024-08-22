@@ -149,13 +149,22 @@
           </select>
         </div>
         <script>
-          // Function to fetch ROMs from the server and populate the select element
           function populateRoms() {
-            fetch('/get-roms')
-              .then(response => response.json())
-              .then(roms => {
+            fetch('roms/') // Assuming the 'roms/' directory is publicly accessible
+              .then(response => response.text())
+              .then(data => {
+                // Use a DOMParser to parse the response into a document
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(data, 'text/html');
+
+                // Get all links (assuming directory listing is in the form of <a href="...">)
+                const romLinks = [...doc.querySelectorAll('a')]
+                    .map(link => link.getAttribute('href'))
+                    .filter(href => href.endsWith('.gba') || href.endsWith('.zip')) // Filter for specific ROM file types
+                    .map(href => href.replace(/\.[^/.]+$/, "")); // Remove file extensions
+
                 const select = document.getElementById('homebrew-list');
-                roms.forEach(rom => {
+                romLinks.forEach(rom => {
                     const option = document.createElement('option');
                     option.value = rom;
                     option.textContent = rom.charAt(0).toUpperCase() + rom.slice(1); // Capitalize first letter
