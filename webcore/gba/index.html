@@ -90,6 +90,22 @@
             background-color: rgba(255, 255, 255, 0.75) !important
         }
 
+        .corner-radius-top-left {
+          border-top-left-radius: 10%;
+        }
+
+        .corner-radius-top-right {
+          border-top-right-radius: 10%;
+        }
+
+        .corner-radius-bottom-right {
+          border-bottom-right-radius: 10%;
+        }
+
+        .corner-radius-bottom-left {
+          border-bottom-left-radius: 10%;
+        }
+
         .menu {
             background: rgb(32, 43, 56);
             position: absolute;
@@ -194,10 +210,10 @@
         <div class="vk-rect vk" data-k="right">→</div>
         <div class="vk-rect vk" data-k="up">↑</div>
         <div class="vk-rect vk" data-k="down">↓</div>
-        <div class="vk-rect vk vk-hide" style="background-color: transparent !important" data-k="ul"></div>
-        <div class="vk-rect vk vk-hide" style="background-color: transparent !important" data-k="ur"></div>
-        <div class="vk-rect vk vk-hide" style="background-color: transparent !important" data-k="dl"></div>
-        <div class="vk-rect vk vk-hide" style="background-color: transparent !important" data-k="dr"></div>
+        <div class="corner-radius-top-left vk-rect vk vk-hide" style="background-color: transparent !important" data-k="ul"></div>
+        <div class="corner-radius-top-right vk-rect vk vk-hide" style="background-color: transparent !important" data-k="ur"></div>
+        <div class="corner-radius-bottom-left vk-rect vk vk-hide" style="background-color: transparent !important" data-k="dl"></div>
+        <div class="corner-radius-bottom-right vk-rect vk vk-hide" style="background-color: transparent !important" data-k="dr"></div>
     </div>
     <canvas width="240" height="160" id="gba-canvas" style="touch-action: none;image-rendering: pixelated;"></canvas>
     <script src="localforage.js"></script>
