@@ -56,6 +56,21 @@
             border-radius: 50% !important;
             display: inline-block;
         }
+
+        .vk-rect {
+            text-align: center;
+            vertical-align: middle;
+            border-radius: 12% !important;
+            display: inline-block;
+        }
+
+        .vk-rect-long {
+            text-align: center;
+            vertical-align: middle;
+            border-radius: 12% / 5% !important;
+            display: inline-block;
+        }
+        
         .vk {
             color: rgba(0, 0, 0, 0.2);
             background-color: rgba(255, 255, 255, 0.25);
@@ -169,20 +184,20 @@
     <div id="vk-layer" hidden>
         <div class="vk-rect vk" data-k="menu">Menu</div>
         <div class="vk-rect vk" data-k="turbo">Turbo</div>
-        <div class="vk-rect vk" data-k="l">L</div>
-        <div class="vk-rect vk" data-k="r">R</div>
+        <div class="vk-rect-long vk" data-k="l">L</div>
+        <div class="vk-rect-long vk" data-k="r">R</div>
         <div class="vk-round vk" data-k="a">A</div>
         <div class="vk-round vk" data-k="b">B</div>
         <div class="vk-rect vk" data-k="select">-</div>
         <div class="vk-rect vk" data-k="start">+</div>
-        <div class=" vk" data-k="left">←</div>
-        <div class=" vk" data-k="right">→</div>
-        <div class=" vk" data-k="up">↑</div>
-        <div class=" vk" data-k="down">↓</div>
-        <div class=" vk vk-hide" style="background-color: transparent !important" data-k="ul"></div>
-        <div class=" vk vk-hide" style="background-color: transparent !important" data-k="ur"></div>
-        <div class=" vk vk-hide" style="background-color: transparent !important" data-k="dl"></div>
-        <div class=" vk vk-hide" style="background-color: transparent !important" data-k="dr"></div>
+        <div class="vk-rect vk" data-k="left">←</div>
+        <div class="vk-rect vk" data-k="right">→</div>
+        <div class="vk-rect vk" data-k="up">↑</div>
+        <div class="vk-rect vk" data-k="down">↓</div>
+        <div class="vk-rect vk vk-hide" style="background-color: transparent !important" data-k="ul"></div>
+        <div class="vk-rect vk vk-hide" style="background-color: transparent !important" data-k="ur"></div>
+        <div class="vk-rect vk vk-hide" style="background-color: transparent !important" data-k="dl"></div>
+        <div class="vk-rect vk vk-hide" style="background-color: transparent !important" data-k="dr"></div>
     </div>
     <canvas width="240" height="160" id="gba-canvas" style="touch-action: none;image-rendering: pixelated;"></canvas>
     <script src="localforage.js"></script>
