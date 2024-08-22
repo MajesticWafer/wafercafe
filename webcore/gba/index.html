@@ -26,10 +26,10 @@
             -webkit-touch-callout: none;
             touch-action: none;
             cursor: inherit;
+            background-color: #494786;
         }
 
         body {
-
             background-color: #494786;
             color: #FFFFFF;
             padding: 0;
@@ -120,12 +120,17 @@
         #gba-canvas {
             position: absolute;
             z-index: -1;
+            touch-action: none;
             image-rendering: pixelated;
             left: 50%;
             top: 20px;
             transform: translateX(-50%);
             width: 78%;
             height: auto;
+            aspect-ratio: 240 / 160; /* Maintains the 240:160 aspect ratio */
+            max-width: 240px; /* Ensures the canvas doesn’t exceed the original size */
+            max-height: 160px;
+            border: 3px solid white;
         }
 
         #vk-layer {
