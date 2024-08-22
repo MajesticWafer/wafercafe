@@ -141,42 +141,18 @@
         <div id="wasm-loading">
             Loading WebAssembly, please wait...
         </div>
-        <div id="select-rom" hidden>
-          <p>Select a pre-downloaded game:</p>
-          <select style="padding:.5em; border:2px" onchange="onHomebrewListSelected()" id="homebrew-list">
-            <option value="">Pre-downloaded Games ↓</option>
-            <option value=""> </option>
-          </select>
-        </div>
-        <script>
-          function populateRoms() {
-            fetch('roms/') // Assuming the 'roms/' directory is publicly accessible
-              .then(response => response.text())
-              .then(data => {
-                // Use a DOMParser to parse the response into a document
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(data, 'text/html');
+       <div id="select-rom" hidden>
+            <p>Select a pre-downloaded game:</p>
+            <select style="padding:.5em; border:2px" onchange="onHomebrewListSelected()" id="homebrew-list">
+                <option value="">Pre-downloaded Games ↓</option>
+                <option value=""> </option>
+                <option value="emerald">Pokémon Emerald</option>
+                <option value="firered">Pokémon FireRed</option>
+                <option value="leafgreen">Pokémon LeafGreen</option>
+                <option value="ruby">Pokémon Ruby</option>
+                <option value="saphhire">Pokémon Saphhire</option>
+            </select> 
 
-                // Get all links (assuming directory listing is in the form of <a href="...">)
-                const romLinks = [...doc.querySelectorAll('a')]
-                    .map(link => link.getAttribute('href'))
-                    .filter(href => href.endsWith('.gba') || href.endsWith('.zip')) // Filter for specific ROM file types
-                    .map(href => href.replace(/\.[^/.]+$/, "")); // Remove file extensions
-
-                const select = document.getElementById('homebrew-list');
-                romLinks.forEach(rom => {
-                    const option = document.createElement('option');
-                    option.value = rom;
-                    option.textContent = rom.charAt(0).toUpperCase() + rom.slice(1); // Capitalize first letter
-                    select.appendChild(option);
-                });
-            })
-            .catch(error => console.error('Error fetching ROMs:', error));
-        }
-
-        // Call populateRoms when the page loads
-        window.onload = populateRoms;
-      </script>
             <p>Or, you can choose your own file:<br><input style="width: calc(100% - 2em); margin: 1em" type="file" id="romFile"
                     onchange="onFileSelected()" /></p>
 
