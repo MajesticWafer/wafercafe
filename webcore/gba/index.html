@@ -125,11 +125,10 @@
             left: 50%;
             top: 20px;
             transform: translateX(-50%);
-            width: 10% !important;
+            width: 65% !important;
             height: auto !important;
-            aspect-ratio: 240px / 160px; /* Maintains the 240:160 aspect ratio */
+            aspect-ratio: 240px / 160px;
             border: 3px solid white;
-            border-radius: 10% / 3%;
         }
 
         #vk-layer {
@@ -225,6 +224,12 @@
         <div class="corner-radius-bottom-right vk-rect vk vk-hide" style="background-color: transparent !important" data-k="dr"></div>
     </div>
     <canvas width="240" height="160" id="gba-canvas" style="touch-action: none;image-rendering: pixelated;"></canvas>
+    <script>
+      const canvas = document.querySelector('canvas');
+      const canvasWidth = canvas.offsetWidth;
+      canvas.style.left = `${50 - (canvasWidth * 0.5)}px`;
+    </script>
+
     <script src="localforage.js"></script>
     <script>
         if (!window.WebAssembly) {
