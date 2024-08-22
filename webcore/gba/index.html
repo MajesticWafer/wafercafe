@@ -224,12 +224,6 @@
         <div class="corner-radius-bottom-right vk-rect vk vk-hide" style="background-color: transparent !important" data-k="dr"></div>
     </div>
     <canvas width="240" height="160" id="gba-canvas" style="touch-action: none;image-rendering: pixelated;"></canvas>
-    <script>
-      const canvas = document.querySelector('gba-canvas');
-      const canvasWidth = canvas.offsetWidth;
-      canvas.style.left = `${50 - (canvasWidth * 0.5)}px`;
-    </script>
-
     <script src="localforage.js"></script>
     <script>
         if (!window.WebAssembly) {
