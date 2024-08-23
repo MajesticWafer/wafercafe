@@ -38,7 +38,7 @@
         }
 
         .inputs {
-            margin: 10px 0;
+            margin: 20px 0;
             display: inline-block;
             position: relative;
         }
@@ -46,9 +46,10 @@
         .inputs label {
             display: block;
             font-size: 1.2rem;
-            margin-bottom: 8px;
+            margin-bottom: 20px;
             color: #e0e0e0;
             font-weight: bold;
+            pointer-events: none; /* Prevent label clicks */
         }
 
         .inputs input[type="file"] {
@@ -76,6 +77,36 @@
         .inputs label:hover::after {
             background-color: #504080;
         }
+
+        #settings {
+            margin-top: 20px;
+            background-color: rgba(20, 16, 50, 0.9);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: left;
+        }
+
+        #settings h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.2rem;
+            color: #b8b8d4;
+        }
+
+        #settings label {
+            margin-right: 10px;
+            color: #d1d1f0;
+            font-size: 1rem;
+        }
+
+        #settings select {
+            background-color: #2a2458;
+            color: #e0e0e0;
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: none;
+            font-size: 1rem;
+            outline: none;
+        }
     </style>
 </head>
 
@@ -99,6 +130,16 @@
             <label for="rom">Choose an SNES ROM:</label>
             <input type="file" id="rom" name="rom" />
         </div>
+        
+        <!-- Settings screen for pixel rendering options -->
+        <div id="settings">
+            <h3>Rendering Settings</h3>
+            <label for="render-type">Pixel Rendering:</label>
+            <select id="render-type">
+                <option value="pixelated">Pixelated</option>
+                <option value="smooth">Smooth</option>
+            </select>
+        </div>
     </div>
 
     <script>
@@ -113,13 +154,20 @@
             loadRom(ptr, rom.length, raw.name)
             Module._free(ptr);
         }
-    </script>
 
-    <script>
         document.getElementById('rom').addEventListener('change', function() {
             console.log("load attempt...")
             loadrom();
             console.log("called function...")
+        });
+
+        document.getElementById('render-type').addEventListener('change', function() {
+            let canvas = document.getElementById('canvas');
+            if (this.value === 'pixelated') {
+                canvas.style.imageRendering = 'pixelated';
+            } else {
+                canvas.style.imageRendering = 'auto';
+            }
         });
     </script>
 </body>
