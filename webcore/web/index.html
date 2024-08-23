@@ -1,58 +1,80 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        #home {
-            background-color: #100d2e;
-            color: white;
-            margin: 0 auto;
-            top: 20px;
+        body {
+            background-color: #0e0b2a;
+            font-family: 'Arial', sans-serif;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
-        
+
         #canvas {
             position: absolute;
-            top: 0px;
-            left: 0px;
-            margin: 0px;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             overflow: hidden;
             display: block;
+            z-index: -1;
+        }
+
+        #home {
+            background-color: rgba(15, 12, 40, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+            text-align: center;
         }
 
         .inputs {
-            margin: 0 auto;
-            position: relative;
+            margin: 10px 0;
             display: inline-block;
-            z-index: 99;
-            background-color: #19144d;
-            color: white;
-            border: 3px white;
-            border-radius: 10%;
+            position: relative;
         }
 
         .inputs label {
-            margin: 0 auto;
-            z-index: 1;
             display: block;
-            font: 1rem 'Fira Sans', sans-serif;
-            background-color: white;
-        }
-
-        .inputs input, .inputs label {
-            margin: 0.4rem 0;
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            color: #e0e0e0;
+            font-weight: bold;
         }
 
         .inputs input[type="file"] {
-            position: relative;
-            z-index: 0;
             opacity: 0;
             width: 100%;
             height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
             cursor: pointer;
+        }
+
+        .inputs label::after {
+            content: 'Browse';
+            display: inline-block;
+            background-color: #3a2e6b;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .inputs label:hover::after {
+            background-color: #504080;
         }
     </style>
 </head>
