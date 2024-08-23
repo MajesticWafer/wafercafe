@@ -185,14 +185,13 @@
             Module._free(ptr);
             let home = document.getElementById('home');
             home.style.display = 'none';
-            let vk = document.getElementById('vk');
-            vk.style.display = 'block';
-
-            updateSettings();  
         }
 
         document.getElementById('rom').addEventListener('change', function() {
             loadrom();
+            updateSettings();
+            let vk = document.getElementById('vk');
+            vk.style.display = 'block';
         });
 
         function updateSettings() {
@@ -208,12 +207,12 @@
             console.log(`VK visibility set to: ${visible}`);
         }
 
-        document.getElementById('vk-select').addEventListener('change', function() {
+        /* document.getElementById('vk-select').addEventListener('change', function() {
             updateSettings();
         });
 
         // Apply the default on page load
-        updateSettings();
+        updateSettings(); */
     </script>
 </body>
 </html>
