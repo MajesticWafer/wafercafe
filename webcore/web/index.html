@@ -108,6 +108,20 @@
             font-size: 1rem;
             outline: none;
         }
+
+        #vk {
+            display: block;
+        }
+        
+        .vk {
+            background-color: rgba(255, 255, 255, 33);
+            text-align: center;
+            align-items: middle;
+            width: 50px;
+            height: 50px;
+            border-radius: 3.5%;
+            position: absolute;
+        }
     </style>
 </head>
 
@@ -115,6 +129,20 @@
 
     <!-- Create the canvas that the C++ code will draw into -->
     <canvas id="canvas" oncontextmenu="event.preventDefault()"></canvas>
+
+    <!-- Virtual keyboard -->
+    <div id="vk">
+        <button class="vk" id="l">L</button>
+        <button class="vk" id="r">R</button>
+        <button class="vk" id="up"></button>
+        <button class="vk" id="down"></button>
+        <button class="vk" id="left"></button>
+        <button class="vk" id="right"></button>
+        <button class="vk" id="a">L</button>
+        <button class="vk" id="b">L</button>
+        <button class="vk" id="start">+</button>
+        <button class="vk" id=select">-</button>
+    </div>
 
     <!-- Allow the C++ to access the canvas element --> 
     <script type='text/javascript'>
@@ -166,7 +194,13 @@
         function updateSettings() {
             let vk = document.getElementById('vk');
             let visible = document.getElementById('vk-select').value;
-            vk.style.display = block;
+            
+            if visible = "block" {
+                vk.style.display = block;
+            } else {
+                vk.style.display = block;
+            }
+            
             console.log(`VK visibility set to: ${visible}`);
         }
 
