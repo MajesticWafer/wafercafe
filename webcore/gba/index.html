@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
+<head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -8,7 +8,7 @@
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
     <link rel="apple-touch-icon" href="icon.png">
     <link rel="manifest" href="manifest.json">
-    <title>GBA</title>
+    <title>VBA</title>
 </head>
 <body>
     <style>
@@ -26,11 +26,11 @@
             -webkit-touch-callout: none;
             touch-action: none;
             cursor: inherit;
-            background-color: #494786;
         }
 
         body {
-            background-color: #494786;
+
+            background-color: #000000;
             color: #FFFFFF;
             padding: 0;
             margin: 0;
@@ -56,21 +56,6 @@
             border-radius: 50% !important;
             display: inline-block;
         }
-
-        .vk-rect {
-            text-align: center;
-            vertical-align: middle;
-            border-radius: 0% !important;
-            display: inline-block;
-        }
-
-        .vk-rect-long {
-            text-align: center;
-            vertical-align: middle;
-            border-radius: 5% / 15% !important;
-            display: inline-block;
-        }
-        
         .vk {
             color: rgba(0, 0, 0, 0.2);
             background-color: rgba(255, 255, 255, 0.25);
@@ -90,22 +75,6 @@
             background-color: rgba(255, 255, 255, 0.75) !important
         }
 
-        .corner-radius-top-left {
-          border-top-left-radius: 10% !important;
-        }
-
-        .corner-radius-top-right {
-          border-top-right-radius: 10% !important;
-        }
-
-        .corner-radius-bottom-right {
-          border-bottom-right-radius: 10% !important;
-        }
-
-        .corner-radius-bottom-left {
-          border-bottom-left-radius: 10% !important;
-        }
-
         .menu {
             background: rgb(32, 43, 56);
             position: absolute;
@@ -119,15 +88,8 @@
 
         #gba-canvas {
             position: absolute;
-            z-index: -4715;
-            touch-action: none;
+            z-index: -1;
             image-rendering: pixelated;
-            top: 7px;
-            width: 65% !important;
-            height: auto !important;
-            aspect-ratio: 240px / 160px;
-            border: 7px solid white;
-            left: 50vh;
         }
 
         #vk-layer {
@@ -204,7 +166,7 @@
     <div id="msg-layer" hidden>
         <p id="msg-text"></p>
     </div>
-    <div id="vk-layer" hidden>
+     <div id="vk-layer" hidden>
         <div class="vk-rect vk" data-k="menu">Menu</div>
         <div class="vk-rect vk" data-k="turbo">Turbo</div>
         <div class="vk-rect-long vk" data-k="l">L</div>
