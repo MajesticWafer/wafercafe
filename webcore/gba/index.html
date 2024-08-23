@@ -127,7 +127,7 @@
             height: auto !important;
             aspect-ratio: 240px / 160px;
             border: 7px solid white;
-            left: 17.5%;
+            left: 50%;
         }
 
         #vk-layer {
@@ -222,7 +222,7 @@
         <div class="corner-radius-bottom-left vk-rect vk vk-hide" style="background-color: transparent !important" data-k="dl"></div>
         <div class="corner-radius-bottom-right vk-rect vk vk-hide" style="background-color: transparent !important" data-k="dr"></div>
     </div>
-    <canvas width="240" height="160" id="gba-canvas" style="touch-action: none;image-rendering: pixelated;"></canvas>
+    <canvas id="gba-canvas"></canvas>
     <script src="localforage.js"></script>
     <script>
         if (!window.WebAssembly) {
