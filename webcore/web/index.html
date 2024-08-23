@@ -110,7 +110,8 @@
         }
 
         #vk {
-            display: block;
+            display: hidden;
+            z-index: 1;
         }
         
         .vk {
@@ -184,7 +185,10 @@
             Module._free(ptr);
             let home = document.getElementById('home');
             home.style.display = 'none';
-            
+            let vk = document.getElementById('vk');
+            vk.style.display = 'block';
+
+            updateSettings();  
         }
 
         document.getElementById('rom').addEventListener('change', function() {
