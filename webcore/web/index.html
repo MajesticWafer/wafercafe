@@ -164,14 +164,19 @@
             loadrom();
         });
 
-        document.getElementById('render-type').addEventListener('change', function() {
+        function updateCanvasRendering() {
             let canvas = document.getElementById('canvas');
-            if (this.value === 'pixelated') {
-                canvas.style.imageRendering = 'pixelated';
-            } else {
-                canvas.style.imageRendering = 'smooth';
-            }
+            let renderType = document.getElementById('render-type').value;
+            canvas.style.imageRendering = renderType;
+            console.log(`Canvas rendering set to: ${renderType}`);
+        }
+
+        document.getElementById('render-type').addEventListener('change', function() {
+            updateCanvasRendering();
         });
+
+        // Apply the default rendering type on page load
+        updateCanvasRendering();
     </script>
 </body>
 
