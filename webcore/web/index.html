@@ -19,6 +19,7 @@
         }
 
         #canvas {
+            image-rendering: pixelated;
             position: absolute;
             top: 0;
             left: 0;
@@ -35,6 +36,7 @@
             border-radius: 15px;
             box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
             text-align: center;
+            display: block;
         }
 
         .inputs {
@@ -153,12 +155,13 @@
             Module.HEAPU8.set(rom, ptr);
             loadRom(ptr, rom.length, raw.name)
             Module._free(ptr);
+            let home = document.getElementById('home');
+            home.style.display = 'none';
+            
         }
 
         document.getElementById('rom').addEventListener('change', function() {
-            console.log("load attempt...")
             loadrom();
-            console.log("called function...")
         });
 
         document.getElementById('render-type').addEventListener('change', function() {
@@ -166,7 +169,7 @@
             if (this.value === 'pixelated') {
                 canvas.style.imageRendering = 'pixelated';
             } else {
-                canvas.style.imageRendering = 'auto';
+                canvas.style.imageRendering = 'smooth';
             }
         });
     </script>
