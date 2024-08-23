@@ -19,7 +19,6 @@
         }
 
         #canvas {
-            image-rendering: smooth !important;
             position: absolute;
             top: 0;
             left: 0;
@@ -135,11 +134,11 @@
         
         <!-- Settings screen for pixel rendering options -->
         <div id="settings">
-            <h3>Rendering Settings</h3>
-            <label for="render-type">Pixel Rendering:</label>
-            <select id="render-type">
-                <option value="pixelated">Pixelated</option>
-                <option value="smooth">Smooth</option>
+            <h3>Emulator Settings</h3>
+            <label for="vk-select">VK visibility:</label>
+            <select id="vk-select">
+                <option value="block">Visible</option>
+                <option value="none">Hidden</option>
             </select>
         </div>
     </div>
@@ -164,19 +163,19 @@
             loadrom();
         });
 
-        /* function updateCanvasRendering() {
-            let canvas = document.getElementById('canvas');
-            let renderType = document.getElementById('render-type').value;
-            canvas.style.imageRendering = renderType;
-            console.log(`Canvas rendering set to: ${renderType}`);
+        function updateSettings() {
+            let vk = document.getElementById('vk');
+            let visible = document.getElementById('vk-select').value;
+            vk.style.display = block;
+            console.log(`VK visibility set to: ${visible}`);
         }
 
-        document.getElementById('render-type').addEventListener('change', function() {
-            updateCanvasRendering();
+        document.getElementById('vk-select').addEventListener('change', function() {
+            updateSettings();
         });
 
-        // Apply the default rendering type on page load
-        updateCanvasRendering(); */
+        // Apply the default on page load
+        updateSettings();
     </script>
 </body>
 </html>
