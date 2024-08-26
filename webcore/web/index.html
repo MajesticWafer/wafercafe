@@ -130,21 +130,7 @@
 
     <!-- Create the canvas that the C++ code will draw into -->
     <canvas id="canvas" oncontextmenu="event.preventDefault()"></canvas>
-
-    <!-- Virtual keyboard -->
-    <div id="vk">
-        <button class="vk" id="l">L</button>
-        <button class="vk" id="r">R</button>
-        <button class="vk" id="up"></button>
-        <button class="vk" id="down"></button>
-        <button class="vk" id="left"></button>
-        <button class="vk" id="right"></button>
-        <button class="vk" id="a">L</button>
-        <button class="vk" id="b">L</button>
-        <button class="vk" id="start">+</button>
-        <button class="vk" id=select">-</button>
-    </div>
-
+    
     <!-- Allow the C++ to access the canvas element --> 
     <script type='text/javascript'>
         var Module = {
@@ -161,14 +147,15 @@
             <input type="file" id="rom" name="rom" />
         </div>
         
-        <!-- Settings screen for pixel rendering options -->
-        <div id="settings">
+        <!-- Settings -->
+        <!-- <div id="settings">
             <h3>Emulator Settings</h3>
-            <label for="vk-select">VK visibility:</label>
-            <select id="vk-select">
-                <option value="block">Visible</option>
-                <option value="none">Hidden</option>
+            <label for=""></label>
+            <select id="">
+                <option value=""></option>
+                <option value=""></option>
             </select>
+        -->
         </div>
     </div>
 
@@ -194,20 +181,20 @@
             vk.style.display = 'block';
         });
 
-        function updateSettings() {
-            let vk = document.getElementById('vk');
-            let visible = document.getElementById('vk-select').value;
+        /* function updateSettings() {
+            let setting = document.getElementById('');
+            let i = document.getElementById('').value;
             
-            if visible = "block" {
-                vk.style.display = block;
+            if setting = "i" {
+                setting.. = ;
             } else {
-                vk.style.display = block;
+                setting.. = ;
             }
             
-            console.log(`VK visibility set to: ${visible}`);
+            console.log(`${setting}`);
         }
 
-        /* document.getElementById('vk-select').addEventListener('change', function() {
+        document.getElementById('').addEventListener('change', function() {
             updateSettings();
         });
 
