@@ -30,7 +30,7 @@
         }
 
         #home {
-            background-color: rgba(15, 12, 40, 0.9);
+            background-color: rgba(20, 16, 50, 0.95);
             padding: 20px;
             border-radius: 15px;
             box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
@@ -48,7 +48,7 @@
             display: block;
             font-size: 1.2rem;
             margin-bottom: 20px;
-            color: #e0e0e0;
+            color: #d1d1f0;
             font-weight: bold;
             pointer-events: none;
         }
@@ -66,7 +66,7 @@
         .inputs label::after {
             content: 'Browse';
             display: inline-block;
-            background-color: #3a2e6b;
+            background-color: #4a3e7b;
             color: white;
             padding: 10px 20px;
             border-radius: 8px;
@@ -76,12 +76,12 @@
         }
 
         .inputs label:hover::after {
-            background-color: #504080;
+            background-color: #615090;
         }
 
         #settings {
             margin-top: 20px;
-            background-color: rgba(20, 16, 50, 0.9);
+            background-color: rgba(30, 26, 70, 0.9);
             padding: 15px;
             border-radius: 10px;
             text-align: left;
@@ -90,17 +90,17 @@
         #settings h3 {
             margin: 0 0 10px 0;
             font-size: 1.2rem;
-            color: #b8b8d4;
+            color: #c4c4e0;
         }
 
         #settings label {
             margin-right: 10px;
-            color: #d1d1f0;
+            color: #e0e0f0;
             font-size: 1rem;
         }
 
         #settings select {
-            background-color: #2a2458;
+            background-color: #3a3478;
             color: #e0e0e0;
             padding: 5px 10px;
             border-radius: 5px;
@@ -111,7 +111,7 @@
 
         .info {
             border-radius: 50%;
-            background-color: #f0f0f5;
+            background-color: #4a3e7b;
             position: absolute;
             z-index: 4;
             left: 10px;
@@ -126,13 +126,13 @@
         }
 
         .info:hover {
-            background-color: #e0e0e5;
+            background-color: #615090;
             box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.4);
         }
 
         .info::before {
             content: "i";
-            color: #3a2e6b;
+            color: #e0e0e5;
             font-size: 1.5rem;
             line-height: 50px;
             display: block;
@@ -141,10 +141,10 @@
 
         #panel {
             border-radius: 10px;
-            background-color: #f9f9fc;
+            background-color: #615090;
             position: absolute;
             z-index: 3;
-            top: 70px;
+            top: 10px;
             left: 10px;
             padding: 15px;
             text-align: left;
@@ -152,7 +152,17 @@
             width: 260px;
             height: auto;
             box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
-            color: #3a2e6b;
+            color: #f0f0f5;
+            transform: scale(0.8);
+            opacity: 0;
+            transform-origin: top left;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        #panel.show {
+            display: block;
+            transform: scale(1);
+            opacity: 1;
         }
 
         #panel p {
@@ -221,10 +231,16 @@
 
         function openInfo() {
             let panel = document.getElementById('panel');
-            if (panel.style.display === "none" || panel.style.display === "") {
-                panel.style.display = "block";
+            if (panel.classList.contains('show')) {
+                panel.classList.remove('show');
+                setTimeout(() => {
+                    panel.style.display = 'none';
+                }, 300); // Matches the transition duration
             } else {
-                panel.style.display = "none";
+                panel.style.display = 'block';
+                setTimeout(() => {
+                    panel.classList.add('show');
+                }, 10); // Allows the panel to render before starting the animation
             }
         }
     </script>
