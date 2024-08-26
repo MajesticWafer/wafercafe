@@ -175,3 +175,15 @@ h1 {
   justify-content: center;
   height: calc(100vh - 200px);
 }
+
+.item {
+  text-align: center;
+  text-align: left;
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 10px;
+}
