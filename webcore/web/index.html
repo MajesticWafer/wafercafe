@@ -109,25 +109,36 @@
             outline: none;
         }
 
-        #vk {
-            display: hidden;
-            z-index: 1;
-        }
-        
-        .vk {
-            background-color: rgba(255, 255, 255, 33);
-            text-align: center;
-            align-items: middle;
-            width: 50px;
-            height: 50px;
-            border-radius: 3.5%;
+        .info {
+            border-radius: 50%;
+            background-color: #3a2e6b;
             position: absolute;
+            z-index: 2;
+            margin: 7px;
+            text-align: center;
+            vertical-align: center;
+        }
+
+        #panel {
+            border-radius: 7%;
+            background-color: #3a2e6b;
+            position: absolute;
+            z-index: 1;
+            margin-top: 9px;
+            margin-left: 7px;
+            text-align: left;
+            vertical-align: top;
+            display: hidden;
         }
     </style>
 </head>
 
 <body>
-
+    <button class="info" id="info" onclick="openInfo()">i</button>
+    <div id="panel">
+        Text
+    </div>
+    
     <!-- Create the canvas that the C++ code will draw into -->
     <canvas id="canvas" oncontextmenu="event.preventDefault()"></canvas>
     
@@ -200,6 +211,15 @@
 
         // Apply the default on page load
         updateSettings(); */
+
+        function openInfo() {
+            let panel = document.getElementById('info-panel')
+            if panel.style.display == "none" {
+                panel.style.display = "block";
+            } else {
+                panel.style.display = "none";
+            }
+        }
     </script>
 </body>
 </html>
