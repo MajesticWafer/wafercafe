@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            background-color: #0e0b2a;
+            font-family: 'Arial', sans-serif;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden; /* Prevent scrolling */
+        }
+
+        #canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            display: block;
+            z-index: -1;
+        }
+
+        #home {
+            background-color: rgba(20, 16, 50, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            display: block;
+        }
+
+        .inputs {
+            margin: 20px 0;
+            display: inline-block;
+            position: relative;
+        }
+
+        .inputs label {
+            display: block;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: #d1d1f0;
+            font-weight: bold;
+            pointer-events: none;
+        }
+
+        .inputs input[type="file"] {
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            cursor: pointer;
+        }
+
+        .inputs label::after {
+            content: 'Browse';
+            display: inline-block;
+            background-color: #4a3e7b;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .inputs label:hover::after {
+            background-color: #615090;
+        }
+
+        #settings {
+            margin-top: 20px;
+            background-color: rgba(30, 26, 70, 0.9);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: left;
+        }
+
+        #settings h3 {
+            margin: 0 0 10px 0;
+            font-size: 1.2rem;
+            color: #c4c4e0;
+        }
+
+        #settings label {
+            margin-right: 10px;
+            color: #e0e0f0;
+            font-size: 1rem;
+        }
+
+        #settings select {
+            background-color: #3a3478;
+            color: #e0e0e0;
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: none;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .info {
+            border-radius: 50%;
+            background-color: #4a3e7b;
+            position: absolute;
+            z-index: 4;
+            left: 10px;
+            top: 10px;
+            text-align: center;
+            width: 35px;
+            height: 35px;
+            border: none;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .info:hover {
+            background-color: #615090;
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        .info::before {
+            content: "i";
+            color: #e0e0e5;
+            font-size: 1.5rem;
+            line-height: 50px;
+            display: block;
+            font-weight: bold;
+        }
+
+        #panel {
+            border-radius: 10px;
+            background-color: #615090;
+            position: absolute;
+            z-index: 3;
+            top: 52.5px;
+            left: 10px;
+            padding: 15px;
+            text-align: left;
+            display: none;
+            width: 260px;
+            height: auto;
+            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
+            color: #f0f0f5;
+            transform: scale(0.8);
+            opacity: 0;
+            transform-origin: top left;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        #panel.show {
+            display: block;
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        #panel p {
+            margin: 0;
+            font-size: 1rem;
+            line-height: 1.5rem;
+        }
+    </style>
+</head>
+
+<body>
+    <button class="info" id="info" onclick="openInfo()"></button>
+    <div id="panel">
+        <p>Info for users, like controller mappings and keyboard mappings</p>
+    </div>
+    
+    <canvas id="canvas" oncontextmenu="event.preventDefault()"></canvas>
+    
+    <script type='text/javascript'>
+        var Module = {
+            canvas: (function() { return document.getElementById('canvas'); })()    
+        };
+    </script>
+    
+    <script src="snesweb.js"></script>
+
+    <div id="home">
+        <div class="inputs">
+            <label for="rom">Choose an SNES ROM: </label>
+            <input type="file" id="rom" name="rom" />
+        </div>
+        
+        <!-- Settings template (e.g., canvas filtering) -->
+        <!-- <div id="settings">
+            <h3>Emulator Settings</h3>
+            <label for="filtering">Canvas Filtering</label>
+            <select id="filtering">
+                <option value="pixelated">Pixelated</option>
+                <option value="smooth">Smooth</option>
+            </select>
+        -->
+        </div>
+    </div>
+
+    <script>
+        async function loadrom(){
+            let raw = document.getElementById("rom").files[0];
+            console.log(raw.name)
+            const rom = new Uint8Array(await raw.arrayBuffer());
+            var loadRom = Module.cwrap('loadRawRom', null, ['number', 'number', 'string']);
+            
+            const ptr = Module._malloc(rom.length);
+            Module.HEAPU8.set(rom, ptr);
+            loadRom(ptr, rom.length, raw.name)
+            Module._free(ptr);
+            let home = document.getElementById('home');
+            home.style.display = 'none';
+        }
+
+        /* Canvas filtering settings example
+        function updateSettings() {
+            let canvas = document.getElementById('canvas');
+            let filter = document.getElementById('filtering').value;
+            
+            if filter = "pixelated" {
+                canvas.style.imageRendering = 'pixelated';
+            } else {
+                canvas.style.imageRendering = 'smooth';
+            }
+            
+            console.log(Updated canvas filtering to ${filtering}!);
+        }
+        */
+        
+        document.getElementById('rom').addEventListener('change', function() {
+            loadrom();
+            /* updateSettings(); */
+        });
+
+        function openInfo() {
+            let panel = document.getElementById('panel');
+            if (panel.classList.contains('show')) {
+                panel.classList.remove('show');
+                setTimeout(() => {
+                    panel.style.display = 'none';
+                }, 300); // Matches the transition duration
+            } else {
+                panel.style.display = 'block';
+                setTimeout(() => {
+                    panel.classList.add('show');
+                }, 10); // Allows the panel to render before starting the animation
+            }
+        }
+    </script>
+</body>
+</html>
