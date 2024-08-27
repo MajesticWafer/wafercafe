@@ -39,3 +39,11 @@ updateVk() {
     vkMap['select'].style = makeVKStyle(offTop + abxyHeight - vkh, window.innerWidth / 2 - vkw * 2.35 - 13.25 * window.innerHeight / 100, vkw, vkh, fontSize);
     vkMap['start'].style = makeVKStyle(offTop + abxyHeight - vkh, window.innerWidth / 2 + vkw * 1.35 + 13.25 * window.innerHeight / 100, vkw, vkh, fontSize);
 }
+
+function gameLoop() {
+    updateVK();  // Update the virtual keyboard state
+    requestAnimationFrame(gameLoop);  // Schedule the next frame
+}
+
+// Start the loop
+requestAnimationFrame(gameLoop);
