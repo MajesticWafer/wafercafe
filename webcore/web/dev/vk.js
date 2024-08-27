@@ -1,4 +1,4 @@
-updateVk() {
+updateVK() {
     var baseSize = window.innerWidth * 0.14
     var fontSize = baseSize * 0.6
     var offTop = Math.min(fbSize[0][1] + fbSize[1][1], window.innerHeight - Math.ceil(baseSize * 3.62))
