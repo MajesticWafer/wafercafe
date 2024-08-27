@@ -1,4 +1,4 @@
-console.log('running vk.js')
+console.log('running vk.js');
 updateVK() {
     var baseSize = window.innerWidth * 0.14
     var fontSize = baseSize * 0.6
@@ -40,7 +40,7 @@ updateVK() {
     vkMap['select'].style = makeVKStyle(offTop + abxyHeight - vkh, window.innerWidth / 2 - vkw * 2.35 - 13.25 * window.innerHeight / 100, vkw, vkh, fontSize);
     vkMap['start'].style = makeVKStyle(offTop + abxyHeight - vkh, window.innerWidth / 2 + vkw * 1.35 + 13.25 * window.innerHeight / 100, vkw, vkh, fontSize);
 }
-console.log('end most of vk.js')
+console.log('end most of vk.js');
 function gameLoop() {
     updateVK();  // Update the virtual keyboard state
     requestAnimationFrame(gameLoop);  // Schedule the next frame
@@ -48,4 +48,4 @@ function gameLoop() {
 
 // Start the loop
 requestAnimationFrame(gameLoop);
-console.log('running game loop done')
+console.log('running game loop done');
