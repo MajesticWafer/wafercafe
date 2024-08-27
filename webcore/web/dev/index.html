@@ -252,6 +252,13 @@
     </div>
 
     <script>
+	function emuScreen() {
+	    let home = document.getElementById('home');
+	    let vkLayer = document.getElementById('vk-layer');
+            home.style.display = 'none';
+            vkLayer.style.display = 'block';
+	}
+	    
         async function loadrom(){
             let raw = document.getElementById("rom").files[0];
             console.log(raw.name)
@@ -262,8 +269,7 @@
             Module.HEAPU8.set(rom, ptr);
             loadRom(ptr, rom.length, raw.name)
             Module._free(ptr);
-            let home = document.getElementById('home');
-            home.style.display = 'none';
+            emuScreen();
         }
 
         /* Canvas filtering settings example
