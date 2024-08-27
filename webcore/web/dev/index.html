@@ -171,10 +171,53 @@
             font-size: 1rem;
             line-height: 1.5rem;
         }
+
+        #vk-layer {
+		    position: absolute;
+		    left: 0;
+		    top: 0;
+		    width: 100%
+		    height: 100%;
+		    z-index: 2;
+		    touch-action: none;
+	    }
+
+        .vk {
+		    color: rgba(0, 0, 0, 0.15);
+		    background-color: rgba(255, 255, 255, 0.25);
+		    position: absolute;
+		    z-index: 1;
+		    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
+		    text-align: center;
+		    vertical-align: middle;
+		    border-radius: 0%;
+		    display: inline-block;
+		    backdrop-filter: blur(1px); 
+            -webkit-backdrop-filter: blur(1px);
+	    }
+		
+	    .vk-touched {
+		    background-color: rgba(255, 255, 255, 0.75) !important;
+	    }
     </style>
 </head>
 
 <body>
+    <div id="vk-layer" hidden>
+		<div class="vk" data-k="up">u</div>
+        <div class="vk" data-k="down">d</div>
+        <div class="vk" data-k="left">l</div>
+        <div class="vk" data-k="right">r</div>
+		<div class="vk" data-k="l">l</div>
+		<div class="vk" data-k="r">r</div>
+		<div class="vk" data-k="a">a</div>
+		<div class="vk" data-k="b">b</div>
+		<div class="vk" data-k="x">x</div>
+		<div class="vk" data-k="y">y</div>
+		<div class="vk" data-k="select">-</div>
+		<div class="vk" data-k="start">+</div>
+	</div>
+    
     <button class="info" id="info" onclick="openInfo()"></button>
     <div id="panel">
         <p>Info for users, like controller mappings and keyboard mappings</p>
