@@ -1,5 +1,22 @@
-console.log('running vk.js');
-updateVK() {
+function initVK() {
+    var vks = document.getElementsByClassName('vk')
+    for (var i = 0; i < vks.length; i++) {
+        var vk = vks[i]
+        var k = vks[i].getAttribute('data-k')
+        if (k) {
+            vkMap[k] = vk
+            vkState[k] = [0, 0]
+        }
+    }
+}
+initVK()
+
+function makeVKStyle(top, left, w, h, fontSize) {
+    return 'top:' + top + 'px;left:' + left + 'px;width:' + w + 'px;height:' + h + 'px;' + 'font-size:' + fontSize + 'px;line-height:' + h + 'px;'
+}
+
+
+function uiAdjustVKLayout() {
     var baseSize = window.innerWidth * 0.14
     var fontSize = baseSize * 0.6
     var offTop = Math.min(fbSize[0][1] + fbSize[1][1], window.innerHeight - Math.ceil(baseSize * 3.62))
@@ -14,10 +31,11 @@ updateVK() {
     fontSize = baseSize * 0.5
     vkMap['l'].style = makeVKStyle(offTop, 0, vkw * 0.775, vkh * 0.775, fontSize * 0.775)
     vkMap['r'].style = makeVKStyle(offTop, window.innerWidth - vkw * 0.775, vkw * 0.775, vkh * 0.775, fontSize * 0.775)
+    vkMap['mic'].style = makeVKStyle(window.innerHeight - (vkh * 0.675), window.innerwidth * 0.5, vkw * 0.675, vkh * 0.675, fontSize * 0.675,)
     $id('vk-menu').style = makeVKStyle(window.innerHeight - (vkh * 1.425), window.innerwidth * 0.5, vkw * 0.675, vkh * 0.675, fontSize * 0.675)
     $id('vk-menu').style.left = '0px';
 
-
+    
     offTop += baseSize * 0.62
     vkw = baseSize
     vkh = baseSize
@@ -39,10 +57,11 @@ updateVK() {
     fontSize = baseSize * 0.4
     vkMap['select'].style = makeVKStyle(offTop + abxyHeight - vkh, window.innerWidth / 2 - vkw * 2.35 - 13.25 * window.innerHeight / 100, vkw, vkh, fontSize);
     vkMap['start'].style = makeVKStyle(offTop + abxyHeight - vkh, window.innerWidth / 2 + vkw * 1.35 + 13.25 * window.innerHeight / 100, vkw, vkh, fontSize);
+
 }
-console.log('end most of vk.js');
+
 function gameLoop() {
-    updateVK();  // Update the virtual keyboard state
+    uiAdjustVKLayout();  // Update the virtual keyboard state
     requestAnimationFrame(gameLoop);  // Schedule the next frame
 }
 
