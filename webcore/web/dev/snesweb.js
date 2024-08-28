@@ -3428,6 +3428,11 @@ var Browser = {
                 canvas.width = img.width;
                 canvas.height = img.height;
                 var ctx = canvas.getContext("2d");
+                ctx.imageSmoothingEnabled = true; 
+                ctx.webkitImageSmoothingEnabled = true;
+                ctx.mozImageSmoothingEnabled = true;
+                ctx.msImageSmoothingEnabled = true; 
+                ctx.style.imageRendering = 'auto';
                 ctx.drawImage(img, 0, 0);
                 preloadedImages[name] = canvas;
                 URL.revokeObjectURL(url);
