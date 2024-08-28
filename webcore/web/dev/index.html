@@ -223,12 +223,10 @@
         function updateSettings() {
             let canvas = document.getElementById('canvas');
             let filter = document.getElementById('filtering').value;
+            let cssRule = filter === "pixelated" ? 'pixelated' : 'smooth';
 
-            if (filter === "pixelated") {
-                canvas.style.imageRendering = 'pixelated';
-            } else {
-                canvas.style.imageRendering = 'smooth';
-            }
+            // Apply the image rendering style with the !important flag
+            canvas.style.setProperty('image-rendering', cssRule, 'important');
 
             console.log(`Updated canvas filtering to ${filter}!`);
         }
