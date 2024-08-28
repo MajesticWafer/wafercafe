@@ -4635,7 +4635,7 @@ var JSEvents_resizeCanvasForFullscreen = (target, strategy) => {
     if (!document.body.style.backgroundColor) document.body.style.backgroundColor = "black";
     target.style.width = cssWidth + "px";
     target.style.height = cssHeight + "px";
-    if (strategy.filteringMode == 2) {
+    /* if (strategy.filteringMode == 2) {
         target.style.imageRendering = "optimizeSpeed";
         target.style.imageRendering = "-moz-crisp-edges";
         target.style.imageRendering = "-o-crisp-edges";
@@ -4643,10 +4643,14 @@ var JSEvents_resizeCanvasForFullscreen = (target, strategy) => {
         target.style.imageRendering = "optimize-contrast";
         target.style.imageRendering = "crisp-edges";
         target.style.imageRendering = "pixelated";
-    } else if (strategy.filteringMode == 1) {
-        target.style.imageRendering = "auto";
-        target.style.imageRendering = "smooth";
-    }
+    } else if (strategy.filteringMode == 1) { */
+        target.style.imageRendering = "auto"; // Default smooth rendering
+        target.style.imageRendering = "-webkit-smooth"; // Webkit-based browsers
+        target.style.imageRendering = "-moz-smooth"; // Firefox-specific
+        target.style.imageRendering = "-o-smooth"; // Opera-specific
+        target.style.imageRendering = "-ms-smooth"; // Older IE versions
+        target.style.imageRendering = "smooth"; // Explicit smooth rendering
+    /* } */
     var dpiScale = strategy.canvasResolutionScaleMode == 2 ? devicePixelRatio : 1;
     if (strategy.canvasResolutionScaleMode != 0) {
         var newWidth = cssWidth * dpiScale | 0;
