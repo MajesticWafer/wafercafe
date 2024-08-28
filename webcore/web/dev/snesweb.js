@@ -4642,7 +4642,10 @@ var JSEvents_resizeCanvasForFullscreen = (target, strategy) => {
         target.style.imageRendering = "-webkit-optimize-contrast";
         target.style.imageRendering = "optimize-contrast";
         target.style.imageRendering = "crisp-edges";
-        target.style.imageRendering = "pixelated"
+        target.style.imageRendering = "pixelated";
+    } else if (strategy.filteringMode == 2) {
+        target.style.imageRendering = "auto";
+        target.style.imageRendering = "smooth";
     }
     var dpiScale = strategy.canvasResolutionScaleMode == 2 ? devicePixelRatio : 1;
     if (strategy.canvasResolutionScaleMode != 0) {
