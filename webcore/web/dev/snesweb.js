@@ -4635,7 +4635,7 @@ var JSEvents_resizeCanvasForFullscreen = (target, strategy) => {
     if (!document.body.style.backgroundColor) document.body.style.backgroundColor = "black";
     target.style.width = cssWidth + "px";
     target.style.height = cssHeight + "px";
-    if (strategy.filteringMode == 1) {
+    if (strategy.filteringMode == 2) {
         target.style.imageRendering = "optimizeSpeed";
         target.style.imageRendering = "-moz-crisp-edges";
         target.style.imageRendering = "-o-crisp-edges";
@@ -4643,7 +4643,7 @@ var JSEvents_resizeCanvasForFullscreen = (target, strategy) => {
         target.style.imageRendering = "optimize-contrast";
         target.style.imageRendering = "crisp-edges";
         target.style.imageRendering = "pixelated";
-    } else if (strategy.filteringMode == 2) {
+    } else if (strategy.filteringMode == 1) {
         target.style.imageRendering = "auto";
         target.style.imageRendering = "smooth";
     }
