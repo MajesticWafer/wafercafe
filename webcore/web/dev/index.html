@@ -25,7 +25,6 @@
             left: 0;
             width: 100%;
             height: 100%;
-            overflow: hidden;
             display: block;
             z-index: -1;
         }
@@ -36,7 +35,6 @@
             border-radius: 15px;
             box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
             text-align: center;
-            display: block;
         }
 
         .inputs {
@@ -135,7 +133,7 @@
             content: "i";
             color: #e0e0e5;
             font-size: 1.5rem;
-            line-height: 50px;
+            line-height: 35px; /* Adjusted line height */
             display: block;
             font-weight: bold;
         }
@@ -151,7 +149,6 @@
             text-align: left;
             display: none;
             width: 260px;
-            height: auto;
             box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.2);
             color: #f0f0f5;
             transform: scale(0.8);
@@ -179,15 +176,15 @@
     <div id="panel">
         <p>Currently, only normal joypads are supported, and only controller 1 has controls set up. <a href="controls.md">Open control mappings</a></p>
     </div>
-    
+
     <canvas id="canvas" oncontextmenu="event.preventDefault()"></canvas>
-    
+
     <script type='text/javascript'>
         var Module = {
-            canvas: (function() { return document.getElementById('canvas'); })()    
+            canvas: (function () { return document.getElementById('canvas'); })()
         };
     </script>
-    
+
     <script src="snesweb.js"></script>
 
     <div id="home">
@@ -195,26 +192,25 @@
             <label for="rom">Choose an SNES ROM: </label>
             <input type="file" id="rom" name="rom" />
         </div>
-        
+
         <!-- Settings template (e.g., canvas filtering) -->
-        <!-- <div id="settings">
+        <div id="settings">
             <h3>Emulator Settings</h3>
             <label for="filtering">Canvas Filtering</label>
             <select id="filtering">
                 <option value="pixelated">Pixelated</option>
                 <option value="smooth">Smooth</option>
             </select>
-        -->
         </div>
     </div>
 
     <script>
-        async function loadrom(){
+        async function loadrom() {
             let raw = document.getElementById("rom").files[0];
             console.log(raw.name)
             const rom = new Uint8Array(await raw.arrayBuffer());
             var loadRom = Module.cwrap('loadRawRom', null, ['number', 'number', 'string']);
-            
+
             const ptr = Module._malloc(rom.length);
             Module.HEAPU8.set(rom, ptr);
             loadRom(ptr, rom.length, raw.name)
@@ -223,24 +219,23 @@
             home.style.display = 'none';
         }
 
-        /* Canvas filtering settings example
+        /* Canvas filtering settings example */
         function updateSettings() {
             let canvas = document.getElementById('canvas');
             let filter = document.getElementById('filtering').value;
-            
-            if filter = "pixelated" {
+
+            if (filter === "pixelated") {
                 canvas.style.imageRendering = 'pixelated';
             } else {
                 canvas.style.imageRendering = 'smooth';
             }
-            
-            console.log(Updated canvas filtering to ${filtering}!);
+
+            console.log(`Updated canvas filtering to ${filter}!`);
         }
-        */
-        
-        document.getElementById('rom').addEventListener('change', function() {
+
+        document.getElementById('rom').addEventListener('change', function () {
             loadrom();
-            /* updateSettings(); */
+            updateSettings();
         });
 
         function openInfo() {
@@ -259,4 +254,5 @@
         }
     </script>
 </body>
+
 </html>
