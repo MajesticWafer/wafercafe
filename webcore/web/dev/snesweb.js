@@ -4563,7 +4563,7 @@ var registerRestoreOldStyle = canvas => {
     var oldDocumentBodyMargin = document.body.style.margin;
     var oldDocumentOverflow = document.documentElement.style.overflow;
     var oldDocumentScroll = document.body.scroll;
-    /* var oldImageRendering = canvas.style.imageRendering; */
+    var oldImageRendering = canvas.style.imageRendering;
 
     function restoreOldStyle() {
         var fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement;
@@ -4587,7 +4587,7 @@ var registerRestoreOldStyle = canvas => {
             document.body.style.margin = oldDocumentBodyMargin;
             document.documentElement.style.overflow = oldDocumentOverflow;
             document.body.scroll = oldDocumentScroll;
-            /* canvas.style.imageRendering = oldImageRendering; */
+            canvas.style.imageRendering = 'smooth';
             if (canvas.GLctxObject) canvas.GLctxObject.GLctx.viewport(0, 0, oldWidth, oldHeight);
             if (currentFullscreenStrategy.canvasResizedCallback) {
                 getWasmTableEntry(currentFullscreenStrategy.canvasResizedCallback)(37, 0, currentFullscreenStrategy.canvasResizedCallbackUserData)
