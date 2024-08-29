@@ -824,9 +824,11 @@
             var controls = document.getElementById('controls').value
             var vk = document.getElementById('vk-layer')
             if (controls === 'top') {
+                vk.style.removeProperty('bottom');
                 vk.style.top = '0';
             } else {
-                vk.style.top = '50vh';
+                vk.style.removeProperty('top');
+                vk.style.bottom = '0';
             }      
         }      
     </script>
