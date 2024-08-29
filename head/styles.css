@@ -84,6 +84,8 @@ h1 {
   margin-bottom: 6px;
   border: none !important;
   border-radius: 50% / 75% !important;
+  aspect-ratio: 1 / 1;
+  width: 100px;
 }
 
 .button-list .button-text {
