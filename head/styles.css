@@ -83,7 +83,7 @@ h1 {
   object-fit: contain;
   margin-bottom: 6px;
   border: none !important;
-  border-radius: 17% !important;
+  border-radius: 15% / 35% !important;
 }
 
 .button-list .button-text {
