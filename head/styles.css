@@ -82,8 +82,8 @@ h1 {
   height: calc(100% - 25px);
   object-fit: contain;
   margin-bottom: 6px;
-  border: none;
-  border-radius: 7%;
+  border: none !important;
+  border-radius: 17% !important;
 }
 
 .button-list .button-text {
