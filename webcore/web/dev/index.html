@@ -193,7 +193,7 @@
             <input type="file" id="rom" name="rom" />
         </div>
 
-        <!-- Settings template (e.g., canvas filtering) -->
+        <!-- Settings template (e.g., canvas filtering)
         <div id="settings">
             <h3>Emulator Settings</h3>
             <label for="filtering">Canvas Filtering</label>
@@ -201,7 +201,7 @@
                 <option value="pixelated">Pixelated</option>
                 <option value="smooth">Smooth</option>
             </select>
-        </div>
+        </div> -->
     </div>
 
     <script>
@@ -219,7 +219,7 @@
             home.style.display = 'none';
         }
 
-        /* Canvas filtering settings example */
+        /* Canvas filtering settings example
         function updateSettings() {
             let canvas = document.getElementById('canvas');
             let filter = document.getElementById('filtering').value;
@@ -229,11 +229,11 @@
             canvas.style.setProperty('image-rendering', cssRule, 'important');
 
             console.log(`Updated canvas filtering to ${filter}!`);
-        }
+        } */
 
         document.getElementById('rom').addEventListener('change', function () {
             loadrom();
-            updateSettings();
+            // updateSettings();
         });
 
         function openInfo() {
