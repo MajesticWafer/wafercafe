@@ -134,7 +134,13 @@
         <button onclick="savBackupBtn()">Backup</button>
         <input type="file" id="sav-file" />
         <button onclick="savRestoreBtn()">Restore</button>
-   </div>
+        <hr> 
+        <label for="controls">[EXPERIMENTAL] Controls:</label>
+        <select name="controls" id="controls">
+            <option value="top">Top</option>
+            <option value="bottom">Bottom</option>    
+        </select>
+    </div>
     <div id="welcome" class="menu">
         <h2>VBA - A GBA Emulator</h2>
         <hr>
@@ -157,7 +163,7 @@
                     onchange="onFileSelected()" /></p>
 
         </div>
-        <hr> Ver. 2024.08.22 | By MajesticWafer
+        <hr> Ver. 2024.08.29 | By MajesticWafer
         <div id="ios-hint" hidden>
             Due to iOS Safari limitations, you have to add this page to your <b>Home Screen</b> in order to save your game progress.
             <p style="text-align: center;">👇</p>
@@ -812,7 +818,18 @@
     </script>
 
 
-    <script src="a.out.js"></script
+    <script src="a.out.js"></script>
+    <script>
+        function controls() {
+            var controls = document.getElementById('controls').value
+            var vk = document.getElementById('vk-layer')
+            if controls === 'top' {
+                vk.style.top = '0';
+            } else {
+                vk.style.top = '50vh';
+            }        
+        }      
+    </script>
 </body>
 
 </html>
