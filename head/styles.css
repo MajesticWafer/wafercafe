@@ -82,6 +82,8 @@ h1 {
   height: calc(100% - 25px);
   object-fit: contain;
   margin-bottom: 6px;
+  border: none;
+  border-radius: 7%;
 }
 
 .button-list .button-text {
@@ -174,16 +176,4 @@ h1 {
   align-items: center;
   justify-content: center;
   height: calc(100vh - 200px);
-}
-
-.item {
-  text-align: center;
-  text-align: left;
-}
-
-.button-row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-  gap: 10px;
 }
