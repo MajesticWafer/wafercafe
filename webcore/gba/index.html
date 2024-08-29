@@ -124,7 +124,7 @@
         }
     </style>
     <div id="pause-menu" class="menu" style="background: rgba(32,43,56,0.7);" hidden>
-        <h1><button onclick="setPauseMenu(false) updateControls()"> ← Back </button>Game Paused</h1>
+        <h1><button onclick="setPauseMenu(false); updateControls();"> ← Back </button>Game Paused</h1>
         <hr> Memory Hacking:<br>
         <input id="cht-addr" value="0x">
         <input id="cht-value">
@@ -823,11 +823,11 @@
         function updateControls() {
             var controls = document.getElementById('controls').value
             var vk = document.getElementById('vk-layer')
-            (if controls === 'top' {
+            if (controls === 'top') {
                 vk.style.top = '0';
             } else {
                 vk.style.top = '50vh';
-            });        
+            }      
         }      
     </script>
 </body>
