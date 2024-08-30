@@ -127,7 +127,7 @@
             image-rendering: pixelated;
             top: 0;
             left: 0;
-            width: 100% !important;
+            width: calc(100% - 14px) !important;
             height: auto !important;
             aspect-ratio: 240px / 160px;
             border: 7px solid white;
@@ -863,7 +863,7 @@
     <script>
         function updateControls() {
             var controls = document.getElementById('controls').value
-            var vk = document.getElementById('vk-1')
+            var vk = document.getElementById('vk-layer')
             if (controls === 'top') {
                 vk.style.top = '0';
             } else {
