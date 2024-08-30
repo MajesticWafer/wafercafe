@@ -29,7 +29,6 @@
         }
 
         body {
-
             background-color: #000000;
             color: #FFFFFF;
             padding: 0;
@@ -37,6 +36,7 @@
             width: 100vw;
             height: 100vh;
             font-family: 'Myriad Set Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            padding: .5em;
         }
 
         hr {
@@ -47,7 +47,6 @@
             border: 2px solid white;
             background: transparent;
             color: white;
-            padding: .5em;
         }
 
         .vk-round {
@@ -84,6 +83,7 @@
             height: 100vh;
             z-index: 999;
             border-radius: 2.5% !important;
+            padding: .5em;
         }
 
         #gba-canvas {
@@ -100,6 +100,7 @@
             height: 100%;
             z-index: 3;
             touch-action: none;
+            bottom: auto;
         }
 
         #msg-layer {
@@ -122,6 +123,9 @@
         textarea::placeholder {
             color: #666;
         }
+
+        .btm0 {
+            bottom: 0 !important;
     </style>
     <div id="pause-menu" class="menu" style="background: rgba(32,43,56,0.7);" hidden>
         <h1><button onclick="setPauseMenu(false); updateControls();"> ← Back </button>Game Paused</h1>
@@ -136,7 +140,7 @@
         <button onclick="savRestoreBtn()">Restore</button>
         <hr> 
         <label for="controls">[EXPERIMENTAL] Controls:</label>
-        <select name="controls" id="controls">
+        <select name="controls" id="controls" onchange="updateControls()">
             <option value="top">Top</option>
             <option value="bottom">Bottom</option>    
         </select>
@@ -179,8 +183,10 @@
         <div class="vk-rect-long vk" data-k="r">R</div>
         <div class="vk-round vk" data-k="a">A</div>
         <div class="vk-round vk" data-k="b">B</div>
-        <div class="vk-rect vk" data-k="select">-</div>
-        <div class="vk-rect vk" data-k="start">+</div>
+        <div class="btm0">
+             <div class="vk-rect vk" data-k="select">-</div>
+             <div class="vk-rect vk" data-k="start">+</div>
+        </div>
         <div class="vk-rect vk" data-k="left">←</div>
         <div class="vk-rect vk" data-k="right">→</div>
         <div class="vk-rect vk" data-k="up">↑</div>
@@ -824,11 +830,9 @@
             var controls = document.getElementById('controls').value
             var vk = document.getElementById('vk-layer')
             if (controls === 'top') {
-                vk.style.removeProperty('bottom');
                 vk.style.top = '0';
             } else {
-                vk.style.removeProperty('top');
-                vk.style.bottom = '0';
+                vk.style.top = '50vh';
             }      
         }      
     </script>
