@@ -100,6 +100,7 @@
             height: 100%;
             z-index: 3;
             touch-action: none;
+            bottom: auto;
         }
 
         #msg-layer {
@@ -122,6 +123,9 @@
         textarea::placeholder {
             color: #666;
         }
+
+        .btm0 {
+            bottom: 0 !important;
     </style>
     <div id="pause-menu" class="menu" style="background: rgba(32,43,56,0.7);" hidden>
         <h1><button onclick="setPauseMenu(false); updateControls();"> ← Back </button>Game Paused</h1>
@@ -179,8 +183,10 @@
         <div class="vk-rect-long vk" data-k="r">R</div>
         <div class="vk-round vk" data-k="a">A</div>
         <div class="vk-round vk" data-k="b">B</div>
-        <div class="vk-rect vk" data-k="select">-</div>
-        <div class="vk-rect vk" data-k="start">+</div>
+        <div class="btm0">
+             <div class="vk-rect vk" data-k="select">-</div>
+             <div class="vk-rect vk" data-k="start">+</div>
+        </div>
         <div class="vk-rect vk" data-k="left">←</div>
         <div class="vk-rect vk" data-k="right">→</div>
         <div class="vk-rect vk" data-k="up">↑</div>
