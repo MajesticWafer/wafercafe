@@ -63,6 +63,7 @@
             vertical-align: middle;
             border-radius: 0% !important;
             display: inline-block;
+            aspect-ratio: 1 / 1 !important;
         }
 
         .vk-rect-long {
@@ -70,6 +71,7 @@
             vertical-align: middle;
             border-radius: 5% / 15% !important;
             display: inline-block;
+            aspect-ratio: 3 / 1 !important;
         }
 
         .vk {
@@ -132,7 +134,7 @@
         }
 
         #vk-layer {
-            position: absolute;
+            position: fixed;
             left: 0;
             top: 0;
             width: 100%;
@@ -212,22 +214,20 @@
         <p id="msg-text"></p>
     </div>
      <div id="vk-layer" hidden>
-        <div id="vk-1">
-             <div class="vk-rect vk" data-k="menu">Menu</div>
-             <div class="vk-rect vk" data-k="turbo">Turbo</div>
-             <div class="vk-rect-long vk" data-k="l">L</div>
-             <div class="vk-rect-long vk" data-k="r">R</div>
-             <div class="vk-round vk" data-k="a">A</div>
-             <div class="vk-round vk" data-k="b">B</div>
-             <div class="vk-rect vk" data-k="left">←</div>
-             <div class="vk-rect vk" data-k="right">→</div>
-             <div class="vk-rect vk" data-k="up">↑</div>
-             <div class="vk-rect vk" data-k="down">↓</div>
-             <div class="corner-radius-top-left vk-rect vk vk-hide" style="background-color: transparent !important" data-k="ul"></div>
-             <div class="corner-radius-top-right vk-rect vk vk-hide" style="background-color: transparent !important" data-k="ur"></div>
-             <div class="corner-radius-bottom-left vk-rect vk vk-hide" style="background-color: transparent !important" data-k="dl"></div>
-             <div class="corner-radius-bottom-right vk-rect vk vk-hide" style="background-color: transparent !important" data-k="dr"></div>
-        </div>
+        <div class="vk-rect vk" data-k="menu">Menu</div>
+        <div class="vk-rect vk" data-k="turbo">Turbo</div>
+        <div class="vk-rect-long vk" data-k="l">L</div>
+        <div class="vk-rect-long vk" data-k="r">R</div>
+        <div class="vk-round vk" data-k="a">A</div>
+        <div class="vk-round vk" data-k="b">B</div>
+        <div class="vk-rect vk" data-k="left">←</div>
+        <div class="vk-rect vk" data-k="right">→</div>
+        <div class="vk-rect vk" data-k="up">↑</div>
+        <div class="vk-rect vk" data-k="down">↓</div>
+        <div class="corner-radius-top-left vk-rect vk vk-hide" style="background-color: transparent !important" data-k="ul"></div>
+        <div class="corner-radius-top-right vk-rect vk vk-hide" style="background-color: transparent !important" data-k="ur"></div>
+        <div class="corner-radius-bottom-left vk-rect vk vk-hide" style="background-color: transparent !important" data-k="dl"></div>
+        <div class="corner-radius-bottom-right vk-rect vk vk-hide" style="background-color: transparent !important" data-k="dr"></div>
         <div class="vk-rect vk" data-k="select">-</div>
         <div class="vk-rect vk" data-k="start">+</div>
     </div>
