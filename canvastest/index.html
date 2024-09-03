@@ -27,20 +27,15 @@
     <script src="xBRZ.js"></script>
 
     <script>
-        // Get the canvas and context
+        // Get the main canvas and context
         const canvas = document.getElementById('myCanvas');
         const ctx = canvas.getContext('2d');
 
-        // Define the scaling factor
-        const scaleFactor = 2; // Change this to 3, 4, etc. for higher scaling
-
-        // Create an offscreen canvas to apply the filter
+        // Create an offscreen canvas
         const offscreenCanvas = document.createElement('canvas');
         const offscreenCtx = offscreenCanvas.getContext('2d');
-
-        // Set the size of the offscreen canvas
-        offscreenCanvas.width = canvas.width * scaleFactor;
-        offscreenCanvas.height = canvas.height * scaleFactor;
+        offscreenCanvas.width = canvas.width;
+        offscreenCanvas.height = canvas.height;
 
         // Ball properties
         let ballX = canvas.width / 2;
@@ -49,45 +44,37 @@
         let ballSpeed = 2;
         let direction = 1; // 1 for right, -1 for left
 
-        // Function to apply the XBRZ filter
-        function applyXBRZFilter(sourceCanvas) {
-            const sourceImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const targetImageData = offscreenCtx.createImageData(offscreenCanvas.width, offscreenCanvas.height);
-
-            // Hypothetical usage of XBRZ scaling function (adapt based on the actual library usage)
-            xBRZ.scale(sourceImageData, targetImageData, scaleFactor);
-
-            // Draw the upscaled image back to the main canvas
-            ctx.putImageData(targetImageData, 0, 0);
-        }
-
-        // Function to render the ball
+        // Function to render the ball on the offscreen canvas
         function renderBall() {
-            // Clear the canvas
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Clear the offscreen canvas
+            offscreenCtx.clearRect(0, 0, offscreenCanvas.width, offscreenCanvas.height);
 
             // Draw the ball
-            ctx.fillStyle = 'yellow';
-            ctx.beginPath();
-            ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
-            ctx.fill();
+            offscreenCtx.fillStyle = 'yellow';
+            offscreenCtx.beginPath();
+            offscreenCtx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
+            offscreenCtx.fill();
 
             // Update the ball's position
             ballX += ballSpeed * direction;
 
             // Reverse direction if the ball reaches the right edge or center
-            if (ballX + ballRadius >= canvas.width || ballX - ballRadius <= canvas.width / 2) {
+            if (ballX + ballRadius >= offscreenCanvas.width || ballX - ballRadius <= offscreenCanvas.width / 2) {
                 direction *= -1;
             }
         }
 
         // Rendering loop
         function renderFrame() {
-            // Render the ball on the canvas
+            // Render the ball on the offscreen canvas
             renderBall();
 
-            // Apply XBRZ filter on every frame
-            applyXBRZFilter(canvas);
+            // Apply XBRZ filter and draw onto the main canvas
+            xBRZ.scaleToCanvas({
+                source: offscreenCanvas,
+                canvas: canvas,
+                scale: 6
+            });
 
             // Continue the loop
             requestAnimationFrame(renderFrame);
@@ -95,7 +82,6 @@
 
         // Start rendering
         renderFrame();
-        console.log('Rendering')
     </script>
 </body>
 </html>
