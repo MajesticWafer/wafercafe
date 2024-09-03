@@ -163,10 +163,6 @@
         textarea::placeholder {
             color: #666;
         }
-        
-        #vk-moveable {
-            top: 0;
-        }
     </style>
     <div id="pause-menu" class="menu" style="background: rgba(32,43,56,0.7);" hidden>
         <h1><button onclick="setPauseMenu(false); updateControls();"> ← Back </button>Game Paused</h1>
@@ -220,18 +216,18 @@
      <div id="vk-layer" hidden>
         <div class="vk-rect vk" data-k="menu">Menu</div>
         <div class="vk-rect vk" data-k="turbo">Turbo</div>
-        <div id="vk-moveable" class="vk-rect-long vk" data-k="l">L</div>
-        <div id="vk-moveable" class="vk-rect-long vk" data-k="r">R</div>
-        <div id="vk-moveable" class="vk-round vk" data-k="a">A</div>
-        <div id="vk-moveable" class="vk-round vk" data-k="b">B</div>
-        <div id="vk-moveable" class="vk-rect vk" data-k="left">←</div>
-        <div id="vk-moveable" class="vk-rect vk" data-k="right">→</div>
-        <div id="vk-moveable" class="vk-rect vk" data-k="up">↑</div>
-        <div id="vk-moveable" class="vk-rect vk" data-k="down">↓</div>
-        <div id="vk-moveable" class="corner-radius-top-left vk-rect vk vk-hide" style="background-color: transparent !important" data-k="ul"></div>
-        <div id="vk-moveable" class="corner-radius-top-right vk-rect vk vk-hide" style="background-color: transparent !important" data-k="ur"></div>
-        <div id="vk-moveable" class="corner-radius-bottom-left vk-rect vk vk-hide" style="background-color: transparent !important" data-k="dl"></div>
-        <div id="vk-moveable" class="corner-radius-bottom-right vk-rect vk vk-hide" style="background-color: transparent !important" data-k="dr"></div>
+        <div id="vkm1" class="vk-rect-long vk" data-k="l">L</div>
+        <div id="vkm2" class="vk-rect-long vk" data-k="r">R</div>
+        <div id="vkm3" class="vk-round vk" data-k="a">A</div>
+        <div id="vkm4" class="vk-round vk" data-k="b">B</div>
+        <div id="vkm5" class="vk-rect vk" data-k="left">←</div>
+        <div id="vkm6" class="vk-rect vk" data-k="right">→</div>
+        <div id="vkm7" class="vk-rect vk" data-k="up">↑</div>
+        <div id="vkm8" class="vk-rect vk" data-k="down">↓</div>
+        <div id="vkm9" class="corner-radius-top-left vk-rect vk vk-hide" style="background-color: transparent !important" data-k="ul"></div>
+        <div id="vkm10" class="corner-radius-top-right vk-rect vk vk-hide" style="background-color: transparent !important" data-k="ur"></div>
+        <div id="vkm11" class="corner-radius-bottom-left vk-rect vk vk-hide" style="background-color: transparent !important" data-k="dl"></div>
+        <div id="vkm12" class="corner-radius-bottom-right vk-rect vk vk-hide" style="background-color: transparent !important" data-k="dr"></div>
         <div class="vk-rect vk" data-k="select">-</div>
         <div class="vk-rect vk" data-k="start">+</div>
     </div>
@@ -578,7 +574,6 @@
             var fontSize = baseSize * 0.7
             var offTop = 0
             var offLeft = 0
-            var offBottom = 100
 
             if (!isLandscape) {
                 offTop = gbaHeight + baseSize
@@ -592,6 +587,10 @@
 
             keyState['l'][0].style = makeVKStyle(offTop + baseSize * 1.5, 0, vkw, vkh, fontSize)
             keyState['r'][0].style = makeVKStyle(offTop + baseSize * 1.5, window.innerWidth - vkw, vkw, vkh, fontSize)
+
+            vkh = baseSize * 0.5
+            keyState['turbo'][0].style = makeVKStyle(offTop + baseSize * 0.5, 0, vkw, vkh, fontSize)
+            keyState['menu'][0].style = makeVKStyle(offTop + baseSize * 0.5, window.innerWidth - vkw, vkw, vkh, fontSize)
 
             vkh = baseSize
             vkw = baseSize
@@ -626,12 +625,6 @@
 
             keyState['select'][0].style = makeVKStyle(offTop, offLeft, vkw, vkh, fontSize)
             keyState['start'][0].style = makeVKStyle(offTop, offLeft + vkw * 1.2, vkw, vkh, fontSize)
-
-            vkh = baseSize * 0.5
-            keyState['turbo'][0].style = makeVKStyle(offBottom + baseSize * 0.5, 0, vkw, vkh, fontSize)
-            keyState['menu'][0].style = makeVKStyle(offBottom + baseSize * 0.5, window.innerWidth - vkw, vkw, vkh, fontSize)
-
-
         }
 
         function adjustSize() {
@@ -868,12 +861,46 @@
     <script>
         function updateControls() {
             var controls = document.getElementById('controls').value;
-            var vk = document.getElementById('vk-moveable');
+            var vkm1 = document.getElementById('vkm1');
+            var vkm2 = document.getElementById('vkm2');
+            var vkm3 = document.getElementById('vkm3');
+            var vkm4 = document.getElementById('vkm4');
+            var vkm5 = document.getElementById('vkm5');
+            var vkm6 = document.getElementById('vkm6');
+            var vkm7 = document.getElementById('vkm7');
+            var vkm8 = document.getElementById('vkm8');
+            var vkm9 = document.getElementById('vkm9');
+            var vkm10 = document.getElementById('vkm10');
+            var vkm11 = document.getElementById('vkm11');
+            var vkm12 = document.getElementById('vkm12');
             
             if (controls === 'top') {
-                vk.style.top = '0';
+                vkm1.style.top = '0';
+                vkm2.style.top = '0';
+                vkm3.style.top = '0';
+                vkm4.style.top = '0';
+                vkm5.style.top = '0';
+                vkm6.style.top = '0';
+                vkm7.style.top = '0';
+                vkm8.style.top = '0';
+                vkm9.style.top = '0';
+                vkm10.style.top = '0';
+                vkm11.style.top = '0';
+                vkm12.style.top = '0';
+                
             } else {
-                vk.style.top = '50vh';
+                vkm1.style.top = '50vh';
+                vkm2.style.top = '50vh';
+                vkm3.style.top = '50vh';
+                vkm4.style.top = '50vh';
+                vkm5.style.top = '50vh';
+                vkm6.style.top = '50vh';
+                vkm7.style.top = '50vh';
+                vkm8.style.top = '50vh';
+                vkm9.style.top = '50vh';
+                vkm10.style.top = '50vh';
+                vkm11.style.top = '50vh';
+                vkm12.style.top = '50vh';
             }
         }
     </script>
