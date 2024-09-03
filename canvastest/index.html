@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas with XBRZ Filter</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #222;
+        }
+        canvas {
+            border: 1px solid #ccc;
+            image-rendering: pixelated; /* Helps visualize pixelated effect */
+        }
+    </style>
+</head>
+<body>
+    <canvas id="myCanvas" width="320" height="240"></canvas>
+
+    <!-- Include the XBRZ library here -->
+    <script src="xBRZ.js"></script>
+
+    <script>
+        // Get the canvas and context
+        const canvas = document.getElementById('myCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Define the scaling factor
+        const scaleFactor = 2; // Change this to 3, 4, etc. for higher scaling
+
+        // Create an offscreen canvas to apply the filter
+        const offscreenCanvas = document.createElement('canvas');
+        const offscreenCtx = offscreenCanvas.getContext('2d');
+
+        // Set the size of the offscreen canvas
+        offscreenCanvas.width = canvas.width * scaleFactor;
+        offscreenCanvas.height = canvas.height * scaleFactor;
+
+        // Function to apply the XBRZ filter
+        function applyXBRZFilter(sourceCanvas) {
+            const sourceImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const targetImageData = offscreenCtx.createImageData(offscreenCanvas.width, offscreenCanvas.height);
+
+            // Hypothetical usage of XBRZ scaling function (adapt based on the actual library usage)
+            xBRZ.scale(sourceImageData, targetImageData, scaleFactor);
+
+            // Draw the upscaled image back to the main canvas
+            ctx.putImageData(targetImageData, 0, 0);
+        }
+
+        // Rendering loop
+        function renderFrame() {
+            // Example: Fill canvas with a test pattern or any other drawing code
+            ctx.fillStyle = 'red';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = 'blue';
+            ctx.fillRect(50, 50, 50, 50);
+
+            // Apply XBRZ filter on every frame
+            applyXBRZFilter(canvas);
+
+            // Continue the loop
+            requestAnimationFrame(renderFrame);
+        }
+
+        // Start rendering
+        renderFrame();
+    </script>
+</body>
+</html>
