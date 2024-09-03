@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canvas with XBRZ Filter - Bouncing Ball</title>
+    <title>Canvas with XBRZ Filter and Moving Ball</title>
     <style>
         body {
             display: flex;
@@ -16,7 +16,7 @@
         }
         canvas {
             border: 1px solid #ccc;
-            image-rendering: pixelated; /* Helps visualize the pixelated effect */
+            image-rendering: pixelated; /* Helps visualize pixelated effect */
         }
     </style>
 </head>
@@ -32,7 +32,7 @@
         const ctx = canvas.getContext('2d');
 
         // Define the scaling factor
-        const scaleFactor = 2; // Change this to 3, 4, etc., for higher scaling
+        const scaleFactor = 2; // Change this to 3, 4, etc. for higher scaling
 
         // Create an offscreen canvas to apply the filter
         const offscreenCanvas = document.createElement('canvas');
@@ -43,15 +43,11 @@
         offscreenCanvas.height = canvas.height * scaleFactor;
 
         // Ball properties
-        const ball = {
-            x: canvas.width / 2,
-            y: 20,
-            radius: 10,
-            color: 'yellow',
-            dy: 2, // Initial downward speed
-            gravity: 0.5, // Gravity effect
-            bounce: 0.7 // Bouncing factor
-        };
+        let ballX = canvas.width / 2;
+        const ballY = canvas.height / 2;
+        const ballRadius = 10;
+        let ballSpeed = 2;
+        let direction = 1; // 1 for right, -1 for left
 
         // Function to apply the XBRZ filter
         function applyXBRZFilter(sourceCanvas) {
@@ -65,40 +61,33 @@
             ctx.putImageData(targetImageData, 0, 0);
         }
 
-        // Function to update ball position
-        function updateBall() {
-            ball.y += ball.dy; // Move the ball
-            ball.dy += ball.gravity; // Apply gravity to speed
+        // Function to render the ball
+        function renderBall() {
+            // Clear the canvas
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Bounce the ball off the bottom edge
-            if (ball.y + ball.radius > canvas.height) {
-                ball.y = canvas.height - ball.radius; // Position ball at the edge
-                ball.dy *= -ball.bounce; // Reverse and reduce speed
-            }
-
-            // Stop the ball if it’s bouncing too low (optional stabilization)
-            if (Math.abs(ball.dy) < 0.5 && ball.y + ball.radius >= canvas.height) {
-                ball.dy = 0; // Stop the ball
-            }
-        }
-
-        // Function to draw the ball
-        function drawBall() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
-            ctx.fillStyle = ball.color;
+            // Draw the ball
+            ctx.fillStyle = 'yellow';
             ctx.beginPath();
-            ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+            ctx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
             ctx.fill();
+
+            // Update the ball's position
+            ballX += ballSpeed * direction;
+
+            // Reverse direction if the ball reaches the right edge or center
+            if (ballX + ballRadius >= canvas.width || ballX - ballRadius <= canvas.width / 2) {
+                direction *= -1;
+            }
         }
 
         // Rendering loop
         function renderFrame() {
-            updateBall(); // Update ball position
-            drawBall(); // Draw the ball
+            // Render the ball on the canvas
+            renderBall();
 
             // Apply XBRZ filter on every frame
             applyXBRZFilter(canvas);
-            console.log('Applying xBRZ filter to frame...')
 
             // Continue the loop
             requestAnimationFrame(renderFrame);
@@ -106,7 +95,7 @@
 
         // Start rendering
         renderFrame();
-        console.log('Rendering frame...')
+        console.log('Rendering')
     </script>
 </body>
 </html>
