@@ -574,6 +574,7 @@
             var fontSize = baseSize * 0.7
             var offTop = 0
             var offLeft = 0
+            var offBottom = 0
 
             if (!isLandscape) {
                 offTop = gbaHeight + baseSize
@@ -589,8 +590,8 @@
             keyState['r'][0].style = makeVKStyle(offTop + baseSize * 1.5, window.innerWidth - vkw, vkw, vkh, fontSize)
 
             vkh = baseSize * 0.5
-            keyState['turbo'][0].style = makeVKStyle(offTop + baseSize * 0.5, 0, vkw, vkh, fontSize)
-            keyState['menu'][0].style = makeVKStyle(offTop + baseSize * 0.5, window.innerWidth - vkw, vkw, vkh, fontSize)
+            keyState['turbo'][0].style = makeVKStyle(offBottom + baseSize * 0.5, 0, vkw, vkh, fontSize)
+            keyState['menu'][0].style = makeVKStyle(offBottom + baseSize * 0.5, window.innerWidth - vkw, vkw, vkh, fontSize)
 
             vkh = baseSize
             vkw = baseSize
