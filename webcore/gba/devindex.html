@@ -867,21 +867,27 @@
     <script src="a.out.js"></script>
     <script>
         function updateControls() {
-            var controls = document.getElementById('controls').value;
-            var vkElements = document.getElementsByClassName('vkdown'); // Returns the collection of elements
+    var controls = document.getElementById('controls').value;
     
-            // Loop through each element in the collection
-            for (var i = 0; i < vkElements.length; i++) {
-                var vk = vkElements[i]; // Get the individual element
+    // Access the first stylesheet (adjust if necessary)
+    var styleSheet = document.styleSheets[0];
+    
+    // Loop through all CSS rules in the stylesheet
+    for (let i = 0; i < styleSheet.cssRules.length; i++) {
+        let rule = styleSheet.cssRules[i];
         
-                // Update the style based on the controls value
-                if (controls === 'top') {
-                    vk.style.top = '0';
-                } else {
-                    vk.style.top = '50vh';
-                }
+        // Find the rule for the class `.vkdown`
+        if (rule.selectorText === '.vkdown') {
+            // Modify the `top` property based on the controls value
+            if (controls === 'top') {
+                rule.style.top = '0';
+            } else {
+                rule.style.top = '50vh';
             }
-        }      
+            break; // Exit loop once the class is found and modified
+        }
+    }
+}
     </script>
 </body>
 
