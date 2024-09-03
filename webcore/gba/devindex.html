@@ -869,25 +869,22 @@
         function updateControls() {
     var controls = document.getElementById('controls').value;
     
-    // Access the first stylesheet (adjust if necessary)
-    var styleSheet = document.styleSheets[0];
+    // Create a style element if it doesn't exist
+    var style = document.getElementById('dynamic-styles');
+    if (!style) {
+        style = document.createElement('style');
+        style.id = 'dynamic-styles';
+        document.head.appendChild(style);
+    }
     
-    // Loop through all CSS rules in the stylesheet
-    for (let i = 0; i < styleSheet.cssRules.length; i++) {
-        let rule = styleSheet.cssRules[i];
-        
-        // Find the rule for the class `.vkdown`
-        if (rule.selectorText === '.vkdown') {
-            // Modify the `top` property based on the controls value
-            if (controls === 'top') {
-                rule.style.top = '0';
-            } else {
-                rule.style.top = '50vh';
-            }
-            break; // Exit loop once the class is found and modified
-        }
+    // Update the CSS rule for the `.vkdown` class
+    if (controls === 'top') {
+        style.innerHTML = `.vkdown { top: 0; }`;
+    } else {
+        style.innerHTML = `.vkdown { top: 50vh; }`;
     }
 }
+
     </script>
 </body>
 
