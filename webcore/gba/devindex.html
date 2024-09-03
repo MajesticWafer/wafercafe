@@ -597,7 +597,8 @@
             keyState['l'][0].style = makeVKStyle(offTop + baseSize * 1.5, 0, vkw, vkh, fontSize)
             keyState['r'][0].style = makeVKStyle(offTop + baseSize * 1.5, window.innerWidth - vkw, vkw, vkh, fontSize)
 
-            vkh = baseSize * 0.5
+            vkh = baseSize * 0.65
+            vkw = baseSize * 2
             keyState['turbo'][0].style = makeVKStyle(offTop, 0, vkw, vkh, fontSize)
             keyState['menu'][0].style = makeVKStyle(offTop, window.innerWidth - vkw, vkw, vkh, fontSize)
 
@@ -624,7 +625,7 @@
             keyState['b'][0].style = makeVKStyle(offTop + vkh, window.innerWidth - abSize * 2.4, abSize, abSize, fontSize)
 
             vkh = baseSize * 0.5
-            vkw = baseSize * 3
+            vkw = baseSize * 2
 
             offLeft = (window.innerWidth - vkw * 2.2) / 2
             offTop += baseSize * 3 + baseSize * 0.5
