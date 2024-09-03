@@ -37,7 +37,6 @@
             width: 100vw;
             height: 100vh;
             font-family: 'Myriad Set Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            padding: .5em;
         }
 
         hr {
@@ -117,7 +116,6 @@
             width: 100vw;
             height: 100vh;
             z-index: 999;
-            padding: .5em;
         }
 
         #gba-canvas {
@@ -127,10 +125,12 @@
             image-rendering: pixelated;
             top: 0;
             left: 0;
-            width: 100% !important;
+            width: 95.45% !important;
             height: auto !important;
             aspect-ratio: 240px / 160px;
-            border: 7px solid white;
+            border: 2.55% solid white;
+            padding: 0 !important;
+            margin: 0 auto;
         }
 
         #vk-layer {
@@ -863,7 +863,7 @@
     <script>
         function updateControls() {
             var controls = document.getElementById('controls').value
-            var vk = document.getElementById('vk-1')
+            var vk = document.getElementById('vk-layer')
             if (controls === 'top') {
                 vk.style.top = '0';
             } else {
