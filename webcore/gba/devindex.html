@@ -867,13 +867,20 @@
     <script src="a.out.js"></script>
     <script>
         function updateControls() {
-            var controls = document.getElementById('controls').value
-            var vk = document.getElementsByClassName('vkdown'); // Returns the collection of elements that should be moved down
-            if (controls === 'top') {
-                vk.style.top = '0';
-            } else {
-                vk.style.top = '50vh';
-            }      
+            var controls = document.getElementById('controls').value;
+            var vkElements = document.getElementsByClassName('vkdown'); // Returns the collection of elements
+    
+            // Loop through each element in the collection
+            for (var i = 0; i < vkElements.length; i++) {
+                var vk = vkElements[i]; // Get the individual element
+        
+                // Update the style based on the controls value
+                if (controls === 'top') {
+                    vk.style.top = '0';
+                } else {
+                    vk.style.top = '50vh';
+                }
+            }
         }      
     </script>
 </body>
