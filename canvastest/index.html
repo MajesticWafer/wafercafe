@@ -4,84 +4,87 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canvas with XBRZ Filter and Moving Ball</title>
+    <title>xBRZ Scaler Demo</title>
     <style>
         body {
+            background-color: #2e2e2e;
+            color: #e0e0e0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
-            background-color: #222;
+            font-family: Arial, sans-serif;
         }
+
         canvas {
-            border: 1px solid #ccc;
-            image-rendering: pixelated; /* Helps visualize pixelated effect */
+            border: 1px solid #444;
+            image-rendering: pixelated; /* Optional: adjust for sharp scaling */
+        }
+
+        #controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 10px;
         }
     </style>
 </head>
 <body>
-    <canvas id="myCanvas" width="320" height="240"></canvas>
 
-    <!-- Include the XBRZ library here -->
-    <script src="xBRZ.js"></script>
+<canvas id="canvas" width="320" height="240"></canvas>
 
-    <script>
-        // Get the main canvas and context
-        const canvas = document.getElementById('myCanvas');
-        const ctx = canvas.getContext('2d');
+<div id="controls">
+    <button onclick="applyScale(2)">Scale 2x</button>
+    <button onclick="applyScale(3)">Scale 3x</button>
+    <button onclick="applyScale(4)">Scale 4x</button>
+    <button onclick="applyScale(5)">Scale 5x</button>
+    <button onclick="applyScale(6)">Scale 6x</button>
+</div>
 
-        // Create an offscreen canvas
-        const offscreenCanvas = document.createElement('canvas');
-        const offscreenCtx = offscreenCanvas.getContext('2d');
-        offscreenCanvas.width = canvas.width;
-        offscreenCanvas.height = canvas.height;
+<script type="module">
+    import { Scaler2x, Scaler3x, Scaler4x, Scaler5x, Scaler6x } from "./scalers/index.js";
 
-        // Ball properties
-        let ballX = canvas.width / 2;
-        const ballY = canvas.height / 2;
-        const ballRadius = 10;
-        let ballSpeed = 2;
-        let direction = 1; // 1 for right, -1 for left
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    img.src = 'image.jpeg'; // Replace with your image path
 
-        // Function to render the ball on the offscreen canvas
-        function renderBall() {
-            // Clear the offscreen canvas
-            offscreenCtx.clearRect(0, 0, offscreenCanvas.width, offscreenCanvas.height);
+    img.onload = () => {
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    };
 
-            // Draw the ball
-            offscreenCtx.fillStyle = 'yellow';
-            offscreenCtx.beginPath();
-            offscreenCtx.arc(ballX, ballY, ballRadius, 0, Math.PI * 2);
-            offscreenCtx.fill();
+    function applyScale(scale) {
+        const scalerMap = {
+            2: Scaler2x,
+            3: Scaler3x,
+            4: Scaler4x,
+            5: Scaler5x,
+            6: Scaler6x
+        };
 
-            // Update the ball's position
-            ballX += ballSpeed * direction;
+        const scaler = new scalerMap[scale]();
+        const srcCanvas = document.createElement('canvas');
+        srcCanvas.width = canvas.width;
+        srcCanvas.height = canvas.height;
+        const srcCtx = srcCanvas.getContext('2d');
+        srcCtx.drawImage(img, 0, 0, srcCanvas.width, srcCanvas.height);
+        const srcImageData = srcCtx.getImageData(0, 0, srcCanvas.width, srcCanvas.height);
 
-            // Reverse direction if the ball reaches the right edge or center
-            if (ballX + ballRadius >= offscreenCanvas.width || ballX - ballRadius <= offscreenCanvas.width / 2) {
-                direction *= -1;
-            }
-        }
+        const trgCanvas = document.createElement('canvas');
+        trgCanvas.width = srcCanvas.width * scale;
+        trgCanvas.height = srcCanvas.height * scale;
+        const trgCtx = trgCanvas.getContext('2d');
+        const trgImageData = trgCtx.createImageData(trgCanvas.width, trgCanvas.height);
 
-        // Rendering loop
-        function renderFrame() {
-            // Render the ball on the offscreen canvas
-            renderBall();
+        // Apply scaling
+        scaler.scaleImage(scale, srcImageData.data, trgImageData.data, srcCanvas.width, srcCanvas.height, 0, srcCanvas.height);
 
-            // Apply XBRZ filter and draw onto the main canvas
-            xBRZ.scaleToCanvas({
-                source: offscreenCanvas,
-                canvas: canvas,
-                scale: 6
-            });
+        // Display scaled image
+        canvas.width = trgCanvas.width;
+        canvas.height = trgCanvas.height;
+        ctx.putImageData(trgImageData, 0, 0);
+    }
+</script>
 
-            // Continue the loop
-            requestAnimationFrame(renderFrame);
-        }
-
-        // Start rendering
-        renderFrame();
-    </script>
 </body>
 </html>
