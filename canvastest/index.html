@@ -24,7 +24,7 @@
     <canvas id="myCanvas" width="320" height="240"></canvas>
 
     <!-- Include the XBRZ library here -->
-    <script src="xBRZ.js"></script>
+    <script src="path/to/xBRZ.js"></script>
 
     <script>
         // Get the canvas and context
@@ -45,11 +45,11 @@
         // Ball properties
         const ball = {
             x: canvas.width / 2,
-            y: 0,
+            y: 20,
             radius: 10,
             color: 'yellow',
-            dy: 1, // Speed in the Y direction
-            gravity: 0.2, // Gravity effect
+            dy: 2, // Initial downward speed
+            gravity: 0.5, // Gravity effect
             bounce: 0.7 // Bouncing factor
         };
 
@@ -68,12 +68,17 @@
         // Function to update ball position
         function updateBall() {
             ball.y += ball.dy; // Move the ball
-            ball.dy += ball.gravity; // Apply gravity
+            ball.dy += ball.gravity; // Apply gravity to speed
 
             // Bounce the ball off the bottom edge
             if (ball.y + ball.radius > canvas.height) {
-                ball.y = canvas.height - ball.radius;
-                ball.dy *= -ball.bounce; // Reverse direction and reduce speed
+                ball.y = canvas.height - ball.radius; // Position ball at the edge
+                ball.dy *= -ball.bounce; // Reverse and reduce speed
+            }
+
+            // Stop the ball if it’s bouncing too low (optional stabilization)
+            if (Math.abs(ball.dy) < 0.5 && ball.y + ball.radius >= canvas.height) {
+                ball.dy = 0; // Stop the ball
             }
         }
 
@@ -93,6 +98,7 @@
 
             // Apply XBRZ filter on every frame
             applyXBRZFilter(canvas);
+            console.log('Applying xBRZ filter to frame...')
 
             // Continue the loop
             requestAnimationFrame(renderFrame);
@@ -100,6 +106,7 @@
 
         // Start rendering
         renderFrame();
+        console.log('Rendering frame...')
     </script>
 </body>
 </html>
