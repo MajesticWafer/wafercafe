@@ -214,8 +214,8 @@
         <p id="msg-text"></p>
     </div>
      <div id="vk-layer" hidden>
-        <div class="vk-rect vk" data-k="menu">Menu</div>
-        <div class="vk-rect vk" data-k="turbo">Turbo</div>
+        <div class="vk-rect-long vk" data-k="menu">Menu</div>
+        <div class="vk-rect-long vk" data-k="turbo">Turbo</div>
         <div id="vkm1" class="vk-rect-long vk" data-k="l">L</div>
         <div id="vkm2" class="vk-rect-long vk" data-k="r">R</div>
         <div id="vkm3" class="vk-round vk" data-k="a">A</div>
@@ -228,8 +228,8 @@
         <div id="vkm10" class="corner-radius-top-right vk-rect vk vk-hide" style="background-color: transparent !important" data-k="ur"></div>
         <div id="vkm11" class="corner-radius-bottom-left vk-rect vk vk-hide" style="background-color: transparent !important" data-k="dl"></div>
         <div id="vkm12" class="corner-radius-bottom-right vk-rect vk vk-hide" style="background-color: transparent !important" data-k="dr"></div>
-        <div class="vk-rect vk" data-k="select">-</div>
-        <div class="vk-rect vk" data-k="start">+</div>
+        <div class="vk-rect-long vk" data-k="select">-</div>
+        <div class="vk-rect-long vk" data-k="start">+</div>
     </div>
     <canvas width="240" height="160" id="gba-canvas" style="touch-action: none;image-rendering: pixelated;"></canvas>
     <script src="localforage.js"></script>
@@ -589,8 +589,8 @@
             keyState['r'][0].style = makeVKStyle(offTop + baseSize * 1.5, window.innerWidth - vkw, vkw, vkh, fontSize)
 
             vkh = baseSize * 0.5
-            keyState['turbo'][0].style = makeVKStyle(offTop + baseSize * 0.5, 0, vkw, vkh, fontSize)
-            keyState['menu'][0].style = makeVKStyle(offTop + baseSize * 0.5, window.innerWidth - vkw, vkw, vkh, fontSize)
+            keyState['turbo'][0].style = makeVKStyle(offTop, 0, vkw, vkh, fontSize)
+            keyState['menu'][0].style = makeVKStyle(offTop, window.innerWidth - vkw, vkw, vkh, fontSize)
 
             vkh = baseSize
             vkw = baseSize
