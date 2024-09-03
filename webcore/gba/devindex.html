@@ -589,10 +589,6 @@
             keyState['l'][0].style = makeVKStyle(offTop + baseSize * 1.5, 0, vkw, vkh, fontSize)
             keyState['r'][0].style = makeVKStyle(offTop + baseSize * 1.5, window.innerWidth - vkw, vkw, vkh, fontSize)
 
-            vkh = baseSize * 0.5
-            keyState['turbo'][0].style = makeVKStyle(offBottom + baseSize * 0.5, 0, vkw, vkh, fontSize)
-            keyState['menu'][0].style = makeVKStyle(offBottom + baseSize * 0.5, window.innerWidth - vkw, vkw, vkh, fontSize)
-
             vkh = baseSize
             vkw = baseSize
             offTop += baseSize * 3
@@ -626,6 +622,10 @@
 
             keyState['select'][0].style = makeVKStyle(offTop, offLeft, vkw, vkh, fontSize)
             keyState['start'][0].style = makeVKStyle(offTop, offLeft + vkw * 1.2, vkw, vkh, fontSize)
+
+            vkh = baseSize * 0.5
+            keyState['turbo'][0].style = makeVKStyle(offBottom + baseSize * 0.5, 0, vkw, vkh, fontSize)
+            keyState['menu'][0].style = makeVKStyle(offBottom + baseSize * 0.5, window.innerWidth - vkw, vkw, vkh, fontSize)
 
 
         }
