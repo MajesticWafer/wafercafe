@@ -164,8 +164,8 @@
             color: #666;
         }
         
-        .vkdown {
-
+        #vk-moveable {
+            top: 0;
         }
     </style>
     <div id="pause-menu" class="menu" style="background: rgba(32,43,56,0.7);" hidden>
@@ -220,18 +220,18 @@
      <div id="vk-layer" hidden>
         <div class="vk-rect vk" data-k="menu">Menu</div>
         <div class="vk-rect vk" data-k="turbo">Turbo</div>
-        <div class="vk-rect-long vk vkdown" data-k="l">L</div>
-        <div class="vk-rect-long vk vkdown" data-k="r">R</div>
-        <div class="vk-round vk vkdown" data-k="a">A</div>
-        <div class="vk-round vk vkdown" data-k="b">B</div>
-        <div class="vk-rect vk vkdown" data-k="left">←</div>
-        <div class="vk-rect vk vkdown" data-k="right">→</div>
-        <div class="vk-rect vk vkdown" data-k="up">↑</div>
-        <div class="vk-rect vk vkdown" data-k="down">↓</div>
-        <div class="corner-radius-top-left vk-rect vk vk-hide vkdown" style="background-color: transparent !important" data-k="ul"></div>
-        <div class="corner-radius-top-right vk-rect vk vk-hide vkdown" style="background-color: transparent !important" data-k="ur"></div>
-        <div class="corner-radius-bottom-left vk-rect vk vk-hide vkdown" style="background-color: transparent !important" data-k="dl"></div>
-        <div class="corner-radius-bottom-right vk-rect vk vk-hide vkdown" style="background-color: transparent !important" data-k="dr"></div>
+        <div id="vk-moveable" class="vk-rect-long vk" data-k="l">L</div>
+        <div id="vk-moveable" class="vk-rect-long vk" data-k="r">R</div>
+        <div id="vk-moveable" class="vk-round vk" data-k="a">A</div>
+        <div id="vk-moveable" class="vk-round vk" data-k="b">B</div>
+        <div id="vk-moveable" class="vk-rect vk" data-k="left">←</div>
+        <div id="vk-moveable" class="vk-rect vk" data-k="right">→</div>
+        <div id="vk-moveable" class="vk-rect vk" data-k="up">↑</div>
+        <div id="vk-moveable" class="vk-rect vk" data-k="down">↓</div>
+        <div id="vk-moveable" class="corner-radius-top-left vk-rect vk vk-hide" style="background-color: transparent !important" data-k="ul"></div>
+        <div id="vk-moveable" class="corner-radius-top-right vk-rect vk vk-hide" style="background-color: transparent !important" data-k="ur"></div>
+        <div id="vk-moveable" class="corner-radius-bottom-left vk-rect vk vk-hide" style="background-color: transparent !important" data-k="dl"></div>
+        <div id="vk-moveable" class="corner-radius-bottom-right vk-rect vk vk-hide" style="background-color: transparent !important" data-k="dr"></div>
         <div class="vk-rect vk" data-k="select">-</div>
         <div class="vk-rect vk" data-k="start">+</div>
     </div>
@@ -867,24 +867,15 @@
     <script src="a.out.js"></script>
     <script>
         function updateControls() {
-    var controls = document.getElementById('controls').value;
-    
-    // Create a style element if it doesn't exist
-    var style = document.getElementById('dynamic-styles');
-    if (!style) {
-        style = document.createElement('style');
-        style.id = 'dynamic-styles';
-        document.head.appendChild(style);
-    }
-    
-    // Update the CSS rule for the `.vkdown` class
-    if (controls === 'top') {
-        style.innerHTML = `.vkdown { top: 0; }`;
-    } else {
-        style.innerHTML = `.vkdown { top: 50vh; }`;
-    }
-}
-
+            var controls = document.getElementById('controls').value;
+            var vk = document.getElementById('vk-moveable');
+            
+            if (controls === 'top') {
+                vk.style.top = '0';
+            } else {
+                vk.style.top = '50vh';
+            }
+        }
     </script>
 </body>
 
