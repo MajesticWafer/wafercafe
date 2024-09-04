@@ -7,6 +7,37 @@
 <body>
 <canvas id="canvas"></canvas>
 <canvas id="canvasScale"></canvas>
+<script>
+    const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+// Set the scaling to create a pixelated effect
+ctx.scale(1, 1); // Adjust scale to your needs, 1:1 is already pixelated in CSS
+
+// Set the image smoothing off for pixelated effect
+ctx.imageSmoothingEnabled = false;
+
+    // Function to draw a pixelated circle
+function drawPixelatedCircle(x, y, radius) {
+    const pixelSize = 4; // Size of each "pixel"
+    for (let i = -radius; i <= radius; i++) {
+        for (let j = -radius; j <= radius; j++) {
+            if (i * i + j * j <= radius * radius) {
+                ctx.fillStyle = '#00FF00'; // Set color of the circle
+                ctx.fillRect(
+                    x + i * pixelSize,
+                    y + j * pixelSize,
+                    pixelSize,
+                    pixelSize
+                );
+            }
+        }
+    }
+}
+
+// Draw a pixelated circle in the center of the canvas
+drawPixelatedCircle(50, 50, 10); // Center and radius
+</script>
 <script type="module">
     import {scaleImage} from './src/xBRZ.js'
     // scaleImage()
@@ -18,7 +49,7 @@
     const ctxScale = canvasScale.getContext('2d');
 
     const srcImage = new Image();
-    srcImage.src = './source.png';
+    srcImage.src = canvas.toDataURL();
     srcImage.onload = () => {
         const {width, height} = srcImage;
         canvas.width = width;
