@@ -172,6 +172,20 @@
         textarea::placeholder {
             color: #666;
         }
+
+        #canvasScale {
+            position: absolute;
+            touch-action: none;
+            top: 0;
+            left: 0;
+            width: 95.45% !important;
+            height: auto !important;
+            aspect-ratio: 240px / 160px;
+            border: 2.55% solid white;
+            padding: 0 !important;
+            margin: 0 auto;
+            display: none;
+        }
     </style>
     <div id="pause-menu" class="menu" style="background: rgba(32,43,56,0.7);" hidden>
         <h1><button onclick="setPauseMenu(false); updateControls();"> ← Back </button>Game Paused</h1>
@@ -189,6 +203,12 @@
         <select name="controls" id="controls" onchange="updateControls()">
             <option value="top">Top</option>
             <option value="bottom">Bottom</option>    
+        </select>
+        <label for="filtering">[EXPERIMENTAL] Canvas Filtering:</label>
+        <select name="filtering" id="filtering" onchange="updateFiltering()">
+            <option value="pixelated">Pixelated</option>
+            <option value="smooth">Smooth</option>
+            <option value="xbrz">xBRZ Upscale</option> 
         </select>
     </div>
     <div id="welcome" class="menu">
@@ -973,6 +993,22 @@
                 vkm10.style.marginTop = '50vh';
                 vkm11.style.marginTop = '50vh';
                 vkm12.style.marginTop = '50vh';
+            }
+        }
+
+        function updateFiltering() {
+            var filter = document.getElementById('filter').value
+            var canvas = document.getElementById('gba-canvas')
+            var xbrz = document.getElementById('canvasScale')
+            
+            if (filter === 'pixelated') {
+                canvas.style.imageRendering = 'pixelated';
+                xbrz.style.display = none';
+            } else if (filter === 'smooth') {
+                canvas.style.imageRendering = 'smooth';
+                xbrz.style.display = 'none';
+            } else {
+                xbrz.style.display = 'block';
             }
         }
     </script>
