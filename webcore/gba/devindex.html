@@ -209,6 +209,12 @@
             <option value="pixelated">Pixelated</option>
             <option value="xbrz">xBRZ Upscale</option> 
         </select>
+        <label for="scale">[EXPERIMENTAL] xBRZ Scale:</label>
+        <select name="scale" id="scale">
+            <option value="2">Faster - 2x</option>
+            <option value="3">Slow - 3x</option>
+            <option value="4">Slower - 4x</option>
+        </select>
     </div>
     <div id="welcome" class="menu">
         <h2>VBA - A GBA Emulator</h2>
@@ -264,6 +270,7 @@
     <script src="localforage.js"></script>
     <script type="module">
     import { scaleImage } from './src/xBRZ.js';
+    var scaleAmount = document.getElemenById('scale').value;
 
     const canvas = document.querySelector('#gba-canvas');
     const ctx = canvas.getContext('2d');
@@ -290,7 +297,7 @@
                 const pixel = (a << 24) | (r << 16) | (g << 8) | b;
                 source.push(pixel);
             }
-            const scaleSize = 2;
+            var scaleSize = scaleAmount;
             let target = new Array(width * scaleSize * height * scaleSize);
             target.fill(0);
             scaleImage(scaleSize, source, target, width, height, 0, height);
