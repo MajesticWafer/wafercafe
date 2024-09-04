@@ -270,7 +270,6 @@
     <script src="localforage.js"></script>
     <script type="module">
     import { scaleImage } from './src/xBRZ.js';
-    var scaleAmount = document.getElementById('scale').value
 
     const canvas = document.querySelector('#gba-canvas');
     const ctx = canvas.getContext('2d');
@@ -279,48 +278,52 @@
     const ctxScale = canvasScale.getContext('2d');
 
     function scaleCanvasImage() {
+        const scaleAmount = parseInt(document.getElementById('scale').value, 10);
+
         const srcImage = new Image();
         srcImage.src = canvas.toDataURL();
         srcImage.onload = () => {
             const { width, height } = srcImage;
-            canvas.width = width;
-            canvas.height = height;
-            ctx.drawImage(srcImage, 0, 0, width, height);
+            const widthScale = width * scaleAmount;
+            const heightScale = height * scaleAmount;
+
+            // Directly use a typed array to reduce memory usage
             const imageData = ctx.getImageData(0, 0, width, height);
-            const buffer = Array.from(imageData.data);
-            let source = [];
-            for (let i = 0, len = buffer.length; i < len; i += 4) {
+            const buffer = imageData.data;
+            const source = new Uint32Array(width * height);
+            
+            // Avoid creating intermediate arrays
+            for (let i = 0, j = 0; i < buffer.length; i += 4, j++) {
                 const r = buffer[i];
                 const g = buffer[i + 1];
                 const b = buffer[i + 2];
                 const a = buffer[i + 3];
-                const pixel = (a << 24) | (r << 16) | (g << 8) | b;
-                source.push(pixel);
+                source[j] = (a << 24) | (r << 16) | (g << 8) | b;
             }
-            var scaleSize = scaleAmount
-            let target = new Array(width * scaleSize * height * scaleSize);
-            target.fill(0);
-            scaleImage(scaleSize, source, target, width, height, 0, height);
 
-            let bufferScale = [];
-            for (let i = 0, len = target.length; i < len; ++i) {
+            // Allocate target array directly
+            const target = new Uint32Array(widthScale * heightScale);
+            
+            // Perform scaling
+            scaleImage(scaleAmount, source, target, width, height, 0, height);
+
+            // Use a single Uint8ClampedArray for bufferScale
+            const bufferScale = new Uint8ClampedArray(widthScale * heightScale * 4);
+            for (let i = 0, j = 0; i < target.length; i++) {
                 const pixel = target[i];
-                const a = (pixel >> 24) & 0xff;
-                const r = (pixel >> 16) & 0xff;
-                const g = (pixel >> 8) & 0xff;
-                const b = pixel & 0xff;
-                bufferScale.push(r);
-                bufferScale.push(g);
-                bufferScale.push(b);
-                bufferScale.push(a);
+                bufferScale[j++] = (pixel >> 16) & 0xff; // R
+                bufferScale[j++] = (pixel >> 8) & 0xff;  // G
+                bufferScale[j++] = pixel & 0xff;         // B
+                bufferScale[j++] = (pixel >> 24) & 0xff; // A
             }
 
-            const widthScale = width * scaleSize;
-            const heightScale = height * scaleSize;
-            canvasScale.width = widthScale;
-            canvasScale.height = heightScale;
-            const imgScaleBuffer = new Uint8ClampedArray(bufferScale);
-            const imgScaleData = new ImageData(imgScaleBuffer, widthScale, heightScale);
+            // Set canvas size only if necessary to reduce unnecessary DOM operations
+            if (canvasScale.width !== widthScale || canvasScale.height !== heightScale) {
+                canvasScale.width = widthScale;
+                canvasScale.height = heightScale;
+            }
+
+            const imgScaleData = new ImageData(bufferScale, widthScale, heightScale);
             ctxScale.putImageData(imgScaleData, 0, 0);
 
             // Schedule the next frame
