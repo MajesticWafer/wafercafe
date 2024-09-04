@@ -73,6 +73,15 @@
             aspect-ratio: 3 / 1 !important;
         }
 
+        .vk-rect-med {
+            text-align: center;
+            vertical-align: middle;
+            border-radius: 5% / 10% !important;
+            display: inline-block;
+            aspect-ratio: 2 / 1 !important;
+        }
+
+
         .vk {
             color: rgba(0, 0, 0, 0.2);
             background-color: rgba(255, 255, 255, 0.25);
@@ -214,22 +223,22 @@
         <p id="msg-text"></p>
     </div>
      <div id="vk-layer" hidden>
-        <div class="vk-rect vk" data-k="menu">Menu</div>
-        <div class="vk-rect vk" data-k="turbo">Turbo</div>
-        <div class="vk-rect-long vk" data-k="l">L</div>
-        <div class="vk-rect-long vk" data-k="r">R</div>
-        <div class="vk-round vk" data-k="a">A</div>
-        <div class="vk-round vk" data-k="b">B</div>
-        <div class="vk-rect vk" data-k="left">←</div>
-        <div class="vk-rect vk" data-k="right">→</div>
-        <div class="vk-rect vk" data-k="up">↑</div>
-        <div class="vk-rect vk" data-k="down">↓</div>
-        <div class="corner-radius-top-left vk-rect vk vk-hide" style="background-color: transparent !important" data-k="ul"></div>
-        <div class="corner-radius-top-right vk-rect vk vk-hide" style="background-color: transparent !important" data-k="ur"></div>
-        <div class="corner-radius-bottom-left vk-rect vk vk-hide" style="background-color: transparent !important" data-k="dl"></div>
-        <div class="corner-radius-bottom-right vk-rect vk vk-hide" style="background-color: transparent !important" data-k="dr"></div>
-        <div class="vk-rect vk" data-k="select">-</div>
-        <div class="vk-rect vk" data-k="start">+</div>
+        <div class="vk-rect-med vk" data-k="menu">Menu</div>
+        <div class="vk-rect-med vk" data-k="turbo">Turbo</div>
+        <div id="vkm1" class="vk-rect-long vk" data-k="l">L</div>
+        <div id="vkm2" class="vk-rect-long vk" data-k="r">R</div>
+        <div id="vkm3" class="vk-round vk" data-k="a">A</div>
+        <div id="vkm4" class="vk-round vk" data-k="b">B</div>
+        <div id="vkm5" class="vk-rect vk" data-k="left">←</div>
+        <div id="vkm6" class="vk-rect vk" data-k="right">→</div>
+        <div id="vkm7" class="vk-rect vk" data-k="up">↑</div>
+        <div id="vkm8" class="vk-rect vk" data-k="down">↓</div>
+        <div id="vkm9" class="corner-radius-top-left vk-rect vk vk-hide" style="background-color: transparent !important" data-k="ul"></div>
+        <div id="vkm10" class="corner-radius-top-right vk-rect vk vk-hide" style="background-color: transparent !important" data-k="ur"></div>
+        <div id="vkm11" class="corner-radius-bottom-left vk-rect vk vk-hide" style="background-color: transparent !important" data-k="dl"></div>
+        <div id="vkm12" class="corner-radius-bottom-right vk-rect vk vk-hide" style="background-color: transparent !important" data-k="dr"></div>
+        <div class="vk-rect-long vk" data-k="select">-</div>
+        <div class="vk-rect-long vk" data-k="start">+</div>
     </div>
     <canvas width="240" height="160" id="gba-canvas" style="touch-action: none;image-rendering: pixelated;"></canvas>
     <script src="localforage.js"></script>
@@ -588,9 +597,10 @@
             keyState['l'][0].style = makeVKStyle(offTop + baseSize * 1.5, 0, vkw, vkh, fontSize)
             keyState['r'][0].style = makeVKStyle(offTop + baseSize * 1.5, window.innerWidth - vkw, vkw, vkh, fontSize)
 
-            vkh = baseSize * 0.5
-            keyState['turbo'][0].style = makeVKStyle(offTop + baseSize * 0.5, 0, vkw, vkh, fontSize)
-            keyState['menu'][0].style = makeVKStyle(offTop + baseSize * 0.5, window.innerWidth - vkw, vkw, vkh, fontSize)
+            vkh = baseSize * 0.65
+            vkw = baseSize * 2
+            keyState['turbo'][0].style = makeVKStyle(offTop, 0, vkw, vkh, fontSize)
+            keyState['menu'][0].style = makeVKStyle(offTop, window.innerWidth - vkw, vkw, vkh, fontSize)
 
             vkh = baseSize
             vkw = baseSize
@@ -615,7 +625,7 @@
             keyState['b'][0].style = makeVKStyle(offTop + vkh, window.innerWidth - abSize * 2.4, abSize, abSize, fontSize)
 
             vkh = baseSize * 0.5
-            vkw = baseSize * 3
+            vkw = baseSize * 2
 
             offLeft = (window.innerWidth - vkw * 2.2) / 2
             offTop += baseSize * 3 + baseSize * 0.5
@@ -625,8 +635,6 @@
 
             keyState['select'][0].style = makeVKStyle(offTop, offLeft, vkw, vkh, fontSize)
             keyState['start'][0].style = makeVKStyle(offTop, offLeft + vkw * 1.2, vkw, vkh, fontSize)
-
-
         }
 
         function adjustSize() {
@@ -862,14 +870,48 @@
     <script src="a.out.js"></script>
     <script>
         function updateControls() {
-            var controls = document.getElementById('controls').value
-            var vk = document.getElementById('vk-layer')
+            var controls = document.getElementById('controls').value;
+            var vkm1 = document.getElementById('vkm1');
+            var vkm2 = document.getElementById('vkm2');
+            var vkm3 = document.getElementById('vkm3');
+            var vkm4 = document.getElementById('vkm4');
+            var vkm5 = document.getElementById('vkm5');
+            var vkm6 = document.getElementById('vkm6');
+            var vkm7 = document.getElementById('vkm7');
+            var vkm8 = document.getElementById('vkm8');
+            var vkm9 = document.getElementById('vkm9');
+            var vkm10 = document.getElementById('vkm10');
+            var vkm11 = document.getElementById('vkm11');
+            var vkm12 = document.getElementById('vkm12');
+            
             if (controls === 'top') {
-                vk.style.top = '0';
+                vkm1.style.marginTop = '0';
+                vkm2.style.marginTop = '0';
+                vkm3.style.marginTop = '0';
+                vkm4.style.marginTop = '0';
+                vkm5.style.marginTop = '0';
+                vkm6.style.marginTop = '0';
+                vkm7.style.marginTop = '0';
+                vkm8.style.marginTop = '0';
+                vkm9.style.marginTop = '0';
+                vkm10.style.marginTop = '0';
+                vkm11.style.marginTop = '0';
+                vkm12.style.marginTop = '0';     
             } else {
-                vk.style.top = '50vh';
-            }      
-        }      
+                vkm1.style.marginTop = '50vh';
+                vkm2.style.marginTop = '50vh';
+                vkm3.style.marginTop = '50vh';
+                vkm4.style.marginTop = '50vh';
+                vkm5.style.marginTop = '50vh';
+                vkm6.style.marginTop = '50vh';
+                vkm7.style.marginTop = '50vh';
+                vkm8.style.marginTop = '50vh';
+                vkm9.style.marginTop = '50vh';
+                vkm10.style.marginTop = '50vh';
+                vkm11.style.marginTop = '50vh';
+                vkm12.style.marginTop = '50vh';
+            }
+        }
     </script>
 </body>
 
