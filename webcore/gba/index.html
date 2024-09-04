@@ -137,7 +137,7 @@
             width: 95.45% !important;
             height: auto !important;
             aspect-ratio: 240px / 160px;
-            border: 2.55% solid white;
+            border: 2.55% solid white !important;
             padding: 0 !important;
             margin: 0 auto;
         }
@@ -172,6 +172,22 @@
         textarea::placeholder {
             color: #666;
         }
+
+        #canvasScale {
+            position: absolute;
+            z-index: -4629;
+            touch-action: none;
+            image-rendering: pixelated;
+            top: 0;
+            left: 2%;
+            width: 95.45% !important;
+            height: auto !important;
+            aspect-ratio: 240px / 160px;
+            border: 2.55% solid white !important;
+            padding: 0 !important;
+            margin: 0 auto;
+            display: none;
+        }
     </style>
     <div id="pause-menu" class="menu" style="background: rgba(32,43,56,0.7);" hidden>
         <h1><button onclick="setPauseMenu(false); updateControls();"> ← Back </button>Game Paused</h1>
@@ -189,6 +205,17 @@
         <select name="controls" id="controls" onchange="updateControls()">
             <option value="top">Top</option>
             <option value="bottom">Bottom</option>    
+        </select><br>
+        <label for="filtering">[EXPERIMENTAL] Canvas Filtering:</label>
+        <select name="filtering" id="filtering" onchange="updateFiltering()">
+            <option value="pixelated">Pixelated</option>
+            <option value="xbrz">xBRZ Upscale</option> 
+        </select><br>
+        <label for="scale">[EXPERIMENTAL] xBRZ Scale:</label>
+        <select name="scale" id="scale">
+            <option value="2">Faster - 2x</option>
+            <option value="3">Slow - 3x</option>
+            <option value="4">Slower - 4x</option>
         </select>
     </div>
     <div id="welcome" class="menu">
@@ -213,7 +240,7 @@
                     onchange="onFileSelected()" /></p>
 
         </div>
-        <hr> Ver. 2024.08.29 | By MajesticWafer
+        <hr> Ver. 2024.09.04 | By MajesticWafer
         <div id="ios-hint" hidden>
             Due to iOS Safari limitations, you have to add this page to your <b>Home Screen</b> in order to save your game progress.
             <p style="text-align: center;">👇</p>
@@ -241,7 +268,74 @@
         <div class="vk-rect-long vk" data-k="start">+</div>
     </div>
     <canvas width="240" height="160" id="gba-canvas" style="touch-action: none;image-rendering: pixelated;"></canvas>
+    <canvas width="240" height="160" id="canvasScale" style="touch-action: none;"></canvas>
     <script src="localforage.js"></script>
+    <script type="module">
+    import { scaleImage } from './src/xBRZ.js';
+
+    const canvas = document.querySelector('#gba-canvas');
+    const ctx = canvas.getContext('2d');
+
+    const canvasScale = document.querySelector('#canvasScale');
+    const ctxScale = canvasScale.getContext('2d');
+
+    function scaleCanvasImage() {
+        const scaleAmount = parseInt(document.getElementById('scale').value, 10);
+
+        const srcImage = new Image();
+        srcImage.src = canvas.toDataURL();
+        srcImage.onload = () => {
+            const { width, height } = srcImage;
+            const widthScale = width * scaleAmount;
+            const heightScale = height * scaleAmount;
+
+            // Directly use a typed array to reduce memory usage
+            const imageData = ctx.getImageData(0, 0, width, height);
+            const buffer = imageData.data;
+            const source = new Uint32Array(width * height);
+            
+            // Avoid creating intermediate arrays
+            for (let i = 0, j = 0; i < buffer.length; i += 4, j++) {
+                const r = buffer[i];
+                const g = buffer[i + 1];
+                const b = buffer[i + 2];
+                const a = buffer[i + 3];
+                source[j] = (a << 24) | (r << 16) | (g << 8) | b;
+            }
+
+            // Allocate target array directly
+            const target = new Uint32Array(widthScale * heightScale);
+            
+            // Perform scaling
+            scaleImage(scaleAmount, source, target, width, height, 0, height);
+
+            // Use a single Uint8ClampedArray for bufferScale
+            const bufferScale = new Uint8ClampedArray(widthScale * heightScale * 4);
+            for (let i = 0, j = 0; i < target.length; i++) {
+                const pixel = target[i];
+                bufferScale[j++] = (pixel >> 16) & 0xff; // R
+                bufferScale[j++] = (pixel >> 8) & 0xff;  // G
+                bufferScale[j++] = pixel & 0xff;         // B
+                bufferScale[j++] = (pixel >> 24) & 0xff; // A
+            }
+
+            // Set canvas size only if necessary to reduce unnecessary DOM operations
+            if (canvasScale.width !== widthScale || canvasScale.height !== heightScale) {
+                canvasScale.width = widthScale;
+                canvasScale.height = heightScale;
+            }
+
+            const imgScaleData = new ImageData(bufferScale, widthScale, heightScale);
+            ctxScale.putImageData(imgScaleData, 0, 0);
+
+            // Schedule the next frame
+            requestAnimationFrame(scaleCanvasImage);
+        };
+    }
+
+    // Start the animation loop
+    scaleCanvasImage();
+</script>
     <script>
         if (!window.WebAssembly) {
             alert('Sorry, your browser does not support WebAssembly. :(')
@@ -910,6 +1004,20 @@
                 vkm10.style.marginTop = '50vh';
                 vkm11.style.marginTop = '50vh';
                 vkm12.style.marginTop = '50vh';
+            }
+        }
+
+        function updateFiltering() {
+            var filter = document.getElementById('filtering').value
+            var canvas = document.getElementById('gba-canvas')
+            var xbrz = document.getElementById('canvasScale')
+            
+            if (filter === 'pixelated') {
+                xbrz.style.display = 'none';
+                canvas.style.display = 'block';
+            } else {
+                xbrz.style.display = 'block';
+                canvas.style.display = 'none';
             }
         }
     </script>
