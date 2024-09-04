@@ -19,7 +19,7 @@ ctx.imageSmoothingEnabled = false;
 
     // Function to draw a pixelated circle
 function drawPixelatedCircle(x, y, radius) {
-    const pixelSize = 4; // Size of each "pixel"
+    const pixelSize = 1; // Size of each "pixel"
     for (let i = -radius; i <= radius; i++) {
         for (let j = -radius; j <= radius; j++) {
             if (i * i + j * j <= radius * radius) {
