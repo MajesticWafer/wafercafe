@@ -117,7 +117,9 @@
           border-bottom-left-radius: 10% !important;
         }
 
-.menu {
+        /* Start menu styles */
+            
+    .menu {
         background: rgb(32, 43, 56);
         position: absolute;
         left: 0;
@@ -129,6 +131,7 @@
         color: #fff;
         font-family: Arial, sans-serif;
         box-sizing: border-box;
+        overflow-y: auto;
     }
 
     .menu h1 {
@@ -137,43 +140,54 @@
     }
 
     .menu button {
-        background-color: #4CAF50;
+        background-color: #6A0DAD; /* Darker Purple */
         color: white;
-        padding: 12px 20px;
+        padding: 8px 15px;
         margin: 10px 0;
         border: none;
         border-radius: 5px;
         cursor: pointer;
-        font-size: 16px;
+        font-size: 14px;
         transition: background-color 0.3s ease;
     }
 
     .menu button:hover {
-        background-color: #45a049;
+        background-color: #5B0D91; /* Slightly darker on hover */
     }
 
     .menu hr {
-        border: 1px solid #4CAF50;
+        border: 1px solid #6A0DAD; /* Darker Purple */
         margin: 30px 0;
     }
 
     .menu input[type="text"],
     .menu input[type="range"],
-    .menu input[type="file"],
     .menu select {
         width: 100%;
-        padding: 10px;
+        padding: 8px;
         margin: 10px 0;
         box-sizing: border-box;
         border-radius: 5px;
         border: 1px solid #ccc;
-        font-size: 16px;
+        font-size: 14px;
+    }
+
+    .menu input[type="file"] {
+        width: auto;
+        padding: 4px;
+        margin-top: 10px;
+        font-size: 12px;
+    }
+
+    .menu select {
+        font-size: 12px;
+        padding: 4px;
     }
 
     .menu input[type="text"]:focus,
     .menu select:focus {
         outline: none;
-        border-color: #4CAF50;
+        border-color: #6A0DAD;
     }
 
     .menu label {
@@ -186,6 +200,22 @@
         margin-left: 10px;
         font-size: 16px;
     }
+
+    .menu #controls,
+    .menu #filtering {
+        width: 100%;
+        font-size: 14px;
+        padding: 6px;
+        margin: 5px 0;
+    }
+
+    .menu .second-half select,
+    .menu .second-half input[type="file"] {
+        font-size: 12px;
+        padding: 6px;
+    }
+
+        /* End menu styles */
 
         #gba-canvas {
             position: absolute;
@@ -259,9 +289,10 @@
         <button onclick="chtWriteBtn()">Write</button>
         <hr> Savegame management:<br>
         <button onclick="savBackupBtn()">Backup</button>
-        <input type="file" id="sav-file" />
+        <input class="second-half" type="file" id="sav-file" />
         <button onclick="savRestoreBtn()">Restore</button>
-        <hr> 
+        <hr>
+        
         <label for="controls">[EXPERIMENTAL] Controls:</label>
         <select name="controls" id="controls" onchange="updateControls()">
             <option value="top">Top</option>
@@ -276,8 +307,7 @@
         
         <label for="scale">[EXPERIMENTAL] xBRZ Scale:</label>
         <input type="range" name="scale" id="scale" min="1" max="6" step="1" value="2" oninput="updateScale(this.value)">
-        <span id="scaleValue">1x</span>
-        
+        <span id="scaleValue">1x</span>       
     </div>
     <div id="welcome" class="menu">
         <h2>VBA - A GBA Emulator</h2>
