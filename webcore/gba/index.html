@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -10,8 +11,9 @@
     <link rel="manifest" href="manifest.json">
     <title>VBA</title>
 </head>
+
 <body>
-        <style>
+    <style>
         a,
         a:visited {
             color: white;
@@ -102,118 +104,122 @@
         }
 
         .corner-radius-top-left {
-          border-top-left-radius: 10% !important;
+            border-top-left-radius: 10% !important;
         }
 
         .corner-radius-top-right {
-          border-top-right-radius: 10% !important;
+            border-top-right-radius: 10% !important;
         }
 
         .corner-radius-bottom-right {
-          border-bottom-right-radius: 10% !important;
+            border-bottom-right-radius: 10% !important;
         }
 
         .corner-radius-bottom-left {
-          border-bottom-left-radius: 10% !important;
+            border-bottom-left-radius: 10% !important;
         }
 
         /* Start menu styles */
-            
-    .menu {
-        background: rgb(32, 43, 56);
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100vw;
-        height: 100vh;
-        z-index: 999;
-        padding: 40px;
-        color: #fff;
-        font-family: Arial, sans-serif;
-        box-sizing: border-box;
-        overflow-y: auto;
-    }
 
-    .menu h1 {
-        font-size: 24px;
-        margin-bottom: 20px;
-    }
+        .menu {
+            background: rgb(32, 43, 56);
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 999;
+            padding: 40px;
+            color: #fff;
+            font-family: Arial, sans-serif;
+            box-sizing: border-box;
+            overflow-y: auto;
+        }
 
-    .menu button {
-        background-color: #6A0DAD; /* Darker Purple */
-        color: white;
-        padding: 8px 15px;
-        margin: 10px 0;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 14px;
-        transition: background-color 0.3s ease;
-    }
+        .menu h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
 
-    .menu button:hover {
-        background-color: #5B0D91; /* Slightly darker on hover */
-    }
+        .menu button {
+            background-color: #6A0DAD;
+            /* Darker Purple */
+            color: white;
+            padding: 8px 15px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s ease;
+        }
 
-    .menu hr {
-        border: 1px solid #6A0DAD; /* Darker Purple */
-        margin: 30px 0;
-    }
+        .menu button:hover {
+            background-color: #5B0D91;
+            /* Slightly darker on hover */
+        }
 
-    .menu input[type="text"],
-    .menu input[type="range"],
-    .menu select {
-        width: 100%;
-        padding: 8px;
-        margin: 10px 0;
-        box-sizing: border-box;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-        font-size: 14px;
-    }
+        .menu hr {
+            border: 1px solid #6A0DAD;
+            /* Darker Purple */
+            margin: 30px 0;
+        }
 
-    .menu input[type="file"] {
-        width: auto;
-        padding: 4px;
-        margin-top: 10px;
-        font-size: 12px;
-    }
+        .menu input[type="text"],
+        .menu input[type="range"],
+        .menu select {
+            width: 100%;
+            padding: 8px;
+            margin: 10px 0;
+            box-sizing: border-box;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 14px;
+        }
 
-    .menu select {
-        font-size: 12px;
-        padding: 4px;
-    }
+        .menu input[type="file"] {
+            width: auto;
+            padding: 4px;
+            margin-top: 10px;
+            font-size: 12px;
+        }
 
-    .menu input[type="text"]:focus,
-    .menu select:focus {
-        outline: none;
-        border-color: #6A0DAD;
-    }
+        .menu select {
+            font-size: 12px;
+            padding: 4px;
+        }
 
-    .menu label {
-        display: block;
-        margin-top: 20px;
-        font-size: 16px;
-    }
+        .menu input[type="text"]:focus,
+        .menu select:focus {
+            outline: none;
+            border-color: #6A0DAD;
+        }
 
-    .menu #scaleValue {
-        margin-left: 10px;
-        font-size: 16px;
-    }
+        .menu label {
+            display: block;
+            margin-top: 20px;
+            font-size: 16px;
+        }
 
-    .menu #controls,
-    .menu #filtering {
-        width: 100%;
-        font-size: 14px;
-        padding: 6px;
-        margin: 5px 0;
-    }
+        .menu #scaleValue {
+            margin-left: 10px;
+            font-size: 16px;
+            width: 95%;
+        }
 
-    .menu .second-half select,
-    .menu .second-half input[type="file"] {
-        font-size: 12px;
-        padding: 6px;
-    }
+        .menu #controls,
+        .menu #filtering {
+            width: 100%;
+            font-size: 14px;
+            padding: 6px;
+            margin: 5px 0;
+        }
+
+        .menu .second-half select,
+        .menu .second-half input[type="file"] {
+            font-size: 12px;
+            padding: 6px;
+        }
 
         /* End menu styles */
 
@@ -292,22 +298,22 @@
         <input class="second-half" type="file" id="sav-file" />
         <button onclick="savRestoreBtn()">Restore</button>
         <hr>
-        
+
         <label for="controls">[EXPERIMENTAL] Controls:</label>
         <select name="controls" id="controls" onchange="updateControls()">
             <option value="top">Top</option>
-            <option value="bottom">Bottom</option>    
+            <option value="bottom">Bottom</option>
         </select><br>
-        
+
         <label for="filtering">[EXPERIMENTAL] Canvas Filtering:</label>
         <select name="filtering" id="filtering" onchange="updateFiltering()">
             <option value="pixelated">Pixelated</option>
-            <option value="xbrz">xBRZ Upscale</option> 
+            <option value="xbrz">xBRZ Upscale</option>
         </select><br>
-        
+
         <label for="scale">[EXPERIMENTAL] xBRZ Scale:</label>
         <input type="range" name="scale" id="scale" min="1" max="6" step="1" value="2" oninput="updateScale(this.value)">
-        <span id="scaleValue">1x</span>       
+        <span id="scaleValue">1x</span>
     </div>
     <div id="welcome" class="menu">
         <h2>VBA - A GBA Emulator</h2>
@@ -315,7 +321,7 @@
         <div id="wasm-loading">
             Loading WebAssembly, please wait...
         </div>
-       <div id="select-rom" hidden>
+        <div id="select-rom" hidden>
             <p>Select a pre-downloaded game:</p>
             <select style="padding:.5em; border:2px" onchange="onHomebrewListSelected()" id="homebrew-list">
                 <option value="">Pre-downloaded Games</option>
@@ -325,10 +331,9 @@
                 <option value="fusion">Metroid Fusion</option>
                 <option value="superstarsaga">Mario & Luigi: Superstar Saga</option>
                 <option value="supercircut">Mario Kart: Super Circut</option>
-            </select> 
+            </select>
 
-            <p>Or, you can choose your own file:<br><input style="width: calc(100% - 2em); margin: 1em" type="file" id="romFile"
-                    onchange="onFileSelected()" /></p>
+            <p>Or, you can choose your own file:<br><input style="width: calc(100% - 2em); margin: 1em" type="file" id="romFile" onchange="onFileSelected()" /></p>
 
         </div>
         <hr> Ver. 2024.09.04 | By MajesticWafer
@@ -340,7 +345,7 @@
     <div id="msg-layer" hidden>
         <p id="msg-text"></p>
     </div>
-     <div id="vk-layer" hidden>
+    <div id="vk-layer" hidden>
         <div class="vk-rect-med vk" data-k="menu">Menu</div>
         <div class="vk-rect-med vk" data-k="turbo">Turbo</div>
         <div id="vkm1" class="vk-rect-long vk" data-k="l">L</div>
@@ -362,77 +367,82 @@
     <canvas width="240" height="160" id="canvasScale" style="touch-action: none;"></canvas>
     <script src="localforage.js"></script>
     <script type="module">
-    import { scaleImage } from './src/xBRZ.js';
+        import {
+            scaleImage
+        } from './src/xBRZ.js';
 
-    const canvas = document.querySelector('#gba-canvas');
-    const ctx = canvas.getContext('2d');
+        const canvas = document.querySelector('#gba-canvas');
+        const ctx = canvas.getContext('2d');
 
-    const canvasScale = document.querySelector('#canvasScale');
-    const ctxScale = canvasScale.getContext('2d');
+        const canvasScale = document.querySelector('#canvasScale');
+        const ctxScale = canvasScale.getContext('2d');
 
-    function scaleCanvasImage() {
-        const scaleAmount = parseInt(document.getElementById('scale').value, 10);
+        function scaleCanvasImage() {
+            const scaleAmount = parseInt(document.getElementById('scale').value, 10);
 
-        const srcImage = new Image();
-        srcImage.src = canvas.toDataURL();
-        srcImage.onload = () => {
-            const { width, height } = srcImage;
-            const widthScale = width * scaleAmount;
-            const heightScale = height * scaleAmount;
+            const srcImage = new Image();
+            srcImage.src = canvas.toDataURL();
+            srcImage.onload = () => {
+                const {
+                    width,
+                    height
+                } = srcImage;
+                const widthScale = width * scaleAmount;
+                const heightScale = height * scaleAmount;
 
-            // Directly use a typed array to reduce memory usage
-            const imageData = ctx.getImageData(0, 0, width, height);
-            const buffer = imageData.data;
-            const source = new Uint32Array(width * height);
-            
-            // Avoid creating intermediate arrays
-            for (let i = 0, j = 0; i < buffer.length; i += 4, j++) {
-                const r = buffer[i];
-                const g = buffer[i + 1];
-                const b = buffer[i + 2];
-                const a = buffer[i + 3];
-                source[j] = (a << 24) | (r << 16) | (g << 8) | b;
-            }
+                // Directly use a typed array to reduce memory usage
+                const imageData = ctx.getImageData(0, 0, width, height);
+                const buffer = imageData.data;
+                const source = new Uint32Array(width * height);
 
-            // Allocate target array directly
-            const target = new Uint32Array(widthScale * heightScale);
-            
-            // Perform scaling
-            scaleImage(scaleAmount, source, target, width, height, 0, height);
+                // Avoid creating intermediate arrays
+                for (let i = 0, j = 0; i < buffer.length; i += 4, j++) {
+                    const r = buffer[i];
+                    const g = buffer[i + 1];
+                    const b = buffer[i + 2];
+                    const a = buffer[i + 3];
+                    source[j] = (a << 24) | (r << 16) | (g << 8) | b;
+                }
 
-            // Use a single Uint8ClampedArray for bufferScale
-            const bufferScale = new Uint8ClampedArray(widthScale * heightScale * 4);
-            for (let i = 0, j = 0; i < target.length; i++) {
-                const pixel = target[i];
-                bufferScale[j++] = (pixel >> 16) & 0xff; // R
-                bufferScale[j++] = (pixel >> 8) & 0xff;  // G
-                bufferScale[j++] = pixel & 0xff;         // B
-                bufferScale[j++] = (pixel >> 24) & 0xff; // A
-            }
+                // Allocate target array directly
+                const target = new Uint32Array(widthScale * heightScale);
 
-            // Set canvas size only if necessary to reduce unnecessary DOM operations
-            if (canvasScale.width !== widthScale || canvasScale.height !== heightScale) {
-                canvasScale.width = widthScale;
-                canvasScale.height = heightScale;
-            }
+                // Perform scaling
+                scaleImage(scaleAmount, source, target, width, height, 0, height);
 
-            const imgScaleData = new ImageData(bufferScale, widthScale, heightScale);
-            ctxScale.putImageData(imgScaleData, 0, 0);
+                // Use a single Uint8ClampedArray for bufferScale
+                const bufferScale = new Uint8ClampedArray(widthScale * heightScale * 4);
+                for (let i = 0, j = 0; i < target.length; i++) {
+                    const pixel = target[i];
+                    bufferScale[j++] = (pixel >> 16) & 0xff; // R
+                    bufferScale[j++] = (pixel >> 8) & 0xff; // G
+                    bufferScale[j++] = pixel & 0xff; // B
+                    bufferScale[j++] = (pixel >> 24) & 0xff; // A
+                }
 
-            // Schedule the next frame
-            requestAnimationFrame(scaleCanvasImage);
-        };
-    }
+                // Set canvas size only if necessary to reduce unnecessary DOM operations
+                if (canvasScale.width !== widthScale || canvasScale.height !== heightScale) {
+                    canvasScale.width = widthScale;
+                    canvasScale.height = heightScale;
+                }
 
-    // Start the animation loop
-    scaleCanvasImage();
-</script>
+                const imgScaleData = new ImageData(bufferScale, widthScale, heightScale);
+                ctxScale.putImageData(imgScaleData, 0, 0);
+
+                // Schedule the next frame
+                requestAnimationFrame(scaleCanvasImage);
+            };
+        }
+
+        // Start the animation loop
+        scaleCanvasImage();
+    </script>
     <script>
         if (!window.WebAssembly) {
             alert('Sorry, your browser does not support WebAssembly. :(')
         }
 
-        window.onerror = function (msg, url, line, col, error) {
+        window.onerror = function(msg, url, line, col, error) {
             var extra = !col ? '' : '\ncolumn: ' + col;
             extra += !error ? '' : '\nerror: ' + error;
             alert("Error: " + msg + "\nurl: " + url + "\nline: " + line + extra);
@@ -539,7 +549,7 @@
                 return;
             }
             try {
-                audioContext = new (window.AudioContext || window.webkitAudioContext)({
+                audioContext = new(window.AudioContext || window.webkitAudioContext)({
                     latencyHint: 0.0001,
                     sampleRate: 48000
                 });
@@ -598,7 +608,7 @@
 
         function loadSaveGame(index, cb) {
             console.log('load', gameID, index)
-            localforage.getItem(gameID + '-save-' + index, function (err, data) {
+            localforage.getItem(gameID + '-save-' + index, function(err, data) {
                 //console.log(err, data)
                 if (data) {
                     wasmSaveBuf.set(data)
@@ -614,7 +624,7 @@
         function saveSaveGame(index, cb) {
             console.log('save', gameID, index)
             tmpSaveBuf.set(wasmSaveBuf)
-            localforage.setItem(gameID + '-save-' + index, tmpSaveBuf, function (err, data) {
+            localforage.setItem(gameID + '-save-' + index, tmpSaveBuf, function(err, data) {
                 cb(true)
             })
         }
@@ -633,7 +643,7 @@
             var file = document.getElementById('sav-file').files[0]
             if (file) {
                 var fileReader = new FileReader()
-                fileReader.onload = function (event) {
+                fileReader.onload = function(event) {
                     var arrayBuffer = event.target.result
                     var u8 = new Uint8Array(arrayBuffer)
                     wasmSaveBuf.set(u8)
@@ -666,7 +676,7 @@
             Module.HEAPU8.set(u8, romBuffer)
             var ret = Module._loadRom(u8.length)
             document.getElementById('welcome').hidden = true
-            loadSaveGame(0, function () {
+            loadSaveGame(0, function() {
                 Module._resetCpu()
                 isRunning = true
             })
@@ -685,8 +695,8 @@
             }
             romFileName = fn
             document.getElementById('select-rom').innerText = 'Downloading...'
-            fetch('roms/' + fn + '.gba').then(function (resp) {
-                resp.arrayBuffer().then(function (ab) {
+            fetch('roms/' + fn + '.gba').then(function(resp) {
+                resp.arrayBuffer().then(function(ab) {
                     loadRomArrayBuffer(ab)
                 })
             });
@@ -703,7 +713,7 @@
                 romFileName = file.name
                 var arrayBuffer
                 var fileReader = new FileReader()
-                fileReader.onload = function (event) {
+                fileReader.onload = function(event) {
                     var arrayBuffer = event.target.result
                     loadRomArrayBuffer(arrayBuffer)
                 };
@@ -944,7 +954,7 @@
             return -1
         }
 
-        document.onkeydown = function (e) {
+        document.onkeydown = function(e) {
             tryInitSound()
             console.log(e.keyCode)
             if (!isRunning) {
@@ -958,7 +968,7 @@
             }
         }
 
-        document.onkeyup = function (e) {
+        document.onkeyup = function(e) {
             if (!isRunning) {
                 return
             }
@@ -980,7 +990,7 @@
             //console.log(state)
             if ((lastCheckedSaveState == 1) && (state == 0) && (isSaveSupported)) {
                 showMsg('Auto saving, please wait...')
-                saveSaveGame(0, function () {
+                saveSaveGame(0, function() {
                     console.log('save done')
                 })
             }
@@ -996,7 +1006,7 @@
         function showMsg(msg) {
             document.getElementById('msg-text').innerText = msg
             document.getElementById('msg-layer').hidden = false
-            setTimeout(function () {
+            setTimeout(function() {
                 document.getElementById('msg-layer').hidden = true
             }, 1000)
         }
@@ -1020,7 +1030,7 @@
             document.getElementById('pause-menu').hidden = !t
         }
 
-        localforage.ready().then(function () { }).catch(function (err) {
+        localforage.ready().then(function() {}).catch(function(err) {
             alert('Save storage not supported: ' + err);
         })
 
@@ -1046,7 +1056,7 @@
             document.getElementById('cht-value').value = '0x' + val.toString(16)
         }
 
-        window.addEventListener("gamepadconnected", function (e) {
+        window.addEventListener("gamepadconnected", function(e) {
             console.log("Gamepad connected")
         });
     </script>
@@ -1068,7 +1078,7 @@
             var vkm10 = document.getElementById('vkm10');
             var vkm11 = document.getElementById('vkm11');
             var vkm12 = document.getElementById('vkm12');
-            
+
             if (controls === 'top') {
                 vkm1.style.marginTop = '0';
                 vkm2.style.marginTop = '0';
@@ -1081,7 +1091,7 @@
                 vkm9.style.marginTop = '0';
                 vkm10.style.marginTop = '0';
                 vkm11.style.marginTop = '0';
-                vkm12.style.marginTop = '0';     
+                vkm12.style.marginTop = '0';
             } else {
                 vkm1.style.marginTop = '50vh';
                 vkm2.style.marginTop = '50vh';
@@ -1102,7 +1112,7 @@
             const filter = document.getElementById('filtering').value
             const canvas = document.getElementById('gba-canvas')
             const xbrz = document.getElementById('canvasScale')
-            
+
             if (filter === 'pixelated') {
                 xbrz.style.display = 'none';
                 canvas.style.display = 'block';
@@ -1118,4 +1128,5 @@
         }
     </script>
 </body>
+
 </html>
