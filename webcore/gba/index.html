@@ -171,13 +171,18 @@
         .menu input[type="text"],
         .menu input[type="range"],
         .menu select {
-            width: 96%;
+            width: 100%;
             padding: 8px;
             margin: 10px 0;
             box-sizing: border-box;
             border-radius: 5px;
             border: 1px solid #ccc;
             font-size: 14px;
+        }
+
+        .menu input[type="range"] {
+            width: 96% !important;
+            height: 32%;
         }
 
         .menu input[type="file"] {
