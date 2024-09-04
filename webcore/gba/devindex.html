@@ -270,7 +270,7 @@
     <script src="localforage.js"></script>
     <script type="module">
     import { scaleImage } from './src/xBRZ.js';
-    var scaleAmount = document.getElemenById('scale').value;
+    var scaleAmount = document.getElemenById('scale').value
 
     const canvas = document.querySelector('#gba-canvas');
     const ctx = canvas.getContext('2d');
@@ -297,7 +297,7 @@
                 const pixel = (a << 24) | (r << 16) | (g << 8) | b;
                 source.push(pixel);
             }
-            var scaleSize = scaleAmount;
+            var scaleSize = scaleAmount
             let target = new Array(width * scaleSize * height * scaleSize);
             target.fill(0);
             scaleImage(scaleSize, source, target, width, height, 0, height);
