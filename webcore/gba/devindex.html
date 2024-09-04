@@ -203,7 +203,7 @@
         <select name="controls" id="controls" onchange="updateControls()">
             <option value="top">Top</option>
             <option value="bottom">Bottom</option>    
-        </select>
+        </select><br>
         <label for="filtering">[EXPERIMENTAL] Canvas Filtering:</label>
         <select name="filtering" id="filtering" onchange="updateFiltering()">
             <option value="pixelated">Pixelated</option>
@@ -997,7 +997,7 @@
         }
 
         function updateFiltering() {
-            var filter = document.getElementById('filter').value
+            var filter = document.getElementById('filtering').value
             var canvas = document.getElementById('gba-canvas')
             var xbrz = document.getElementById('canvasScale')
             
