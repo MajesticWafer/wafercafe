@@ -140,6 +140,7 @@
             border: 2.55% solid white !important;
             padding: 0 !important;
             margin: 0 auto;
+            display: block;
         }
 
         #vk-layer {
@@ -206,17 +207,17 @@
             <option value="top">Top</option>
             <option value="bottom">Bottom</option>    
         </select><br>
+        
         <label for="filtering">[EXPERIMENTAL] Canvas Filtering:</label>
         <select name="filtering" id="filtering" onchange="updateFiltering()">
             <option value="pixelated">Pixelated</option>
             <option value="xbrz">xBRZ Upscale</option> 
         </select><br>
+        
         <label for="scale">[EXPERIMENTAL] xBRZ Scale:</label>
-        <select name="scale" id="scale">
-            <option value="2">Faster - 2x</option>
-            <option value="3">Slow - 3x</option>
-            <option value="4">Slower - 4x</option>
-        </select>
+        <input type="range" name="scale" id="scale" min="2" max="4" step="1" value="2" oninput="updateScale(this.value)">
+        <span id="scaleValue">2x</span>
+        
     </div>
     <div id="welcome" class="menu">
         <h2>VBA - A GBA Emulator</h2>
@@ -1008,9 +1009,9 @@
         }
 
         function updateFiltering() {
-            var filter = document.getElementById('filtering').value
-            var canvas = document.getElementById('gba-canvas')
-            var xbrz = document.getElementById('canvasScale')
+            const filter = document.getElementById('filtering').value
+            const canvas = document.getElementById('gba-canvas')
+            const xbrz = document.getElementById('canvasScale')
             
             if (filter === 'pixelated') {
                 xbrz.style.display = 'none';
@@ -1019,8 +1020,12 @@
                 xbrz.style.display = 'block';
                 canvas.style.display = 'none';
             }
+            console.log('Canvas filtering updated to ' + filter + '!');
+        }
+
+        function updateScale(value) {
+            document.getElementById("scaleValue").textContent = value + "x";
         }
     </script>
 </body>
-
 </html>
