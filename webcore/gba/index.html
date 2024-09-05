@@ -310,10 +310,14 @@
         <hr>
 
         <label for="controls">[EXPERIMENTAL] Controls:</label>
-        <select class="second-half" name="controls" id="controls" onchange="updateControls()">
-            <option value="top">Top</option>
-            <option value="bottom">Bottom</option>
+        <select name="controls" id="controls" onchange="updateControls()">
+            <option value="normal">Normal</option>
+            <option value="custom">Custom</option>
         </select><br>
+
+        <label for="controlPlace">[EXPERIMENTAL] Controls Placement:</label>
+        <input class="second-half" type="range" name="controlPlace" id="scale" min="10" max="50" step="10" value="10" oninput="updatePlace(this.value)">
+        <span id="placeValue">10%</span><br>
 
         <label for="filtering">[EXPERIMENTAL] Canvas Filtering:</label>
         <select class="second-half" name="filtering" id="filtering" onchange="updateFiltering()">
@@ -322,7 +326,7 @@
         </select><br>
 
         <label for="scale">[EXPERIMENTAL] xBRZ Scale:</label>
-        <input class="second-half" type="range" name="scale" id="scale" min="2" max="6" step="1" value="2" oninput="updateScale(this.value)">
+        <input type="range" name="scale" id="scale" min="2" max="6" step="1" value="2" oninput="updateScale(this.value)">
         <span id="scaleValue">2x</span>
     </div>
     <div id="welcome" class="menu">
@@ -923,7 +927,7 @@
         /*
                 // dunno why, but we should do that first on iOS
                 window.ontouchstart = function() {
-        
+
                 };
                 window.ontouchstart = handleTouch;
                 window.ontouchmove = handleTouch;
@@ -1089,7 +1093,75 @@
             var vkm11 = document.getElementById('vkm11');
             var vkm12 = document.getElementById('vkm12');
 
-            if (controls === 'top') {
+            if (controls === 'custom') {
+                if (place === '10') {
+                    vkm1.style.marginTop = '10%';
+                    vkm2.style.marginTop = '10%';
+                    vkm3.style.marginTop = '10%';
+                    vkm4.style.marginTop = '10%';
+                    vkm5.style.marginTop = '10%';
+                    vkm6.style.marginTop = '10%';
+                    vkm7.style.marginTop = '10%';
+                    vkm8.style.marginTop = '10%';
+                    vkm9.style.marginTop = '10%';
+                    vkm10.style.marginTop = '10%';
+                    vkm11.style.marginTop = '10%';
+                    vkm12.style.marginTop = '10%';
+                } else if (place === '20') {
+                    vkm1.style.marginTop = '20%';
+                    vkm2.style.marginTop = '20%';
+                    vkm3.style.marginTop = '20%';
+                    vkm4.style.marginTop = '20%';
+                    vkm5.style.marginTop = '20%';
+                    vkm6.style.marginTop = '20%';
+                    vkm7.style.marginTop = '20%';
+                    vkm8.style.marginTop = '20%';
+                    vkm9.style.marginTop = '20%';
+                    vkm10.style.marginTop = '20%';
+                    vkm11.style.marginTop = '20%';
+                    vkm12.style.marginTop = '20%';
+                } else if (place === '30') {
+                    vkm1.style.marginTop = '30%';
+                    vkm2.style.marginTop = '30%';
+                    vkm3.style.marginTop = '30%';
+                    vkm4.style.marginTop = '30%';
+                    vkm5.style.marginTop = '30%';
+                    vkm6.style.marginTop = '30%';
+                    vkm7.style.marginTop = '30%';
+                    vkm8.style.marginTop = '30%';
+                    vkm9.style.marginTop = '30%';
+                    vkm10.style.marginTop = '30%';
+                    vkm11.style.marginTop = '30%';
+                    vkm12.style.marginTop = '30%';
+                } else if (place === '40') {
+                    vkm1.style.marginTop = '40%';
+                    vkm2.style.marginTop = '40%';
+                    vkm3.style.marginTop = '40%';
+                    vkm4.style.marginTop = '40%';
+                    vkm5.style.marginTop = '40%';
+                    vkm6.style.marginTop = '40%';
+                    vkm7.style.marginTop = '40%';
+                    vkm8.style.marginTop = '40%';
+                    vkm9.style.marginTop = '40%';
+                    vkm10.style.marginTop = '40%';
+                    vkm11.style.marginTop = '40%';
+                    vkm12.style.marginTop = '40%';
+                } else if (place === '50') {
+                    vkm1.style.marginTop = '50%';
+                    vkm2.style.marginTop = '50%';
+                    vkm3.style.marginTop = '50%';
+                    vkm4.style.marginTop = '50%';
+                    vkm5.style.marginTop = '50%';
+                    vkm6.style.marginTop = '50%';
+                    vkm7.style.marginTop = '50%';
+                    vkm8.style.marginTop = '50%';
+                    vkm9.style.marginTop = '50%';
+                    vkm10.style.marginTop = '50%';
+                    vkm11.style.marginTop = '50%';
+                    vkm12.style.marginTop = '50%';
+                }
+
+            } else {
                 vkm1.style.marginTop = '0';
                 vkm2.style.marginTop = '0';
                 vkm3.style.marginTop = '0';
@@ -1102,19 +1174,6 @@
                 vkm10.style.marginTop = '0';
                 vkm11.style.marginTop = '0';
                 vkm12.style.marginTop = '0';
-            } else {
-                vkm1.style.marginTop = '50vh';
-                vkm2.style.marginTop = '50vh';
-                vkm3.style.marginTop = '50vh';
-                vkm4.style.marginTop = '50vh';
-                vkm5.style.marginTop = '50vh';
-                vkm6.style.marginTop = '50vh';
-                vkm7.style.marginTop = '50vh';
-                vkm8.style.marginTop = '50vh';
-                vkm9.style.marginTop = '50vh';
-                vkm10.style.marginTop = '50vh';
-                vkm11.style.marginTop = '50vh';
-                vkm12.style.marginTop = '50vh';
             }
         }
 
@@ -1135,6 +1194,10 @@
 
         function updateScale(value) {
             document.getElementById("scaleValue").textContent = value + "x";
+        }
+
+        function updatePlace(value) {
+            document.getElementById("placeValue").textContent = value + "%";
         }
     </script>
 </body>
