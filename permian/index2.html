@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paper Layer Slider</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+            overflow: hidden;
+        }
+        .container {
+            position: relative;
+            width: 400px;
+            height: 600px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            background-color: white;
+            overflow: hidden;
+        }
+        .layer {
+            position: absolute;
+            top: 100%;
+            width: 100%;
+            height: 100%;
+            transition: top 0.5s;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .layer.active {
+            top: 0;
+        }
+        .slider-container {
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            z-index: 10;
+        }
+        .slider {
+            writing-mode: bt-lr; /* vertical slider */
+            -webkit-appearance: slider-vertical;
+            width: 8px;
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="paperContainer">
+        <div class="layer" id="layer1"></div>
+        <div class="layer" id="layer2"></div>
+        <div class="layer active" id="layer3"></div>
+    </div>
+
+    <div class="slider-container">
+        <input type="range" min="1" max="3" value="3" class="slider" id="layerSlider">
+    </div>
+
+    <script>
+        const layers = document.querySelectorAll('.layer');
+        const slider = document.getElementById('layerSlider');
+
+        slider.addEventListener('input', (event) => {
+            const value = parseInt(event.target.value);
+
+            layers.forEach((layer, index) => {
+                if (3 - index === value) {
+                    layer.classList.add('active');
+                } else {
+                    layer.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
