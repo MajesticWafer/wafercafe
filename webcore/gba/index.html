@@ -134,7 +134,7 @@
             font-family: Arial, sans-serif;
             box-sizing: border-box;
             overflow-y: auto;
-            border: 3px 1px #6A0DAD;
+            /* border: 3px 1px #6A0DAD; */
             margin: 0 auto;
             overflow-y: scroll !important;
         }
@@ -310,19 +310,19 @@
         <hr>
 
         <label for="controls">[EXPERIMENTAL] Controls:</label>
-        <select name="controls" id="controls" onchange="updateControls()">
+        <select class="second-half" name="controls" id="controls" onchange="updateControls()">
             <option value="top">Top</option>
             <option value="bottom">Bottom</option>
         </select><br>
 
         <label for="filtering">[EXPERIMENTAL] Canvas Filtering:</label>
-        <select name="filtering" id="filtering" onchange="updateFiltering()">
+        <select class="second-half" name="filtering" id="filtering" onchange="updateFiltering()">
             <option value="pixelated">Pixelated</option>
             <option value="xbrz">xBRZ Upscale</option>
         </select><br>
 
         <label for="scale">[EXPERIMENTAL] xBRZ Scale:</label>
-        <input type="range" name="scale" id="scale" min="1" max="6" step="1" value="2" oninput="updateScale(this.value)">
+        <input class="second-half" type="range" name="scale" id="scale" min="1" max="6" step="1" value="2" oninput="updateScale(this.value)">
         <span id="scaleValue">1x</span>
     </div>
     <div id="welcome" class="menu">
