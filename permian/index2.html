@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sliding Slides</title>
+    <title>Paper Layer Slider</title>
     <style>
         body {
             margin: 0;
@@ -18,9 +18,9 @@
         }
         .container {
             position: relative;
-            width: 85vw;
+            width: 80vw; /* Increased width for a larger container */
             height: calc(80vw * 9 / 16); /* Maintaining 16:9 aspect ratio */
-            max-height: 100vh; /* Slightly larger max height */
+            max-height: 85vh; /* Slightly larger max height */
             border-radius: 10px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
             background-color: white;
@@ -37,7 +37,7 @@
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
         }
         .layer.active {
-            top: 0;
+            top: 0; /* Slide into view */
         }
         .slider-container {
             position: absolute;
@@ -49,7 +49,7 @@
         .slider {
             writing-mode: bt-lr; /* Vertical slider */
             -webkit-appearance: slider-vertical;
-            width: 20px;
+            width: 30px;
             height: 200px;
             cursor: pointer;
             background: #ddd;
