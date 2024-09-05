@@ -295,6 +295,8 @@
             display: none;
         }
     </style>
+
+    <!-- menu -->
     <div id="pause-menu" class="menu" style="background: rgba(32,43,56,0.85);" hidden>
         <h1 style="margin-bottom: 7px !important;">Game Paused</h1><br>
         <button onclick="setPauseMenu(false); updateControls();"> ← Back </button>
@@ -329,6 +331,8 @@
         <input type="range" name="scale" id="scale" min="2" max="6" step="1" value="2" oninput="updateScale(this.value)">
         <span id="scaleValue">2x</span>
     </div>
+
+    <!-- home menu -->
     <div id="welcome" class="menu">
         <h2>VBA - A GBA Emulator</h2>
         <hr>
@@ -356,6 +360,8 @@
             <p style="text-align: center;">👇</p>
         </div>
     </div>
+
+    <!-- emu -->
     <div id="msg-layer" hidden>
         <p id="msg-text"></p>
     </div>
