@@ -28,16 +28,20 @@
         }
         .layer {
             position: absolute;
-            top: 100%; /* Start off-screen */
+            top: 0;
             width: 100%;
             height: 100%;
-            transition: top 0.5s ease-in-out; /* Smooth transition */
+            transition: transform 0.5s ease-in-out; /* Smooth transition */
             background-color: white;
             border-radius: 10px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            transform: translateY(100%); /* Start off-screen */
         }
         .layer.active {
-            top: 0; /* Slide into view */
+            transform: translateY(0); /* Slide into view */
+        }
+        .layer.inactive {
+            transform: translateY(-10%); /* Slight offset for inactive layers to simulate a stack */
         }
         .slider-container {
             position: absolute;
@@ -60,10 +64,10 @@
 </head>
 <body>
     <div class="container" id="paperContainer">
-        <div class="layer" id="layer1">
+        <div class="layer inactive" id="layer1">
             <h1>Layer 1</h1>
         </div>
-        <div class="layer" id="layer2">
+        <div class="layer inactive" id="layer2">
             <h1>Layer 2</h1>
         </div>
         <div class="layer active" id="layer3">
@@ -83,11 +87,16 @@
             const value = parseInt(event.target.value);
 
             layers.forEach((layer, index) => {
-                // Calculate the correct layer to be active based on slider value
-                if (3 - index === value) {
+                const layerIndex = layers.length - index; // Layers from 1 to 3
+
+                if (layerIndex === value) {
                     layer.classList.add('active');
-                } else {
+                    layer.classList.remove('inactive');
+                } else if (layerIndex < value) {
+                    layer.classList.add('inactive');
                     layer.classList.remove('active');
+                } else {
+                    layer.classList.remove('active', 'inactive');
                 }
             });
         });
