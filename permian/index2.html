@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Paper Layer Slider</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
             margin: 0;
@@ -15,16 +16,17 @@
             height: 100vh;
             background-color: #f0f0f0;
             overflow: hidden;
+            font-family: 'Open Sans', sans-serif;
         }
         .container {
             position: relative;
-            width: 80vw; /* Increased width for a larger container */
-            height: calc(80vw * 9 / 16); /* Maintaining 16:9 aspect ratio */
-            max-height: 85vh; /* Slightly larger max height */
+            width: 80vw;
+            height: calc(80vw * 9 / 16);
+            max-height: 85vh;
             border-radius: 10px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
             background-color: white;
-            overflow: visible; /* Allow layers to move outside the container */
+            overflow: visible;
         }
         .layer {
             position: absolute;
@@ -32,17 +34,18 @@
             left: 0;
             width: 100%;
             height: 100%;
-            transition: transform 0.5s ease-in-out; /* Smooth transition */
+            transition: transform 0.5s ease-in-out;
             background-color: white;
             border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25); /* Enhanced box shadow */
-            transform: translateY(120%); /* Start off-screen */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+            padding: 20px;
+            transform: translateY(120%);
         }
         .layer.active {
-            transform: translateY(0); /* Slide into view */
+            transform: translateY(0);
         }
         .layer.inactive {
-            transform: translateY(-10%); /* Slight offset for inactive layers to simulate a stack */
+            transform: translateY(-10%);
         }
         .slider-container {
             position: absolute;
@@ -52,7 +55,7 @@
             z-index: 10;
         }
         .slider {
-            writing-mode: bt-lr; /* Vertical slider */
+            writing-mode: bt-lr;
             -webkit-appearance: slider-vertical;
             width: 30px;
             height: 200px;
@@ -65,30 +68,31 @@
 </head>
 <body>
     <div class="container" id="paperContainer">
-        <div class="layer inactive" id="layer1">
+        <div class="layer" id="layer1">
             <h1>Layer 1</h1>
+            <p>Content for Layer 1</p>
         </div>
-        <div class="layer inactive" id="layer2">
+        <div class="layer" id="layer2">
             <h1>Layer 2</h1>
+            <p>Content for Layer 2</p>
         </div>
-        <div class="layer active" id="layer3">
+        <div class="layer" id="layer3">
             <h1>Layer 3</h1>
+            <p>Content for Layer 3</p>
         </div>
     </div>
 
     <div class="slider-container">
-        <input type="range" min="1" max="3" value="3" class="slider" id="layerSlider">
+        <input type="range" min="1" max="3" value="1" class="slider" id="layerSlider">
     </div>
 
     <script>
         const layers = document.querySelectorAll('.layer');
         const slider = document.getElementById('layerSlider');
 
-        slider.addEventListener('input', (event) => {
-            const value = parseInt(event.target.value);
-
+        function updateLayers(value) {
             layers.forEach((layer, index) => {
-                const layerIndex = layers.length - index; // Layers from 1 to 3
+                const layerIndex = index + 1; // Layers from 1 to 3
 
                 if (layerIndex === value) {
                     layer.classList.add('active');
@@ -100,7 +104,26 @@
                     layer.classList.remove('active', 'inactive');
                 }
             });
+
+            if (value === 1) {
+                layers[2].style.transform = 'translateY(-10%)'; // Layer 3 slides slightly up
+                layers[1].style.transform = 'translateY(-10%)'; // Layer 2 slides slightly up
+            } else if (value === 2) {
+                layers[1].style.transform = 'translateY(0)'; // Layer 2 slides into position
+                layers[2].style.transform = 'translateY(-10%)'; // Layer 3 slides slightly up
+            } else {
+                layers[2].style.transform = 'translateY(0)'; // Layer 3 remains at bottom
+                layers[1].style.transform = 'translateY(0)'; // Layer 2 remains above Layer 3
+            }
+        }
+
+        slider.addEventListener('input', (event) => {
+            const value = parseInt(event.target.value);
+            updateLayers(value);
         });
+
+        // Initialize with Layer 1 active
+        updateLayers(parseInt(slider.value));
     </script>
 </body>
 </html>
