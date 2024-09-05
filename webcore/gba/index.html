@@ -12,7 +12,7 @@
     <title>VBA</title>
 </head>
 
-<body>
+<body onload="updatePlace(); updateScale();">
     <style>
         a,
         a:visited {
@@ -225,7 +225,8 @@
         }
 
         .menu .second-half select,
-        .menu .second-half input[type="file"] {
+        .menu .second-half input[type="file"],
+        .menu .second-half input[type="range"] {
             font-size: 12px;
             padding: 6px;
         }
@@ -1086,6 +1087,7 @@
     <script>
         function updateControls() {
             var controls = document.getElementById('controls').value;
+            var place = document.getElementById('controlPlace').value;
             var vkm1 = document.getElementById('vkm1');
             var vkm2 = document.getElementById('vkm2');
             var vkm3 = document.getElementById('vkm3');
@@ -1200,10 +1202,12 @@
 
         function updateScale(value) {
             document.getElementById("scaleValue").textContent = value + "x";
+            console.log('xBRZ scale updated to ' + value + '!');
         }
 
         function updatePlace(value) {
             document.getElementById("placeValue").textContent = value + "%";
+            console.log('Controller placement updated to ' + value + '!');
         }
     </script>
 </body>
