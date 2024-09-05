@@ -39,14 +39,10 @@
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
             padding: 20px;
-            transform: translateY(120%);
         }
-        .layer.active {
-            transform: translateY(0);
-        }
-        .layer.inactive {
-            transform: translateY(-10%);
-        }
+        .layer:nth-child(3) { transform: translateY(0); } /* Layer 1 */
+        .layer:nth-child(2) { transform: translateY(120%); } /* Layer 2 */
+        .layer:nth-child(1) { transform: translateY(120%); } /* Layer 3 */
         .slider-container {
             position: absolute;
             top: 50%;
@@ -94,27 +90,21 @@
             layers.forEach((layer, index) => {
                 const layerIndex = index + 1; // Layers from 1 to 3
 
-                if (layerIndex === value) {
-                    layer.classList.add('active');
-                    layer.classList.remove('inactive');
-                } else if (layerIndex < value) {
-                    layer.classList.add('inactive');
-                    layer.classList.remove('active');
-                } else {
-                    layer.classList.remove('active', 'inactive');
+                // Set transform styles based on the selected value
+                if (value === 1) {
+                    layers[0].style.transform = 'translateY(120%)'; // Layer 3 slides down
+                    layers[1].style.transform = 'translateY(120%)'; // Layer 2 slides down
+                    layers[2].style.transform = 'translateY(0)';    // Layer 1 is in view
+                } else if (value === 2) {
+                    layers[0].style.transform = 'translateY(120%)'; // Layer 3 slides down
+                    layers[1].style.transform = 'translateY(0)';    // Layer 2 is in view
+                    layers[2].style.transform = 'translateY(-120%)';// Layer 1 slides up
+                } else if (value === 3) {
+                    layers[0].style.transform = 'translateY(0)';    // Layer 3 is in view
+                    layers[1].style.transform = 'translateY(-120%)';// Layer 2 slides up
+                    layers[2].style.transform = 'translateY(-120%)';// Layer 1 slides up
                 }
             });
-
-            if (value === 1) {
-                layers[2].style.transform = 'translateY(-10%)'; // Layer 3 slides slightly up
-                layers[1].style.transform = 'translateY(-10%)'; // Layer 2 slides slightly up
-            } else if (value === 2) {
-                layers[1].style.transform = 'translateY(0)'; // Layer 2 slides into position
-                layers[2].style.transform = 'translateY(-10%)'; // Layer 3 slides slightly up
-            } else {
-                layers[2].style.transform = 'translateY(0)'; // Layer 3 remains at bottom
-                layers[1].style.transform = 'translateY(0)'; // Layer 2 remains above Layer 3
-            }
         }
 
         slider.addEventListener('input', (event) => {
