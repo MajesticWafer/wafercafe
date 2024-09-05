@@ -24,18 +24,19 @@
             border-radius: 10px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
             background-color: white;
-            overflow: hidden;
+            overflow: visible; /* Allow layers to move outside the container */
         }
         .layer {
             position: absolute;
             top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             transition: transform 0.5s ease-in-out; /* Smooth transition */
             background-color: white;
             border-radius: 10px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-            transform: translateY(100%); /* Start off-screen */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25); /* Enhanced box shadow */
+            transform: translateY(120%); /* Start off-screen */
         }
         .layer.active {
             transform: translateY(0); /* Slide into view */
