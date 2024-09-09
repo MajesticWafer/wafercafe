@@ -11,25 +11,50 @@
             color: #333;
             line-height: 1.6;
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            transition: background-color 0.3s, color 0.3s;
         }
         .container {
             max-width: 900px;
-            margin: auto;
+            margin: 80px auto 20px;
             background: #fff;
             padding: 20px;
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
             border-radius: 8px;
         }
-        h1 {
-            color: #0044cc;
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: #0044cc;
+            color: #fff;
+            padding: 10px 0;
             text-align: center;
-            margin-bottom: 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+        header nav {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        header a {
+            color: #fff;
+            text-decoration: none;
+            padding: 5px 10px;
+            transition: background 0.3s;
+        }
+        header a:hover {
+            background: #003399;
+            border-radius: 4px;
+        }
+        h1, h2 {
+            color: #0044cc;
+            margin: 10px 0;
         }
         h2 {
             color: #0066ff;
-            margin-top: 0;
-            text-align: center;
         }
         .section {
             margin-top: 20px;
@@ -39,6 +64,11 @@
             padding: 10px;
             background: #e6f7ff;
             border-left: 4px solid #0044cc;
+            transition: transform 0.3s;
+        }
+        .details:hover {
+            transform: scale(1.02);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
         .phonetics {
             font-size: 0.9em;
@@ -46,13 +76,11 @@
         }
         .visuals {
             margin: 20px 0;
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 15px;
-            flex-wrap: wrap;
-            justify-content: space-around;
         }
         .visual {
-            max-width: 45%;
             text-align: center;
         }
         .visual img {
@@ -76,6 +104,10 @@
             padding: 10px;
             border-radius: 5px;
             list-style-type: none;
+            margin: 0;
+        }
+        .presentation-tips li {
+            margin: 5px 0;
         }
         .qr-code {
             text-align: center;
@@ -85,34 +117,62 @@
             width: 150px;
             height: 150px;
         }
+        .theme-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #0044cc;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: background 0.3s;
+        }
+        .theme-toggle:hover {
+            background: #003399;
+        }
+        .dark-mode {
+            background-color: #1e1e1e;
+            color: #f4f4f9;
+        }
     </style>
 </head>
 <body>
+    <header>
+        <nav>
+            <a href="#analysis">Analysis</a>
+            <a href="#visuals">Visuals</a>
+            <a href="#conclusion">Conclusion</a>
+            <a href="#presentation-tips">Presentation Tips</a>
+        </nav>
+    </header>
     <div class="container">
         <h1>Permian Period Exploration</h1>
-        <h2>Essential Question & Claim: Why is the Permian period significant in Earth's history?</h2>
+        <h2 id="analysis">Essential Question & Claim: Why is the Permian period significant in Earth's history?</h2>
 
         <div class="section">
             <h2>Analysis</h2>
             <div class="details">
                 <strong>Detail 1:</strong> The Permian period was the last period of the Paleozoic Era, characterized by the formation of the supercontinent Pangaea.
-                <div class="phonetics">(Pangaea: /pænˈdʒiː.ə/)</div>
+                <div class="phonetics" title="Pangaea: /pænˈdʒiː.ə/">(Pangaea: /pænˈdʒiː.ə/)</div>
             </div>
             <div class="details">
                 <strong>Detail 2:</strong> It was marked by diverse marine life, including brachiopods and ammonites.
-                <div class="phonetics">(Brachiopods: /ˈbræk.i.oʊˌpɒdz/)</div>
+                <div class="phonetics" title="Brachiopods: /ˈbræk.i.oʊˌpɒdz/">(Brachiopods: /ˈbræk.i.oʊˌpɒdz/)</div>
             </div>
             <div class="details">
                 <strong>Detail 3:</strong> Significant evolutionary advancements in reptiles, leading to the dominance of therapsids.
-                <div class="phonetics">(Therapsids: /θəˈræp.sɪdz/)</div>
+                <div class="phonetics" title="Therapsids: /θəˈræp.sɪdz/">(Therapsids: /θəˈræp.sɪdz/)</div>
             </div>
             <div class="details">
                 <strong>Detail 4:</strong> The Permian period ended with the largest mass extinction in Earth's history, wiping out approximately 90% of marine species.
-                <div class="phonetics">(Extinction: /ɪkˈstɪŋk.ʃən/)</div>
+                <div class="phonetics" title="Extinction: /ɪkˈstɪŋk.ʃən/">(Extinction: /ɪkˈstɪŋk.ʃən/)</div>
             </div>
             <div class="details">
                 <strong>Detail 5:</strong> This period set the stage for the rise of dinosaurs in the Mesozoic Era.
-                <div class="phonetics">(Mesozoic: /ˌmɛz.oʊˈzoʊ.ɪk/)</div>
+                <div class="phonetics" title="Mesozoic: /ˌmɛz.oʊˈzoʊ.ɪk/">(Mesozoic: /ˌmɛz.oʊˈzoʊ.ɪk/)</div>
             </div>
         </div>
 
@@ -132,22 +192,31 @@
                 </div>
             </div>
         </div>
-
-        <div class="conclusion">
+        <div class="conclusion" id="conclusion">
             <h2>Conclusion</h2>
             <p>The Permian period's environmental and evolutionary developments laid crucial foundations for future life on Earth, highlighting its significance in geological history.</p>
         </div>
 
-        <ul class="presentation-tips">
+        <!-- ul class="presentation-tips" id="presentation-tips">
             <li>Speak clearly and loud enough for all to hear.</li>
             <li>Emphasize phonetic pronunciations for complex terms.</li>
             <li>Stay on topic and support your claim with strong evidence.</li>
-        </ul>
+        </ul -->
 
         <div class="qr-code">
             <p>Scan the QR code for more resources on the Permian period:</p>
             <img src="path/to/qr-code.png" alt="QR Code to Additional Resources">
         </div>
     </div>
+
+    <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+
+    <script>
+        function toggleTheme() {
+            document.body.classList.toggle('dark-mode');
+            const button = document.querySelector('.theme-toggle');
+            button.textContent = document.body.classList.contains('dark-mode') ? '🌞' : '🌙';
+        }
+    </script>
 </body>
 </html>
