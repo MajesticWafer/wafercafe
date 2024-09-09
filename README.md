@@ -1,6 +1,6 @@
 # The Wafer Café
 
-A simple, yet fun-packed gam̷e center.
+A user-friendly web assembly video game website, aimed to entertain users (during work and school, too!).
 
 ## About
 
@@ -8,16 +8,15 @@ The Wafer Café strives to have fun games in the browser, while maintaining educ
 
 Features
 - Simple GUI
-- Gam̷e and Em̷ulator sorting
 
 ## Info
 
-Please star if you fork or find this useful.
+Please star if you fork, or simply find this useful!
 
-Made by MajesticWafer, 2023-2024
+While the Wafer Café is intended to be be a game center, I also ocasionally run my school projects on this domain.
+
+MajesticWafer, 2023-2024
 
 ## Contribution
 
 If you want to contribute, fork this repository, make your changes, and commit a pull request towards this repo.
-
-ඞඞඞ Amongi
