@@ -117,26 +117,6 @@
             width: 150px;
             height: 150px;
         }
-        .theme-toggle {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: #0044cc;
-            color: #fff;
-            border: none;
-            padding: 10px 15px;
-            border-radius: 50%;
-            cursor: pointer;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            transition: background 0.3s;
-        }
-        .theme-toggle:hover {
-            background: #003399;
-        }
-        .dark-mode {
-            background-color: #1e1e1e;
-            color: #f4f4f9;
-        }
     </style>
 </head>
 <body>
@@ -145,7 +125,7 @@
             <a href="#analysis">Analysis</a>
             <a href="#visuals">Visuals</a>
             <a href="#conclusion">Conclusion</a>
-            <a href="#presentation-tips">Presentation Tips</a>
+            <!-- a href="#presentation-tips">Presentation Tips</a -->
         </nav>
     </header>
     <div class="container">
@@ -208,15 +188,5 @@
             <img src="path/to/qr-code.png" alt="QR Code to Additional Resources">
         </div>
     </div>
-
-    <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
-
-    <script>
-        function toggleTheme() {
-            document.body.classList.toggle('dark-mode');
-            const button = document.querySelector('.theme-toggle');
-            button.textContent = document.body.classList.contains('dark-mode') ? '🌞' : '🌙';
-        }
-    </script>
 </body>
 </html>
