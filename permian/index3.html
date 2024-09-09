@@ -51,12 +51,21 @@
             flex-wrap: wrap;
             justify-content: space-around;
         }
-        .visuals img {
+        .visual {
+            max-width: 45%;
+            text-align: center;
+        }
+        .visual img {
             max-width: 100%;
             height: auto;
             border: 1px solid #ddd;
             border-radius: 5px;
             box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+        }
+        .desc {
+            margin-top: 5px;
+            font-size: 0.9em;
+            color: #444;
         }
         .conclusion {
             margin: 20px 0;
@@ -108,8 +117,20 @@
         </div>
 
         <div class="visuals">
-            <img src="path/to/permian-landscape.jpg" alt="Permian Landscape">
-            <img src="path/to/permian-fossils.jpg" alt="Permian Fossils">
+            <div class="visual">
+                <img src="content/permian-landscape.jpeg" alt="Permian Landscape">
+                <div class="desc">
+                    <strong>Guadalupe Mountains:</strong> The Guadalupe Mountains in Texas are home to one of the world's largest exposed fossil reefs, a 400-mile-long (644-kilometer-long) horseshoe-shaped limestone bed laid down some 250 million years ago during the Permian period. At that time, much of what is now Texas and New Mexico was covered by a vast tropical ocean. As this sea began to evaporate, sediments entombed the reef, perfectly preserving thousands of marine fossils. 
+                    <em>Photograph by Jonathan Blair/Corbis</em>
+                </div>
+            </div>
+            <div class="visual">
+                <img src="content/permian-fossils.jpeg" alt="Permian Fossils">
+                <div class="desc">
+                    <strong>Trilobite Fossil:</strong> Trilobites, like this perfectly preserved specimen at South Dakota's Black Hills Institute of Geological Research, were among the most successful organisms ever to populate Earth. These familiar marine arthropods first arose about 545 million years ago in the early Cambrian and thrived throughout the world's oceans until they were wiped out in the Permian extinctions about 250 million years ago.
+                    <em>Photograph by James L. Amos</em>
+                </div>
+            </div>
         </div>
 
         <div class="conclusion">
