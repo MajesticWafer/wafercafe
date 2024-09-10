@@ -36,6 +36,8 @@ textarea {
     border: none;
     border-radius: 5px;
     padding: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
     margin: 0 auto 15px;
     resize: none;
     font-size: 14px;
