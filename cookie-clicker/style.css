@@ -416,7 +416,7 @@ oh forget it this is just a mess
 	background:url(img/darkNoiseTopBar.jpg) repeat-x bottom;
 	color:#ccc;
 }
-#topBar>div
+/* #topBar>div
 {
 	display:inline-block;
 	float:left;
@@ -446,7 +446,7 @@ a.orangeLink:hover,#topBar a.orangeLink:hover
 	float:right;
 	cursor:pointer;
 }
-
+*/
 .hoverable
 {
 	text-align:left;
