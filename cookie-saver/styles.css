@@ -1,7 +1,9 @@
 body {
     background-color: #3b6eb4;
+    background-image: url('https://orteil.dashnet.org/cookieclicker/img/bgBlue.jpg'); /* Cookie Clicker blue wallpaper texture */
+    background-size: cover;
     color: #fff;
-    font-family: Arial, sans-serif;
+    font-family: 'Kavoon', cursive; /* Cookie Clicker Font */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -13,6 +15,7 @@ body {
     background-color: #1c3a5b;
     padding: 20px;
     border-radius: 10px;
+    border: 5px solid #8b5a2b; /* Wooden border color */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     text-align: center;
     width: 400px;
@@ -21,18 +24,20 @@ body {
 h1 {
     font-size: 24px;
     margin-bottom: 20px;
+    color: #fff;
 }
 
 textarea {
-    width: 100%;
+    width: 350px;
     height: 150px;
     border: none;
     border-radius: 5px;
     padding: 10px;
-    margin-bottom: 15px;
+    margin: 0 auto 15px; /* Center the text area */
     resize: none;
     font-size: 14px;
     color: #333;
+    display: block; /* Ensures margin auto centers the element */
 }
 
 .buttons {
