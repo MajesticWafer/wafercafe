@@ -48,9 +48,14 @@ h1, h2 {
 
 .details-container {
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr; /* Default to one column */
     gap: 10px;
     margin-top: 10px;
+}
+
+/* Set first detail to full width */
+.details:first-child {
+    grid-column: 1 / -1;
 }
 
 .details {
@@ -65,17 +70,16 @@ h1, h2 {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.details.full-width {
-    grid-column: 1 / -1;
+/* Wrap remaining details in two-per-row format */
+.details-container > .details:not(:first-child) {
+    grid-column: span 1;
 }
 
-.details-container > .details:nth-child(1) {
-    grid-column: 1 / -1;
-}
-
-.details-container {
-    grid-template-columns: repeat(auto-fill, minmax(calc(50% - 10px), 1fr));
-    gap: 10px;
+/* Layout fix for wrapping */
+@media (min-width: 700px) {
+    .details-container {
+        grid-template-columns: repeat(2, 1fr); /* Two columns after the first detail */
+    }
 }
 
 .phonetics {
