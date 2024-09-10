@@ -7,146 +7,172 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
     <style>
         html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-        }
-        body {
-            font-family: 'Roboto Slab', serif;
-            background-color: #f4f4f9;
-            color: #333;
-            line-height: 1.4;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .container {
-            width: 8.5in;
-            height: 11in;
-            padding: 0.5in;
-            box-sizing: border-box;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            background-color: white;
-            border: 1px solid #ddd;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        h1, h2 {
-            color: #0044cc;
-            margin: 5px 0;
-        }
-        .section-container {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 10px;
-            margin-top: 10px;
-        }
-        .details-container {
-            flex: wrap;
-            display: flex;
-            grid-template-columns: 1fr;
-            gap: 10px;
-        }
-        .details {
-            padding: 10px;
-            background: #e6f7ff;
-            border-left: 4px solid #0044cc;
-            transition: transform 0.3s;
-            width: 3.45in;
-            margin-right: 0.05in;
-        }
-        .details:hover {
-            transform: scale(1.02);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-        .details.full-width {
-            width: 7in !important;
-            margin-right: 0 !important;
-        }
-        .details.wrap {
-            grid-template-columns: 1fr 1fr;
-        }
-        .phonetics {
-            font-size: 0.9em;
-            color: #555;
-            font-weight: bold;
-        }
-        .visuals {
-            margin: 10px 0;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 10px;
-        }
-        .visual {
-            text-align: center;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        .visual:hover {
-            transform: scale(1.05);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-        }
-        .visual img {
-            max-width: 100%;
-            height: auto;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            transition: transform 0.3s;
-        }
-        .visual img:hover {
-            transform: scale(1.03);
-        }
-        .desc {
-            margin-top: 5px;
-            font-size: 0.85em;
-            color: #444;
-        }
-        .conclusion {
-            margin: 10px 0;
-            font-style: italic;
-        }
-        .qr-code {
-            text-align: center;
-            margin-top: 10px;
-        }
-        .qr-code img {
-            width: 100px;
-            height: 100px;
-        }
-        .lightbox {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            align-items: center;
-            justify-content: center;
-            z-index: 2000;
-        }
-        .lightbox img {
-            max-width: 90%;
-            max-height: 90%;
-            border: 2px solid #fff;
-            border-radius: 8px;
-        }
-        .a {
-            color: blue;
-        }
-        .a:after {
-            color: purple;
-        }
-        @media print {
-            body, .container {
-                margin: 0;
-                padding: 0;
-                width: 8.5in;
-                height: 11in;
-            }
-        }
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Roboto Slab', serif;
+    background-color: #f4f4f9;
+    color: #333;
+    line-height: 1.4;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    width: 8.5in;
+    height: 11in;
+    padding: 0.5in;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background-color: white;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2 {
+    color: #0044cc;
+    margin: 5px 0;
+}
+
+.section-container {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+}
+
+.details-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.details {
+    padding: 10px;
+    background: #e6f7ff;
+    border-left: 4px solid #0044cc;
+    transition: transform 0.3s;
+}
+
+.details:hover {
+    transform: scale(1.02);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.details.full-width {
+    grid-column: 1 / -1;
+}
+
+.details-container > .details:nth-child(1) {
+    grid-column: 1 / -1;
+}
+
+.details-container {
+    grid-template-columns: repeat(auto-fill, minmax(calc(50% - 10px), 1fr));
+    gap: 10px;
+}
+
+.phonetics {
+    font-size: 0.9em;
+    color: #555;
+    font-weight: bold;
+}
+
+.visuals {
+    margin: 10px 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+}
+
+.visual {
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.visual:hover {
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.visual img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.visual img:hover {
+    transform: scale(1.03);
+}
+
+.desc {
+    margin-top: 5px;
+    font-size: 0.85em;
+    color: #444;
+}
+
+.conclusion {
+    margin: 10px 0;
+    font-style: italic;
+}
+
+.qr-code {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.qr-code img {
+    width: 100px;
+    height: 100px;
+}
+
+.lightbox {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+.lightbox img {
+    max-width: 90%;
+    max-height: 90%;
+    border: 2px solid #fff;
+    border-radius: 8px;
+}
+
+.a {
+    color: blue;
+}
+
+.a:after {
+    color: purple;
+}
+
+@media print {
+    body, .container {
+        margin: 0;
+        padding: 0;
+        width: 8.5in;
+        height: 11in;
+    }
+}
+
     </style>
 </head>
 <body>
