@@ -15,7 +15,7 @@
             font-family: 'Roboto Slab', serif;
             background-color: #f4f4f9;
             color: #333;
-            line-height: 1.6;
+            line-height: 1.4;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -23,7 +23,7 @@
         .container {
             width: 8.5in;
             height: 11in;
-            padding: 0.3in;
+            padding: 0.5in;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
@@ -34,36 +34,45 @@
         }
         h1, h2 {
             color: #0044cc;
-            margin: 10px 0;
+            margin: 5px 0;
         }
         .section-container {
             display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 20px;
-            margin-top: 20px;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .details-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
         }
         .details {
-            margin: 0 auto;
-            padding: 15px;
+            padding: 10px;
             background: #e6f7ff;
             border-left: 4px solid #0044cc;
             transition: transform 0.3s;
-            width: 7in;
         }
         .details:hover {
             transform: scale(1.02);
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
+        .details.full-width {
+            grid-column: 1 / -1;
+        }
+        .details.wrap {
+            grid-template-columns: 1fr 1fr;
+        }
         .phonetics {
-            font-size: 1em;
+            font-size: 0.9em;
             color: #555;
             font-weight: bold;
         }
         .visuals {
-            margin: 20px 0;
+            margin: 10px 0;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
         }
         .visual {
             text-align: center;
@@ -87,20 +96,20 @@
         }
         .desc {
             margin-top: 5px;
-            font-size: 0.9em;
+            font-size: 0.85em;
             color: #444;
         }
         .conclusion {
-            margin: 20px 0;
+            margin: 10px 0;
             font-style: italic;
         }
         .qr-code {
             text-align: center;
-            margin-top: 20px;
+            margin-top: 10px;
         }
         .qr-code img {
-            width: 150px;
-            height: 150px;
+            width: 100px;
+            height: 100px;
         }
         .lightbox {
             display: none;
@@ -126,6 +135,14 @@
         .a:after {
             color: purple;
         }
+        @media print {
+            body, .container {
+                margin: 0;
+                padding: 0;
+                width: 8.5in;
+                height: 11in;
+            }
+        }
     </style>
 </head>
 <body>
@@ -136,25 +153,27 @@
         <section class="section-container">
             <article class="analysis-text">
                 <h2>Analysis</h2>
-                <div class="details">
-                    <strong>Detail 1:</strong> The Permian period was the last of the Paleozoic Era, with the supercontinent Pangaea forming.
-                    <div class="phonetics" title="Pangaea: /pænˈdʒiː.ə/">(Pangaea: /pænˈdʒiː.ə/)</div>
-                </div>
-                <div class="details">
-                    <strong>Detail 2:</strong> It featured diverse marine life, including brachiopods and ammonites.
-                    <div class="phonetics" title="Brachiopods: /ˈbræk.i.oʊˌpɒdz/">(Brachiopods: /ˈbræk.i.oʊˌpɒdz/)</div>
-                </div>
-                <div class="details">
-                    <strong>Detail 3:</strong> Significant advances in reptiles led to the dominance of therapsids.
-                    <div class="phonetics" title="Therapsids: /θəˈræp.sɪdz/">(Therapsids: /θəˈræp.sɪdz/)</div>
-                </div>
-                <div class="details">
-                    <strong>Detail 4:</strong> It ended with the largest mass extinction, wiping out around 90% of marine species.
-                    <div class="phonetics" title="Extinction: /ɪkˈstɪŋk.ʃən/">(Extinction: /ɪkˈstɪŋk.ʃən/)</div>
-                </div>
-                <div class="details">
-                    <strong>Detail 5:</strong> This period paved the way for the rise of dinosaurs in the Mesozoic Era.
-                    <div class="phonetics" title="Mesozoic: /ˌmɛz.oʊˈzoʊ.ɪk/">(Mesozoic: /ˌmɛz.oʊˈzoʊ.ɪk/)</div>
+                <div class="details-container">
+                    <div class="details full-width">
+                        <strong>Detail 1:</strong> The Permian period was the last of the Paleozoic Era, with the supercontinent Pangaea forming.
+                        <div class="phonetics" title="Pangaea: /pænˈdʒiː.ə/">(Pangaea: /pænˈdʒiː.ə/)</div>
+                    </div>
+                    <div class="details">
+                        <strong>Detail 2:</strong> It featured diverse marine life, including brachiopods and ammonites.
+                        <div class="phonetics" title="Brachiopods: /ˈbræk.i.oʊˌpɒdz/">(Brachiopods: /ˈbræk.i.oʊˌpɒdz/)</div>
+                    </div>
+                    <div class="details">
+                        <strong>Detail 3:</strong> Significant advances in reptiles led to the dominance of therapsids.
+                        <div class="phonetics" title="Therapsids: /θəˈræp.sɪdz/">(Therapsids: /θəˈræp.sɪdz/)</div>
+                    </div>
+                    <div class="details">
+                        <strong>Detail 4:</strong> It ended with the largest mass extinction, wiping out around 90% of marine species.
+                        <div class="phonetics" title="Extinction: /ɪkˈstɪŋk.ʃən/">(Extinction: /ɪkˈstɪŋk.ʃən/)</div>
+                    </div>
+                    <div class="details">
+                        <strong>Detail 5:</strong> This period paved the way for the rise of dinosaurs in the Mesozoic Era.
+                        <div class="phonetics" title="Mesozoic: /ˌmɛz.oʊˈzoʊ.ɪk/">(Mesozoic: /ˌmɛz.oʊˈzoʊ.ɪk/)</div>
+                    </div>
                 </div>
             </article>
         </section>
@@ -188,9 +207,8 @@
         <p style="margin: 0 auto;">Original page <a class="a" onclick="location.href='https://wafercafe.com/permian/'">here</a>.</p>
     </div>
 
-    <!-- Lightbox Overlay -->
     <div class="lightbox" id="lightbox">
-        <img id="lightbox-img" src="" alt="Enlarged View">
+        <img id="lightbox-img" src="#" alt="Enlarged Visual">
     </div>
 
     <script>
