@@ -16,15 +16,21 @@
             background-color: #f4f4f9;
             color: #333;
             line-height: 1.6;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         .container {
-            width: 100vw;
-            height: 100vh;
-            padding: 20px;
+            width: 8.5in;
+            height: 11in;
+            padding: 1in;
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
-            overflow: auto;
+            overflow: hidden;
+            background-color: white;
+            border: 1px solid #ddd;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
         h1, h2 {
             color: #0044cc;
@@ -55,7 +61,7 @@
         .visuals {
             margin: 20px 0;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
         }
         .visual {
@@ -187,18 +193,16 @@
     </div>
 
     <script>
-        // Lightbox functionality
         function openLightbox(src) {
-            const lightbox = document.getElementById('lightbox');
-            const lightboxImg = document.getElementById('lightbox-img');
-            lightboxImg.src = src;
-            lightbox.style.display = 'flex';
+            document.getElementById('lightbox-img').src = src;
+            document.getElementById('lightbox').style.display = 'flex';
         }
 
-        // Close lightbox when clicked outside the image
-        document.getElementById('lightbox').addEventListener('click', function() {
-            this.style.display = 'none';
-        });
+        function closeLightbox() {
+            document.getElementById('lightbox').style.display = 'none';
+        }
+
+        document.getElementById('lightbox').onclick = closeLightbox;
     </script>
 </body>
 </html>
