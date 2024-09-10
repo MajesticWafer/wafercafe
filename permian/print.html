@@ -48,40 +48,47 @@ h1, h2 {
 
 .details-container {
     display: grid;
-    grid-template-columns: 1fr; /* Default to one column */
+    grid-template-columns: 1fr; /* Single column by default */
     gap: 10px;
     margin-top: 10px;
 }
-
+        
 /* Set first detail to full width */
 .details:first-child {
     grid-column: 1 / -1;
 }
 
+/* Ensure minimal margins */
 .details {
     padding: 10px;
     background: #e6f7ff;
     border-left: 4px solid #0044cc;
     transition: transform 0.3s;
+    margin: 0; /* Minimize margins to fit properly */
 }
 
 .details:hover {
     transform: scale(1.02);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+ }
+            
+/* Make the first detail full width */
+.details-container > .details:first-child {
+    grid-column: span 2; /* Span across both columns */
 }
 
-/* Wrap remaining details in two-per-row format */
+/* Two-per-row for subsequent details */
 .details-container > .details:not(:first-child) {
-    grid-column: span 1;
+    grid-column: span 1; /* Standard span of 1 for two-per-row */
 }
 
-/* Layout fix for wrapping */
-@media (min-width: 700px) {
+/* Media query to handle layout properly */
+@media (min-width: 600px) {
     .details-container {
-        grid-template-columns: repeat(2, 1fr); /* Two columns after the first detail */
+        grid-template-columns: repeat(2, 1fr); /* Two columns layout */
     }
 }
-
+        
 .phonetics {
     font-size: 0.9em;
     color: #555;
