@@ -115,6 +115,12 @@
             color: #555;
             text-align: center;
         }
+
+        .p {
+            left: 0;
+            margin: 0;
+            padding: 0;
+        }
     </style>
 </head>
 
@@ -129,7 +135,7 @@
             <h3>Settings</h3>
             <label for="resolution">Resolution:</label>
             <input type="range" id="resolution" min="0.5" max="1" step="0.25" value="0.75" oninput="updateRes(this.value)">
-            <p id="resolution-p">0.75x</p>
+            <p class="p" id="resolution-p">0.75x</p>
 
             <label for="audio">Audio:</label>
             <select id="audio">
@@ -142,7 +148,7 @@
 
             <label for="vm-ram">VM RAM:</label>
             <input type="range" id="vm-ram" min="2" max="4" step="1" value="3" oninput="updateRam(this.value)">
-            <p id="vm-ram-p">3GB</p>
+            <p class="p" id="vm-ram-p">3GB</p>
         </div>
     </main>
     <script src="app.js"></script>
