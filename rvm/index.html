@@ -87,7 +87,7 @@
 
         .settings input,
         .settings select {
-            width: 100%;
+            width: 87%;
             padding: 12px;
             border: 1px solid #ccc;
             border-radius: 6px;
@@ -126,6 +126,7 @@
         <button id="start-vm" class="btn-primary">Start Session</button>
         <p id="status" class="status-message">Click the button to start a session.</p>
         <div id="settings" class="settings">
+            <h3>Settings</h3>
             <label for="resolution">Resolution:</label>
             <input type="range" id="resolution" min="0.5" max="1" step="0.25" value="0.75" oninput="updateRes(this.value)">
             <p id="resolution-p">0.75x</p>
@@ -137,7 +138,7 @@
             </select>
 
             <hr class="divider">
-            <h2>Advanced Settings</h2>
+            <h4>Advanced Settings</h4>
 
             <label for="vm-ram">VM RAM:</label>
             <input type="range" id="vm-ram" min="2" max="4" step="1" value="3" oninput="updateRam(this.value)">
