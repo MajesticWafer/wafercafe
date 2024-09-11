@@ -12,9 +12,10 @@ body {
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background-color: #e8eaf6; /* Light blue background for a modern look */
+    background-color: #fff;
     color: #333;
     padding: 20px;
+    font-family: "Roboto", sans-serif;
 }
 
 .header {
@@ -24,7 +25,6 @@ body {
 
 h1 {
     font-size: 2.5rem;
-    color: #3949ab; /* Blue shade for the title */
     margin-bottom: 20px;
 }
 
@@ -36,7 +36,7 @@ h1 {
     width: 100%;
     max-width: 400px;
     padding: 20px;
-    background: #ffffff;
+    background: #f1f1f1;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
 }
@@ -45,7 +45,7 @@ h1 {
     padding: 12px 24px;
     font-size: 16px;
     color: #fff;
-    background-color: #3949ab; /* Matching the title color */
+    background-color: #f1f1f2;
     border: none;
     border-radius: 8px;
     cursor: pointer;
@@ -53,7 +53,7 @@ h1 {
 }
 
 .btn-primary:hover {
-    background-color: #303f9f; /* Darker shade on hover */
+    background-color: #f0f0f1; /* Darker shade on hover */
 }
 
 .settings {
