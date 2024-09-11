@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
     <title>Roblox Cloud</title>
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -13,10 +16,11 @@
     </header>
     <main class="main-content">
         <button id="start-vm" class="btn-primary">Start Session</button>
+        <p id="status" class="status-message">Click the button to start a session.</p>
         <div id="settings" class="settings">
             <!-- Settings panel -->
             <label for="resolution">Resolution:</label>
-            <input type="range" id="resolution" min="0.5" max="1" step="0.25" value="0.75">
+            <input type="range" id="resolution" min="0.5" max="1" step="0.25" value="0.75" oninput="updateRes(this.value)"><p id="resolution-p">0.75x</p>
             
             <label for="audio">Audio:</label>
             <select id="audio">
@@ -28,11 +32,21 @@
             <h2>Advanced Settings</h2>
             
             <label for="vm-ram">VM RAM:</label>
-            <input type="range" id="vm-ram" min="2" max="4" step="1" value="3">
+            <input type="range" id="vm-ram" min="2" max="4" step="1" value="3" oninput="updateRam(this.value)"><p id="vm-ram-p">3GB</p>
             <!-- End of settings panel -->
         </div>
-        <p id="status" class="status-message">Click the button to start a session.</p>
     </main>
     <script src="app.js"></script>
+    <script>
+        function updateRes(value) {
+            document.getElementById("resolution").textContent = value + "x";   
+            console.log('VM resolution updated to ' + value + '!');
+        }
+
+        function updateRam(value) {
+            document.getElementById("vm-ram").textContent = value + "GB";   
+            console.log('VM RAM updated to ' + value + '!');
+        }
+    </script>
 </body>
 </html>
