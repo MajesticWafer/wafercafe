@@ -8,18 +8,31 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Roblox Cloud</h1>
-    <button id="start-vm">Start session</button>
-    <div id="settings">
-        <!-- pseudo
-        Slider for resolution; 0.5x, 0.75x, 1x (default 0.75x)
-        Audio options select (on/off)
-        Divider "Advanced Settings" (not to be touched if user is not knowing what they are doing)
-        VM RAM slider; 2GB, 3GB, 4GB (default 3GB)
-        /pseudo -->
-    </div>
-    <p id="status">Click the button to start a session.</p>
-
+    <header class="header">
+        <h1>Roblox Cloud</h1>
+    </header>
+    <main class="main-content">
+        <button id="start-vm" class="btn-primary">Start Session</button>
+        <div id="settings" class="settings">
+            <!-- Settings panel -->
+            <label for="resolution">Resolution:</label>
+            <input type="range" id="resolution" min="0.5" max="1" step="0.25" value="0.75">
+            
+            <label for="audio">Audio:</label>
+            <select id="audio">
+                <option value="on">On</option>
+                <option value="off">Off</option>
+            </select>
+            
+            <hr class="divider">
+            <h2>Advanced Settings</h2>
+            
+            <label for="vm-ram">VM RAM:</label>
+            <input type="range" id="vm-ram" min="2" max="4" step="1" value="3">
+            <!-- End of settings panel -->
+        </div>
+        <p id="status" class="status-message">Click the button to start a session.</p>
+    </main>
     <script src="app.js"></script>
 </body>
 </html>
