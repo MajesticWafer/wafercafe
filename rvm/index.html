@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,8 +9,112 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <title>Roblox Cloud</title>
-    <link rel="stylesheet" href="styles.css">
+    <styles>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f7f8fa;
+            color: #333;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #2e3a59;
+            margin-bottom: 20px;
+        }
+
+        .main-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+            max-width: 480px;
+            padding: 25px;
+            background: #ffffff;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+        }
+
+        .btn-primary {
+            padding: 12px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #fff;
+            background-color: #3949ab;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #303f9f;
+            transform: translateY(-2px);
+        }
+
+        .settings {
+            width: 100%;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+        }
+
+        .settings label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+            color: #2e3a59;
+        }
+
+        .settings input,
+        .settings select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .divider {
+            border: none;
+            height: 1px;
+            background: #ddd;
+            margin: 20px 0;
+        }
+
+        h2 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: #3949ab;
+            font-weight: 700;
+        }
+
+        .status-message {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #555;
+            text-align: center;
+        }
+    </styles>
 </head>
+
 <body>
     <header class="header">
         <h1>Roblox Cloud</h1>
@@ -21,16 +126,16 @@
             <label for="resolution">Resolution:</label>
             <input type="range" id="resolution" min="0.5" max="1" step="0.25" value="0.75" oninput="updateRes(this.value)">
             <p id="resolution-p">0.75x</p>
-            
+
             <label for="audio">Audio:</label>
             <select id="audio">
                 <option value="on">On</option>
                 <option value="off">Off</option>
             </select>
-            
+
             <hr class="divider">
             <h2>Advanced Settings</h2>
-            
+
             <label for="vm-ram">VM RAM:</label>
             <input type="range" id="vm-ram" min="2" max="4" step="1" value="3" oninput="updateRam(this.value)">
             <p id="vm-ram-p">3GB</p>
@@ -39,14 +144,18 @@
     <script src="app.js"></script>
     <script>
         function updateRes(value) {
-            document.getElementById("resolution-p").textContent = value + "x";
+            document.getElementById("resolution-p")
+                .textContent = value + "x";
             console.log('VM resolution updated to ' + value + '!');
         }
 
         function updateRam(value) {
-            document.getElementById("vm-ram-p").textContent = value + "GB";
+            document.getElementById("vm-ram-p")
+                .textContent = value + "GB";
             console.log('VM RAM updated to ' + value + '!');
         }
+
     </script>
 </body>
+
 </html>
