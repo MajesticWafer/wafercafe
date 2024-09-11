@@ -1,25 +1,97 @@
+/* General reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background-color: #f4f4f9;
+    background-color: #e8eaf6; /* Light blue background for a modern look */
+    color: #333;
+    padding: 20px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
 }
 
 h1 {
+    font-size: 2.5rem;
+    color: #3949ab; /* Blue shade for the title */
     margin-bottom: 20px;
 }
 
-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
+.main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    background: #ffffff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
 }
 
-#status {
+.btn-primary {
+    padding: 12px 24px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #3949ab; /* Matching the title color */
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #303f9f; /* Darker shade on hover */
+}
+
+.settings {
+    width: 100%;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+}
+
+.settings label {
+    display: block;
+    margin: 10px 0 5px;
+    font-weight: bold;
+}
+
+.settings input,
+.settings select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.divider {
+    border: none;
+    height: 1px;
+    background: #ddd;
+    margin: 20px 0;
+}
+
+h2 {
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    color: #3949ab;
+}
+
+.status-message {
     margin-top: 20px;
     font-size: 14px;
     color: #555;
+    text-align: center;
 }
