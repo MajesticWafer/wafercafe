@@ -28,6 +28,8 @@ socket.onclose = () => {
 // Event listener for the Start VM button
 document.getElementById('start-vm').addEventListener('click', () => {
     if (socket.readyState === WebSocket.OPEN) {
+        // Get data ready from settings in index (resolution, [audio is cs, not a dynamic setting], RAM)
+        // Send data with start-vm command
         socket.send('start-vm'); // Send a command to start the VM
         document.getElementById('status').innerText = 'Sent start command to server.';
     } else {
