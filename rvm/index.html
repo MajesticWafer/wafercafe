@@ -140,6 +140,13 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
+        .x {
+            color: black;
+            background-color: transparent;
+            right: 0;
+            top: 0;
+            margin: 4px;
+        }
     </style>
 </head>
 
@@ -147,8 +154,7 @@
     <div id="vmAlertModal" class="modal">
         <div class="modal-content">
             <p>The virtual machine (VM) will take about 5 minutes to start.</p>
-            <button id="acknowledgeBtn">Acknowledge</button>
-            <button id="remindLaterBtn">Remind Me Later</button>
+            <button class="x" id="close-alert">x</button>
         </div>
     </div>
 
