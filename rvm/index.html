@@ -131,40 +131,8 @@
     <main class="main-content">
         <button id="start-vm" class="btn-primary">Start Session</button>
         <p id="status" class="status-message">Click the button to start a session.</p>
-        <div id="settings" class="settings">
-            <h3>Settings</h3>
-            <label for="resolution">Resolution:</label>
-            <input type="range" id="resolution" min="0.5" max="1" step="0.25" value="0.75" oninput="updateRes(this.value)">
-            <p class="p" id="resolution-p">0.75x</p>
-
-            <label for="audio">Audio:</label>
-            <select id="audio">
-                <option value="on">On</option>
-                <option value="off">Off</option>
-            </select>
-
-            <hr class="divider">
-            <h4>Advanced Settings</h4>
-
-            <label for="vm-ram">VM RAM:</label>
-            <input type="range" id="vm-ram" min="2" max="4" step="1" value="3" oninput="updateRam(this.value)">
-            <p class="p" id="vm-ram-p">3GB</p>
-        </div>
     </main>
     <script src="app.js"></script>
-    <script>
-        function updateRes(value) {
-            document.getElementById("resolution-p")
-                .textContent = value + "x";
-            console.log('VM resolution updated to ' + value + '!');
-        }
-
-        function updateRam(value) {
-            document.getElementById("vm-ram-p")
-                .textContent = value + "GB";
-            console.log('VM RAM updated to ' + value + '!');
-        }
-    </script>
 </body>
 
 </html>
