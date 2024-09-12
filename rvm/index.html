@@ -21,13 +21,10 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 90%;
-            max-width: 900px;
+            width: 100%;
             height: 100%;
-            max-height: 900px;
             background: linear-gradient(145deg, #1c1c1c, #252525);
             box-shadow: 12px 12px 24px #363636, -12px -12px 24px #363636;
-            border-radius: 16px;
             padding: 40px;
             position: relative;
             overflow: hidden;
@@ -41,6 +38,8 @@
             margin-bottom: 20px;
             padding-bottom: 10px;
             border-bottom: 1px solid #333;
+            border-bottom-left-radius: 10%;
+            border-bottom-right-radius: 10%;
         }
 
         .logo {
@@ -129,10 +128,10 @@
     </style>
 </head>
 <body>
+    <div class="header">
+        <div class="logo">Roblox Cloud</div>
+    </div>
     <div class="main-container">
-        <div class="header">
-            <div class="logo">Roblox Cloud</div>
-        </div>
         <div class="content">
             <button id="start-vm">Start VM</button>
             <p id="status" class="status-message">Click the button to start the session.</p>
