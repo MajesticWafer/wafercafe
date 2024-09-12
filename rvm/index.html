@@ -6,132 +6,102 @@
     <title>Roblox Cloud</title>
     <style>
         body {
-            margin: 0;
-            font-family: 'Roboto', sans-serif;
-            background-color: #121212;
-            color: #e8eaed;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            overflow: hidden;
-        }
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #121212;
+    color: #e8eaed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    overflow: hidden;
+}
 
-        .main-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(145deg, #1c1c1c, #252525);
-            box-shadow: 12px 12px 24px #363636, -12px -12px 24px #363636;
-            padding: 40px;
-            padding-top: 55px;
-            position: relative;
-            overflow: hidden;
-            z-index: 0;
-        }
+.main-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(145deg, #1c1c1c, #252525);
+    padding: 20px;
+    box-sizing: border-box;
+    margin: 0 auto;
+}
 
-        .header {
-            position: absolute;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 1px solid #333;
-            border-bottom-left-radius: 10%;
-            border-bottom-right-radius: 10%;
-            z-index: 1;
-            top: 0;
-        }
+.header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 30px;
+    background-color: #1c1c1c;
+    border-bottom: 1.7px solid #333;
+    box-shadow: 12px 12px 24px #363636, -12px -12px 24px #363636;
+}
 
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #1a73e8;
-        }
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #1a73e8;
+    margin: 5px;
+}
 
-        .nav {
-            display: flex;
-            gap: 15px;
-        }
+.content {
+    text-align: center;
+    width: 100%;
+    margin: 20px 0;
+}
 
-        .nav a {
-            text-decoration: none;
-            color: #e8eaed;
-            font-size: 0.9rem;
-            transition: color 0.3s;
-        }
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    margin: 5px;
+}
 
-        .nav a:hover {
-            color: #1a73e8;
-        }
+p {
+    font-size: 1rem;
+    margin: 0 0 20px;
+    color: #a1a1a1;
+}
 
-        .content {
-            text-align: center;
-            width: 100%;
-        }
+#start-vm {
+    padding: 15px 30px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+    background: linear-gradient(145deg, #2d88ff, #1a73e8);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 8px 16px rgba(26, 115, 232, 0.3);
+    transition: all 0.3s ease;
+}
 
-        h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
+#start-vm:hover {
+    background: linear-gradient(145deg, #1a73e8, #2d88ff);
+    box-shadow: 0 12px 24px rgba(26, 115, 232, 0.5);
+}
 
-        p {
-            font-size: 1rem;
-            margin: 0 0 20px;
-            color: #a1a1a1;
-        }
+#start-vm:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(26, 115, 232, 0.4);
+}
 
-        #start-vm {
-            padding: 15px 30px;
-            font-size: 1rem;
-            font-weight: bold;
-            color: #fff;
-            background: linear-gradient(145deg, #2d88ff, #1a73e8);
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            box-shadow: 0 8px 16px rgba(26, 115, 232, 0.3);
-            transition: all 0.3s ease;
-        }
+.status-message {
+    font-size: 1.1rem;
+    margin-top: 20px;
+    color: #b0bec5;
+}
 
-        #start-vm:hover {
-            background: linear-gradient(145deg, #1a73e8, #2d88ff);
-            box-shadow: 0 12px 24px rgba(26, 115, 232, 0.5);
-        }
+.footer {
+    margin-top: 20px;
+    font-size: 0.8rem;
+    color: #777;
+    text-align: center;
+}
 
-        #start-vm:focus {
-            outline: none;
-            box-shadow: 0 0 0 4px rgba(26, 115, 232, 0.4);
-        }
-
-        .status-message {
-            font-size: 1.1rem;
-            margin-top: 20px;
-            color: #b0bec5;
-        }
-
-        .footer {
-            margin-top: 30px;
-            margin: 7px;
-            font-size: 0.8rem;
-            color: #777;
-            text-align: center;
-            bottom: 0;
-        }
-
-        .footer a {
-            color: #1a73e8;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .footer a:hover {
-            color: #63a4ff;
-        }
     </style>
 </head>
 <body>
