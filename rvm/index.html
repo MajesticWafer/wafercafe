@@ -10,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <title>Roblox Cloud</title>
     <style>
+        /* reset styles */
         * {
             margin: 0;
             padding: 0;
@@ -38,7 +39,23 @@
             font-size: 2.8rem;
             font-weight: 700;
             color: #2e3a59;
-            margin-bottom: 20px;
+            margin-bottom: 12px;
+        }
+
+        h2 {
+            margin-bottom: 12px;
+            color: #3949ab;
+        }
+        
+        h4 {
+            margin: 3px;
+            margin-bottom: 12px;
+            padding: 0;
+        }
+        
+        p {
+            margin: 3px;
+            padding: 0;
         }
 
         .main-content {
@@ -54,7 +71,7 @@
             border-radius: 12px;
         }
 
-        .btn-primary {
+        button {
             padding: 14px 28px;
             font-size: 18px;
             font-weight: 600;
@@ -66,7 +83,7 @@
             transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
         }
 
-        .btn-primary:hover {
+        button:hover {
             background-color: #303f9f;
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -79,24 +96,11 @@
             margin: 24px 0;
         }
 
-        h2 {
-            font-size: 1.6rem;
-            margin-bottom: 12px;
-            color: #3949ab;
-            font-weight: 700;
-        }
-
         .status-message {
             margin-top: 20px;
             font-size: 16px;
             color: #555;
             text-align: center;
-        }
-
-        .p {
-            left: 0;
-            margin: 0;
-            padding: 0;
         }
     </style>
 </head>
@@ -106,8 +110,11 @@
         <h1>Roblox Cloud</h1>
     </header>
     <main class="main-content">
-        <button id="start-vm" class="btn-primary">Start Session</button>
-        <p id="status" class="status-message">Click the button to start a session.</p>
+        <button id="start-vm">Start Session</button>
+        <p id="status" class="status-message">Click the button to start the session.</p>
+        <div class="divider"></div>
+        <h4>Information</h4>
+        <p>Starting the cloud virtual machine (VM) will take about 5 minutes. Do not disconnect from the page, as your session will be terminated.</p>
     </main>
     <script src="app.js"></script>
 </body>
