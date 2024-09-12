@@ -119,12 +119,25 @@
             border: 1px solid #888;
             width: 300px;
             text-align: center;
+            border-radius: 10%;
         }
 
         button {
-            margin: 10px;
-            padding: 10px 20px;
+            padding: 14px 28px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #fff;
+            background-color: #3949ab;
+            border: none;
+            border-radius: 8px;
             cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #303f9f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
     </style>
