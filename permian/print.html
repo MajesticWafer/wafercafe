@@ -7,184 +7,184 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
     <style>
         html, body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-}
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box; /* Ensure consistent box sizing */
+        }
 
-body {
-    font-family: 'Roboto Slab', serif;
-    background-color: #f4f4f9;
-    color: #333;
-    line-height: 1.4;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+        body {
+            font-family: 'Roboto Slab', serif;
+            background-color: #f4f4f9;
+            color: #333;
+            line-height: 1.4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
 
-.container {
-    width: 8.5in;
-    height: 11in;
-    padding: 0.5in;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    background-color: white;
-    border: 1px solid #ddd;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+        .container {
+            width: 8.5in;
+            height: 11in;
+            padding: 0.5in;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            background-color: white;
+            border: 1px solid #ddd;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden; /* Prevent content overflow */
+            position: relative; /* Maintain relative positioning for internal elements */
+        }
 
-h1, h2 {
-    color: #0044cc;
-    margin: 2px 0;
-}
+        h1, h2 {
+            color: #0044cc;
+            margin: 0 0 10px 0; /* Ensure minimal margins to avoid overflow */
+        }
 
-.section-container {
-    display: flex;
-    flex-direction: column;
-    margin-top: 10px;
-}
+        .section-container {
+            display: flex;
+            flex-direction: column;
+            margin-top: 10px;
+        }
 
-.details-container {
-    display: grid;
-    grid-template-columns: 1fr; /* Single column by default */
-    gap: 10px;
-    margin-top: 10px;
-}
-        
-/* Set first detail to full width */
-.details:first-child {
-    grid-column: 1 / -1;
-}
+        .details-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-top: 10px;
+        }
 
-/* Ensure minimal margins */
-.details {
-    padding: 10px;
-    background: #e6f7ff;
-    border-left: 4px solid #0044cc;
-    transition: transform 0.3s;
-    margin: 0; /* Minimize margins to fit properly */
-}
+        .details {
+            padding: 10px;
+            background: #e6f7ff;
+            border-left: 4px solid #0044cc;
+            transition: transform 0.3s;
+        }
 
-.details:hover {
-    transform: scale(1.02);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
- }
-            
-/* Make the first detail full width */
-.details-container > .details:first-child {
-    grid-column: span 2; /* Span across both columns */
-}
+        .details:hover {
+            transform: scale(1.02);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
 
-/* Two-per-row for subsequent details */
-.details-container > .details:not(:first-child) {
-    grid-column: span 1; /* Standard span of 1 for two-per-row */
-}
+        .details-container > .details:first-child {
+            grid-column: span 2;
+        }
 
-/* Media query to handle layout properly */
-@media (min-width: 600px) {
-    .details-container {
-        grid-template-columns: repeat(2, 1fr); /* Two columns layout */
-    }
-}
-        
-.phonetics {
-    font-size: 0.9em;
-    color: #555;
-    font-weight: bold;
-}
+        @media (min-width: 600px) {
+            .details-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
 
-.visuals {
-    margin: 10px 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 10px;
-}
+        .phonetics {
+            font-size: 0.9em;
+            color: #555;
+            font-weight: bold;
+        }
 
-.visual {
-    text-align: center;
-    transition: transform 0.3s, box-shadow 0.3s;
-}
+        .visuals {
+            margin: 10px 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
 
-.visual:hover {
-    transform: scale(1.05);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
+        .visual {
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
 
-.visual img {
-    max-width: 100%;
-    height: auto;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
-    cursor: pointer;
-    transition: transform 0.3s;
-}
+        .visual:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
 
-.visual img:hover {
-    transform: scale(1.03);
-}
+        .visual img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
 
-.desc {
-    margin-top: 5px;
-    font-size: 0.85em;
-    color: #444;
-}
+        .visual img:hover {
+            transform: scale(1.03);
+        }
 
-.conclusion {
-    margin: 10px 0;
-    font-style: italic;
-}
+        .desc {
+            margin-top: 5px;
+            font-size: 0.85em;
+            color: #444;
+        }
 
-.qr-code {
-    position: relative;
-    text-align: center;
-    margin: 3px;
-}
+        .conclusion {
+            margin: 10px 0;
+            font-style: italic;
+        }
 
-.qr-code img {
-    width: 2.2in;
-    height: 2.2in;
-}
+        .qr-code {
+            position: relative;
+            text-align: center;
+            margin: 10px auto; /* Center the QR code */
+        }
 
-.lightbox {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    align-items: center;
-    justify-content: center;
-    z-index: 2000;
-}
+        .qr-code img {
+            width: 2.2in;
+            height: 2.2in;
+            display: block; /* Ensure the image is displayed */
+        }
 
-.lightbox img {
-    max-width: 90%;
-    max-height: 90%;
-    border: 2px solid #fff;
-    border-radius: 8px;
-}
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
 
-.a {
-    color: blue;
-}
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            border: 2px solid #fff;
+            border-radius: 8px;
+        }
 
-.a:after {
-    color: purple;
-}
+        a {
+            color: blue;
+        }
 
-@media print {
-    body, .container {
-        margin: 0;
-        padding: 0;
-        width: 8.5in;
-        height: 11in;
-    }
-}
+        a:after {
+            color: purple;
+        }
 
+        @media print {
+            body, .container {
+                margin: 0;
+                padding: 0;
+                width: 8.5in;
+                height: 11in;
+                box-shadow: none; /* Remove shadows in print */
+                border: none; /* Remove borders in print */
+                page-break-inside: avoid; /* Avoid breaking inside the content */
+            }
+
+            .visual:hover, .details:hover {
+                transform: none; /* Disable hover effects in print */
+                box-shadow: none; /* Disable box shadows in print */
+            }
+
+            .lightbox {
+                display: none; /* Hide the lightbox in print */
+            }
+        }
     </style>
 </head>
 <body>
@@ -224,46 +224,39 @@ h1, h2 {
             <div class="visual">
                 <img src="content/permian-landscape.jpeg" alt="Permian Landscape" onclick="openLightbox('content/permian-landscape.jpeg')">
                 <div class="desc">
-                    <strong>Guadalupe Mountains:</strong> Texas's Guadalupe Mountains hold one of the largest exposed fossil reefs from the Permian period. A tropical ocean once covered the region, leaving a 400-mile-long reef that preserved thousands of marine fossils.
-                    <em>Photograph by Jonathan Blair/Corbis</em>
+                    <strong>Guadalupe Mountains:</strong> Texas's Guadalupe Mountains hold one of the largest exposed fossil reefs from the Permian period. A tropical ocean once covered the region, leaving limestone deposits and fossils that offer insight into the ancient marine life and geology.
                 </div>
             </div>
             <div class="visual">
-                <img src="content/permian-fossils.jpeg" alt="Permian Fossils" onclick="openLightbox('content/permian-fossils.jpeg')">
+                <img src="content/ammonite.jpeg" alt="Ammonite Fossil" onclick="openLightbox('content/ammonite.jpeg')">
                 <div class="desc">
-                    <strong>Trilobite Fossil:</strong> Trilobites thrived for millions of years before being wiped out in the Permian extinction. They are among the most successful organisms in Earth's history.
-                    <em>Photograph by James L. Amos</em>
+                    <strong>Ammonite Fossil:</strong> Ammonites are a group of extinct marine mollusks that thrived during the Permian period. They are known for their spiral shells and are often used as index fossils to date rocks.
                 </div>
             </div>
         </section>
 
-        <section style="max-width: 4.5in;">
-            <h2 id="conclusion">Conclusion</h2>
-            <p class="conclusion">The Permian period was crucial in Earth's history, marking significant geological and biological changes that set the stage for future evolution.</p>
+        <section class="conclusion">
+            <p>In conclusion, the Permian period was a critical time in Earth's history, marking a transition from the dominance of marine life to the rise of land-dwelling vertebrates. The supercontinent Pangaea formed, and the era ended with a massive extinction event, setting the stage for the Mesozoic era and the rise of the dinosaurs.</p>
         </section>
 
         <div class="qr-code">
-            <img src="content/qrcode.png" alt="QR Code for More Information">
-        </div>      
-        <p style="margin: 0 auto;">QR code linked <a class="a" onclick="location.href='https://wafercafe.com/permian/qr/'">here</a>.</p>
-        <p style="margin: 0 auto;">Original page <a class="a" onclick="location.href='https://wafercafe.com/permian/'">here</a>.</p>
+            <img src="content/qr_code.png" alt="QR Code">
+        </div>
     </div>
 
-    <div class="lightbox" id="lightbox">
-        <img id="lightbox-img" src="#" alt="Enlarged Visual">
+    <div id="lightbox" class="lightbox" onclick="closeLightbox()">
+        <img id="lightbox-image" src="#" alt="Expanded Visual">
     </div>
 
     <script>
-        function openLightbox(src) {
-            document.getElementById('lightbox-img').src = src;
+        function openLightbox(imageSrc) {
             document.getElementById('lightbox').style.display = 'flex';
+            document.getElementById('lightbox-image').src = imageSrc;
         }
 
         function closeLightbox() {
             document.getElementById('lightbox').style.display = 'none';
         }
-
-        document.getElementById('lightbox').onclick = closeLightbox;
     </script>
 </body>
 </html>
