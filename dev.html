@@ -11,21 +11,23 @@
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
         <!-- End font -->
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="keywords" content="emulator, games, unblocked, gaming, game website, unblocked games, nintendo ds emulator, nintendo 64 emulator, gba emulator, monkey mart, jetpack joyride, solitare, super mario 64, sm64, basket bros, crossy road, blumgi rocket, cookie clicker, knife hit, tiny fishing, burrito bison, wafer cafe, wafer café, wafer cafe unblocked, wafer café unblocked, unblocked games wafer cafe, unblocked games wafer café">
-        <script>
-            function toggleDropDown() {
-                var dropdown = document.getElementById("dropdown");
-                dropdown.classList.toggle("open");
-            }
+        <meta name="keywords" content="emulator, games, unblocked, gaming, game website, unblocked games, nintendo ds emulator, nintendo 64 emulator, gba emulator, etc.">
 
-            document.getElementById('theme-toggle').addEventListener('click', () => {
-                document.body.classList.toggle('light-mode');
+        <script>
+            // Theme toggle
+            document.addEventListener('DOMContentLoaded', () => {
+                document.getElementById('theme-toggle').addEventListener('click', () => {
+                    document.body.classList.toggle('light-mode');
+                });
             });
 
-            document.getElementById('random-game').addEventListener('click', () => {
-                const games = document.querySelectorAll('.button-container');
-                const randomGame = games[Math.floor(Math.random() * games.length)];
-                window.location.href = randomGame.getAttribute('onclick').replace("location.href='", "").replace("';", "");
+            // Random game function
+            document.addEventListener('DOMContentLoaded', () => {
+                document.getElementById('random-game').addEventListener('click', () => {
+                    const games = document.querySelectorAll('.button-container');
+                    const randomGame = games[Math.floor(Math.random() * games.length)];
+                    window.location.href = randomGame.getAttribute('onclick').replace("location.href='", "").replace("';", "");
+                });
             });
         </script>
     </head>
@@ -34,16 +36,18 @@
         <div id="header">
             <h1><a href="#">The Wafer Café</a></h1>
             <div class="nav-links">
-                <a href="#">Games</a>
-                <a href="#">FAQ</a>
-                <a href="#">Changelog</a>
+                <a href="#games">Games</a>
+                <a href="#faq">FAQ</a>
+                <a href="#changelog">Changelog</a>
                 <input type="text" id="search" placeholder="Search games...">
                 <button id="theme-toggle">Toggle Light/Dark Mode</button>
             </div>
         </div>
+
         <div class="container">
             <button id="random-game">Pick a Random Game</button>
 
+            <!-- Game Buttons -->
             <div class="button-container" onclick="location.href='webcore/'">
                 <img src="/webcore/img.jpeg" alt="WebCore">
                 <span class="button-text">WebCore</span>
@@ -100,10 +104,6 @@
             </div>
             <!-- End of buttons -->
         </div>
-        <div id="dropdown">
-            <h2 style="margin-top: 50px;">Sort By</h2>
-            <button onclick="location.href='/'"><i>Games</i></button>
-        </div>
         <!--
 	<script>
   	     fetch('http://76.177.242.104:3000/log', { method: 'GET' })
@@ -111,6 +111,10 @@
     	     .catch(error => console.error('Error logging IP:', error));
 	</script>
 	-->
+        <div id="dropdown">
+            <h2 style="margin-top: 50px;">Sort By</h2>
+            <button onclick="location.href='/'"><i>Games</i></button>
+        </div>
     </body>
 
 </html>
