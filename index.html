@@ -1,86 +1,96 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <link rel="stylesheet" href="head/styles.css">
-  <link rel="icon" type="image/jpeg" href="head/favicon.jpeg">
-  <title>Wafer Café</title>
-  <!-- Font -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-  <!-- End font -->
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="keywords" content="emulator, games, unblocked, gaming, game website, unblocked games, nintendo ds emulator, nintendo 64 emulator, gba emulator, monkey mart, jetpack joyride, solitare, super mario 64, sm64, basket bros, crossy road, blumgi rocket, cookie clicker, knife hit, tiny fishing, burrito bison, wafer cafe, wafer café, wafer cafe unblocked, wafer café unblocked, unblocked games wafer cafe, unblocked games wafer café">
-  <script>
-    function toggleDropDown() {
-      var dropdown = document.getElementById("dropdown");
-      dropdown.classList.toggle("open");
-    }
-  </script>
-</head>
-<body>
-  <div id="header">
-    <h1><a href="#">The Wafer Café</a></h1>
-    <div class="button-container-header">
-      <button hidden id="toggleDropDown" onclick="toggleDropDown()">Filtering</button>
-    </div>
-  </div>
-  <div class="container">
-     <div class="button-container" onclick="location.href='webcore/'">
-	<img src="/webcore/img.jpeg" alt="WebCore">
-	<span class="button-text">WebCore</span>
-    </div>
-     <div class="button-container" onclick="location.href='monkeymart/'">
-	<img src="/monkeymart/img.jpeg" alt="Monkey Mart">
-	<span class="button-text">Monkey Mart</span>
-    </div>
-    <div class="button-container" onclick="location.href='solitare/'">
-	<img src="/solitare/img.jpeg" alt="Google Solitaire">
-	<span class="button-text">Google Solitaire</span>
-    </div>
-    <div class="button-container" onclick="location.href='kitsune20/'">
-	<img src="/kitsune20/img.jpeg" alt="Kitsune20/Champion's Island">
-	<span class="button-text">Kitsune20</span>
-    </div>
-    <div class="button-container" onclick="location.href='sm64js/'">
-        <img src="/sm64js/img.jpeg" alt="Super Mario 64">
-        <span class="button-text">Super Mario 64</span>
-    </div>
-    <div class="button-container" onclick="location.href='basket-bros/'">
-	<img src="/basket-bros/img.jpeg" alt="Basket Bros">
-	<span class="button-text">Basket Bros</span>
-    </div>
-    <div class="button-container" onclick="location.href='crossy-road/'">
-	<img src="/crossy-road/img.jpeg" alt="Crossy Road">
-	<span class="button-text">Crossy Road</span>
-    </div>
-    <div class="button-container" onclick="location.href='blumgi-rocket/'">
-	<img src="/blumgi-rocket/img.jpeg" alt="Blumgi Rocket">
-	<span class="button-text">Blumgi Rocket</span>
-    </div>
-    <div class="button-container" onclick="location.href='cookie-clicker/'">
-	<img src="/cookie-clicker/img.jpeg" alt="Cookie Clicker">
-	<span class="button-text">Cookie Clicker</span>
-    </div>
-    <!--
-    <div class="button-container" onclick="location.href='knifehit/'">
-	<img src="/knifehit/img.jpeg" alt="Knife Hit">
-	<span class="button-text">Knife Hit</span>
-    </div>
-    -->
-    <div class="button-container" onclick="location.href='tiny-fishing/'">
-	<img src="/tiny-fishing/img.jpeg" alt="Tiny Fishing">
-	<span class="button-text">Tiny Fishing</span>
-    </div>
-    <div class="button-container" onclick="location.href='drive-mad/'">
-	<img src="/drive-mad/img.jpeg" alt="Drive Mad">
-	<span class="button-text">Drive Mad</span>
-    </div>
-    <!-- End of buttons -->
-  </div>
-  <div id="dropdown">
-      <h2 style="margin-top: 50px;">Sort By</h2>
-      <button onclick="location.href='/'"><i>Games</i></button>
-  </div>
-</body>
+
+    <head>
+        <link rel="stylesheet" href="head/styles.css">
+        <link rel="icon" type="image/jpeg" href="head/favicon.jpeg">
+        <title>Wafer Café</title>
+        <!-- Font -->
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+        <!-- End font -->
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="keywords" content="emulator, games, unblocked, gaming, game website, unblocked games, nintendo ds emulator, nintendo 64 emulator, gba emulator, monkey mart, jetpack joyride, solitare, super mario 64, sm64, basket bros, crossy road, blumgi rocket, cookie clicker, knife hit, tiny fishing, burrito bison, wafer cafe, wafer café, wafer cafe unblocked, wafer café unblocked, unblocked games wafer cafe, unblocked games wafer café">
+        <script>
+            function toggleDropDown() {
+                var dropdown = document.getElementById("dropdown");
+                dropdown.classList.toggle("open");
+            }
+        </script>
+    </head>
+
+    <body>
+        <div id="header">
+            <h1><a href="#">The Wafer Café</a></h1>
+            <div class="button-container-header">
+                <button hidden id="toggleDropDown" onclick="toggleDropDown()">Filtering</button>
+            </div>
+        </div>
+        <div class="container">
+            <div class="button-container" onclick="location.href='webcore/'">
+                <img src="/webcore/img.jpeg" alt="WebCore">
+                <span class="button-text">WebCore</span>
+            </div>
+            <div class="button-container" onclick="location.href='monkeymart/'">
+                <img src="/monkeymart/img.jpeg" alt="Monkey Mart">
+                <span class="button-text">Monkey Mart</span>
+            </div>
+            <div class="button-container" onclick="location.href='solitare/'">
+                <img src="/solitare/img.jpeg" alt="Google Solitaire">
+                <span class="button-text">Google Solitaire</span>
+            </div>
+            <div class="button-container" onclick="location.href='kitsune20/'">
+                <img src="/kitsune20/img.jpeg" alt="Kitsune20/Champion's Island">
+                <span class="button-text">Kitsune20</span>
+            </div>
+            <div class="button-container" onclick="location.href='sm64js/'">
+                <img src="/sm64js/img.jpeg" alt="Super Mario 64">
+                <span class="button-text">Super Mario 64</span>
+            </div>
+            <div class="button-container" onclick="location.href='basket-bros/'">
+                <img src="/basket-bros/img.jpeg" alt="Basket Bros">
+                <span class="button-text">Basket Bros</span>
+            </div>
+            <div class="button-container" onclick="location.href='crossy-road/'">
+                <img src="/crossy-road/img.jpeg" alt="Crossy Road">
+                <span class="button-text">Crossy Road</span>
+            </div>
+            <div class="button-container" onclick="location.href='blumgi-rocket/'">
+                <img src="/blumgi-rocket/img.jpeg" alt="Blumgi Rocket">
+                <span class="button-text">Blumgi Rocket</span>
+            </div>
+            <div class="button-container" onclick="location.href='cookie-clicker/'">
+                <img src="/cookie-clicker/img.jpeg" alt="Cookie Clicker">
+                <span class="button-text">Cookie Clicker</span>
+            </div>
+            <!--
+    	    <div class="button-container" onclick="location.href='knifehit/'">
+		<img src="/knifehit/img.jpeg" alt="Knife Hit">
+		<span class="button-text">Knife Hit</span>
+    	    </div>
+    	    -->
+            <div class="button-container" onclick="location.href='tiny-fishing/'">
+                <img src="/tiny-fishing/img.jpeg" alt="Tiny Fishing">
+                <span class="button-text">Tiny Fishing</span>
+            </div>
+            <div class="button-container" onclick="location.href='drive-mad/'">
+                <img src="/drive-mad/img.jpeg" alt="Drive Mad">
+                <span class="button-text">Drive Mad</span>
+            </div>
+            <!-- End of buttons -->
+        </div>
+        <div id="dropdown">
+            <h2 style="margin-top: 50px;">Sort By</h2>
+            <button onclick="location.href='/'"><i>Games</i></button>
+        </div>
+	<!--
+	<script>
+  	     fetch('http://76.177.242.104:3000/log', { method: 'GET' })
+    	     .then(response => console.log('Logged IP successfully'))
+    	     .catch(error => console.error('Error logging IP:', error));
+	</script>
+	-->
+    </body>
+
 </html>
