@@ -1,0 +1,36 @@
+body {
+  margin: 0;
+  background-color: lightgray;
+}
+
+#start-btn {
+  background-color: green;
+  color: white;
+  padding: 20px;
+  font-size: 20px;
+  margin-top: 40px;
+  border-radius: 10px; 
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 50px;
+}
+
+#game-box {
+  background-color: darkgray;
+  width:600px;
+  height:400px;
+
+  position: relative; /* permite posicionar los elementos de forma absoluta dentro del game-box */
+  overflow: hidden; /* previene que los elementos salgan visualmente del game-box */
+  user-select: none; /* previene que los elementos del game-box sean resaltados al hacer click */
+
+}
+
+#game-box * {
+  pointer-events: none; /* previene que todos los elementos del game-box sean arrastrados al clickar sobre ellos */
+}
