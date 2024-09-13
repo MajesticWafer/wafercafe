@@ -81,6 +81,7 @@ body {
 
 /* Button Styling */
 .button-container {
+  height: 185px;
   border-radius: 10px;
   padding: 15px;
   color: white;
@@ -91,7 +92,7 @@ body {
   text-align: center;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
   position: relative;
-  display: inline-block;
+  display: flex;
   margin: 10px;
   cursor: pointer;
 }
@@ -109,8 +110,6 @@ body {
 }
 
 .button-container img {
-  object-fit: cover;
-  margin-bottom: 8px;
   width: 150px;
   height: 150px;
   border: 2px solid var(--button-border);
@@ -147,7 +146,7 @@ body {
 
 .button-text {
     position: absolute;
-    top: 50%;
+    top: 100%%;
     left: 50%;
     transform: translate(-50%, -50%);
     color: var(--text-color);
