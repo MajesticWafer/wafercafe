@@ -63,42 +63,42 @@ body {
 }
 
 #header h1 a {
-  color: white;
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 24px;
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 24px;
 }
 
 /* Container for Buttons */
 .container {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap: 20px;
-  padding: 20px;
-  max-width: 1200px;
-  margin: 100px auto 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    max-width: 1200px;
+    margin: 100px auto 0;
 }
 
 /* Button Styling */
 .button-container {
-  height: 185px;
-  border-radius: 10px;
-  padding: 15px;
-  color: white;
-  background-color: #d6caff;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
-  position: relative;
-  display: flex;
-  margin: 10px;
-  cursor: pointer;
+    height: 185px;
+    border-radius: 10px;
+    padding: 15px;
+    color: var(--text-color);
+    background-color: var(--button-background);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+    position: relative;
+    display: flex;
+    margin: 10px;
+    cursor: pointer;
 }
 
 .button-container:hover {
-    border: 2px solid white;
+    border: 2px solid var(--text-color);
 }
 
 .button-container span {
@@ -110,43 +110,43 @@ body {
 }
 
 .button-container img {
-  width: 150px;
-  height: 150px;
-  border: 2px solid var(--button-border);
+    width: 150px;
+    height: 150px;
+    border: 2px solid var(--button-border);
 }
 
 .button-container:hover img {
-    border-color: white;
+    border-color: var(--text-color);
 }
 
 .button-text {
-  font-weight: 500;
-  font-size: 16px;
+    font-weight: 500;
+    font-size: 16px;
 }
 
 /* Header Buttons */
 .button-container-header {
-  display: flex;
-  gap: 10px;
+    display: flex;
+    gap: 10px;
 }
 
 .button-container-header button {
-  border-radius: 10px;
-  padding: 10px 20px;
-  color: white;
-  background-color: #d6caff;
-  transition: transform 0.2s, background-color 0.2s;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    padding: 10px 20px;
+    color: var(--text-color);
+    background-color: var(--button-background);
+    transition: transform 0.2s, background-color 0.2s;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .button-container-header button:hover {
-  background-color: #d0c2ff;
-  transform: scale(1.05);
+    background-color: var(--button-border);
+    transform: scale(1.05);
 }
 
 .button-text {
     position: absolute;
-    top: 100%%;
+    top: 100%;
     left: 50%;
     transform: translate(-50%, -50%);
     color: var(--text-color);
@@ -162,39 +162,39 @@ body {
 
 /* Dropdown Menu */
 #dropdown {
-  opacity: 0;
-  position: absolute;
-  top: -250px;
-  right: 20px;
-  background-color: #cdbeff;
-  padding: 15px;
-  border-radius: 10px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 150px;
-  transition: opacity 0.5s, top 0.5s;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
-  z-index: 2;
+    opacity: 0;
+    position: absolute;
+    top: -250px;
+    right: 20px;
+    background-color: var(--button-background);
+    padding: 15px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 150px;
+    transition: opacity 0.5s, top 0.5s;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+    z-index: 2;
 }
 
 #dropdown.open {
-  opacity: 1;
-  top: 80px;
+    opacity: 1;
+    top: 80px;
 }
 
 #dropdown button {
-  border-radius: 10px;
-  padding: 10px 20px;
-  margin: 10px 0;
-  background-color: #d6caff;
-  color: white;
-  transition: transform 0.2s, background-color 0.2s;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    padding: 10px 20px;
+    margin: 10px 0;
+    background-color: var(--button-background);
+    color: var(--text-color);
+    transition: transform 0.2s, background-color 0.2s;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 #dropdown button:hover {
-  background-color: #d0c2ff;
-  transform: scale(1.05);
+    background-color: var(--button-border);
+    transform: scale(1.05);
 }
