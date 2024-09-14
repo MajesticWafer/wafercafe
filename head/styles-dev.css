@@ -81,7 +81,8 @@ body {
 
 /* Button Styling */
 .button-container {
-    height: 185px;
+    height: 195px;
+    width: 195px;
     border-radius: 10px;
     padding: 15px;
     color: var(--text-color);
@@ -146,7 +147,7 @@ body {
 
 .button-text {
     position: absolute;
-    top: 100%;
+    top: 80%;
     left: 50%;
     transform: translate(-50%, -50%);
     color: var(--text-color);
