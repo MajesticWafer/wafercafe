@@ -11,7 +11,7 @@ body.light-mode {
     --background-color: #f0f0f0;
     --text-color: #000;
     --button-background: #fff;
-    --button-border: #ccc;
+    --button-border: #d6caff;
 }
 
 body {
@@ -117,7 +117,7 @@ body {
 .button-container {
     height: 120px;
     width: 120px;
-    borderborder-radius: 10px;
+    border-radius: 10px;
     padding: 10px;
     color: var(--text-color);
     background-color: var(--button-background);
@@ -134,7 +134,7 @@ body {
 }
 
 button-container:hover {
-    border: 2px solid #800080;
+    border: 2px solid #d6caff;
 }
 
 .button-container span {
