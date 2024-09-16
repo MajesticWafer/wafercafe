@@ -9,7 +9,16 @@ html, body {
     align-items: center; /* Vertically center */
 }
 
-/* Container for your main content */
+.container {
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center; /* Center elements horizontally */
+    justify-content: flex-start; /* Ensure elements stack from top to bottom */
+    width: 100%;
+    position: relative;
+}
+
+/* Adjust main container settings */
 #main-cont {
     display: flex;
     flex-direction: column;
@@ -19,12 +28,12 @@ html, body {
     border-radius: 12px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
     padding: 20px;
-    max-width: 400px; /* Restrict max width */
-    width: 100%; /* Responsive width */
+    max-width: 400px;
+    width: 100%;
     text-align: center;
-    position: relative; /* Make this the reference for absolute positioning */
-    z-index: 1; /* Ensure the container is above the console */
-    margin-bottom: 20px; /* Add some space for the console */
+    position: relative;
+    z-index: 1;
+    margin-bottom: 20px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -79,15 +88,12 @@ button:focus {
     font-size: 0.9rem;
     width: 250px;
     text-align: left;
-    transition: opacity 0.3s ease; /* Smooth appearance */
-    opacity: 0; /* Initially hidden */
-    margin-top: 10px; /* Give it space from the container */
-    text-align: center;
+    display: none;
+    margin: 0.9rem auto;
 }
 
-/* Show the status when the checkbox is checked */
 .status.show {
-    opacity: 1;
+    display: block;
 }
 
 .settings {
