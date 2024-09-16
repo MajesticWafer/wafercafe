@@ -1,134 +1,133 @@
 <!DOCTYPE html>
 <html>
 
-    <head>
-        <link rel="stylesheet" href="head/styles-dev.css">
-        <link rel="icon" type="image/jpeg" href="head/favicon.jpeg">
-        <title>Wafer Café</title>
-        <!-- Font -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-        <!-- End font -->
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="keywords" content="emulator, games, unblocked, gaming, game website, unblocked games, nintendo ds emulator, nintendo 64 emulator, gba emulator, etc.">
+<head>
+    <link rel="stylesheet" href="head/styles-dev.css">
+    <link rel="icon" type="image/jpeg" href="head/favicon.jpeg">
+    <title>Wafer Café</title>
+    <!-- Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- End font -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="emulator, games, unblocked, gaming, game website, unblocked games, nintendo ds emulator, nintendo 64 emulator, gba emulator, etc.">
 
-        <script>
-            // Theme toggle
+    <script>
+        // Theme toggle
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('theme-toggle').addEventListener('click', () => {
+                document.body.classList.toggle('light-mode');
+            });
+        });
+
+        // Random game function
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('random-game').addEventListener('click', () => {
+                const games = document.querySelectorAll('.button-container');
+                const randomGame = games[Math.floor(Math.random() * games.length)];
+
+                // Extract the location.href value without adding extra characters
+                const onClickValue = randomGame.getAttribute('onclick');
+                const url = onClickValue.match(/location\.href='([^']+)'/)[1];
+
+                // Redirect to the random game URL
+                window.location.href = url;
+            });
+        });
+
+        <
+        script >
+            // Function to dynamically create game buttons
             document.addEventListener('DOMContentLoaded', () => {
-                document.getElementById('theme-toggle').addEventListener('click', () => {
-                    document.body.classList.toggle('light-mode');
+                // Your games.json data
+                const games = {
+                    "Monkey Mart": "monkeymart",
+                    "Solitare": "solitare",
+                    "Champion Island": "kitsune20",
+                    "Super Mario 64": "sm64js",
+                    "Basket Bros": "basket-bros",
+                    "Crossy Road": "crossy-road",
+                    "Blumgi Rocket": "blumgi-rocket",
+                    "Cookie Clicker": "cookie-clicker",
+                    "Tiny Fishing": "tiny-fishing",
+                    "Drive Mad": "drive-mad",
+                    "Retro Bowl": "retro-bowl"
+                };
+
+                // Get the container where buttons will be appended
+                const container = document.querySelector('.container');
+
+                // Loop through the games object and create buttons dynamically
+                Object.keys(games).forEach(gameName => {
+                    const gameLink = games[gameName];
+
+                    // Create the button container
+                    const buttonContainer = document.createElement('div');
+                    buttonContainer.classList.add('button-container');
+                    buttonContainer.setAttribute('onclick', `location.href='${gameLink}/'`);
+
+                    // Create the image element
+                    const img = document.createElement('img');
+                    img.src = `/${gameLink}/img.jpeg`;
+                    img.alt = gameName;
+
+                    // Create the span for the button text
+                    const span = document.createElement('span');
+                    span.classList.add('button-text');
+                    span.textContent = gameName;
+
+                    // Append image and text to the button container
+                    buttonContainer.appendChild(img);
+                    buttonContainer.appendChild(span);
+
+                    // Append the button container to the main container
+                    container.appendChild(buttonContainer);
                 });
             });
 
-            // Random game function
-            document.addEventListener('DOMContentLoaded', () => {
-                document.getElementById('random-game').addEventListener('click', () => {
-                    const games = document.querySelectorAll('.button-container');
-                    const randomGame = games[Math.floor(Math.random() * games.length)];
-        
-                    // Extract the location.href value without adding extra characters
-                    const onClickValue = randomGame.getAttribute('onclick');
-                    const url = onClickValue.match(/location\.href='([^']+)'/)[1];
+    </script>
 
-                    // Redirect to the random game URL
-                    window.location.href = url;
-                });
-            });
-        </script>
-    </head>
+    </script>
+</head>
 
-    <body>
-        <div id="header">
-            <h1><a href="#">The Wafer Café</a></h1>
-            <div class="nav-links">
-                <a href="#games">Games</a>
-                <a href="#faq">FAQ</a>
-                <a href="#changelog">Changelog</a>
-                <input type="text" id="search" placeholder="Search games...">
-                <button id="theme-toggle">☀️</button>
-            </div>
+<body>
+    <div id="header">
+        <h1><a href="#">The Wafer Café</a></h1>
+        <div class="nav-links">
+            <a href="#games">Games</a>
+            <a href="#faq">FAQ</a>
+            <a href="#changelog">Changelog</a>
+            <input type="text" id="search" placeholder="Search games...">
+            <button id="theme-toggle">☀️</button>
         </div>
+    </div>
 
-	<script>
-	    // change emoji on press
-            document.getElementById('theme-toggle').addEventListener('click', function() {
-                this.textContent = this.textContent === '☀️' ? '🌙' : '☀️';
-            });
-        </script>
+    <script>
+        // change emoji on press
+        document.getElementById('theme-toggle').addEventListener('click', function() {
+            this.textContent = this.textContent === '☀️' ? '🌙' : '☀️';
+        });
 
-	<div class="random-button-container">
-            <button id="random-game">Random Game 🎲</button>
-        </div>
-        <div class="container">
-            <!-- Game Buttons -->
-            <div class="button-container" onclick="location.href='webcore/'">
-                <img src="/webcore/img.jpeg" alt="WebCore">
-                <span class="button-text">WebCore</span>
-            </div>
-            <div class="button-container" onclick="location.href='monkeymart/'">
-                <img src="/monkeymart/img.jpeg" alt="Monkey Mart">
-                <span class="button-text">Monkey Mart</span>
-            </div>
-            <div class="button-container" onclick="location.href='solitare/'">
-                <img src="/solitare/img.jpeg" alt="Google Solitaire">
-                <span class="button-text">Google Solitaire</span>
-            </div>
-            <div class="button-container" onclick="location.href='kitsune20/'">
-                <img src="/kitsune20/img.jpeg" alt="Kitsune20/Champion's Island">
-                <span class="button-text">Kitsune20</span>
-            </div>
-            <div class="button-container" onclick="location.href='sm64js/'">
-                <img src="/sm64js/img.jpeg" alt="Super Mario 64">
-                <span class="button-text">Super Mario 64</span>
-            </div>
-            <div class="button-container" onclick="location.href='basket-bros/'">
-                <img src="/basket-bros/img.jpeg" alt="Basket Bros">
-                <span class="button-text">Basket Bros</span>
-            </div>
-            <div class="button-container" onclick="location.href='crossy-road/'">
-                <img src="/crossy-road/img.jpeg" alt="Crossy Road">
-                <span class="button-text">Crossy Road</span>
-            </div>
-            <div class="button-container" onclick="location.href='blumgi-rocket/'">
-                <img src="/blumgi-rocket/img.jpeg" alt="Blumgi Rocket">
-                <span class="button-text">Blumgi Rocket</span>
-            </div>
-            <div class="button-container" onclick="location.href='cookie-clicker/'">
-                <img src="/cookie-clicker/img.jpeg" alt="Cookie Clicker">
-                <span class="button-text">Cookie Clicker</span>
-            </div>
-            <!--
-    	    <div class="button-container" onclick="location.href='knifehit/'">
-		<img src="/knifehit/img.jpeg" alt="Knife Hit">
-		<span class="button-text">Knife Hit</span>
-    	    </div>
-    	    -->
-            <div class="button-container" onclick="location.href='tiny-fishing/'">
-                <img src="/tiny-fishing/img.jpeg" alt="Tiny Fishing">
-                <span class="button-text">Tiny Fishing</span>
-            </div>
-            <div class="button-container" onclick="location.href='drive-mad/'">
-                <img src="/drive-mad/img.jpeg" alt="Drive Mad">
-                <span class="button-text">Drive Mad</span>
-            </div>
-            <div class="button-container" onclick="location.href='retrobowl/'">
-                <img src="/retrobowl/img.jpeg" alt="Retro Bowl">
-                <span class="button-text">Retrobowl</span>
-            </div>
-            <!-- End of buttons -->
-        </div>
-        <!--
+    </script>
+
+    <div class="random-button-container">
+        <button id="random-game">Random Game 🎲</button>
+    </div>
+    <div class="container">
+        <!-- Game Buttons -->
+    </div>
+    <!--
 	<script>
   	     fetch('http://76.177.242.104:3000/log', { method: 'GET' })
     	     .then(response => console.log('Logged IP successfully'))
     	     .catch(error => console.error('Error logging IP:', error));
 	</script>
 	-->
-        <div id="dropdown">
-            <h2 style="margin-top: 50px;">Sort By</h2>
-            <button onclick="location.href='/'"><i>Games</i></button>
-        </div>
-    </body>
+    <div id="dropdown">
+        <h2 style="margin-top: 50px;">Sort By</h2>
+        <button onclick="location.href='/'"><i>Games</i></button>
+    </div>
+</body>
 
 </html>
