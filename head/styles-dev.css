@@ -194,12 +194,13 @@ button-container:hover {
     background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0)); /* Fade-out effect */
     padding: 10px;
     text-align: center;
-    display: none; /* Hidden by default */
+    opacity: 0;
     border-radius: 0 0 10px 10px; /* Rounded corners at the bottom */
+    transition: opacity 0.3s ease; /* Smooth appearance */
 }
 
 .button-container:hover .button-text {
-    display: block; /* Show on hover */
+    opacity: 1;
 }
 
 /* Dropdown Menu */
