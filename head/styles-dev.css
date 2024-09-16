@@ -18,6 +18,7 @@ body {
     background-color: var(--background-color);
     color: var(--text-color);
     font-family: 'Poppins', sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 #header {
@@ -49,15 +50,20 @@ body {
     border: 1px solid var(--button-border);
 }
 
+/* Styling for Random Button */
 #random-game {
     background-color: var(--button-background);
     border: 2px solid var(--button-border);
     color: var(--text-color);
-    padding: 10px 20px;
-    margin: 20px 0;
+    padding: 5px 15px; /* Reduce height */
+    margin: 10px 0 20px; /* Reduce top margin, keep bottom margin */
     cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    text-align: center;
+    font-size: 16px;
 }
 
+/* Hover effect for Random Button */
 #random-game:hover {
     background-color: var(--button-border);
 }
@@ -69,14 +75,24 @@ body {
     font-size: 24px;
 }
 
-/* Container for Buttons */
+/* Adjust button-container to position random button above */
 .container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    grid-template-columns: 1fr;
+    justify-items: center; /* Center the random button */
+}
+
+.container .button-container {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Ensure proper button layout */
     gap: 20px;
     padding: 20px;
     max-width: 1200px;
-    margin: 100px auto 0;
+    margin: auto;
+}
+
+/* Add hover transition effect for smoother change on buttons */
+.button-container, .nav-links a {
+    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
 /* Button Styling */
