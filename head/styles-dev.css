@@ -95,7 +95,7 @@ body {
 .button-container {
     height: 120px;
     width: 120px;
-    border-radius: 10px;
+    borderborder-radius: 10px;
     padding: 10px;
     color: var(--text-color);
     background-color: var(--button-background);
@@ -111,8 +111,8 @@ body {
     margin: 20px;
 }
 
-.button-container:hover {
-    border: 2px solid var(--text-color);
+button-container:hover {
+    border: 2px solid #800080;
 }
 
 .button-container span {
@@ -123,15 +123,14 @@ body {
     display: block;
 }
 
-/* Adjusting Image Size */
 .button-container img {
-    width: 100px;  /* Smaller image */
-    height: 100px; /* Smaller image */
+    width: 100px;
+    height: 100px;
     border: 2px solid var(--button-border);
 }
 
 .button-container:hover img {
-    border-color: var(--text-color);
+    border-color: #800080; 
 }
 
 .button-text {
@@ -159,19 +158,20 @@ body {
     transform: scale(1.05);
 }
 
-/* Adjusting Text Span */
+/* Faded Black Overlay for Text */
 .button-text {
     font-weight: 500;
-    font-size: 14px; /* Reduced font size */
+    font-size: 14px;
     position: absolute;
-    bottom: 10px; /* Positioning text inside button */
-    left: 50%;
-    transform: translateX(-50%);
-    color: var(--text-color);
-    background-color: rgba(0, 0, 0, 0.6); /* Semi-transparent background for better readability */
-    padding: 5px 8px;
-    border-radius: 5px;
+    bottom: 0; /* Positioned at the bottom */
+    left: 0;
+    right: 0;
+    color: white;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0)); /* Fade-out effect */
+    padding: 10px;
+    text-align: center;
     display: none; /* Hidden by default */
+    border-radius: 0 0 10px 10px; /* Rounded corners at the bottom */
 }
 
 .button-container:hover .button-text {
