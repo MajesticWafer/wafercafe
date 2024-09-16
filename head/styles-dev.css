@@ -11,7 +11,7 @@ body.light-mode {
     --background-color: #f0f0f0;
     --text-color: #000;
     --button-background: #fff;
-    --button-border: #d6caff;
+    --button-border: #ccc;
 }
 
 body {
@@ -152,7 +152,7 @@ button-container:hover {
 }
 
 .button-container:hover img {
-    border-color: #800080; 
+    border-color: #d6caff; 
 }
 
 .button-text {
