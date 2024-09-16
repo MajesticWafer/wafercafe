@@ -24,6 +24,7 @@ body {
 #header {
     text-align: center;
     padding: 20px;
+    margin-bottom: 30px;
 }
 
 .nav-links {
@@ -107,7 +108,7 @@ body {
 .container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Ensure buttons wrap in rows */
-    gap: 20px;
+    gap: 14px;
     padding: 20px;
     max-width: 1200px;
     margin: 0 auto;
@@ -131,6 +132,7 @@ body {
     cursor: pointer;
     overflow: hidden; /* Ensure content doesn't overflow */
     margin: 20px;
+    margin-bottom: 10px;
 }
 
 button-container:hover {
