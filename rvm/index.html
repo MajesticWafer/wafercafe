@@ -1,74 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="stylesheet" href="styles.css" />
-        <!-- Google Fonts -->
-        <link
-            href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
-            rel="stylesheet"
-        />
-        <title>JS App</title>
-    </head>
 
-    <body>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="styles.css" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+    <title>JS App</title>
+    <!-- Add the AWS SDK -->
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.283.1.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
         <noscript>You need to enable JavaScript to run this app.</noscript>
         <div id="main-cont">
-            <h1>Roblox JS App</h1>
+            <h1>AWS Server Control</h1>
             <label>
                 <input id="show-console" type="checkbox" />
                 Show console
             </label>
-            <p id="server-ip" style="display: none;">Server IP: 192.168.0.1</p>
+            <p id="server-ip" style="display: none;">Server IP: <span id="ip-address">Fetching...</span></p>
             <div class="button-container">
                 <button id="start-btn">Start Server</button>
                 <button id="stop-btn" disabled>Stop Server</button>
             </div>
         </div>
 
-        <!-- Console positioned below the container -->
-        <p id="status">Status: offline</p>
+        <div class="status" id="status">
+            Status: offline
+        </div>
+    </div>
+    <script>
+        const startBtn = document.getElementById('start-btn');
+        const stopBtn = document.getElementById('stop-btn');
+        const status = document.getElementById('status');
+        const serverIp = document.getElementById('server-ip');
+        const ipAddress = document.getElementById('ip-address');
+        const showConsoleCheckbox = document.getElementById('show-console');
+        let serverStatus = 'offline';
+        let instanceId = 'YOUR_INSTANCE_ID'; // Replace with your EC2 instance ID
 
-        <script>
-            const startBtn = document.getElementById('start-btn');
-            const stopBtn = document.getElementById('stop-btn');
-            const status = document.getElementById('status');
-            const serverIp = document.getElementById('server-ip');
-            const showConsoleCheckbox = document.getElementById('show-console');
-            let serverStatus = 'offline';
+        // Configure AWS SDK
+        AWS.config.region = 'YOUR_REGION'; // Replace with your region
+        AWS.config.credentials = new AWS.Credentials('YOUR_ACCESS_KEY', 'YOUR_SECRET_KEY');
 
-            function updateStatus(newStatus) {
-                serverStatus = newStatus;
-                status.textContent = 'Status: ' + serverStatus;
-            }
+        const ec2 = new AWS.EC2();
 
-            startBtn.addEventListener('click', function () {
-                updateStatus('launching...');
-                startBtn.disabled = true;
-                stopBtn.disabled = false;
+        function updateStatus(newStatus) {
+            serverStatus = newStatus;
+            status.textContent = 'Status: ' + serverStatus;
+        }
 
-                setTimeout(() => {
+        function getInstancePublicIp() {
+            const params = {
+                InstanceIds: [instanceId]
+            };
+
+            ec2.describeInstances(params, function (err, data) {
+                if (err) {
+                    console.error(err, err.stack);
+                    ipAddress.textContent = 'Error fetching IP';
+                } else {
+                    const ip = data.Reservations[0].Instances[0].PublicIpAddress || 'Not assigned yet';
+                    ipAddress.textContent = ip;
+                }
+            });
+        }
+
+        startBtn.addEventListener('click', function () {
+            updateStatus('launching...');
+            startBtn.disabled = true;
+            stopBtn.disabled = false;
+
+            const params = {
+                InstanceIds: [instanceId]
+            };
+
+            ec2.startInstances(params, function (err, data) {
+                if (err) {
+                    console.error(err, err.stack);
+                    updateStatus('Error starting server');
+                } else {
                     updateStatus('online');
-                    serverIp.style.display = 'block'; // Show the IP address
-                }, 2000); // Simulate server starting delay
+                    getInstancePublicIp();
+                    serverIp.style.display = 'block';
+                }
             });
+        });
 
-            stopBtn.addEventListener('click', function () {
-                updateStatus('stopping...');
-                stopBtn.disabled = true;
-                startBtn.disabled = false;
+        stopBtn.addEventListener('click', function () {
+            updateStatus('stopping...');
+            stopBtn.disabled = true;
+            startBtn.disabled = false;
 
-                setTimeout(() => {
+            const params = {
+                InstanceIds: [instanceId]
+            };
+
+            ec2.stopInstances(params, function (err, data) {
+                if (err) {
+                    console.error(err, err.stack);
+                    updateStatus('Error stopping server');
+                } else {
                     updateStatus('offline');
-                    serverIp.style.display = 'none'; // Hide the IP address
-                }, 2000); // Simulate server stopping delay
+                    serverIp.style.display = 'none';
+                }
             });
+        });
 
-            showConsoleCheckbox.addEventListener('change', function () {
-                const isChecked = showConsoleCheckbox.checked;
-                status.style.display = isChecked ? 'block' : 'none';
-            });
-        </script>
-    </body>
+        showConsoleCheckbox.addEventListener('change', function () {
+            const isChecked = showConsoleCheckbox.checked;
+            status.style.display = isChecked ? 'block' : 'none';
+        });
+    </script>
+</body>
+
 </html>
