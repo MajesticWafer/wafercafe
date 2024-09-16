@@ -13,6 +13,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="keywords" content="emulator, games, unblocked, gaming, game website, unblocked games, nintendo ds emulator, nintendo 64 emulator, gba emulator, etc.">
 
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .section {
+            padding: 100px 20px;
+            margin: 50px 0;
+        }
+    </style>
+
     <script>
         // Theme toggle
         document.addEventListener('DOMContentLoaded', () => {
@@ -80,7 +91,6 @@
                     console.error('There was a problem with the fetch operation:', error);
                 });
         };
-
     </script>
 </head>
 
@@ -97,26 +107,36 @@
     </div>
 
     <script>
-        // change emoji on press
+        // Change emoji on press
         document.getElementById('theme-toggle').addEventListener('click', function() {
             this.textContent = this.textContent === '☀️' ? '🌙' : '☀️';
         });
-
     </script>
 
     <div class="random-button-container">
         <button id="random-game">Random Game 🎲</button>
     </div>
+
     <div class="container">
         <!-- Game Buttons -->
     </div>
-    <!--
-	<script>
-  	     fetch('http://76.177.242.104:3000/log', { method: 'GET' })
-    	     .then(response => console.log('Logged IP successfully'))
-    	     .catch(error => console.error('Error logging IP:', error));
-	</script>
-	-->
+
+    <!-- Sections -->
+    <div id="games" class="section">
+        <h2>Games</h2>
+        <p>This section lists all available games.</p>
+    </div>
+
+    <div id="faq" class="section">
+        <h2>FAQ</h2>
+        <p>Frequently Asked Questions go here.</p>
+    </div>
+
+    <div id="changelog" class="section">
+        <h2>Changelog</h2>
+        <p>Version history and updates will be listed here.</p>
+    </div>
+
     <div id="dropdown">
         <h2 style="margin-top: 50px;">Sort By</h2>
         <button onclick="location.href='/'"><i>Games</i></button>
