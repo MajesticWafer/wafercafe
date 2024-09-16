@@ -36,53 +36,50 @@
             });
         });
 
-        // Function to dynamically create game buttons
-        document.addEventListener('DOMContentLoaded', () => {
-            // Your games.json data
-            const games = {
-                "Monkey Mart": "monkeymart",
-                "Solitare": "solitare",
-                "Champion Island": "kitsune20",
-                "Super Mario 64": "sm64js",
-                "Basket Bros": "basket-bros",
-                "Crossy Road": "crossy-road",
-                "Blumgi Rocket": "blumgi-rocket",
-                "Cookie Clicker": "cookie-clicker",
-                "Tiny Fishing": "tiny-fishing",
-                "Drive Mad": "drive-mad",
-                "Retro Bowl": "retrobowl"
-            };
+        window.onload = function() {
+            // Fetch the games.json file
+            fetch('games.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const games = data.games; // The games object from JSON
+                    const container = document.querySelector('.container');
 
-            // Get the container where buttons will be appended
-            const container = document.querySelector('.container');
+                    // Loop through the games object and create buttons dynamically
+                    Object.keys(games).forEach(gameName => {
+                        const gameLink = games[gameName];
 
-            // Loop through the games object and create buttons dynamically
-            Object.keys(games).forEach(gameName => {
-                const gameLink = games[gameName];
+                        // Create the button container
+                        const buttonContainer = document.createElement('div');
+                        buttonContainer.classList.add('button-container');
+                        buttonContainer.setAttribute('onclick', `location.href='${gameLink}/'`);
 
-                // Create the button container
-                const buttonContainer = document.createElement('div');
-                buttonContainer.classList.add('button-container');
-                buttonContainer.setAttribute('onclick', `location.href='${gameLink}/'`);
+                        // Create the image element
+                        const img = document.createElement('img');
+                        img.src = `/${gameLink}/img.jpeg`;
+                        img.alt = gameName;
 
-                // Create the image element
-                const img = document.createElement('img');
-                img.src = `/${gameLink}/img.jpeg`;
-                img.alt = gameName;
+                        // Create the span for the button text
+                        const span = document.createElement('span');
+                        span.classList.add('button-text');
+                        span.textContent = gameName;
 
-                // Create the span for the button text
-                const span = document.createElement('span');
-                span.classList.add('button-text');
-                span.textContent = gameName;
+                        // Append image and text to the button container
+                        buttonContainer.appendChild(img);
+                        buttonContainer.appendChild(span);
 
-                // Append image and text to the button container
-                buttonContainer.appendChild(img);
-                buttonContainer.appendChild(span);
-
-                // Append the button container to the main container
-                container.appendChild(buttonContainer);
-            });
-        });
+                        // Append the button container to the main container
+                        container.appendChild(buttonContainer);
+                    });
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        };
 
     </script>
 </head>
