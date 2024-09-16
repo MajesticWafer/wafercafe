@@ -50,6 +50,28 @@ body {
     border: 1px solid var(--button-border);
 }
 
+#theme-toggle {
+    background-color: var(--button-background);
+    border: 2px solid var(--button-border);
+    color: var(--text-color);
+    padding: 5px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    text-align: center;
+    font-size: 16px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+    border-radius: 5px / 10px;background-color: var(--button-background);
+    border: 2px solid var(--button-border);
+    color: var(--text-color);
+    padding: 5px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    text-align: center;
+    font-size: 16px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+}
+
 /* Styling for Random Button Container */
 .random-button-container {
     display: flex;
@@ -67,7 +89,7 @@ body {
     text-align: center;
     font-size: 16px;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
-    border-radius: 5px / 10px;
+    border-radius: 10px;
 }
 
 #random-game:hover {
