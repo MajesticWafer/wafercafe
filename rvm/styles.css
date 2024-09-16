@@ -1,0 +1,96 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    display: flex;
+    justify-content: center; /* Horizontally center */
+    align-items: center; /* Vertically center */
+}
+
+/* Container for your main content */
+#main-cont {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    padding: 20px;
+    max-width: 400px; /* Restrict max width */
+    width: 100%; /* Responsive width */
+    text-align: center;
+    position: relative; /* Make this the reference for absolute positioning */
+    z-index: 1; /* Ensure the container is above the console */
+    margin-bottom: 20px; /* Add some space for the console */
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #333;
+    margin-bottom: 12px;
+}
+
+a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+button {
+    padding: 15px 30px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #fff;
+    background: linear-gradient(145deg, #2d88ff, #1a73e8);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    box-shadow: 0 8px 16px rgba(26, 115, 232, 0.3);
+    transition: all 0.3s ease;
+    margin: 7.5px;
+}
+
+button:hover {
+    background: linear-gradient(145deg, #1a73e8, #2d88ff);
+    box-shadow: 0 12px 24px rgba(26, 115, 232, 0.5);
+}
+
+button:focus {
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(26, 115, 232, 0.4);
+}
+
+.button-container {
+    display: flex;
+    gap: 10px;
+}
+
+.status {
+    position: relative;
+    left: 50%;
+    transform: translateX(-65%); /* Center it horizontally */
+    background-color: #333;
+    color: #fff;
+    border-radius: 8px;
+    padding: 10px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.9rem;
+    width: 250px;
+    text-align: left;
+    transition: opacity 0.3s ease; /* Smooth appearance */
+    opacity: 0; /* Initially hidden */
+    margin: 0 auto;
+}
+
+.status.show {
+    opacity: 1; /* Show when visible */
+}
+
+.settings {
+    margin-bottom: 47px;
+}
