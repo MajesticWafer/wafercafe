@@ -26,7 +26,13 @@
                 document.getElementById('random-game').addEventListener('click', () => {
                     const games = document.querySelectorAll('.button-container');
                     const randomGame = games[Math.floor(Math.random() * games.length)];
-                    window.location.href = randomGame.getAttribute('onclick').replace("location.href='", "").replace("';", "");
+        
+                    // Extract the location.href value without adding extra characters
+                    const onClickValue = randomGame.getAttribute('onclick');
+                    const url = onClickValue.match(/location\.href='([^']+)'/)[1];
+
+                    // Redirect to the random game URL
+                    window.location.href = url;
                 });
             });
         </script>
@@ -44,9 +50,10 @@
             </div>
         </div>
 
-        <div class="container">
+	<div class="random-button-container">
             <button id="random-game">Pick a Random Game</button>
-
+        </div>
+        <div class="container">
             <!-- Game Buttons -->
             <div class="button-container" onclick="location.href='webcore/'">
                 <img src="/webcore/img.jpeg" alt="WebCore">
