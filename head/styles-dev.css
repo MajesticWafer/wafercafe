@@ -66,6 +66,8 @@ body {
     transition: background-color 0.3s ease, border-color 0.3s ease;
     text-align: center;
     font-size: 16px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+    border-radius: 5px / 10px;
 }
 
 #random-game:hover {
@@ -91,8 +93,8 @@ body {
 
 /* Button Styling */
 .button-container {
-    height: 150px; /* Reduced button size */
-    width: 150px;  /* Reduced button size */
+    height: 120px;
+    width: 120px;
     border-radius: 10px;
     padding: 10px;
     color: var(--text-color);
@@ -106,6 +108,7 @@ body {
     position: relative;
     cursor: pointer;
     overflow: hidden; /* Ensure content doesn't overflow */
+    margin: 20px;
 }
 
 .button-container:hover {
