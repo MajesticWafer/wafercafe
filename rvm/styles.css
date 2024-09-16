@@ -71,9 +71,6 @@ button:focus {
 }
 
 .status {
-    position: relative;
-    left: 50%;
-    transform: translateX(-65%); /* Center it horizontally */
     background-color: #333;
     color: #fff;
     border-radius: 8px;
@@ -84,11 +81,13 @@ button:focus {
     text-align: left;
     transition: opacity 0.3s ease; /* Smooth appearance */
     opacity: 0; /* Initially hidden */
-    margin: 0 auto;
+    margin-top: 10px; /* Give it space from the container */
+    text-align: center;
 }
 
+/* Show the status when the checkbox is checked */
 .status.show {
-    opacity: 1; /* Show when visible */
+    opacity: 1;
 }
 
 .settings {
