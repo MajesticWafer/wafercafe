@@ -75,11 +75,15 @@ body {
     font-size: 24px;
 }
 
-/* Adjust button-container to position random button above */
+./* Container for Buttons */
 .container {
     display: grid;
-    grid-template-columns: 1fr;
-    justify-items: center; /* Center the random button */
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Adjust columns to wrap properly */
+    gap: 20px; /* Add spacing between buttons */
+    padding: 20px;
+    max-width: 1200px;
+    margin: 100px auto 0;
+    justify-content: center; /* Center the button grid */
 }
 
 .container .button-container {
