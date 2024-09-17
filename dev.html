@@ -22,15 +22,33 @@
             padding: 100px 20px;
             margin: 50px 0;
         }
+
     </style>
 
     <script>
-        // Theme toggle
+        // Theme toggle with localStorage
         document.addEventListener('DOMContentLoaded', () => {
+            // Check if a theme is saved in localStorage
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.body.classList.add(savedTheme);
+                // Adjust emoji based on theme
+                document.getElementById('theme-toggle').textContent = savedTheme === 'light-mode' ? '🌙' : '☀️';
+            }
+
+            // Toggle theme on button click
             document.getElementById('theme-toggle').addEventListener('click', () => {
-                document.body.classList.toggle('light-mode');
+                const isLightMode = document.body.classList.toggle('light-mode');
+                const newTheme = isLightMode ? 'light-mode' : '';
+
+                // Save the current theme in localStorage
+                localStorage.setItem('theme', newTheme);
+
+                // Change emoji based on the theme
+                document.getElementById('theme-toggle').textContent = isLightMode ? '🌙' : '☀️';
             });
         });
+
 
         // Random game function
         document.addEventListener('DOMContentLoaded', () => {
@@ -91,6 +109,7 @@
                     console.error('There was a problem with the fetch operation:', error);
                 });
         };
+
     </script>
 </head>
 
@@ -112,6 +131,7 @@
         document.getElementById('theme-toggle').addEventListener('click', function() {
             this.textContent = this.textContent === '☀️' ? '🌙' : '☀️';
         });
+
     </script>
 
     <div class="random-button-container">
