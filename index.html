@@ -1,100 +1,193 @@
 <!DOCTYPE html>
 <html>
 
-    <head>
-        <link rel="stylesheet" href="head/styles.css">
-        <link rel="icon" type="image/jpeg" href="head/favicon.jpeg">
-        <title>Wafer Café</title>
-        <!-- Font -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-        <!-- End font -->
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="keywords" content="emulator, games, unblocked, gaming, game website, unblocked games, nintendo ds emulator, nintendo 64 emulator, gba emulator, monkey mart, jetpack joyride, solitare, super mario 64, sm64, basket bros, crossy road, blumgi rocket, cookie clicker, knife hit, tiny fishing, burrito bison, wafer cafe, wafer café, wafer cafe unblocked, wafer café unblocked, unblocked games wafer cafe, unblocked games wafer café">
-        <script>
-            function toggleDropDown() {
-                var dropdown = document.getElementById("dropdown");
-                dropdown.classList.toggle("open");
-            }
-        </script>
-    </head>
+<head>
+    <link rel="stylesheet" href="head/styles-dev.css">
+    <link rel="icon" type="image/jpeg" href="head/favicon.jpeg">
+    <title>Wafer Café</title>
+    <!-- Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <!-- End font -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="emulator, games, unblocked, gaming, game website, unblocked games, nintendo ds emulator, nintendo 64 emulator, gba emulator, etc.">
 
-    <body>
-        <div id="header">
-            <h1><a href="#">The Wafer Café</a></h1>
-            <div class="button-container-header">
-                <button hidden id="toggleDropDown" onclick="toggleDropDown()">Filtering</button>
-            </div>
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+
+        .section {
+            padding: 80px 20px;
+            margin: 15px 0;
+        }
+
+    </style>
+
+    <script>
+        // Theme toggle with localStorage
+        document.addEventListener('DOMContentLoaded', () => {
+            // Check if a theme is saved in localStorage
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme) {
+                document.body.classList.add(savedTheme);
+                // Adjust emoji based on theme
+                document.getElementById('theme-toggle').textContent = savedTheme === 'light-mode' ? '🌙' : '☀️';
+            }
+
+            // Toggle theme on button click
+            document.getElementById('theme-toggle').addEventListener('click', () => {
+                const isLightMode = document.body.classList.toggle('light-mode');
+                const newTheme = isLightMode ? 'light-mode' : '';
+
+                // Save the current theme in localStorage
+                localStorage.setItem('theme', newTheme);
+
+                // Change emoji based on the theme
+                document.getElementById('theme-toggle').textContent = isLightMode ? '🌙' : '☀️';
+            });
+        });
+
+
+        // Random game function
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('random-game').addEventListener('click', () => {
+                const games = document.querySelectorAll('.button-container');
+                const randomGame = games[Math.floor(Math.random() * games.length)];
+
+                // Extract the location.href value without adding extra characters
+                const onClickValue = randomGame.getAttribute('onclick');
+                const url = onClickValue.match(/location\.href='([^']+)'/)[1];
+
+                // Redirect to the random game URL
+                window.location.href = url;
+            });
+        });
+
+        window.onload = function() {
+            // Fetch the games.json file
+            fetch('games.json')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const games = data.games; // The games object from JSON
+                    const container = document.querySelector('.container');
+
+                    // Loop through the games object and create buttons dynamically
+                    Object.keys(games).forEach(gameName => {
+                        const gameLink = games[gameName];
+
+                        // Create the button container
+                        const buttonContainer = document.createElement('div');
+                        buttonContainer.classList.add('button-container');
+                        buttonContainer.setAttribute('onclick', `location.href='${gameLink}/'`);
+
+                        // Create the image element
+                        const img = document.createElement('img');
+                        img.src = `/${gameLink}/img.jpeg`;
+                        img.alt = gameName;
+
+                        // Create the span for the button text
+                        const span = document.createElement('span');
+                        span.classList.add('button-text');
+                        span.textContent = gameName;
+
+                        // Append image and text to the button container
+                        buttonContainer.appendChild(img);
+                        buttonContainer.appendChild(span);
+
+                        // Append the button container to the main container
+                        container.appendChild(buttonContainer);
+                    });
+                })
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
+        };
+
+    </script>
+</head>
+
+<body>
+    <div id="games"></div>
+    <div id="header">
+        <h1><a href="#">The Wafer Café</a></h1>
+        <div class="nav-links">
+            <a href="#games">Games</a>
+            <a href="#faq">FAQ</a>
+            <a href="#changelog">Changelog</a>
+            <input type="text" id="search" placeholder="Search for a game...">
+            <button id="theme-toggle">☀️</button>
         </div>
-        <div class="container">
-            <div class="button-container" onclick="location.href='webcore/'">
-                <img src="/webcore/img.jpeg" alt="WebCore">
-                <span class="button-text">WebCore</span>
-            </div>
-            <div class="button-container" onclick="location.href='monkeymart/'">
-                <img src="/monkeymart/img.jpeg" alt="Monkey Mart">
-                <span class="button-text">Monkey Mart</span>
-            </div>
-            <div class="button-container" onclick="location.href='solitare/'">
-                <img src="/solitare/img.jpeg" alt="Google Solitaire">
-                <span class="button-text">Google Solitaire</span>
-            </div>
-            <div class="button-container" onclick="location.href='kitsune20/'">
-                <img src="/kitsune20/img.jpeg" alt="Kitsune20/Champion's Island">
-                <span class="button-text">Kitsune20</span>
-            </div>
-            <div class="button-container" onclick="location.href='sm64js/'">
-                <img src="/sm64js/img.jpeg" alt="Super Mario 64">
-                <span class="button-text">Super Mario 64</span>
-            </div>
-            <div class="button-container" onclick="location.href='basket-bros/'">
-                <img src="/basket-bros/img.jpeg" alt="Basket Bros">
-                <span class="button-text">Basket Bros</span>
-            </div>
-            <div class="button-container" onclick="location.href='crossy-road/'">
-                <img src="/crossy-road/img.jpeg" alt="Crossy Road">
-                <span class="button-text">Crossy Road</span>
-            </div>
-            <div class="button-container" onclick="location.href='blumgi-rocket/'">
-                <img src="/blumgi-rocket/img.jpeg" alt="Blumgi Rocket">
-                <span class="button-text">Blumgi Rocket</span>
-            </div>
-            <div class="button-container" onclick="location.href='cookie-clicker/'">
-                <img src="/cookie-clicker/img.jpeg" alt="Cookie Clicker">
-                <span class="button-text">Cookie Clicker</span>
-            </div>
-            <!--
-    	    <div class="button-container" onclick="location.href='knifehit/'">
-		<img src="/knifehit/img.jpeg" alt="Knife Hit">
-		<span class="button-text">Knife Hit</span>
-    	    </div>
-    	    -->
-            <div class="button-container" onclick="location.href='tiny-fishing/'">
-                <img src="/tiny-fishing/img.jpeg" alt="Tiny Fishing">
-                <span class="button-text">Tiny Fishing</span>
-            </div>
-            <div class="button-container" onclick="location.href='drive-mad/'">
-                <img src="/drive-mad/img.jpeg" alt="Drive Mad">
-                <span class="button-text">Drive Mad</span>
-            </div>
-	    <div class="button-container" onclick="location.href='retrobowl/'">
-                <img src="/retrobowl/img.jpeg" alt="Retro Bowl">
-                <span class="button-text">Retrobowl</span>
-            </div>
-            <!-- End of buttons -->
-        </div>
-        <div id="dropdown">
-            <h2 style="margin-top: 50px;">Sort By</h2>
-            <button onclick="location.href='/'"><i>Games</i></button>
-        </div>
-	<!--
-	<script>
-  	     fetch('http://76.177.242.104:3000/log', { method: 'GET' })
-    	     .then(response => console.log('Logged IP successfully'))
-    	     .catch(error => console.error('Error logging IP:', error));
-	</script>
-	-->
-    </body>
+    </div>
+
+    <script>
+        // Change emoji on press
+        document.getElementById('theme-toggle').addEventListener('click', function() {
+            this.textContent = this.textContent === '☀️' ? '🌙' : '☀️';
+        });
+
+        // search
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('search');
+            const container = document.querySelector('.container');
+
+            // Event listener for search input
+            searchInput.addEventListener('input', function() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const games = document.querySelectorAll('.button-container');
+
+                // Loop through all the games and toggle visibility based on search term
+                games.forEach(game => {
+                    const gameName = game.querySelector('.button-text').textContent.toLowerCase();
+                    if (gameName.includes(searchTerm)) {
+                        game.style.display = 'block'; // Show matching games
+                    } else {
+                        game.style.display = 'none'; // Hide non-matching games
+                    }
+                });
+            });
+        });
+
+    </script>
+
+    <div class="random-button-container">
+        <button id="random-game">Random Game 🎲</button>
+    </div>
+
+    <div class="container">
+        <!-- Game Buttons -->
+    </div>
+
+    <div id="faq" class="section">
+        <h2>FAQ</h2>
+        <p><b>Q: Why isn't my game working on mobile?</b></p>
+        <p>A: Sometimes its best to swap over to desktop mode or mobile mode in the browser settings, fixing potential interaction problems.</p><br>
+
+        <p><b>Q: I want to send feedback, but how?</b></p>
+        <p>A: Currently, the only way to give feedback to me is to go to the <a href="https://github.com/MajesticWafer/wafercafe/">GitHub</a> repository and create an issue.</p><br>
+    </div>
+
+    <div id="changelog" class="section">
+        <h2>Changelog</h2>
+        <p>New homepage created.</p>
+        <p>- Light/Dark mode</p>
+        <p>- Game search bar</p>
+        <p>- New button layout</p>
+        <p>- Button name overlay on hover</p>
+        <p>- Added FAQ section</p>
+        <p>- Added changelog section (duh)</p>
+    </div>
+
+    <div id="dropdown">
+        <h2 style="margin-top: 50px;">Sort By</h2>
+        <button onclick="location.href='/'"><i>Games</i></button>
+    </div>
+</body>
 
 </html>
