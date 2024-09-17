@@ -121,7 +121,7 @@
             <a href="#games">Games</a>
             <a href="#faq">FAQ</a>
             <a href="#changelog">Changelog</a>
-            <input type="text" id="search" placeholder="I'm broken!">
+            <input type="text" id="search" placeholder="Search for a game...">
             <button id="theme-toggle">☀️</button>
         </div>
     </div>
@@ -130,6 +130,28 @@
         // Change emoji on press
         document.getElementById('theme-toggle').addEventListener('click', function() {
             this.textContent = this.textContent === '☀️' ? '🌙' : '☀️';
+        });
+
+        // search
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchInput = document.getElementById('search');
+            const container = document.querySelector('.container');
+
+            // Event listener for search input
+            searchInput.addEventListener('input', function() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const games = document.querySelectorAll('.button-container');
+
+                // Loop through all the games and toggle visibility based on search term
+                games.forEach(game => {
+                    const gameName = game.querySelector('.button-text').textContent.toLowerCase();
+                    if (gameName.includes(searchTerm)) {
+                        game.style.display = 'block'; // Show matching games
+                    } else {
+                        game.style.display = 'none'; // Hide non-matching games
+                    }
+                });
+            });
         });
 
     </script>
@@ -157,7 +179,7 @@
         <p>- Light/Dark mode</p>
         <p>- NON-functional search bar (will work soon!)</p>
         <p>- New button layout</p>
-        <p>- Button name overlay on hovert</p>
+        <p>- Button name overlay on hover</p>
         <p>- Added FAQ section</p>
         <p>- Added changelog section (duh)</p>
     </div>
