@@ -81,6 +81,11 @@ a:visited {
 	text-align: center;
 	vertical-align: middle;
 	display: inline-block;
+	border-radius: 5%;
+}
+
+.vk-long {
+	border-radius 5% / 10%;
 }
 
 .vk-touched {
