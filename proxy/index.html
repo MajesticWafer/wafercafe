@@ -1,25 +1,142 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
-  <title>Proxy</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proxy Browser</title>
   <style>
     body {
-      background-color: #1c1c1c;
-      color: white;
+      margin: 0;
+      font-family: 'Roboto', sans-serif;
+      background-color: #001f3f;
+      color: #ffffff;
+      overflow: hidden;
     }
 
-    header {
-      background-color: #2a2a2a;
-      padding: 5px 3px;
-      margin: 0 auto;
+    #particles-js {
+      position: absolute;
       width: 100%;
-      height: 8%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    .browser-wrapper {
+      position: relative;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      width: 80%;
+      margin: 50px auto;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+
+    .nav-btn, .search-btn {
+      background-color: #0074D9;
+      border: none;
+      padding: 10px 20px;
+      color: #fff;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .nav-btn:hover, .search-btn:hover {
+      background-color: #005bb5;
+    }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    #url-input {
+      width: 80%;
+      padding: 10px;
+      border-radius: 5px;
+      border: 1px solid #005bb5;
+      background-color: #001f3f;
+      color: #ffffff;
+    }
+
+    iframe {
+      width: 100%;
+      height: 500px;
+      border: none;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
-  <header>
-    <p id="back">{</p>
-    <p id="forward">}</p>
-    <input type="text" id="url-nav" placeholder="Search or enter a URL here..."></input>
-  </header>
+
+  <!-- Particle Background -->
+  <div id="particles-js"></div>
+
+  <!-- Browser Wrapper -->
+  <div class="browser-wrapper">
+    <!-- Navigation Bar -->
+    <div class="navbar">
+      <button class="nav-btn" onclick="goBack()">Back</button>
+      <button class="nav-btn" onclick="goForward()">Forward</button>
+      <button class="nav-btn" onclick="refreshPage()">Refresh</button>
+    </div>
+    
+    <!-- Search Bar -->
+    <div class="search-bar">
+      <input type="text" id="url-input" placeholder="Enter URL or Search">
+      <button class="search-btn" onclick="loadPage()">Go</button>
+    </div>
+
+    <!-- temp iframe for displaying web pages -->
+    <iframe id="browser-iframe" src=""></iframe>
+  </div>
+
+  <!-- Particle.js script -->
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
+  <!-- Initialize Particle.js -->
+  <script>
+    particlesJS.load('particles-js', 'particles.json', function() {
+      console.log('Particles.js loaded!');
+    });
+  </script>
+
+  <!-- placeholder -->
+  <script>
+    const iframe = document.getElementById('browser-iframe');
+
+    function loadPage() {
+      const input = document.getElementById('url-input').value;
+      let url;
+
+      // Check if input is a URL or a search term
+      if (input.startsWith('http') || input.includes('.')) {
+        url = input;
+      } else {
+        url = 'https://www.google.com/search?q=' + encodeURIComponent(input);
+      }
+
+      iframe.src = url;
+    }
+
+    function goBack() {
+      iframe.contentWindow.history.back();
+    }
+
+    function goForward() {
+      iframe.contentWindow.history.forward();
+    }
+
+    function refreshPage() {
+      iframe.src = iframe.src;
+    }
+  </script>
+
 </body>
+</html>
