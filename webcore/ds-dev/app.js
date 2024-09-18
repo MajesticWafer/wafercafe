@@ -340,50 +340,97 @@ function makeVKStyle(top, left, w, h, fontSize) {
 }
 
 function uiAdjustVKLayout() {
-    var baseSize = window.innerWidth * 0.14;
-    var fontSize = baseSize * 0.7;
-    var offTop = Math.min(fbSize[0][1] + fbSize[1][1], window.innerHeight - Math.ceil(baseSize * 3.62));
-    var offLeft = 0;
-    var abxyWidth = baseSize * 2.5; // Reduced size of ABXY buttons
-    var abxyHeight = baseSize * 2.5; // Reduced height
-    var vkw = baseSize;
-    var vkh = baseSize;
-    var buttonSpacing = baseSize * 0.3; // Increase this for more space between buttons
+    var baseSize = window.innerWidth * 0.14
+    var fontSize = baseSize * 0.7
+    var offTop = Math.min(fbSize[0][1] + fbSize[1][1], window.innerHeight - Math.ceil(baseSize * 3.62))
+    var offLeft = 0
+    var abxyWidth = baseSize * 3
+    var abxyHeight = baseSize * 3
+    var vkw = baseSize
+    var vkh = baseSize
 
-    // Adjusted for L and R buttons
-    vkw = baseSize * 1.2;
-    vkh = baseSize * 0.5;
-    fontSize = baseSize * 0.4;
-    vkMap['l'].style = makeVKStyle(offTop, 0, vkw, vkh, fontSize);
-    vkMap['r'].style = makeVKStyle(offTop, window.innerWidth - vkw, vkw, vkh, fontSize);
+    vkw = baseSize * 1.5
+    vkh = baseSize * 0.6
+    fontSize = baseSize * 0.5
+    vkMap['l'].style = makeVKStyle(
+        // Y position on screen
+        offTop,
+        // X position on screen
+        0,
+        // General sizing
+        vkw, vkh, fontSize)
+    
+    vkMap['r'].style = makeVKStyle(
+        // Y position on screen
+        offTop,
+        // X position on screen
+        window.innerWidth - vkw,
+        // General sizing
+        vkw, vkh, fontSize)
+    
+    $id('vk-menu').style = makeVKStyle(
+        // Y position on screen
+        offTop,
+        // X position on screen
+        window.innerWidth / 2 - vkw / 2,
+        // General sizing
+        vkw, vkh, fontSize)
 
-    // Move the menu button off-screen
-    $id('vk-menu').style = makeVKStyle(-9999, -9999, vkw, vkh, fontSize);
 
-    offTop += baseSize * 0.62;
-    vkw = baseSize;
-    vkh = baseSize;
-    offLeft = window.innerWidth - abxyWidth - buttonSpacing; // Add spacing here
+    offTop += baseSize * 0.62
+    vkw = baseSize
+    vkh = baseSize
+    offLeft = window.innerWidth - abxyWidth
+    vkMap['a'].style = makeVKStyle(
+        // Y position on screen
+        offTop + abxyHeight / 2 - vkh / 2,
+        // X position on screen
+        offLeft + abxyWidth - vkw * 1.5,
+        // General sizing
+        vkw, vkh, fontSize)
+    
+    vkMap['b'].style = makeVKStyle(
+        // Y position on screen
+        offTop + abxyHeight - vkh,
+        // X position on screen
+        offLeft + abxyWidth / 2 - vkw * 1.5 / 2,
+        // General sizing
+        vkw, vkh, fontSize)
+    
+    vkMap['x'].style = makeVKStyle(
+        // Y position on screen
+        offTop,
+        // X position on screen
+        offLeft + abxyWidth / 2 - vkw * 1.5 / 2,
+        // General sizing
+        vkw, vkh, fontSize)
+    
+    vkMap['y'].style = makeVKStyle(
+        // Y position on screen
+        offTop + abxyHeight / 2 - vkh / 2,
+        // X position on screen
+        offLeft,
+        // General styling
+        vkw, vkh, fontSize)
 
-    // Adjust the ABXY button placements with more spacing
-    vkMap['a'].style = makeVKStyle(offTop + abxyHeight / 2 - vkh / 2, offLeft + abxyWidth - vkw, vkw, vkh, fontSize);
-    vkMap['b'].style = makeVKStyle(offTop + abxyHeight - vkh, offLeft + abxyWidth / 2 - vkw / 2 + buttonSpacing, vkw, vkh, fontSize);
-    vkMap['x'].style = makeVKStyle(offTop, offLeft + abxyWidth / 2 - vkw / 2 + buttonSpacing, vkw, vkh, fontSize);
-    vkMap['y'].style = makeVKStyle(offTop + abxyHeight / 2 - vkh / 2, offLeft - buttonSpacing, vkw, vkh, fontSize);
+    vkw = baseSize * 1.0
+    vkh = baseSize * 1.0
+    offLeft = 0
+    $id('vk-stick').style = makeVKStyle(
+        // Y position on screen
+        offTop + abxyHeight / 2 - vkh / 2,
+        // X position on screen
+        offLeft + abxyHeight / 2 - vkw / 2,
+        // General styling
+        vkw, vkh, fontSize)
+    
+    vkStickPos = [offTop + abxyHeight / 2, offLeft + abxyHeight / 2, vkw, vkh, fontSize]
 
-    // Adjust joystick size and placement
-    vkw = baseSize * 0.8; // Reduced joystick size
-    vkh = baseSize * 0.8;
-    offLeft = 0;
-    $id('vk-stick').style = makeVKStyle(offTop + abxyHeight / 2 - vkh / 2, offLeft + abxyHeight / 2 - vkw / 2, vkw, vkh, fontSize);
-    vkStickPos = [offTop + abxyHeight / 2, offLeft + abxyHeight / 2, vkw, vkh, fontSize];
-
-    // Adjust Select and Start button sizes
-    vkw = baseSize * 0.4;
-    vkh = baseSize * 0.4;
-    fontSize = baseSize * 0.4;
-    vkMap['select'].style = makeVKStyle(offTop + abxyHeight - vkh, window.innerWidth / 2 - vkw * 1.5, vkw, vkh, fontSize);
-    vkMap['start'].style = makeVKStyle(offTop + abxyHeight - vkh, window.innerWidth / 2 + vkw * 0.5, vkw, vkh, fontSize);
+    vkw = baseSize * 0.4
+    vkh = baseSize * 0.4
+    fontSize = baseSize * 0.4
+    vkMap['select'].style = makeVKStyle(offTop + abxyHeight - vkh, window.innerWidth / 2 - vkw * 1.5, vkw, vkh, fontSize)
+    vkMap['start'].style = makeVKStyle(offTop + abxyHeight - vkh, window.innerWidth / 2 + vkw * 0.5, vkw, vkh, fontSize)
 }
 
 function uiUpdateLayout() {
