@@ -210,6 +210,7 @@
 	}
 	</style>
 	<script>
+	   // check if user visits for about a week, if so, alert them about save data
 	   if (localStorage.getItem('visitCount')) {
                var lastVisitDate = localStorage.getItem('lastVisitDate');
                var currentDate = new Date().getTime();
@@ -246,20 +247,6 @@
 			<br />
 		</p>
 		<hr />
-		<div class="container">
-			<div class="button-list" onclick="openLink('https://archive.org/download/dsp-storage/Mario%20Kart%20DS.nds')">
-				<img src="mkds.jpeg" alt="Mario Kart DS">
-				<span class="button-text">Mario Kart DS</span>
-			</div>
-			<div class="button-list" onclick="openLink('https://archive.org/download/dsp-storage/Super%20Mario%2064%20DS.nds')">
-				<img src="sm64ds.jpeg" alt="Super Mario 64 DS">
-				<span class="button-text">Super Mario 64 DS</span>
-			</div>
-			<div class="button-list" onclick="openLink('https://archive.org/download/dsp-storage/NSMB%20DS.nds')">
-				<img src="nsmbds.jpeg" alt="New Super Mario Bros. DS">
-				<span class="button-text">New Super Mario Bros. DS</span>
-			</div>
-		</div>
 		<div id="pro" style="background-color: #333"></div>
 		<div id="ios-hint" hidden style="margin-left: 14px; bottom: 7px;">
 			⬇ Due to iOS Safari limitations, you have to add this page to your <b>Home Screen</b> in order to save your game progress. ⬇
@@ -270,17 +257,17 @@
 	</div>
 	</div>
 	<div id="vk-layer" hidden>
-		<div class="vk-rectangle vk" data-k="menu" id="vk-menu">𝗠𝗲𝗻𝘂</div>
-		<div class="vk-trig vk" data-k="l">𝗟</div>
-		<div class="vk-trig vk" data-k="r">𝗥</div>
-		<div class="vk-round vk" data-k="a">𝗔</div>
-		<div class="vk-round vk" data-k="b">𝗕</div>
-		<div class="vk-round vk" data-k="x">𝗫</div>
-		<div class="vk-round vk" data-k="y">𝗬</div>
+		<div class="vk-rectangle vk" data-k="menu" id="vk-menu">Menu</div>
+		<div class="vk-trig vk" data-k="l">L</div>
+		<div class="vk-trig vk" data-k="r">R</div>
+		<div class="vk-round vk" data-k="a">A</div>
+		<div class="vk-round vk" data-k="b">B</div>
+		<div class="vk-round vk" data-k="x">X</div>
+		<div class="vk-round vk" data-k="y">Y</div>
 		<div class="vk-square vk" data-k="select">-</div>
 		<div class="vk-square vk" data-k="start">+</div>
                 <div class="vk-round vk" data-k="stick" id="vk-stick"></div>
-		<div class="vk-rectangle vk" data-k="mic">𝗠𝗶𝗰</div>
+		<div class="vk-rectangle vk" data-k="mic">Mic</div>
 	</div>
 	<div style="z-index: 2; position: absolute; bottom: 7px; right: 7px;" id="fps"></div>
 	<div id="msg-layer" hidden>
@@ -310,7 +297,7 @@
                 <hr />
 
 		<div style="position: fixed; bottom: 0; left: 0; padding: 10px;">
-                  <a href="/vba" style="font-size: 12px;">GBA Player</a>
+                  <a href="../gba" style="font-size: 12px;">GBA Player</a>
                 </div>
 		
                 <div style="position: fixed; bottom: 0; right: 0; padding: 10px;">
