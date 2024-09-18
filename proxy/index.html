@@ -38,6 +38,7 @@
       background-color: #f8f9fa;
       padding: 10px;
       border-bottom: 1px solid #ccc;
+      z-index: 10;
       transition: background-color 0.3s;
     }
 
@@ -58,26 +59,25 @@
       flex-grow: 1;
       display: flex;
       flex-direction: column;
+      position: relative;
+      z-index: 10;
     }
 
     iframe {
       border: none;
       width: 100%;
       height: 100%;
+      z-index: 10;
     }
 
     #particles-js {
       position: absolute;
       width: 100%;
       height: 100%;
-      z-index: 1;
+      z-index: 1; /* Make sure particles stay behind all content */
+      pointer-events: none; /* Prevent particles from blocking clicks */
     }
 
-    iframe {
-      z-index: 2;
-      position: relative;
-    }
-    
     .dark-mode button, .dark-mode input {
       color: white;
       background-color: #333;
