@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8">
@@ -74,14 +75,6 @@
         z-index: 10;
       }
 
-      #particles-js {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        z-index: 1;
-        pointer-events: none;
-      }
-
       .dark-mode button,
       .dark-mode input {
         color: white;
@@ -92,241 +85,60 @@
         margin-left: 10px;
       }
 
-      .sidebar {
-        position: fixed;
-        right: 0;
-        top: 0;
-        height: 100%;
-        width: 300px;
-        background-color: #fff;
-        box-shadow: -2px 0 5px rgba(0, 0, 0, 0.5);
-        padding: 20px;
-        display: none;
-        transition: transform 0.3s ease-in-out;
-      }
-
-      .dark-mode .sidebar {
+      .dark-mode {
         background-color: #333;
         color: #f8f9fa;
-      }
-
-      .sidebar.active {
-        display: block;
-        transform: translateX(0);
-      }
-
-      .sidebar input[type="color"] {
-        width: 100px; /* Adjust color picker width */
-        height: 30px;
-        border: none;
-        background: none;
-      }
-
-      .close-sidebar {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        cursor: pointer;
       }
     </style>
   </head>
   <body>
     <div class="browser-window">
       <div class="toolbar">
+        <button id="close-tab-btn" class="btn btn-outline-danger" onclick="clearIframe()">
+          <i class="bi bi-x-lg"></i>
+        </button>
         <button id="back" class="btn btn-outline-secondary" onclick="iframeGoBack()">
           <i class="bi bi-arrow-left"></i>
         </button>
         <button id="forward" class="btn btn-outline-secondary" onclick="iframeGoForward()">
           <i class="bi bi-arrow-right"></i>
         </button>
+        <input type="text" id="url-input" placeholder="Enter URL or Search" class="form-control">
         <button id="refresh" class="btn btn-outline-secondary" onclick="iframeRefresh()">
           <i class="bi bi-arrow-clockwise"></i>
         </button>
-        <input type="text" id="url-input" placeholder="Enter URL or Search" class="form-control">
         <button id="go" class="btn btn-outline-primary" onclick="loadUrl()">Go</button>
         <button id="theme-toggler" class="btn btn-outline-secondary theme-toggler" onclick="toggleTheme()">
           <i class="bi bi-moon"></i>
         </button>
-        <button id="settings-btn" class="btn btn-outline-secondary" onclick="toggleSidebar()">Settings</button>
-        <button id="close-tab-btn" class="btn btn-outline-danger" onclick="clearIframe()">
-          <i class="bi bi-x-lg"></i>
-        </button>
       </div>
-      <div id="particles-js"></div>
       <div class="iframe-container">
         <iframe id="browser-iframe" style="display: none;"></iframe>
       </div>
-      <div id="settings-sidebar" class="sidebar">
-        <button class="close-sidebar btn btn-danger" onclick="toggleSidebar()">Back</button>
-        <h4>Settings</h4>
-        <label for="particle-color">Particle Color</label>
-        <input type="color" id="particle-color">
-        <label for="particle-quality">Particle Quality</label>
-        <select id="particle-quality">
-          <option value="100">High</option>
-          <option value="50">Medium</option>
-          <option value="20">Low</option>
-        </select>
-        <input type="checkbox" id="toggle-particles" checked> Show Particles
-      </div>
     </div>
-<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 <script>
   let darkMode = localStorage.getItem("theme") === "dark";
-  let particleColor = localStorage.getItem("particleColor") || (darkMode ? "#ffffff" : "#000000");
-  let particleQuality = localStorage.getItem("particleQuality") || "100";
 
   document.addEventListener("DOMContentLoaded", function () {
     applyTheme();
-    loadParticles();
   });
 
   function toggleTheme() {
     darkMode = !darkMode;
     localStorage.setItem("theme", darkMode ? "dark" : "light");
     applyTheme();
-    loadParticles(); // Reload particles with the correct color
   }
 
   function applyTheme() {
     if (darkMode) {
       document.body.classList.add("dark-mode");
       document.getElementById("theme-toggler").innerHTML = '<i class="bi bi-brightness-high"></i>';
-      particleColor = "#ffffff";
     } else {
       document.body.classList.remove("dark-mode");
       document.getElementById("theme-toggler").innerHTML = '<i class="bi bi-moon"></i>';
-      particleColor = "#000000";
     }
-    localStorage.setItem("particleColor", particleColor);
-    loadParticles();
   }
-
-  function loadParticles() {
-    particlesJS("particles-js", {
-      "particles": {
-        "number": {
-          "value": parseInt(particleQuality),
-          "density": {
-            "enable": true,
-            "value_area": 800
-          }
-        },
-        "color": {
-          "value": particleColor
-        },
-        "shape": {
-          "type": "circle",
-          "stroke": {
-            "width": 0,
-            "color": "#000000"
-          },
-          "polygon": {
-            "nb_sides": 5
-          }
-        },
-        "opacity": {
-          "value": 0.5,
-          "random": false,
-          "anim": {
-            "enable": false,
-            "speed": 1,
-            "opacity_min": 0.1,
-            "sync": false
-          }
-        },
-        "size": {
-          "value": 3,
-          "random": true,
-          "anim": {
-            "enable": false,
-            "speed": 40,
-            "size_min": 0.1,
-            "sync": false
-          }
-        },
-        "line_linked": {
-          "enable": true,
-          "distance": 150,
-          "color": particleColor,
-          "opacity": 0.4,
-          "width": 1
-        },
-        "move": {
-          "enable": true,
-          "speed": 6,
-          "direction": "none",
-          "random": false,
-          "straight": false,
-          "out_mode": "out",
-          "bounce": false,
-          "attract": {
-            "enable": false,
-            "rotateX": 600,
-            "rotateY": 1200
-          }
-        }
-      },
-      "interactivity": {
-        "detect_on": "canvas",
-        "events": {
-          "onhover": {
-            "enable": true,
-            "mode": "repulse"
-          },
-          "onclick": {
-            "enable": true,
-            "mode": "push"
-          },
-          "resize": true
-        },
-        "modes": {
-          "grab": {
-            "distance": 400,
-            "line_linked": {
-              "opacity": 1
-            }
-          },
-          "bubble": {
-            "distance": 400,
-            "size": 40,
-            "duration": 2,
-            "opacity": 8,
-            "speed": 3
-          },
-          "repulse": {
-            "distance": 200,
-            "duration": 0.4
-          },
-          "push": {
-            "particles_nb": 4
-          },
-          "remove": {
-            "particles_nb": 2
-          }
-        }
-      },
-      "retina_detect": true
-    });
-  }
-
-  // Sidebar functions
-  function toggleSidebar() {
-    document.getElementById("settings-sidebar").classList.toggle("active");
-  }
-
-  document.getElementById("particle-color").addEventListener("input", function () {
-    particleColor = this.value;
-    localStorage.setItem("particleColor", particleColor);
-    loadParticles();
-  });
-
-  document.getElementById("particle-quality").addEventListener("change", function () {
-    particleQuality = this.value;
-    localStorage.setItem("particleQuality", particleQuality);
-    loadParticles();
-  });
-
+  
   // Tab closing function
   function clearIframe() {
     const iframe = document.getElementById("browser-iframe");
@@ -363,4 +175,3 @@
 </script>
 </body>
 </html>
-
