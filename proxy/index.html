@@ -208,15 +208,20 @@
 
   // Iframe control functions
   function loadUrl() {
-    const urlInput = document.getElementById("url-input").value;
-    const iframe = document.getElementById("browser-iframe");
-    iframe.style.display = "block";
-    if (urlInput.startsWith("http") || urlInput.startsWith("www")) {
-      iframe.src = urlInput;
-    } else {
-      iframe.src = `https://www.google.com/search?q=${encodeURIComponent(urlInput)}`;
-    }
+  const urlInput = document.getElementById("url-input").value;
+  const iframe = document.getElementById("browser-iframe");
+  const welcomePage = document.getElementById("welcome-page");
+
+  iframe.style.display = "block";
+  welcomePage.style.display = "none"; // Hide the welcome message
+
+  if (urlInput.startsWith("http") || urlInput.startsWith("www")) {
+    iframe.src = urlInput;
+  } else {
+    iframe.src = `https://www.google.com/search?q=${encodeURIComponent(urlInput)}`;
   }
+}
+
 
   function iframeGoBack() {
     const iframe = document.getElementById("browser-iframe");
