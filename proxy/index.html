@@ -137,6 +137,15 @@
     </div>
 
 <script>
+  document.querySelectorAll("button").forEach(button => {
+    button.addEventListener("touchend", () => {
+      button.blur();
+    });
+    button.addEventListener("mouseup", () => {
+      button.blur();
+    });
+  });
+  
   let darkMode = localStorage.getItem("theme") === "dark";
 
   document.addEventListener("DOMContentLoaded", function () {
