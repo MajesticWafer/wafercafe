@@ -13,6 +13,7 @@
 </head>
 
 <body>
+
     <style>
         a,
         a:visited {
@@ -28,11 +29,10 @@
             -webkit-touch-callout: none;
             touch-action: none;
             cursor: inherit;
-            background-color: #494786;
         }
 
         body {
-            background-color: #494786;
+            background-color: #000000;
             color: #FFFFFF;
             padding: 0;
             margin: 0;
@@ -83,7 +83,6 @@
             aspect-ratio: 2 / 1 !important;
         }
 
-
         .vk {
             color: rgba(0, 0, 0, 0.2);
             background-color: rgba(255, 255, 255, 0.25);
@@ -118,57 +117,34 @@
         .corner-radius-bottom-left {
             border-bottom-left-radius: 10% !important;
         }
-
-        /* Start menu styles */
-
+        
         .menu {
             background: rgb(32, 43, 56);
-            position: relative;
+            position: absolute;
             left: 0;
             top: 0;
             width: 100vw;
             height: 100vh;
-            z-index: 99999;
-            padding: 40px;
-            color: #fff;
-            font-family: Arial, sans-serif;
-            box-sizing: border-box;
-            overflow-y: auto;
-            /* border: 3px 1px #6A0DAD; */
-            margin: 0 auto;
-            overflow-y: scroll !important;
+            z-index: 999;
+            border-radius: 2.5% !important;
         }
 
-        .menu h1 {
-            font-size: 24px;
-            margin-bottom: 15px;
+        #gba-canvas {
+            position: absolute;
+            z-index: -1;
+            image-rendering: pixelated;
         }
 
-        .menu button {
-            background-color: #6A0DAD;
-            /* Darker Purple */
-            color: white;
-            padding: 8px 15px;
-            margin: 6.5px 0;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.3s ease;
+        #msg-layer {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            top: 40vh;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2;
         }
 
-        .menu button:hover {
-            background-color: #5B0D91;
-            /* Slightly darker on hover */
-        }
-
-        .menu hr {
-            border: 1px solid #6A0DAD;
-            /* Darker Purple */
-            margin: 30px 0;
-        }
-
-        .menu input[type="text"],
+                .menu input[type="text"],
         .menu input[type="range"],
         .menu select {
             width: 100%;
@@ -231,9 +207,8 @@
             padding: 6px;
         }
 
-        /* End menu styles */
 
-        #gba-canvas {
+                #gba-canvas {
             position: absolute;
             z-index: -4715;
             touch-action: none;
@@ -279,7 +254,7 @@
         textarea::placeholder {
             color: #666;
         }
-
+        
         #canvasScale {
             position: absolute;
             z-index: -4629;
