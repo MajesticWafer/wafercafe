@@ -1,157 +1,272 @@
-<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simple Browser</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.3/font/bootstrap-icons.min.css" rel="stylesheet">
-  <style>
-    body, html {
-      height: 100%;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      background-color: #f8f9fa;
-      transition: background-color 0.3s, color 0.3s;
-    }
-
-    .dark-mode {
-      background-color: #1c1c1c;
-      color: #f8f9fa;
-    }
-
-    .browser-window {
-      flex-grow: 1;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-    }
-
-    .toolbar {
-      display: flex;
-      align-items: center;
-      background-color: #f8f9fa;
-      padding: 10px;
-      border-bottom: 1px solid #ccc;
-      z-index: 10;
-      transition: background-color 0.3s;
-    }
-
-    .dark-mode .toolbar {
-      background-color: #333;
-    }
-
-    .toolbar input[type="text"] {
-      flex-grow: 1;
-      margin: 0 10px;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-      padding: 5px;
-      font-size: 16px;
-    }
-
-    .iframe-container {
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      z-index: 10;
-    }
-
-    iframe {
-      border: none;
-      width: 100%;
-      height: 100%;
-      z-index: 10;
-    }
-
-    #particles-js {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      z-index: 1; /* Make sure particles stay behind all content */
-      pointer-events: none; /* Prevent particles from blocking clicks */
-    }
-
-    .dark-mode button, .dark-mode input {
-      color: white;
-      background-color: #333;
-    }
-
-    .theme-toggler {
-      margin-left: 10px;
-    }
-  </style>
-</head>
-<body>
-
-<div class="browser-window">
-  <div class="toolbar">
-    <button id="back" class="btn btn-outline-secondary" onclick="history.back()">
-      <i class="bi bi-arrow-left"></i>
-    </button>
-    <button id="forward" class="btn btn-outline-secondary" onclick="history.forward()">
-      <i class="bi bi-arrow-right"></i>
-    </button>
-    <button id="refresh" class="btn btn-outline-secondary" onclick="refreshPage()">
-      <i class="bi bi-arrow-clockwise"></i>
-    </button>
-    <input type="text" id="url-input" placeholder="Enter URL or Search" class="form-control">
-    <button id="go" class="btn btn-outline-primary" onclick="loadUrl()">
-      Go
-    </button>
-    <button id="theme-toggler" class="btn btn-outline-secondary theme-toggler" onclick="toggleTheme()">
-      <i class="bi bi-moon"></i>
-    </button>
-  </div>
-  <div id="particles-js"></div>
-  <div class="iframe-container">
-    <iframe id="browser-iframe" style="display: none;"></iframe>
-  </div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js?v=1.8"></script>
-<script>
-  // Load particles on page load
-  particlesJS.load('particles-js', 'https://cdn.jsdelivr.net/particles.js/2.0.0/demo/particles.json', function() {
-    console.log('Particles loaded.');
-  });
-
-  function loadUrl() {
-    var input = document.getElementById('url-input').value.trim();
-    var iframe = document.getElementById('browser-iframe');
-    if (input === '') return;
-
-    // Check if the input is a valid URL
-    var isUrl = input.startsWith('http://') || input.startsWith('https://');
-    var url = isUrl ? input : `https://www.google.com/search?q=${encodeURIComponent(input)}`;
-
-    iframe.src = url;
-    iframe.style.display = 'block';
-    document.getElementById('particles-js').style.display = 'none';
-  }
-
-  function refreshPage() {
-    var iframe = document.getElementById('browser-iframe');
-    iframe.src = iframe.src;
-  }
-
-  // Dark mode toggle
-  function toggleTheme() {
-    document.body.classList.toggle('dark-mode');
-    var themeIcon = document.getElementById('theme-toggler').querySelector('i');
-    themeIcon.classList.toggle('bi-moon');
-    themeIcon.classList.toggle('bi-sun');
-  }
-</script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.3/font/bootstrap-icons.min.js"></script>
-
-</body>
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Simple Browser</title>
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+      <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.3/font/bootstrap-icons.min.css" rel="stylesheet">
+      <style>
+         body,
+         html {
+         height: 100%;
+         margin: 0;
+         display: flex;
+         flex-direction: column;
+         background-color: #f8f9fa;
+         transition: background-color 0.3s, color 0.3s;
+         }
+         .dark-mode {
+         background-color: #1c1c1c;
+         color: #f8f9fa;
+         }
+         .browser-window {
+         flex-grow: 1;
+         border: 1px solid #ccc;
+         border-radius: 5px;
+         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+         overflow: hidden;
+         display: flex;
+         flex-direction: column;
+         position: relative;
+         }
+         .toolbar {
+         display: flex;
+         align-items: center;
+         background-color: #f8f9fa;
+         padding: 10px;
+         border-bottom: 1px solid #ccc;
+         z-index: 10;
+         transition: background-color 0.3s;
+         }
+         .dark-mode .toolbar {
+         background-color: #333;
+         }
+         .toolbar button {
+         margin-right: 8px;
+         }
+         .toolbar input[type="text"] {
+         flex-grow: 1;
+         margin: 0 10px;
+         border: 1px solid #ccc;
+         border-radius: 5px;
+         padding: 5px;
+         font-size: 16px;
+         }
+         .iframe-container {
+         flex-grow: 1;
+         display: flex;
+         flex-direction: column;
+         position: relative;
+         z-index: 10;
+         }
+         iframe {
+         border: none;
+         width: 100%;
+         height: 100%;
+         z-index: 10;
+         }
+         #particles-js {
+         position: absolute;
+         width: 100%;
+         height: 100%;
+         z-index: 1;
+         pointer-events: none;
+         }
+         .dark-mode button,
+         .dark-mode input {
+         color: white;
+         background-color: #333;
+         }
+         .theme-toggler {
+         margin-left: 10px;
+         }
+         /* Sidebar Styles */
+         .sidebar {
+         position: fixed;
+         right: -250px;
+         top: 0;
+         width: 250px;
+         height: 100%;
+         background-color: #f8f9fa;
+         box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+         transition: right 0.3s;
+         z-index: 999;
+         }
+         .dark-mode .sidebar {
+         background-color: #333;
+         }
+         .sidebar.open {
+         right: 0;
+         }
+         .sidebar .sidebar-content {
+         padding: 20px;
+         }
+         .sidebar h5 {
+         margin-bottom: 15px;
+         }
+         .sidebar input[type="color"] {
+         margin-top: 10px;
+         width: 100%;
+         height: 30px;
+         border: none;
+         cursor: pointer;
+         }
+      </style>
+   </head>
+   <body>
+      <div class="browser-window">
+         <div class="toolbar">
+            <button id="back" class="btn btn-outline-secondary" onclick="iframeGoBack()">
+            <i class="bi bi-arrow-left"></i>
+            </button>
+            <button id="forward" class="btn btn-outline-secondary" onclick="iframeGoForward()">
+            <i class="bi bi-arrow-right"></i>
+            </button>
+            <button id="refresh" class="btn btn-outline-secondary" onclick="iframeRefresh()">
+            <i class="bi bi-arrow-clockwise"></i>
+            </button>
+            <input type="text" id="url-input" placeholder="Enter URL or Search" class="form-control">
+            <button id="go" class="btn btn-outline-primary" onclick="loadUrl()"> Go </button>
+            <button id="theme-toggler" class="btn btn-outline-secondary theme-toggler" onclick="toggleTheme()">
+            <i class="bi bi-moon"></i>
+            </button>
+            <button id="settings-toggler" class="btn btn-outline-secondary" onclick="toggleSettings()">
+            <i class="bi bi-gear"></i>
+            </button>
+         </div>
+         <div id="particles-js"></div>
+         <div class="iframe-container">
+            <iframe id="browser-iframe" style="display: none;"></iframe>
+         </div>
+      </div>
+      <!-- Settings Sidebar -->
+      <div class="sidebar" id="settings-sidebar">
+         <div class="sidebar-content">
+            <h5>Settings</h5>
+            <label>
+            <input type="checkbox" id="toggle-particles" onclick="toggleParticles()"> Show Particles
+            </label>
+            <label for="particles-color">Particle Color</label>
+            <input type="color" id="particles-color" value="#ffffff" onchange="changeParticleColor()">
+         </div>
+      </div>
+      <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js?v=1.8"></script>
+      <script>
+         // Load particles on page load
+         function loadParticles(color = "#ffffff") {
+           particlesJS("particles-js", {
+             "particles": {
+               "number": {
+                 "value": 100,
+                 "density": {
+                   "enable": true,
+                   "value_area": 800
+                 }
+               },
+               "color": {
+                 "value": color
+               },
+               "shape": {
+                 "type": "circle"
+               },
+               "opacity": {
+                 "value": 0.5
+               },
+               "size": {
+                 "value": 3
+               },
+               "line_linked": {
+                 "enable": true,
+                 "distance": 150,
+                 "color": color,
+                 "opacity": 0.4,
+                 "width": 1
+               },
+               "move": {
+                 "enable": true,
+                 "speed": 6
+               }
+             }
+           });
+         }
+         
+         loadParticles();
+         
+         // Toggle particle visibility
+         function toggleParticles() {
+           const particlesDiv = document.getElementById('particles-js');
+           const checkbox = document.getElementById('toggle-particles');
+           particlesDiv.style.display = checkbox.checked ? 'block' : 'none';
+         }
+         
+         // Change particle color
+         function changeParticleColor() {
+           const color = document.getElementById('particles-color').value;
+           loadParticles(color);
+         }
+         
+         // Sidebar toggle
+         function toggleSettings() {
+           const sidebar = document.getElementById('settings-sidebar');
+           sidebar.classList.toggle('open');
+         }
+         
+         // Iframe control functions
+         let iframeHistory = [];
+         let currentIframeIndex = -1;
+         
+         function loadUrl() {
+           var input = document.getElementById('url-input').value.trim();
+           var iframe = document.getElementById('browser-iframe');
+           if (input === '') return;
+           var isUrl = input.startsWith('http://') || input.startsWith('https://');
+           var url = isUrl ? input : `https://www.google.com/search?q=${encodeURIComponent(input)}`;
+           iframe.src = url;
+           iframe.style.display = 'block';
+           document.getElementById('particles-js').style.display = 'none';
+           iframeHistory.push(url);
+           currentIframeIndex++;
+         }
+         
+         function iframeGoBack() {
+           if (currentIframeIndex > 0) {
+             currentIframeIndex--;
+             document.getElementById('browser-iframe').src = iframeHistory[currentIframeIndex];
+           }
+         }
+         
+         function iframeGoForward() {
+           if (currentIframeIndex < iframeHistory.length - 1) {
+             currentIframeIndex++;
+             document.getElementById('browser-iframe').src = iframeHistory[currentIframeIndex];
+           }
+         }
+         
+         function iframeRefresh() {
+           var iframe = document.getElementById('browser-iframe');
+           iframe.src = iframe.src;
+         }
+         
+         // Dark mode toggle with theme persistence
+         function toggleTheme() {
+           document.body.classList.toggle('dark-mode');
+           const isDark = document.body.classList.contains('dark-mode');
+           localStorage.setItem('theme', isDark ? 'dark' : 'light');
+           var themeIcon = document.getElementById('theme-toggler').querySelector('i');
+           themeIcon.classList.toggle('bi-moon');
+           themeIcon.classList.toggle('bi-sun');
+         }
+         
+         function loadTheme() {
+           const storedTheme = localStorage.getItem('theme');
+           if (storedTheme === 'dark') {
+             document.body.classList.add('dark-mode');
+             var themeIcon = document.getElementById('theme-toggler').querySelector('i');
+             themeIcon.classList.remove('bi-moon');
+               themeIcon.classList.add('bi-sun');
+             }
+           }
+           loadTheme();
+      </script>
+   </body>
 </html>
