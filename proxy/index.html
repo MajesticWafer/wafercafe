@@ -1,186 +1,209 @@
+<!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Simple Browser</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
-        body, html {
-            height: 100%;
-            margin: 0;
-            display: flex;
-            flex-direction: column;
-            background-color: #f1f1f1;
-            transition: background-color 0.3s, color 0.3s;
-        }
+      body,
+      html {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        background-color: #f8f9fa;
+        font-family: 'Roboto', sans-serif;
+        transition: background-color 0.3s, color 0.3s;
+      }
 
-        .dark-mode {
-            background-color: #1c1c1c;
-            color: #f8f9fa;
-        }
+      .dark-mode {
+        background-color: #1c1c1c;
+        color: #f8f9fa;
+      }
 
-        .browser-window {
-            flex-grow: 1;
-            border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            background-color: #fff;
-        }
+      .browser-window {
+        flex-grow: 1;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+      }
 
-        .toolbar {
-            display: flex;
-            align-items: center;
-            background-color: #f8f9fa;
-            padding: 10px;
-            border-bottom: 2px solid #ccc;
-            z-index: 10;
-            transition: background-color 0.3s;
-        }
+      .toolbar {
+        display: flex;
+        align-items: center;
+        background-color: #f8f9fa;
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+        transition: background-color 0.3s;
+      }
 
-        .dark-mode .toolbar {
-            background-color: #333;
-            border-bottom-color: #555;
-        }
+      .dark-mode .toolbar {
+        background-color: #333;
+      }
 
-        .tab-container {
-            display: flex;
-            align-items: center;
-            background-color: #e1e1e1;
-            padding: 8px;
-            border-radius: 10px;
-            flex-grow: 1;
-            position: relative;
-        }
+      .toolbar button {
+        margin-right: 8px;
+      }
 
-        .tab-container input {
-            border: none;
-            background-color: transparent;
-            outline: none;
-            flex-grow: 1;
-            padding-left: 10px;
-        }
+      .toolbar input[type="text"] {
+        flex-grow: 1;
+        margin: 0 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        padding: 5px;
+        font-size: 16px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
 
-        .toolbar button {
-            margin-left: 8px;
-            font-size: 1.2rem;
-        }
+      .iframe-container {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        z-index: 10;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
 
-        .iframe-container {
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            background-color: #f8f9fa;
-        }
+      iframe {
+        border: none;
+        width: 100%;
+        height: 100%;
+        z-index: 10;
+      }
 
-        iframe {
-            border: none;
-            width: 100%;
-            height: 100%;
-        }
+      .dark-mode button,
+      .dark-mode input {
+        color: white;
+        background-color: #333;
+      }
 
-        .dark-mode button, .dark-mode input {
-            color: white;
-            background-color: #333;
-        }
+      .theme-toggler {
+        margin-left: 10px;
+      }
 
-        .home-page {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
-            font-size: 2rem;
-            color: #666;
-        }
+      .dark-mode {
+        background-color: #333;
+        color: #f8f9fa;
+      }
+
+      .welcome-page {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-grow: 1;
+        text-align: center;
+        font-size: 24px;
+        color: #333;
+      }
+
+      .dark-mode .welcome-page {
+        color: #f8f9fa;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="browser-window">
-        <div class="toolbar">
-            <button id="back" class="btn btn-outline-secondary" onclick="iframeGoBack()">
-                <i class="bi bi-arrow-left"></i>
-            </button>
-            <div class="tab-container">
-                <input type="text" id="url-input" placeholder="Enter URL or Search">
-                <button id="refresh" class="btn btn-outline-secondary" onclick="iframeRefresh()">
-                    <i class="bi bi-arrow-clockwise"></i>
-                </button>
-                <button id="close-tab-btn" class="btn btn-outline-danger" onclick="clearIframe()">
-                    <i class="bi bi-x-lg"></i>
-                </button>
-            </div>
-            <button id="theme-toggler" class="btn btn-outline-secondary theme-toggler" onclick="toggleTheme()">
-                <i class="bi bi-moon"></i>
-            </button>
-        </div>
-        <div class="iframe-container">
-            <div id="home-page" class="home-page" style="display: block;">Welcome! Enter a URL or search to begin.</div>
-            <iframe id="browser-iframe" style="display: none;"></iframe>
-        </div>
+      <div class="toolbar">
+        <button id="back" class="btn btn-outline-secondary" onclick="iframeGoBack()">
+          <i class="bi bi-arrow-left"></i>
+        </button>
+        <button id="forward" class="btn btn-outline-secondary" onclick="iframeGoForward()">
+          <i class="bi bi-arrow-right"></i>
+        </button>
+        <button id="refresh" class="btn btn-outline-secondary" onclick="iframeRefresh()">
+          <i class="bi bi-arrow-clockwise"></i>
+        </button>
+        <input type="text" id="url-input" placeholder="Enter URL or Search" class="form-control">
+        <button id="theme-toggler" class="btn btn-outline-secondary theme-toggler" onclick="toggleTheme()">
+          <i class="bi bi-moon"></i>
+        </button>
+        <button id="close-tab-btn" class="btn btn-outline-danger" onclick="clearIframe()">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+      <div class="iframe-container">
+        <div id="welcome-page" class="welcome-page">Welcome! Type a URL or search a term to begin.</div>
+        <iframe id="browser-iframe" style="display: none;"></iframe>
+      </div>
     </div>
-    <script>
-        let darkMode = localStorage.getItem("theme") === "dark";
 
-        document.addEventListener("DOMContentLoaded", function () {
-            applyTheme();
-        });
+<script>
+  let darkMode = localStorage.getItem("theme") === "dark";
 
-        function toggleTheme() {
-            darkMode = !darkMode;
-            localStorage.setItem("theme", darkMode ? "dark" : "light");
-            applyTheme();
-        }
+  document.addEventListener("DOMContentLoaded", function () {
+    applyTheme();
 
-        function applyTheme() {
-            if (darkMode) {
-                document.body.classList.add("dark-mode");
-                document.getElementById("theme-toggler").innerHTML = '<i class="bi bi-brightness-high"></i>';
-            } else {
-                document.body.classList.remove("dark-mode");
-                document.getElementById("theme-toggler").innerHTML = '<i class="bi bi-moon"></i>';
-            }
-        }
+    const urlInput = document.getElementById("url-input");
+    urlInput.addEventListener("keypress", function (e) {
+      if (e.key === 'Enter') {
+        loadUrl();
+      }
+    });
+  });
 
-        function clearIframe() {
-            const iframe = document.getElementById("browser-iframe");
-            const homePage = document.getElementById("home-page");
-            iframe.src = "about:blank";
-            iframe.style.display = "none";
-            homePage.style.display = "flex";
-        }
+  function toggleTheme() {
+    darkMode = !darkMode;
+    localStorage.setItem("theme", darkMode ? "dark" : "light");
+    applyTheme();
+  }
 
-        function loadUrl() {
-            const urlInput = document.getElementById("url-input").value;
-            const iframe = document.getElementById("browser-iframe");
-            const homePage = document.getElementById("home-page");
-            homePage.style.display = "none";
-            iframe.style.display = "block";
+  function applyTheme() {
+    if (darkMode) {
+      document.body.classList.add("dark-mode");
+      document.getElementById("theme-toggler").innerHTML = '<i class="bi bi-brightness-high"></i>';
+    } else {
+      document.body.classList.remove("dark-mode");
+      document.getElementById("theme-toggler").innerHTML = '<i class="bi bi-moon"></i>';
+    }
+  }
 
-            if (urlInput.startsWith("http") || urlInput.startsWith("www")) {
-                iframe.src = urlInput;
-            } else {
-                iframe.src = `https://www.google.com/search?q=${encodeURIComponent(urlInput)}`;
-            }
-        }
+  // Tab closing function
+  function clearIframe() {
+    const iframe = document.getElementById("browser-iframe");
+    const welcomePage = document.getElementById("welcome-page");
+    iframe.src = "about:blank";
+    iframe.style.display = "none";
+    welcomePage.style.display = "flex";
+  }
 
-        function iframeGoBack() {
-            const iframe = document.getElementById("browser-iframe");
-            iframe.contentWindow.history.back();
-        }
+  // Iframe control functions
+  function loadUrl() {
+    const urlInput = document.getElementById("url-input").value;
+    const iframe = document.getElementById("browser-iframe");
+    const welcomePage = document.getElementById("welcome-page");
+    welcomePage.style.display = "none";
+    iframe.style.display = "block";
 
-        function iframeGoForward() {
-            const iframe = document.getElementById("browser-iframe");
-            iframe.contentWindow.history.forward();
-        }
+    if (urlInput.startsWith("http") || urlInput.startsWith("www")) {
+      iframe.src = urlInput;
+    } else {
+      iframe.src = `https://www.google.com/search?q=${encodeURIComponent(urlInput)}`;
+    }
+  }
 
-        function iframeRefresh() {
-            const iframe = document.getElementById("browser-iframe");
-            iframe.contentWindow.location.reload();
-        }
-    </script>
+  function iframeGoBack() {
+    const iframe = document.getElementById("browser-iframe");
+    iframe.contentWindow.history.back();
+  }
+
+  function iframeGoForward() {
+    const iframe = document.getElementById("browser-iframe");
+    iframe.contentWindow.history.forward();
+  }
+
+  function iframeRefresh() {
+    const iframe = document.getElementById("browser-iframe");
+    iframe.contentWindow.location.reload();
+  }
+</script>
 </body>
 </html>
