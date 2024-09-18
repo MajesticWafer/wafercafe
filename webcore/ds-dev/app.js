@@ -378,30 +378,30 @@ function uiAdjustVKLayout() {
 
 
     offTop += baseSize * 0.62
-    vkw = baseSize
-    vkh = baseSize
+    vkw = baseSize * 0.78
+    vkh = baseSize * 0.78
     offLeft = window.innerWidth - abxyWidth
     vkMap['a'].style = makeVKStyle(
         // Y position on screen
         offTop + abxyHeight / 2 - vkh / 2,
         // X position on screen
-        offLeft + abxyWidth - vkw * 1.5,
+        offLeft + abxyWidth - vkw,
         // General sizing
         vkw, vkh, fontSize)
     
     vkMap['b'].style = makeVKStyle(
         // Y position on screen
-        offTop + abxyHeight - vkh,
+        offTop + abxyHeight - vkh * 2,
         // X position on screen
-        offLeft + abxyWidth / 2 - vkw * 1.5 / 2,
+        offLeft + abxyWidth / 2 - vkw * 2 / 2,
         // General sizing
         vkw, vkh, fontSize)
     
     vkMap['x'].style = makeVKStyle(
         // Y position on screen
-        offTop,
+        offTop + abxyHeight - vkh * 0.5,
         // X position on screen
-        offLeft + abxyWidth / 2 - vkw * 1.5 / 2,
+        offLeft + abxyWidth / 2 - vkw * 2 / 2,
         // General sizing
         vkw, vkh, fontSize)
     
@@ -409,7 +409,7 @@ function uiAdjustVKLayout() {
         // Y position on screen
         offTop + abxyHeight / 2 - vkh / 2,
         // X position on screen
-        offLeft,
+        offLeft + abxyWidth / 2 - vkw * 2 / 2,
         // General styling
         vkw, vkh, fontSize)
 
