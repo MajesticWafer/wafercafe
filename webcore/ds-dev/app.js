@@ -345,8 +345,8 @@ function uiAdjustVKLayout() {
     var fontSize = baseSize * 0.7;
     var offTop = Math.min(fbSize[0][1] + fbSize[1][1], window.innerHeight - Math.ceil(baseSize * 3.62));
     var offLeft = 0;
-    var abxyWidth = baseSize * 2.5; // Reduced size of ABXY buttons
-    var abxyHeight = baseSize * 2.5; // Reduced height
+    var abxyWidth = baseSize * 1.8; // Reduced size of ABXY buttons
+    var abxyHeight = baseSize * 1.8; // Reduced height
     var vkw = baseSize;
     var vkh = baseSize;
 
