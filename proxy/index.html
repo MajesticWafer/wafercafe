@@ -86,6 +86,16 @@
         background-color: #333;
       }
 
+      .dark-mode input[type="text"] {
+        background-color: #333;
+        color: #f8f9fa;
+        border: 1px solid #666;
+      }
+
+      .dark-mode input::placeholder {
+        color: #aaa;
+      }
+
       .theme-toggler {
         margin-left: 10px;
       }
@@ -141,13 +151,15 @@
   document.addEventListener("DOMContentLoaded", function () {
     applyTheme();
 
-    // Remove focus from all buttons after click
     document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('touchstart', function() {
+        button.blur();
+      });
       button.addEventListener('click', function() {
-        button.blur(); // Remove focus from the clicked button
+        button.blur();
       });
     });
-  });
+  }
 
   function toggleTheme() {
     darkMode = !darkMode;
