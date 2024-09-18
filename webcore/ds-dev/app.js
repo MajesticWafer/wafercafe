@@ -341,43 +341,49 @@ function makeVKStyle(top, left, w, h, fontSize) {
 
 
 function uiAdjustVKLayout() {
-    var baseSize = window.innerWidth * 0.14
-    var fontSize = baseSize * 0.7
-    var offTop = Math.min(fbSize[0][1] + fbSize[1][1], window.innerHeight - Math.ceil(baseSize * 3.62))
-    var offLeft = 0
-    var abxyWidth = baseSize * 3
-    var abxyHeight = baseSize * 3
-    var vkw = baseSize
-    var vkh = baseSize
+    var baseSize = window.innerWidth * 0.14;
+    var fontSize = baseSize * 0.7;
+    var offTop = Math.min(fbSize[0][1] + fbSize[1][1], window.innerHeight - Math.ceil(baseSize * 3.62));
+    var offLeft = 0;
+    var abxyWidth = baseSize * 2.5; // Reduced size of ABXY buttons
+    var abxyHeight = baseSize * 2.5; // Reduced height
+    var vkw = baseSize;
+    var vkh = baseSize;
 
-    vkw = baseSize * 1.5
-    vkh = baseSize * 0.6
-    fontSize = baseSize * 0.5
-    vkMap['l'].style = makeVKStyle(offTop, 0, vkw, vkh, fontSize)
-    vkMap['r'].style = makeVKStyle(offTop, window.innerWidth - vkw, vkw, vkh, fontSize)
-    $id('vk-menu').style = makeVKStyle(offTop, window.innerWidth / 2 - vkw / 2, vkw, vkh, fontSize)
+    // Adjusted for L and R buttons
+    vkw = baseSize * 1.2;
+    vkh = baseSize * 0.5;
+    fontSize = baseSize * 0.4;
+    vkMap['l'].style = makeVKStyle(offTop, 0, vkw, vkh, fontSize);
+    vkMap['r'].style = makeVKStyle(offTop, window.innerWidth - vkw, vkw, vkh, fontSize);
 
+    // Move the menu button off-screen
+    $id('vk-menu').style = makeVKStyle(-9999, -9999, vkw, vkh, fontSize);
 
-    offTop += baseSize * 0.62
-    vkw = baseSize
-    vkh = baseSize
-    offLeft = window.innerWidth - abxyWidth
-    vkMap['a'].style = makeVKStyle(offTop + abxyHeight / 2 - vkh / 2, offLeft + abxyWidth - vkw, vkw, vkh, fontSize)
-    vkMap['b'].style = makeVKStyle(offTop + abxyHeight - vkh, offLeft + abxyWidth / 2 - vkw / 2, vkw, vkh, fontSize)
-    vkMap['x'].style = makeVKStyle(offTop, offLeft + abxyWidth / 2 - vkw / 2, vkw, vkh, fontSize)
-    vkMap['y'].style = makeVKStyle(offTop + abxyHeight / 2 - vkh / 2, offLeft, vkw, vkh, fontSize)
+    offTop += baseSize * 0.62;
+    vkw = baseSize;
+    vkh = baseSize;
+    offLeft = window.innerWidth - abxyWidth;
 
-    vkw = baseSize * 1.0
-    vkh = baseSize * 1.0
-    offLeft = 0
-    $id('vk-stick').style = makeVKStyle(offTop + abxyHeight / 2 - vkh / 2, offLeft + abxyHeight / 2 - vkw / 2, vkw, vkh, fontSize)
-    vkStickPos = [offTop + abxyHeight / 2, offLeft + abxyHeight / 2, vkw, vkh, fontSize]
+    // Adjust the ABXY button placements
+    vkMap['a'].style = makeVKStyle(offTop + abxyHeight / 2 - vkh / 2, offLeft + abxyWidth - vkw, vkw, vkh, fontSize);
+    vkMap['b'].style = makeVKStyle(offTop + abxyHeight - vkh, offLeft + abxyWidth / 2 - vkw / 2, vkw, vkh, fontSize);
+    vkMap['x'].style = makeVKStyle(offTop, offLeft + abxyWidth / 2 - vkw / 2, vkw, vkh, fontSize);
+    vkMap['y'].style = makeVKStyle(offTop + abxyHeight / 2 - vkh / 2, offLeft, vkw, vkh, fontSize);
 
-    vkw = baseSize * 0.4
-    vkh = baseSize * 0.4
-    fontSize = baseSize * 0.4
-    vkMap['select'].style = makeVKStyle(offTop + abxyHeight - vkh, window.innerWidth / 2 - vkw * 1.5, vkw, vkh, fontSize)
-    vkMap['start'].style = makeVKStyle(offTop + abxyHeight - vkh, window.innerWidth / 2 + vkw * 0.5, vkw, vkh, fontSize)
+    // Adjust joystick size and placement
+    vkw = baseSize * 0.8; // Reduced joystick size
+    vkh = baseSize * 0.8;
+    offLeft = 0;
+    $id('vk-stick').style = makeVKStyle(offTop + abxyHeight / 2 - vkh / 2, offLeft + abxyHeight / 2 - vkw / 2, vkw, vkh, fontSize);
+    vkStickPos = [offTop + abxyHeight / 2, offLeft + abxyHeight / 2, vkw, vkh, fontSize];
+
+    // Adjust Select and Start button sizes
+    vkw = baseSize * 0.4;
+    vkh = baseSize * 0.4;
+    fontSize = baseSize * 0.4;
+    vkMap['select'].style = makeVKStyle(offTop + abxyHeight - vkh, window.innerWidth / 2 - vkw * 1.5, vkw, vkh, fontSize);
+    vkMap['start'].style = makeVKStyle(offTop + abxyHeight - vkh, window.innerWidth / 2 + vkw * 0.5, vkw, vkh, fontSize);
 }
 
 function uiUpdateLayout() {
