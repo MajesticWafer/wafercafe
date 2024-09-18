@@ -393,7 +393,7 @@ function uiAdjustVKLayout() {
         // Y position on screen
         offTop + abxyHeight - vkh * 2,
         // X position on screen
-        offLeft + abxyWidth / 2 - vkw * 2 / 2,
+        offLeft + abxyWidth / 2 - vkw * 0.5 / 2,
         // General sizing
         vkw, vkh, fontSize)
     
@@ -401,7 +401,7 @@ function uiAdjustVKLayout() {
         // Y position on screen
         offTop + abxyHeight - vkh * 0.5,
         // X position on screen
-        offLeft + abxyWidth / 2 - vkw * 2 / 2,
+        offLeft + abxyWidth / 2 - vkw * 0.5 / 2,
         // General sizing
         vkw, vkh, fontSize)
     
