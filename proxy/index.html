@@ -166,7 +166,14 @@
         button.blur();
       });
     });
-  });
+
+    // Add an event listener for "Enter" key press in the search input
+    document.getElementById("url-input").addEventListener("keydown", function(event) {
+      if (event.key === "Enter") {
+        loadUrl();
+      }
+    });
+});
 
   function toggleTheme() {
     darkMode = !darkMode;
