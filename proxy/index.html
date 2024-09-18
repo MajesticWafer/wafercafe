@@ -44,10 +44,12 @@
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         z-index: 10;
         transition: background-color 0.3s;
+        color: black;
       }
 
       .dark-mode .toolbar {
         background-color: #333;
+        color: white;
       }
 
       .toolbar button {
@@ -62,6 +64,10 @@
         padding: 5px;
         font-size: 16px;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      .dark-mode .toolbar input[type="text"] {
+        color: white;
       }
 
       .iframe-container {
@@ -90,10 +96,6 @@
         background-color: #333;
         color: #f8f9fa;
         border: 1px solid #666;
-      }
-
-      .dark-mode input::placeholder {
-        color: #aaa;
       }
 
       .theme-toggler {
@@ -151,6 +153,7 @@
   document.addEventListener("DOMContentLoaded", function () {
     applyTheme();
 
+    // Remove focus from all buttons after click or touch
     document.querySelectorAll('button').forEach(button => {
       button.addEventListener('touchstart', function() {
         button.blur();
@@ -159,7 +162,7 @@
         button.blur();
       });
     });
-  }
+  });
 
   function toggleTheme() {
     darkMode = !darkMode;
@@ -171,9 +174,17 @@
     if (darkMode) {
       document.body.classList.add("dark-mode");
       document.getElementById("theme-toggler").innerHTML = '<i class="bi bi-brightness-high"></i>';
+      // Change input text color in dark mode
+      document.getElementById("url-input").style.color = '#f8f9fa';
+      document.getElementById("url-input").style.backgroundColor = '#333';
+      document.getElementById("url-input").style.borderColor = '#666';
     } else {
       document.body.classList.remove("dark-mode");
       document.getElementById("theme-toggler").innerHTML = '<i class="bi bi-moon"></i>';
+      // Revert input text color for light mode
+      document.getElementById("url-input").style.color = '#000';
+      document.getElementById("url-input").style.backgroundColor = '#fff';
+      document.getElementById("url-input").style.borderColor = '#ccc';
     }
   }
 
