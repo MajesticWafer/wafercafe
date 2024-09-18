@@ -135,27 +135,17 @@
         <iframe id="browser-iframe" style="display: none;"></iframe>
       </div>
     </div>
-
 <script>
-  document.querySelectorAll("button").forEach(button => {
-    button.addEventListener("touchend", () => {
-      button.blur();
-    });
-    button.addEventListener("mouseup", () => {
-      button.blur();
-    });
-  });
-  
   let darkMode = localStorage.getItem("theme") === "dark";
 
   document.addEventListener("DOMContentLoaded", function () {
     applyTheme();
 
-    const urlInput = document.getElementById("url-input");
-    urlInput.addEventListener("keypress", function (e) {
-      if (e.key === 'Enter') {
-        loadUrl();
-      }
+    // Remove focus from all buttons after click
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('click', function() {
+        button.blur(); // Remove focus from the clicked button
+      });
     });
   });
 
@@ -178,20 +168,15 @@
   // Tab closing function
   function clearIframe() {
     const iframe = document.getElementById("browser-iframe");
-    const welcomePage = document.getElementById("welcome-page");
     iframe.src = "about:blank";
     iframe.style.display = "none";
-    welcomePage.style.display = "flex";
   }
 
   // Iframe control functions
   function loadUrl() {
     const urlInput = document.getElementById("url-input").value;
     const iframe = document.getElementById("browser-iframe");
-    const welcomePage = document.getElementById("welcome-page");
-    welcomePage.style.display = "none";
     iframe.style.display = "block";
-
     if (urlInput.startsWith("http") || urlInput.startsWith("www")) {
       iframe.src = urlInput;
     } else {
