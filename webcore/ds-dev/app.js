@@ -317,7 +317,7 @@ function emuStart() {
     if (!emuIsGameLoaded) {
         return
     }
-    console.log('Start!!!')
+    console.log('Start!')
     emuIsRunning = true
     uiSwitchTo('player')
 }
@@ -339,16 +339,16 @@ function makeVKStyle(top, left, w, h, fontSize) {
     return 'top:' + top + 'px;left:' + left + 'px;width:' + w + 'px;height:' + h + 'px;' + 'font-size:' + fontSize + 'px;line-height:' + h + 'px;'
 }
 
-
 function uiAdjustVKLayout() {
     var baseSize = window.innerWidth * 0.14;
     var fontSize = baseSize * 0.7;
     var offTop = Math.min(fbSize[0][1] + fbSize[1][1], window.innerHeight - Math.ceil(baseSize * 3.62));
     var offLeft = 0;
-    var abxyWidth = baseSize * 1.8; // Reduced size of ABXY buttons
-    var abxyHeight = baseSize * 1.8; // Reduced height
+    var abxyWidth = baseSize * 2.5; // Reduced size of ABXY buttons
+    var abxyHeight = baseSize * 2.5; // Reduced height
     var vkw = baseSize;
     var vkh = baseSize;
+    var buttonSpacing = baseSize * 0.3; // Increase this for more space between buttons
 
     // Adjusted for L and R buttons
     vkw = baseSize * 1.2;
@@ -363,13 +363,13 @@ function uiAdjustVKLayout() {
     offTop += baseSize * 0.62;
     vkw = baseSize;
     vkh = baseSize;
-    offLeft = window.innerWidth - abxyWidth;
+    offLeft = window.innerWidth - abxyWidth - buttonSpacing; // Add spacing here
 
-    // Adjust the ABXY button placements
+    // Adjust the ABXY button placements with more spacing
     vkMap['a'].style = makeVKStyle(offTop + abxyHeight / 2 - vkh / 2, offLeft + abxyWidth - vkw, vkw, vkh, fontSize);
-    vkMap['b'].style = makeVKStyle(offTop + abxyHeight - vkh, offLeft + abxyWidth / 2 - vkw / 2, vkw, vkh, fontSize);
-    vkMap['x'].style = makeVKStyle(offTop, offLeft + abxyWidth / 2 - vkw / 2, vkw, vkh, fontSize);
-    vkMap['y'].style = makeVKStyle(offTop + abxyHeight / 2 - vkh / 2, offLeft, vkw, vkh, fontSize);
+    vkMap['b'].style = makeVKStyle(offTop + abxyHeight - vkh, offLeft + abxyWidth / 2 - vkw / 2 + buttonSpacing, vkw, vkh, fontSize);
+    vkMap['x'].style = makeVKStyle(offTop, offLeft + abxyWidth / 2 - vkw / 2 + buttonSpacing, vkw, vkh, fontSize);
+    vkMap['y'].style = makeVKStyle(offTop + abxyHeight / 2 - vkh / 2, offLeft - buttonSpacing, vkw, vkh, fontSize);
 
     // Adjust joystick size and placement
     vkw = baseSize * 0.8; // Reduced joystick size
