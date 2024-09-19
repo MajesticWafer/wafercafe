@@ -26,10 +26,23 @@
         #particles-js {
             position: absolute;
             width: 100%;
-            height: 100%;
+            height: 100vh;
             top: 0;
             left: 0;
             z-index: -1; /* Ensure particles stay in the background */
+        }
+
+        /* Fade-out effect */
+        .fade {
+            position: absolute;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.5));
+            pointer-events: none; /* Ensure it doesn't block interaction */
+        }
+
+        body.light-mode .fade {
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5));
         }
 
     </style>
@@ -38,26 +51,136 @@
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 
     <script>
-        // Initialize particles.js
-        document.addEventListener('DOMContentLoaded', () => {
-            particlesJS.load('particles-js', 'head/particles.json', function() {
-                console.log('Particles.js config loaded');
+        // Function to load particles with specific color based on theme
+        function loadParticles(color) {
+            particlesJS("particles-js", {
+                "particles": {
+                    "number": {
+                        "value": 80,
+                        "density": {
+                            "enable": true,
+                            "value_area": 800
+                        }
+                    },
+                    "color": {
+                        "value": color
+                    },
+                    "shape": {
+                        "type": "circle",
+                        "stroke": {
+                            "width": 0,
+                            "color": "#000000"
+                        },
+                        "polygon": {
+                            "nb_sides": 5
+                        }
+                    },
+                    "opacity": {
+                        "value": 0.5,
+                        "random": false,
+                        "anim": {
+                            "enable": false,
+                            "speed": 1,
+                            "opacity_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "size": {
+                        "value": 3,
+                        "random": true,
+                        "anim": {
+                            "enable": false,
+                            "speed": 40,
+                            "size_min": 0.1,
+                            "sync": false
+                        }
+                    },
+                    "line_linked": {
+                        "enable": true,
+                        "distance": 150,
+                        "color": color,
+                        "opacity": 0.4,
+                        "width": 1
+                    },
+                    "move": {
+                        "enable": true,
+                        "speed": 6,
+                        "direction": "none",
+                        "random": false,
+                        "straight": false,
+                        "out_mode": "out",
+                        "bounce": false,
+                        "attract": {
+                            "enable": false,
+                            "rotateX": 600,
+                            "rotateY": 1200
+                        }
+                    }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": {
+                        "onhover": {
+                            "enable": true,
+                            "mode": "grab"
+                        },
+                        "onclick": {
+                            "enable": true,
+                            "mode": "push"
+                        },
+                        "resize": true
+                    },
+                    "modes": {
+                        "grab": {
+                            "distance": 140,
+                            "line_linked": {
+                                "opacity": 1
+                            }
+                        },
+                        "bubble": {
+                            "distance": 400,
+                            "size": 40,
+                            "duration": 2,
+                            "opacity": 8,
+                            "speed": 3
+                        },
+                        "repulse": {
+                            "distance": 200,
+                            "duration": 0.4
+                        },
+                        "push": {
+                            "particles_nb": 4
+                        },
+                        "remove": {
+                            "particles_nb": 2
+                        }
+                    }
+                },
+                "retina_detect": true
             });
-        });
+        }
 
-        // Theme toggle with localStorage
+        // Handle theme toggle with localStorage
         document.addEventListener('DOMContentLoaded', () => {
             const savedTheme = localStorage.getItem('theme');
+            const themeToggle = document.getElementById('theme-toggle');
+
             if (savedTheme) {
                 document.body.classList.add(savedTheme);
-                document.getElementById('theme-toggle').textContent = savedTheme === 'light-mode' ? '🌙' : '☀️';
+                themeToggle.textContent = savedTheme === 'light-mode' ? '🌙' : '☀️';
+                loadParticles(savedTheme === 'light-mode' ? '#000000' : '#ffffff');
+            } else {
+                loadParticles('#ffffff'); // Default to white particles
             }
 
-            document.getElementById('theme-toggle').addEventListener('click', () => {
+            themeToggle.addEventListener('click', () => {
                 const isLightMode = document.body.classList.toggle('light-mode');
                 const newTheme = isLightMode ? 'light-mode' : '';
                 localStorage.setItem('theme', newTheme);
-                document.getElementById('theme-toggle').textContent = isLightMode ? '🌙' : '☀️';
+                themeToggle.textContent = isLightMode ? '🌙' : '☀️';
+
+                // Reload particles with new color
+                loadParticles(isLightMode ? '#000000' : '#ffffff');
             });
         });
 
@@ -110,6 +233,7 @@
 
 <body>
     <div id="particles-js"></div> <!-- Particle container -->
+    <div class="fade"></div> <!-- Fade-out effect container -->
 
     <div id="games"></div>
     <div id="header">
@@ -123,30 +247,6 @@
         </div>
     </div>
 
-    <script>
-        document.getElementById('theme-toggle').addEventListener('click', function() {
-            this.textContent = this.textContent === '☀️' ? '🌙' : '☀️';
-        });
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const searchInput = document.getElementById('search');
-            const container = document.querySelector('.container');
-            searchInput.addEventListener('input', function() {
-                const searchTerm = searchInput.value.toLowerCase();
-                const games = document.querySelectorAll('.button-container');
-                games.forEach(game => {
-                    const gameName = game.querySelector('.button-text').textContent.toLowerCase();
-                    if (gameName.includes(searchTerm)) {
-                        game.style.display = 'block';
-                    } else {
-                        game.style.display = 'none';
-                    }
-                });
-            });
-        });
-
-    </script>
-
     <div class="random-button-container">
         <button id="random-game">Random Game 🎲</button>
     </div>
@@ -158,7 +258,7 @@
     <div id="faq" class="section">
         <h2>FAQ</h2>
         <p><b>Q: Why isn't my game working on mobile?</b></p>
-        <p>A: Sometimes its best to swap over to desktop mode or mobile mode in the browser settings, fixing potential interaction problems.</p><br>
+        <p>A: Sometimes it's best to swap over to desktop mode or mobile mode in the browser settings, fixing potential interaction problems.</p><br>
 
         <p><b>Q: I want to send feedback, but how?</b></p>
         <p>A: Currently, the only way to give feedback to me is to go to the <a href="https://github.com/MajesticWafer/wafercafe/">GitHub</a> repository and create an issue.</p><br>
@@ -166,13 +266,14 @@
 
     <div id="changelog" class="section">
         <h2>Changelog</h2>
-        <p>New homepage created.</p>
-        <p>- Light/Dark mode</p>
-        <p>- Game search bar</p>
-        <p>- New button layout</p>
-        <p>- Button name overlay on hover</p>
-        <p>- Added FAQ section</p>
-        <p>- Added changelog section (duh)</p>
+        <p><b>Homepage revamp</b></p>
+        <p>- <i>Particles</i></p>
+        <p>- <i>Light/dark mode</i></p>
+        <p>- <i>Game search bar</i></p>
+        <p>- <i>New button layout</i></p>
+        <p>- <i>Button name overlay on hover</i></p>
+        <p>- <i>Added FAQ section</i></p>
+        <p>- <i>Added changelog section</i></p>
     </div>
 
     <div id="dropdown">
