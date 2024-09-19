@@ -4,6 +4,8 @@
     --text-color: white;
     --button-background: #2a2a2a;
     --button-border: #4c4c4c;
+    --background-image-fade-1: rgba(0,0,0,0);
+    --background-image-fade-2: rgba(0,0,0,1);
 }
 
 /* Light mode */
@@ -12,6 +14,12 @@ body.light-mode {
     --text-color: #000;
     --button-background: #fff;
     --button-border: #ccc;
+    --background-image-fade-1: rgba(255,255,255,0);
+    --background-image-fade-2: rgba(255,255,255,1);
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {
@@ -19,6 +27,25 @@ body {
     color: var(--text-color);
     font-family: 'Poppins', sans-serif;
     transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#particles-js {
+    position: absolute;
+    width: 100%;
+    height: 130%;
+    top: 0;
+    left: 0;
+    z-index: -2; /* particles stay in the background */
+    overflow: hidden;
+}
+
+#particles-fade {
+    position: absolute;
+    top: 30%;
+    background-image: linear-gradient(var(--background-image-fade-1), var(--background-image-fade-2));
+    width: 100%;
+    height: 35%;
+    z-index: -1; /* above particles, below bg */
 }
 
 #header {
@@ -240,4 +267,14 @@ button-container:hover {
 #dropdown button:hover {
     background-color: var(--button-border);
     transform: scale(1.05);
+}
+
+.section {
+    padding: 80px 20px;
+    margin: 15px 0;
+}
+
+.section-games
+    padding: none !important;
+    margin: none !important;
 }
