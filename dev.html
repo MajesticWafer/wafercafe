@@ -48,23 +48,21 @@
         // Theme toggle with localStorage
         document.addEventListener('DOMContentLoaded', () => {
             const savedTheme = localStorage.getItem('theme');
-            const themeToggle = document.getElementById('theme-toggle');
-
             if (savedTheme) {
                 document.body.classList.add(savedTheme);
-                themeToggle.textContent = savedTheme === 'light-mode' ? '🌙' : '☀️';
+                document.getElementById('theme-toggle').textContent = savedTheme === 'light-mode' ? '🌙' : '☀️';
                 loadParticles(savedTheme === 'light-mode' ? '#000000' : '#ffffff');
             } else {
                 loadParticles('#ffffff'); // Default to white particles
             }
 
-            themeToggle.addEventListener('click', () => {
+            document.getElementById('theme-toggle').addEventListener('click', () => {
                 const isLightMode = document.body.classList.toggle('light-mode');
                 const newTheme = isLightMode ? 'light-mode' : '';
                 localStorage.setItem('theme', newTheme);
-                themeToggle.textContent = isLightMode ? '🌙' : '☀️';
+                document.getElementById('theme-toggle').textContent = isLightMode ? '🌙' : '☀️';
 
-                // Reload particles with new color
+                // Reload particles
                 loadParticles(isLightMode ? '#000000' : '#ffffff');
             });
         });
