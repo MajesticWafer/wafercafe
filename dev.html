@@ -23,142 +23,22 @@
             margin: 15px 0;
         }
 
+        /* Styling for particles */
         #particles-js {
             position: absolute;
             width: 100%;
             height: 100%;
             top: 0;
             left: 0;
-            z-index: -1;
+            z-index: -1; /* Behind all other content */
         }
 
-        body {
-            background-color: var(--background-color);
-            color: var(--text-color);
-            font-family: 'Poppins', sans-serif;
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-
-        /* Other styles from your project go here... */
+        /* Add other styles as you already have them */
     </style>
 
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    
-    <script>
-        // Particles.js configuration
-        document.addEventListener('DOMContentLoaded', () => {
-            particlesJS('particles-js', {
-                "particles": {
-                    "number": {
-                        "value": 100,
-                        "density": {
-                            "enable": true,
-                            "value_area": 800
-                        }
-                    },
-                    "color": {
-                        "value": "#ffffff"
-                    },
-                    "shape": {
-                        "type": "circle",
-                        "stroke": {
-                            "width": 0,
-                            "color": "#000000"
-                        },
-                        "polygon": {
-                            "nb_sides": 5
-                        },
-                        "image": {
-                            "src": "img/github.svg",
-                            "width": 100,
-                            "height": 100
-                        }
-                    },
-                    "opacity": {
-                        "value": 0.5,
-                        "random": false,
-                        "anim": {
-                            "enable": false,
-                            "speed": 1,
-                            "opacity_min": 0.1,
-                            "sync": false
-                        }
-                    },
-                    "size": {
-                        "value": 5,
-                        "random": true,
-                        "anim": {
-                            "enable": false,
-                            "speed": 40,
-                            "size_min": 0.1,
-                            "sync": false
-                        }
-                    },
-                    "line_linked": {
-                        "enable": true,
-                        "distance": 150,
-                        "color": "#ffffff",
-                        "opacity": 0.4,
-                        "width": 1
-                    },
-                    "move": {
-                        "enable": true,
-                        "speed": 6,
-                        "direction": "none",
-                        "random": false,
-                        "straight": false,
-                        "out_mode": "out",
-                        "bounce": false,
-                        "attract": {
-                            "enable": false,
-                            "rotateX": 600,
-                            "rotateY": 1200
-                        }
-                    }
-                },
-                "interactivity": {
-                    "detect_on": "canvas",
-                    "events": {
-                        "onhover": {
-                            "enable": true,
-                            "mode": "repulse"
-                        },
-                        "onclick": {
-                            "enable": true,
-                            "mode": "push"
-                        },
-                        "resize": true
-                    },
-                    "modes": {
-                        "grab": {
-                            "distance": 400,
-                            "line_linked": {
-                                "opacity": 1
-                            }
-                        },
-                        "bubble": {
-                            "distance": 400,
-                            "size": 40,
-                            "duration": 2,
-                            "opacity": 8,
-                            "speed": 3
-                        },
-                        "repulse": {
-                            "distance": 200,
-                            "duration": 0.4
-                        },
-                        "push": {
-                            "particles_nb": 4
-                        },
-                        "remove": {
-                            "particles_nb": 2
-                        }
-                    }
-                },
-                "retina_detect": true
-            });
-        });
 
+    <script>
         // Theme toggle with localStorage
         document.addEventListener('DOMContentLoaded', () => {
             // Check if a theme is saved in localStorage
@@ -180,61 +60,64 @@
                 // Change emoji based on the theme
                 document.getElementById('theme-toggle').textContent = isLightMode ? '🌙' : '☀️';
             });
-        });
 
-        // Random game function
-        document.addEventListener('DOMContentLoaded', () => {
-            document.getElementById('random-game').addEventListener('click', () => {
-                const games = document.querySelectorAll('.button-container');
-                const randomGame = games[Math.floor(Math.random() * games.length)];
-
-                // Extract the location.href value without adding extra characters
-                const onClickValue = randomGame.getAttribute('onclick');
-                const url = onClickValue.match(/location\.href='([^']+)'/)[1];
-
-                // Redirect to the random game URL
-                window.location.href = url;
+            // Initialize particles.js
+            particlesJS.load('particles-js', 'particles.json', function() {
+                console.log('particles.js config loaded');
             });
         });
 
-        // Fetch and dynamically load game buttons
-        window.onload = function() {
+        window.onload = function () {
+            // Load games as before
             fetch('games.json')
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok ' + response.statusText);
+                    }
+                    return response.json();
+                })
                 .then(data => {
-                    const games = data.games;
+                    const games = data.games; // The games object from JSON
                     const container = document.querySelector('.container');
 
+                    // Loop through the games object and create buttons dynamically
                     Object.keys(games).forEach(gameName => {
                         const gameLink = games[gameName];
 
+                        // Create the button container
                         const buttonContainer = document.createElement('div');
                         buttonContainer.classList.add('button-container');
                         buttonContainer.setAttribute('onclick', `location.href='${gameLink}/'`);
 
+                        // Create the image element
                         const img = document.createElement('img');
                         img.src = `/${gameLink}/img.jpeg`;
                         img.alt = gameName;
 
+                        // Create the span for the button text
                         const span = document.createElement('span');
                         span.classList.add('button-text');
                         span.textContent = gameName;
 
+                        // Append image and text to the button container
                         buttonContainer.appendChild(img);
                         buttonContainer.appendChild(span);
 
+                        // Append the button container to the main container
                         container.appendChild(buttonContainer);
                     });
                 })
-                .catch(error => console.error('Fetch error:', error));
+                .catch(error => {
+                    console.error('There was a problem with the fetch operation:', error);
+                });
         };
+
     </script>
 </head>
 
 <body>
-    <!-- Particles.js container -->
     <div id="particles-js"></div>
-
+    <div id="games"></div>
     <div id="header">
         <h1><a href="#">The Wafer Café</a></h1>
         <div class="nav-links">
