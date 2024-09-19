@@ -47,38 +47,45 @@
 
         // Theme toggle with localStorage
         document.addEventListener('DOMContentLoaded', () => {
+            // Check if a theme is saved in localStorage
             const savedTheme = localStorage.getItem('theme');
             if (savedTheme) {
                 document.body.classList.add(savedTheme);
+                // Adjust emoji based on theme
                 document.getElementById('theme-toggle').textContent = savedTheme === 'light-mode' ? '🌙' : '☀️';
-                loadParticles(savedTheme === 'light-mode' ? '#000000' : '#ffffff');
-            } else {
-                loadParticles('#ffffff'); // Default to white particles
             }
 
+            // Toggle theme on button click
             document.getElementById('theme-toggle').addEventListener('click', () => {
                 const isLightMode = document.body.classList.toggle('light-mode');
                 const newTheme = isLightMode ? 'light-mode' : '';
-                localStorage.setItem('theme', newTheme);
-                document.getElementById('theme-toggle').textContent = isLightMode ? '🌙' : '☀️';
 
-                // Reload particles
-                loadParticles(isLightMode ? '#000000' : '#ffffff');
+                // Save the current theme in localStorage
+                localStorage.setItem('theme', newTheme);
+
+                // Change emoji based on the theme
+                document.getElementById('theme-toggle').textContent = isLightMode ? '🌙' : '☀️';
             });
         });
+
 
         // Random game function
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('random-game').addEventListener('click', () => {
                 const games = document.querySelectorAll('.button-container');
                 const randomGame = games[Math.floor(Math.random() * games.length)];
+
+                // Extract the location.href value without adding extra characters
                 const onClickValue = randomGame.getAttribute('onclick');
                 const url = onClickValue.match(/location\.href='([^']+)'/)[1];
+
+                // Redirect to the random game URL
                 window.location.href = url;
             });
         });
 
         window.onload = function() {
+            // Fetch the games.json file
             fetch('games.json')
                 .then(response => {
                     if (!response.ok) {
@@ -87,22 +94,33 @@
                     return response.json();
                 })
                 .then(data => {
-                    const games = data.games;
+                    const games = data.games; // The games object from JSON
                     const container = document.querySelector('.container');
 
+                    // Loop through the games object and create buttons dynamically
                     Object.keys(games).forEach(gameName => {
                         const gameLink = games[gameName];
+
+                        // Create the button container
                         const buttonContainer = document.createElement('div');
                         buttonContainer.classList.add('button-container');
                         buttonContainer.setAttribute('onclick', `location.href='${gameLink}/'`);
+
+                        // Create the image element
                         const img = document.createElement('img');
                         img.src = `/${gameLink}/img.jpeg`;
                         img.alt = gameName;
+
+                        // Create the span for the button text
                         const span = document.createElement('span');
                         span.classList.add('button-text');
                         span.textContent = gameName;
+
+                        // Append image and text to the button container
                         buttonContainer.appendChild(img);
                         buttonContainer.appendChild(span);
+
+                        // Append the button container to the main container
                         container.appendChild(buttonContainer);
                     });
                 })
