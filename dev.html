@@ -24,12 +24,12 @@
         }
 
         #particles-js {
-            position: absolute;
+            position: fixed;
             width: 100%;
             height: 100%;
             top: 0;
             left: 0;
-            z-index: -1;
+            z-index: 0;
         }
 
         body {
@@ -37,6 +37,13 @@
             color: var(--text-color);
             font-family: 'Poppins', sans-serif;
             transition: background-color 0.3s ease, color 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
         }
 
         /* Other styles from your project go here... */
@@ -47,6 +54,8 @@
     <script>
         // Particles.js configuration
         document.addEventListener('DOMContentLoaded', () => {
+            const themeColor = getComputedStyle(document.body).getPropertyValue('--text-color');
+
             particlesJS('particles-js', {
                 "particles": {
                     "number": {
@@ -57,7 +66,7 @@
                         }
                     },
                     "color": {
-                        "value": "#ffffff"
+                        "value": themeColor.trim() // Use the current text color for particles
                     },
                     "shape": {
                         "type": "circle",
@@ -97,7 +106,7 @@
                     "line_linked": {
                         "enable": true,
                         "distance": 150,
-                        "color": "#ffffff",
+                        "color": themeColor.trim(),
                         "opacity": 0.4,
                         "width": 1
                     },
