@@ -4,6 +4,7 @@
     --text-color: white;
     --button-background: #2a2a2a;
     --button-border: #4c4c4c;
+    --background-image-fade-1: rgba(0,0,0,0);
 }
 
 /* Light mode */
@@ -11,7 +12,11 @@ body.light-mode {
     --background-color: #f0f0f0;
     --text-color: #000;
     --button-background: #fff;
-    --button-border: #ccc;
+    --button-border: #ccc;;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 body {
@@ -19,6 +24,7 @@ body {
     color: var(--text-color);
     font-family: 'Poppins', sans-serif;
     transition: background-color 0.3s ease, color 0.3s ease;
+    overflow-x: none;
 }
 
 #header {
@@ -53,15 +59,6 @@ body {
 
 #theme-toggle {
     background-color: var(--button-background);
-    border: 2px solid var(--button-border);
-    color: var(--text-color);
-    padding: 5px 15px;
-    cursor: pointer;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
-    text-align: center;
-    font-size: 16px;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
-    border-radius: 5px / 10px;background-color: var(--button-background);
     border: 2px solid var(--button-border);
     color: var(--text-color);
     padding: 5px 15px;
@@ -114,8 +111,9 @@ body {
     margin: 0 auto;
 }
 
-/* Button Styling */
 .button-container {
+    position: relative; /* Ensure it is placed within the stacking context */
+    z-index: 1; /* Place buttons above the particles */
     height: 120px;
     width: 120px;
     border-radius: 10px;
@@ -130,12 +128,12 @@ body {
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
     position: relative;
     cursor: pointer;
-    overflow: hidden; /* Ensure content doesn't overflow */
+    overflow: hidden;
     margin: 20px;
     margin-bottom: 10px;
 }
 
-button-container:hover {
+.button-container:hover {
     border: 2px solid #d6caff;
 }
 
@@ -219,7 +217,7 @@ button-container:hover {
     width: 150px;
     transition: opacity 0.5s, top 0.5s;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
-    z-index: 2;
+    z-index: 2; /* Ensure dropdown is above buttons */
 }
 
 #dropdown.open {
@@ -240,4 +238,14 @@ button-container:hover {
 #dropdown button:hover {
     background-color: var(--button-border);
     transform: scale(1.05);
+}
+
+.section {
+    padding: 80px 20px;
+    margin: 15px 0;
+}
+
+.section-games {
+    padding: none !important;
+    margin: none !important;
 }
