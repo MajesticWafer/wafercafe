@@ -95,6 +95,27 @@
                 });
         };
     </script>
+    <style>
+        /* Particles.js container */
+        #particles-js {
+            position: absolute;
+            width: 100vw;
+            height: 100vw; /* square */
+            top: 0;
+            left: 0;
+            z-index: -2; /* Ensure particles stay in the background */
+            overflow: hidden;
+        }
+
+        #particles-fade {
+            position: absolute;
+            top: 8vw;
+            background-image: linear-gradient(rgba(0,0,0,0), var(--background-color));
+            width: 100vw;
+            height: 92vw; /* square */
+            z-index: -1; /* Above particles, below bg */
+        }
+    </style>
 </head>
 
 <body>
