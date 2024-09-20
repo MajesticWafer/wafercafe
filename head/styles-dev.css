@@ -27,26 +27,6 @@ body {
     overflow-x: none;
 }
 
-/* Particles.js container */
-#particles-js {
-    position: absolute;
-    width: 100vw;
-    height: 100vw; /* square */
-    top: 0;
-    left: 0;
-    z-index: -2; /* Ensure particles stay in the background */
-    overflow: hidden;
-}
-
-#particles-fade {
-    position: absolute;
-    top: 10vw;
-    background-image: linear-gradient(rgba(0,0,0,0), var(--background-color));
-    width: 100vw;
-    height: 100vw; /* square */
-    z-index: -1; /* Above particles, below bg */
-}
-
 #header {
     text-align: center;
     padding: 20px;
