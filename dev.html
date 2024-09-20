@@ -114,57 +114,63 @@
 
     </script>
     <style>
-        /* Set default theme colors */
-:root {
-    --background-color: #1c1c1c;
-    --text-color: white;
-    --button-background: #2a2a2a;
-    --button-border: #4c4c4c;
-    --background-image-fade-1: rgba(0,0,0,0);
-    --background-image-fade-2: rgba(0,0,0,1);
-}
+    /* Set default theme colors */
+    :root {
+        --background-color: #1c1c1c;
+        --text-color: white;
+        --button-background: #2a2a2a;
+        --button-border: #4c4c4c;
+        --background-image-fade-1: rgba(0,0,0,0);
+        --background-image-fade-2: rgba(0,0,0,1);
+    }
 
-/* Light mode */
-body.light-mode {
-    --background-color: #f0f0f0;
-    --text-color: #000;
-    --button-background: #fff;
-    --button-border: #ccc;
-    --background-image-fade-1: rgba(255,255,255,0);
-    --background-image-fade-2: rgba(255,255,255,1);
-}
+    /* Light mode */
+    body.light-mode {
+        --background-color: #f0f0f0;
+        --text-color: #000;
+        --button-background: #fff;
+        --button-border: #ccc;
+        --background-image-fade-1: rgba(255,255,255,0);
+        --background-image-fade-2: rgba(255,255,255,1);
+    }
 
-html {
-    scroll-behavior: smooth;
-}
+    html {
+        scroll-behavior: smooth;
+    }
 
-body {
-    background-color: var(--background-color);
-    color: var(--text-color);
-    font-family: 'Poppins', sans-serif;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
+    body {
+        background-color: var(--background-color);
+        color: var(--text-color);
+        font-family: 'Poppins', sans-serif;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
 
-/* Particles.js container */
-#particles-js {
-    position: absolute;
-    width: 100%;
-    height: 130%;
-    top: 0;
-    left: 0;
-    z-index: -2; /* Ensure particles stay in the background */
-    overflow: hidden;
-}
+    /* Particles.js container */
+    #particles-js {
+        position: fixed; /* Changed to fixed to ensure it stays in the background */
+        width: 100%;
+        height: 100%; /* Ensure it covers the entire page */
+        top: 0;
+        left: 0;
+        z-index: -2; /* Keep this behind everything */
+        overflow: hidden;
+    }
 
-#particles-fade {
-    position: absolute;
-    top: 30%;
-    background-image: linear-gradient(var(--background-image-fade-1), var(--background-image-fade-2));
-    width: 100%;
-    height: 35%;
-    z-index: -1; /* Above particles, below bg */
-}
+    #particles-fade {
+        position: absolute;
+        top: 30%;
+        background-image: linear-gradient(var(--background-image-fade-1), var(--background-image-fade-2));
+        width: 100%;
+        height: 35%;
+        z-index: -1; /* Above particles, below interactive elements */
+    }
 
+    /* Adjust z-index for interactive elements */
+    .container, #header, #theme-toggle, .random-button-container, #dropdown {
+        position: relative;
+        z-index: 1; /* Ensure these are above the particles */
+    }
+        
 #header {
     text-align: center;
     padding: 20px;
@@ -251,7 +257,6 @@ body {
 
 .button-container {
     position: relative; /* Ensure it is placed within the stacking context */
-    z-index: 1; /* Place buttons above the particles */
     height: 120px;
     width: 120px;
     border-radius: 10px;
@@ -269,6 +274,7 @@ body {
     overflow: hidden;
     margin: 20px;
     margin-bottom: 10px;
+    z-index: 2;
 }
 
 .button-container:hover {
