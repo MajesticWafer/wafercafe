@@ -20,40 +20,41 @@
 
     <script>
     // Function to load particles based on the theme
-    function loadParticles(theme) {
-        const particlesConfig = theme === 'light-mode' ? 'dark-particles.json' : 'light-particles.json';
-        particlesJS.load('particles-js', `head/${particlesConfig}`, function() {
-            console.log(`Particles.js config (${particlesConfig}) loaded`);
-        });
+function loadParticles(theme) {
+    const particlesConfig = theme === 'light-mode' ? 'light-particles.json' : 'dark-particles.json';  // Fix the JSON config
+    particlesJS.load('particles-js', `head/${particlesConfig}`, function() {
+        console.log(`Particles.js config (${particlesConfig}) loaded`);
+    });
+}
+
+// Theme toggle with localStorage
+document.addEventListener('DOMContentLoaded', () => {
+    const savedTheme = localStorage.getItem('theme') || '';  // Default to dark mode if nothing is saved
+    document.body.classList.add(savedTheme);
+
+    // Adjust the emoji and load correct particles based on theme
+    const themeToggle = document.getElementById('theme-toggle');
+    if (savedTheme === 'light-mode') {
+        themeToggle.textContent = '🌙';
+        loadParticles('light-mode');  // Load light particles for light mode
+    } else {
+        themeToggle.textContent = '☀️';
+        loadParticles('');  // Load dark particles for dark mode
     }
 
-    // Theme toggle with localStorage
-    document.addEventListener('DOMContentLoaded', () => {
-        const savedTheme = localStorage.getItem('theme') || '';  // Default to dark mode if nothing is saved
-        document.body.classList.add(savedTheme);
+    // Toggle theme on button click
+    themeToggle.addEventListener('click', () => {
+        const isLightMode = document.body.classList.toggle('light-mode');
+        const newTheme = isLightMode ? 'light-mode' : '';
+        
+        localStorage.setItem('theme', newTheme);
+        themeToggle.textContent = isLightMode ? '🌙' : '☀️';
 
-        // Adjust the emoji and load correct particles based on theme
-        const themeToggle = document.getElementById('theme-toggle');
-        if (savedTheme === 'light-mode') {
-            themeToggle.textContent = '🌙';
-            loadParticles('light-mode');  // Load dark particles for light mode
-        } else {
-            themeToggle.textContent = '☀️';
-            loadParticles('');  // Load light particles for dark mode
-        }
-
-        // Toggle theme on button click
-        themeToggle.addEventListener('click', () => {
-            const isLightMode = document.body.classList.toggle('light-mode');
-            const newTheme = isLightMode ? 'light-mode' : '';
-            
-            localStorage.setItem('theme', newTheme);
-            themeToggle.textContent = isLightMode ? '🌙' : '☀️';
-
-            // Reload particles based on the new theme
-            loadParticles(newTheme);
-        });
+        // Reload particles based on the new theme
+        loadParticles(newTheme);
     });
+});
+
 
         // Random game function
         document.addEventListener('DOMContentLoaded', () => {
