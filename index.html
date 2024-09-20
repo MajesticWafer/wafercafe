@@ -13,60 +13,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="keywords" content="emulator, games, unblocked, gaming, game website, unblocked games, nintendo ds emulator, nintendo 64 emulator, gba emulator, etc.">
 
-    <style>
-        html {
-            scroll-behavior: smooth;
+    <!-- Load particles.js -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+     <script>
+        // Function to load particles based on the theme
+        function loadParticles(theme) {
+            const particlesConfig = theme === 'light-mode' ? 'dark-particles.json' : 'light-particles.json';
+            particlesJS.load('particles-js', `head/${particlesConfig}`, function() {
+                console.log(`Particles.js config (${particlesConfig}) loaded`);
+            });
         }
 
-        .section {
-            padding: 80px 20px;
-            margin: 15px 0;
-        }
-
-    </style>
-
-    <script>
         // Theme toggle with localStorage
         document.addEventListener('DOMContentLoaded', () => {
-            // Check if a theme is saved in localStorage
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme) {
-                document.body.classList.add(savedTheme);
-                // Adjust emoji based on theme
-                document.getElementById('theme-toggle').textContent = savedTheme === 'light-mode' ? '🌙' : '☀️';
-            }
+            const savedTheme = localStorage.getItem('theme') || 'dark-mode'; // Default to dark mode
+            document.body.classList.add(savedTheme);
+            loadParticles(savedTheme);
+
+            // Adjust emoji based on theme
+            const themeToggle = document.getElementById('theme-toggle');
+            themeToggle.textContent = savedTheme === 'light-mode' ? '🌙' : '☀️';
 
             // Toggle theme on button click
-            document.getElementById('theme-toggle').addEventListener('click', () => {
+            themeToggle.addEventListener('click', () => {
                 const isLightMode = document.body.classList.toggle('light-mode');
-                const newTheme = isLightMode ? 'light-mode' : '';
+                const newTheme = isLightMode ? 'light-mode' : 'dark-mode';
 
                 // Save the current theme in localStorage
                 localStorage.setItem('theme', newTheme);
+                themeToggle.textContent = isLightMode ? '🌙' : '☀️';
 
-                // Change emoji based on the theme
-                document.getElementById('theme-toggle').textContent = isLightMode ? '🌙' : '☀️';
+                // Reload particles based on the new theme
+                loadParticles(newTheme);
             });
         });
-
 
         // Random game function
         document.addEventListener('DOMContentLoaded', () => {
             document.getElementById('random-game').addEventListener('click', () => {
                 const games = document.querySelectorAll('.button-container');
                 const randomGame = games[Math.floor(Math.random() * games.length)];
-
-                // Extract the location.href value without adding extra characters
                 const onClickValue = randomGame.getAttribute('onclick');
                 const url = onClickValue.match(/location\.href='([^']+)'/)[1];
-
-                // Redirect to the random game URL
                 window.location.href = url;
             });
         });
 
         window.onload = function() {
-            // Fetch the games.json file
             fetch('games.json')
                 .then(response => {
                     if (!response.ok) {
@@ -78,30 +71,22 @@
                     const games = data.games; // The games object from JSON
                     const container = document.querySelector('.container');
 
-                    // Loop through the games object and create buttons dynamically
                     Object.keys(games).forEach(gameName => {
                         const gameLink = games[gameName];
-
-                        // Create the button container
                         const buttonContainer = document.createElement('div');
                         buttonContainer.classList.add('button-container');
                         buttonContainer.setAttribute('onclick', `location.href='${gameLink}/'`);
 
-                        // Create the image element
                         const img = document.createElement('img');
                         img.src = `/${gameLink}/img.jpeg`;
                         img.alt = gameName;
 
-                        // Create the span for the button text
                         const span = document.createElement('span');
                         span.classList.add('button-text');
                         span.textContent = gameName;
 
-                        // Append image and text to the button container
                         buttonContainer.appendChild(img);
                         buttonContainer.appendChild(span);
-
-                        // Append the button container to the main container
                         container.appendChild(buttonContainer);
                     });
                 })
@@ -109,12 +94,37 @@
                     console.error('There was a problem with the fetch operation:', error);
                 });
         };
-
     </script>
+    <style>
+        /* Particles.js container */
+        #particles-js {
+            position: absolute;
+            width: 100vw;
+            height: 100vw; /* square */
+            top: 0;
+            left: 0;
+            z-index: -2; /* Ensure particles stay in the background */
+            overflow: hidden;
+        }
+
+        #particles-fade {
+            position: absolute;
+            top: 8vw;
+            background-image: linear-gradient(rgba(0,0,0,0), var(--background-color));
+            width: 100vw;
+            height: 92vw; /* square */
+            z-index: -1; /* Above particles, below bg */
+        }
+    </style>
 </head>
 
 <body>
-    <div id="games"></div>
+    <!-- Particle container -->
+    <div id="particles-js"></div>
+
+    <div id="particles-fade"></div>
+
+    <div class="section-games" id="games"></div>
     <div id="header">
         <h1><a href="#">The Wafer Café</a></h1>
         <div class="nav-links">
@@ -127,28 +137,22 @@
     </div>
 
     <script>
-        // Change emoji on press
         document.getElementById('theme-toggle').addEventListener('click', function() {
             this.textContent = this.textContent === '☀️' ? '🌙' : '☀️';
         });
 
-        // search
         document.addEventListener('DOMContentLoaded', () => {
             const searchInput = document.getElementById('search');
             const container = document.querySelector('.container');
-
-            // Event listener for search input
             searchInput.addEventListener('input', function() {
                 const searchTerm = searchInput.value.toLowerCase();
                 const games = document.querySelectorAll('.button-container');
-
-                // Loop through all the games and toggle visibility based on search term
                 games.forEach(game => {
                     const gameName = game.querySelector('.button-text').textContent.toLowerCase();
                     if (gameName.includes(searchTerm)) {
-                        game.style.display = 'block'; // Show matching games
+                        game.style.display = 'block';
                     } else {
-                        game.style.display = 'none'; // Hide non-matching games
+                        game.style.display = 'none';
                     }
                 });
             });
@@ -188,6 +192,7 @@
         <h2 style="margin-top: 50px;">Sort By</h2>
         <button onclick="location.href='/'"><i>Games</i></button>
     </div>
+
 </body>
 
 </html>
