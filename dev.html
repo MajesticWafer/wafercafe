@@ -20,7 +20,7 @@
      <script>
         // Function to load particles based on the theme
         function loadParticles(theme) {
-            const particlesConfig = theme === 'light-mode' ? 'light-particles.json' : 'dark-particles.json';
+            const particlesConfig = theme === 'light-mode' ? 'dark-particles.json' : 'light-particles.json';
             particlesJS.load('particles-js', `head/${particlesConfig}`, function() {
                 console.log(`Particles.js config (${particlesConfig}) loaded`);
             });
