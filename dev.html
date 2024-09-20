@@ -19,44 +19,39 @@
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 
     <script>
-    // Initialize particles.js
-    document.addEventListener('DOMContentLoaded', () => {
-        particlesJS.load('particles-js', 'head/particles.json', function() {
-            console.log('Particles.js config loaded');
+    // Function to load particles based on the theme
+    function loadParticles(theme) {
+        const particlesConfig = theme === 'light-mode' ? 'dark-particles.json' : 'light-particles.json';
+        particlesJS.load('particles-js', `head/${particlesConfig}`, function() {
+            console.log(`Particles.js config (${particlesConfig}) loaded`);
         });
-    });
+    }
 
     // Theme toggle with localStorage
     document.addEventListener('DOMContentLoaded', () => {
-        // Check if a theme is saved in localStorage
-        const savedTheme = localStorage.getItem('theme');
-        
-        if (savedTheme) {
-            document.body.classList.add(savedTheme);
-            // Adjust emoji based on theme
-            document.getElementById('theme-toggle').textContent = savedTheme === 'light-mode' ? '🌙' : '☀️';
+        const savedTheme = localStorage.getItem('theme') || '';  // Default to dark mode if nothing is saved
+        document.body.classList.add(savedTheme);
 
-            // Change particle color based on the theme
-            const particleColor = savedTheme === 'light-mode' ? '#000000' : '#ffffff'; // black for light mode, white for dark mode
-            pJSDom[0].pJS.particles.color.value = particleColor;
-            pJSDom[0].pJS.fn.particlesRefresh();
+        // Adjust the emoji and load correct particles based on theme
+        const themeToggle = document.getElementById('theme-toggle');
+        if (savedTheme === 'light-mode') {
+            themeToggle.textContent = '🌙';
+            loadParticles('light-mode');  // Load dark particles for light mode
+        } else {
+            themeToggle.textContent = '☀️';
+            loadParticles('');  // Load light particles for dark mode
         }
 
         // Toggle theme on button click
-        document.getElementById('theme-toggle').addEventListener('click', () => {
+        themeToggle.addEventListener('click', () => {
             const isLightMode = document.body.classList.toggle('light-mode');
             const newTheme = isLightMode ? 'light-mode' : '';
-
-            // Save the current theme in localStorage
+            
             localStorage.setItem('theme', newTheme);
+            themeToggle.textContent = isLightMode ? '🌙' : '☀️';
 
-            // Change emoji based on the theme
-            document.getElementById('theme-toggle').textContent = isLightMode ? '🌙' : '☀️';
-
-            // Change particle color based on the theme
-            const particleColor = isLightMode ? '#000000' : '#ffffff'; // black for light mode, white for dark mode
-            pJSDom[0].pJS.particles.color.value = particleColor;
-            pJSDom[0].pJS.fn.particlesRefresh();
+            // Reload particles based on the new theme
+            loadParticles(newTheme);
         });
     });
 
