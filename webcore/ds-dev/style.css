@@ -51,6 +51,7 @@ canvas {
 	z-index: 4;
 	overflow: hidden scroll;
 	background: rgba(0, 127, 255, 0.5);
+	padding: 7px;
 }
 
 #menu button {
