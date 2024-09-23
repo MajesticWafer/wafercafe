@@ -9,6 +9,7 @@ var config = {
     powerSave: true,
     micWhenR: true,
     vkEnabled: true,
+    cfgOpt: true,
 }
 
 function loadConfig() {
@@ -18,13 +19,39 @@ function loadConfig() {
     }
     $id('power-save').checked = config.powerSave
     $id('vk-enabled').checked = config.vkEnabled
+    $id('cfg-opt').checked = config.cfgOpt
 }
 loadConfig()
 
 function uiSaveConfig() {
     config.powerSave = !!($id('power-save').checked)
     config.vkEnabled = !!($id('vk-enabled').checked)
+    config.cfgOpt = !!($id('cfg-opt').checked)
     window.localStorage['config'] = JSON.stringify(config)
+}
+
+$id('back-menu').onclick = function () {
+    if ($id('cfg-opt').checked) {
+        if (safariVer) {
+            if (!((safariVer[0] >= 16 && safariVer[1] >= 4) || (safariVer[0] >= 17))) {
+                alert('iOS 16.4+ is required to enable this option.')
+                $id('cfg-opt').checked = false
+                return
+            }
+        } else if (chromeVer) {
+            if (chromeVer[0] < 92) {
+                alert('Chrome 92+ is required to enable this option.')
+                $id('cfg-opt').checked = false
+                return
+            }
+        } else {
+            alert("We don't know if your browser is supported. Please try it and disable this option if it doesn't work.")
+        }
+        localStorage['simd'] = '1'
+    } else {
+        localStorage['simd'] = '0'
+    }
+    alert('Please restart the app to apply the change.')
 }
 
 
@@ -64,9 +91,19 @@ async function uiSaveRestore() {
     localforage.setItem('sav-' + gameID, u8).then(() => {
         alert('Save data updated. \nThis page will be reloaded to apply the changes.')
         setTimeout(() => {
-            location.href = 'https://ds.44670.org'
+            location.href = 'https://majesticwafer.github.io/dsp/'
         }, 1000)
     })
+}
+
+if (!(window.WebAssembly)) {
+    if (isIOS && isWebApp) {
+        alert(`You have lockdown mode enabled, which disables WebAssembly and prevents the app from running. 
+               Please go back to Safari, click double A button in the address bar, open "Website Settings", and disable "Lockdown Mode" for this website.`)
+    } else {
+        alert(`WebAssembly is not supported or disabled in your browser.
+               Please check the settings of your browser and enable WebAssembly.`)
+    }
 }
 
 
@@ -79,7 +116,7 @@ var isIOS = !!navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
 var isMacOS = !!navigator.platform && /Mac/.test(navigator.platform);
 if (isMacOS) {
     if (navigator.maxTouchPoints > 2) {
-        // Nah, it is an iPad pretending to be a Mac
+        // iPad showing desktop site, not actual mac
         isIOS = true
         isMacOS = false
     }
@@ -96,6 +133,7 @@ if (isIOS) {
         var divIosHint = $id('ios-hint')
         divIosHint.hidden = false
         divIosHint.style = 'position: absolute; bottom: ' + divIosHint.clientHeight + 'px;'
+        alert('Important! You must save this page as a web clip in order to save your game progress. Press the share icon, then add this site to your home screen.')
     }
 }
 if (isMacOS) {
@@ -105,8 +143,8 @@ if (isMacOS) {
     }
 }
 
-var emuKeyState = new Array(14)
-const emuKeyNames = ["right", "left", "down", "up", "select", "start", "b", "a", "y", "x", "l", "r", "debug", "lid"]
+var emuKeyState = new Array(15)
+const emuKeyNames = ["right", "left", "down", "up", "select", "start", "b", "a", "y", "x", "l", "r", "debug", "lid", "mic"]
 var vkMap = {}
 var vkState = {}
 var keyNameToKeyId = {}
@@ -168,9 +206,9 @@ function emuRunFrame() {
             keyMask |= 1 << i
         }
     }
-    var mic = emuKeyState[11]
+    var mic = emuKeyState[14]
     if (mic) {
-        console.log('mic')
+        console.log('Microphone utilized')
         keyMask |= 1 << 14
     }
 
@@ -190,6 +228,7 @@ function emuRunFrame() {
         } catch (error) {
             // tmpAudioBuffer may be detached if previous message is still processing 
             console.log(error)
+            showMsg(error)
         }
     }
 
@@ -198,7 +237,7 @@ function emuRunFrame() {
         var time = performance.now()
         fps = 120 / ((time - prevCalcFPSTime) / 1000)
         prevCalcFPSTime = time
-        divFPS.innerText = 'fps:' + ('' + fps).substring(0, 5)
+        divFPS.innerText = 'FPS:' + ('' + fps).substring(0, 5)
     }
     if (frameCount % 30 == 0) {
         checkSaveGame()
@@ -317,7 +356,7 @@ function emuStart() {
     if (!emuIsGameLoaded) {
         return
     }
-    console.log('Start!!!')
+    console.log('Starting emulation!')
     emuIsRunning = true
     uiSwitchTo('player')
 }
@@ -342,7 +381,7 @@ function makeVKStyle(top, left, w, h, fontSize) {
 
 function uiAdjustVKLayout() {
     var baseSize = window.innerWidth * 0.14
-    var fontSize = baseSize * 0.7
+    var fontSize = baseSize * 0.6
     var offTop = Math.min(fbSize[0][1] + fbSize[1][1], window.innerHeight - Math.ceil(baseSize * 3.62))
     var offLeft = 0
     var abxyWidth = baseSize * 3
@@ -353,53 +392,67 @@ function uiAdjustVKLayout() {
     vkw = baseSize * 1.5
     vkh = baseSize * 0.6
     fontSize = baseSize * 0.5
-    vkMap['l'].style = makeVKStyle(offTop, 0, vkw, vkh, fontSize)
-    vkMap['r'].style = makeVKStyle(offTop, window.innerWidth - vkw, vkw, vkh, fontSize)
-    $id('vk-menu').style = makeVKStyle(offTop, window.innerWidth / 2 - vkw / 2, vkw, vkh, fontSize)
+    vkMap['l'].style = makeVKStyle(offTop, 0, vkw * 0.775, vkh * 0.775, fontSize * 0.775)
+    vkMap['r'].style = makeVKStyle(offTop, window.innerWidth - vkw * 0.775, vkw * 0.775, vkh * 0.775, fontSize * 0.775)
+    vkMap['mic'].style = makeVKStyle(window.innerHeight - (vkh * 0.675), window.innerwidth * 0.5, vkw * 0.675, vkh * 0.675, fontSize * 0.675,)
+    $id('vk-menu').style = makeVKStyle(window.innerHeight - (vkh * 1.425), window.innerwidth * 0.5, vkw * 0.675, vkh * 0.675, fontSize * 0.675)
+    $id('vk-menu').style.left = '0px';
 
-
+    
     offTop += baseSize * 0.62
     vkw = baseSize
     vkh = baseSize
     offLeft = window.innerWidth - abxyWidth
-    vkMap['a'].style = makeVKStyle(offTop + abxyHeight / 2 - vkh / 2, offLeft + abxyWidth - vkw, vkw, vkh, fontSize)
-    vkMap['b'].style = makeVKStyle(offTop + abxyHeight - vkh, offLeft + abxyWidth / 2 - vkw / 2, vkw, vkh, fontSize)
-    vkMap['x'].style = makeVKStyle(offTop, offLeft + abxyWidth / 2 - vkw / 2, vkw, vkh, fontSize)
-    vkMap['y'].style = makeVKStyle(offTop + abxyHeight / 2 - vkh / 2, offLeft, vkw, vkh, fontSize)
+    vkMap['a'].style = makeVKStyle(offTop + abxyHeight / 2 - vkh * 0.425, offLeft + abxyWidth * 0.675, vkw * 0.85, vkw * 0.85, vkh * 0.85, fontSize * 0)
+    vkMap['b'].style = makeVKStyle(offTop + abxyHeight - vkh * 0.975, offLeft + abxyWidth / 2 - vkw * 0.425, vkw * 0.85, vkh * 0.85, fontSize * 0.85);
+    vkMap['x'].style = makeVKStyle(offTop + abxyHeight * 0.025, offLeft + abxyWidth / 2 - vkw * 0.425, vkw * 0.85, vkh * 0.85, fontSize * 0.85);
+    vkMap['y'].style = makeVKStyle(offTop + abxyHeight / 2 - vkh * 0.425, offLeft + abxyWidth * 0.025, vkw * 0.85, vkh * 0.85, fontSize * 0.85);
+
 
     vkw = baseSize * 1.0
     vkh = baseSize * 1.0
     offLeft = 0
-    $id('vk-stick').style = makeVKStyle(offTop + abxyHeight / 2 - vkh / 2, offLeft + abxyHeight / 2 - vkw / 2, vkw, vkh, fontSize)
-    vkStickPos = [offTop + abxyHeight / 2, offLeft + abxyHeight / 2, vkw, vkh, fontSize]
+    $id('vk-stick').style = makeVKStyle(offTop + abxyHeight / 2 - vkh * 0.9 / 2, offLeft + abxyHeight / 2 - vkw * 0.9 / 2, vkw * 0.9, vkh * 0.9, fontSize * 0.85)
+    vkStickPos = [offTop + abxyHeight / 2, offLeft + abxyHeight / 2, vkw * 0.9, vkh * 0.9, fontSize * 0.9]
 
     vkw = baseSize * 0.4
     vkh = baseSize * 0.4
     fontSize = baseSize * 0.4
-    vkMap['select'].style = makeVKStyle(offTop + abxyHeight - vkh, window.innerWidth / 2 - vkw * 1.5, vkw, vkh, fontSize)
-    vkMap['start'].style = makeVKStyle(offTop + abxyHeight - vkh, window.innerWidth / 2 + vkw * 0.5, vkw, vkh, fontSize)
+    vkMap['select'].style = makeVKStyle(offTop + abxyHeight - vkh, window.innerWidth / 2 - vkw * 2.35 - 13.25 * window.innerHeight / 100, vkw, vkh, fontSize);
+    vkMap['start'].style = makeVKStyle(offTop + abxyHeight - vkh, window.innerWidth / 2 + vkw * 1.35 + 13.25 * window.innerHeight / 100, vkw, vkh, fontSize);
+
 }
 
 function uiUpdateLayout() {
-    isLandscape = window.innerWidth > window.innerHeight
-    var maxWidth = window.innerWidth
-    var maxHeight = window.innerHeight / 2
-    var w = maxWidth
-    var h = w / 256 * 192
-    if (h > maxHeight) {
-        h = maxHeight
-        w = h / 192 * 256
-    }
-    var left = 0
-    left += (window.innerWidth - w) / 2;
-    var top = 0
+    
+        isLandscape = window.innerWidth > window.innerHeight;
+        var maxWidth = window.innerWidth;
+        var maxHeight = window.innerHeight / 2;
+        var w = maxWidth;
+        var h = w / 256 * 192;
 
-    fbSize = [[w, h], [w, h]]
-    for (var i = 0; i < 2; i++) {
-        screenCanvas[i].style = 'left:' + left + 'px;top:' + top + "px;width:" + w + "px;height:" + h + "px;"
-        top += h
+        if (h > maxHeight) {
+            h = maxHeight;
+            w = h / 192 * 256;
+        }
+
+        var left = 0;
+        left += (window.innerWidth - w) / 2;
+        var top = 0;
+
+        fbSize = [[w, h], [w, h]];
+        if (screenLayout === 'lbr') {
+          fbSize = [[w, h], [w, h]];
+        } else if (screenLayout === 'lr') {
+          
+        } else {
+        for (var i = 0; i < 2; i++) {
+            screenCanvas[i].style = 'left:' + left + 'px;top:' + top + 'px;width:' + w + 'px;height:' + h + 'px;';
+            top += h;
+        }
     }
-    uiAdjustVKLayout()
+        
+        uiAdjustVKLayout();
 }
 
 
@@ -417,8 +470,8 @@ function uiSwitchTo(mode) {
     emuIsRunning = false
 
     if (mode == 'player') {
-        body.style = 'touch-action: none;'
-        html.style = 'position: fixed;overflow:hidden;touch-action: none;'
+        body.style = 'background: black; background-color: black; touch-action: none;'
+        html.style = 'background: black; background-color: black; position: fixed;overflow:hidden;touch-action: none;'
         for (var i = 0; i < 14; i++) {
             emuKeyState[i] = false
         }
@@ -494,7 +547,7 @@ function tryInitSound() {
         audioContext.resume()
     } catch (e) {
         console.log(e)
-        //alert('Cannnot init sound ')
+        alert('Error: Unable to initilize sound.')
     }
 }
 
@@ -770,10 +823,8 @@ function processGamepadInput() {
 
 function whatsNew() {
     alert(`
-1. Improve auto-save, export/import save.
-2. Add gamepad guide.
-3. Add link to gba player.
-4. Cheat support. (Early Access)
+1. Introduced beta fullscreen mode (gamepad needed)
+2. Improved menu and message visuals
 `)
 }
 
@@ -826,5 +877,3 @@ function enableMicrophone() {
            
         });
 }
-
-
