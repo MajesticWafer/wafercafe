@@ -148,7 +148,7 @@
       <div id="particles-fade"></div>
       <div class="section-games" id="games"></div>
       <div id="header">
-         <h1><a href="#">The Wafer Café</a></h1>
+         <h1><a href="#" id="title">The Wafer Café</a></h1>
          <div class="nav-links">
             <a href="#games">Games</a>
             <a href="#faq">FAQ</a>
@@ -177,7 +177,7 @@
 
       <script>
          // Show/Hide the advanced settings panel when clicking the title
-         document.getElementById('wafer-title').addEventListener('click', function() {
+         document.getElementById('title').addEventListener('click', function() {
             const dropdown = document.getElementById('settings-dropdown');
             dropdown.classList.toggle('show');
          });
@@ -197,7 +197,7 @@
 
          // Close the dropdown if the user clicks outside of it
          window.onclick = function(event) {
-            if (!event.target.matches('#wafer-title')) {
+            if (!event.target.matches('#title')) {
                const dropdown = document.getElementById('settings-dropdown');
                if (dropdown.classList.contains('show')) {
                   dropdown.classList.remove('show');
