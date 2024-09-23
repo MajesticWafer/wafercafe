@@ -33,28 +33,6 @@
       z-index: -1;
     }
 
-    #settings-dropdown {
-      display: none;
-      position: absolute;
-      top: 50px;
-      right: 20px;
-      background-color: #f9f9f9;
-      min-width: 200px;
-      border: 1px solid #ccc;
-      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-      z-index: 1;
-      padding: 10px;
-    }
-
-    #settings-dropdown.show {
-      display: block;
-    }
-
-    #settings-dropdown h2,
-    #settings-dropdown label {
-      font-family: 'Poppins', sans-serif;
-    }
-
     .random-button-container {
       margin-top: 20px;
     }
@@ -82,7 +60,7 @@
   <div id="dropdown">
     <h2>Settings</h2>
     <label>
-      <input type="checkbox" id="particles-toggle"> Show Particles
+      <input type="checkbox" id="particles-toggle" checked> Show Particles
     </label>
   </div>
 
