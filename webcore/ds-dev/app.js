@@ -350,9 +350,9 @@ function uiAdjustVKLayout() {
     var vkw = baseSize
     var vkh = baseSize
 
-    vkw = baseSize * 1.5
-    vkh = baseSize * 0.6
-    fontSize = baseSize * 0.5
+    vkw = baseSize * 1.1
+    vkh = baseSize * 0.5
+    fontSize = baseSize * 0.4
     vkMap['l'].style = makeVKStyle(offTop * 1.3, 17, vkw, vkh, fontSize)
     vkMap['r'].style = makeVKStyle(offTop * 1.3, window.innerWidth - vkw - 17, vkw, vkh, fontSize)
     $id('vk-menu').style = makeVKStyle(offTop, window.innerWidth / 2 - vkw / 2, vkw, vkh, fontSize)
@@ -363,9 +363,9 @@ function uiAdjustVKLayout() {
     vkh = baseSize * 0.82
     offLeft = window.innerWidth - abxyWidth
     vkMap['a'].style = makeVKStyle(offTop + abxyHeight / 2 - vkh / 2, offLeft + abxyWidth - vkw, vkw, vkh, fontSize)
-    vkMap['b'].style = makeVKStyle(offTop + abxyHeight - vkh, offLeft + abxyWidth / 2 - vkw / 2, vkw, vkh, fontSize)
-    vkMap['x'].style = makeVKStyle(offTop, offLeft + abxyWidth / 2 - vkw / 2, vkw, vkh, fontSize)
-    vkMap['y'].style = makeVKStyle(offTop + abxyHeight / 2 - vkh / 2, offLeft, vkw, vkh, fontSize)
+    vkMap['b'].style = makeVKStyle(offTop + abxyHeight - vkh * 2, offLeft + abxyWidth / 2 - vkw, vkw, vkh, fontSize)
+    vkMap['x'].style = makeVKStyle(offTop + vkh * 2, offLeft + abxyWidth / 2 - vkw, vkw, vkh, fontSize)
+    vkMap['y'].style = makeVKStyle(offTop + abxyHeight / 2 - vkh, offLeft, vkw, vkh, fontSize)
 
     vkw = baseSize * 0.82
     vkh = baseSize * 0.82
