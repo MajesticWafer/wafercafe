@@ -353,22 +353,22 @@ function uiAdjustVKLayout() {
     vkw = baseSize * 1.5
     vkh = baseSize * 0.6
     fontSize = baseSize * 0.5
-    vkMap['l'].style = makeVKStyle(offTop, 0, vkw, vkh, fontSize)
-    vkMap['r'].style = makeVKStyle(offTop, window.innerWidth - vkw, vkw, vkh, fontSize)
+    vkMap['l'].style = makeVKStyle(offTop * 1.3, 17, vkw, vkh, fontSize)
+    vkMap['r'].style = makeVKStyle(offTop * 1.3, window.innerWidth - vkw - 17, vkw, vkh, fontSize)
     $id('vk-menu').style = makeVKStyle(offTop, window.innerWidth / 2 - vkw / 2, vkw, vkh, fontSize)
 
 
     offTop += baseSize * 0.62
-    vkw = baseSize
-    vkh = baseSize
+    vkw = baseSize * 0.82
+    vkh = baseSize * 0.82
     offLeft = window.innerWidth - abxyWidth
     vkMap['a'].style = makeVKStyle(offTop + abxyHeight / 2 - vkh / 2, offLeft + abxyWidth - vkw, vkw, vkh, fontSize)
     vkMap['b'].style = makeVKStyle(offTop + abxyHeight - vkh, offLeft + abxyWidth / 2 - vkw / 2, vkw, vkh, fontSize)
     vkMap['x'].style = makeVKStyle(offTop, offLeft + abxyWidth / 2 - vkw / 2, vkw, vkh, fontSize)
     vkMap['y'].style = makeVKStyle(offTop + abxyHeight / 2 - vkh / 2, offLeft, vkw, vkh, fontSize)
 
-    vkw = baseSize * 1.0
-    vkh = baseSize * 1.0
+    vkw = baseSize * 0.82
+    vkh = baseSize * 0.82
     offLeft = 0
     $id('vk-stick').style = makeVKStyle(offTop + abxyHeight / 2 - vkh / 2, offLeft + abxyHeight / 2 - vkw / 2, vkw, vkh, fontSize)
     vkStickPos = [offTop + abxyHeight / 2, offLeft + abxyHeight / 2, vkw, vkh, fontSize]
