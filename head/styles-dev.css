@@ -205,10 +205,10 @@ body {
 #dropdown {
     opacity: 0;
     position: absolute;
-    top: 250px;
-    right: 20px;
+    top: 180px;
+    right: 40px;
     background-color: var(--button-background);
-    padding: 15px;
+    padding: 8px;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
