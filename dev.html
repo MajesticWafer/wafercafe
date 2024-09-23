@@ -1,187 +1,207 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <link rel="stylesheet" href="head/styles.css">
-   <link rel="icon" type="image/jpeg" href="head/favicon.jpeg">
-   <title>Wafer Café</title>
-   <!-- Font -->
-   <link rel="preconnect" href="https://fonts.googleapis.com">
-   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-   <!-- End font -->
-   <meta name="keywords" content="emulator, games, unblocked, gaming, game website, unblocked games, nintendo ds emulator, nintendo 64 emulator, gba emulator, etc.">
-   <!-- Load particles.js -->
-   <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-   <style>
-      /* Particles.js container */
-      #particles-js {
-         position: absolute;
-         width: 100vw;
-         height: 100vw;
-         top: 0;
-         left: 0;
-         z-index: -2;
-         overflow: hidden;
-      }
-      #particles-fade {
-         position: absolute;
-         top: 8vw;
-         background-image: linear-gradient(rgba(0,0,0,0), var(--background-color));
-         width: 100vw;
-         height: 92vw;
-         z-index: -1;
-      }
-      #settings-dropdown {
-         display: none;
-         position: absolute;
-         top: 50px;
-         right: 20px;
-         background-color: #f9f9f9;
-         min-width: 200px;
-         border: 1px solid #ccc;
-         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-         z-index: 1;
-         padding: 10px;
-      }
-      #settings-dropdown.show {
-         display: block;
-      }
-      #settings-dropdown h2 {
-         font-family: 'Poppins', sans-serif;
-         font-weight: 600;
-         margin-bottom: 10px;
-      }
-      #settings-dropdown label {
-         font-family: 'Poppins', sans-serif;
-         font-weight: 400;
-         margin-bottom: 10px;
-      }
-   </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="keywords" content="emulator, games, unblocked, gaming, game website, nintendo ds emulator, etc.">
+  <title>Wafer Café</title>
+  
+  <!-- Styles and Fonts -->
+  <link rel="stylesheet" href="head/styles.css">
+  <link rel="icon" type="image/jpeg" href="head/favicon.jpeg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    #particles-js {
+      position: absolute;
+      width: 100vw;
+      height: 100vh;
+      top: 0;
+      left: 0;
+      z-index: -2;
+      overflow: hidden;
+    }
+
+    #particles-fade {
+      position: absolute;
+      top: 8vw;
+      background-image: linear-gradient(rgba(0, 0, 0, 0), var(--background-color));
+      width: 100vw;
+      height: 92vh;
+      z-index: -1;
+    }
+
+    #settings-dropdown {
+      display: none;
+      position: absolute;
+      top: 50px;
+      right: 20px;
+      background-color: #f9f9f9;
+      min-width: 200px;
+      border: 1px solid #ccc;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      z-index: 1;
+      padding: 10px;
+    }
+
+    #settings-dropdown.show {
+      display: block;
+    }
+
+    #settings-dropdown h2,
+    #settings-dropdown label {
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .random-button-container {
+      margin-top: 20px;
+    }
+  </style>
 </head>
 <body>
-   <!-- Particle container -->
-   <div id="particles-js"></div>
-   <div id="particles-fade"></div>
-   <div class="section-games" id="games"></div>
 
-   <div id="header">
-      <h1><a href="#" id="title">The Wafer Café</a></h1>
-      <div class="nav-links">
-         <a href="#games">Games</a>
-         <a href="#faq">FAQ</a>
-         <a href="#changelog">Changelog</a>
-         <input type="text" id="search" placeholder="Search for a game...">
-         <button id="theme-toggle">☀️</button>
-      </div>
-   </div>
+  <!-- Particle container -->
+  <div id="particles-js"></div>
+  <div id="particles-fade"></div>
 
-   <!-- Dropdown for settings -->
-   <div id="settings-dropdown">
-      <h2>Settings</h2>
-      <label>
-         <input type="checkbox" id="particles-toggle"><a>Show Particles</a>
-      </label>
-   </div>
+  <!-- Header and Navigation -->
+  <div id="header">
+    <h1><a href="#" id="title">The Wafer Café</a></h1>
+    <div class="nav-links">
+      <a href="#games">Games</a>
+      <a href="#faq">FAQ</a>
+      <a href="#changelog">Changelog</a>
+      <input type="text" id="search" placeholder="Search for a game...">
+      <button id="theme-toggle">☀️</button>
+    </div>
+  </div>
 
-   <div class="random-button-container">
-      <button id="random-game">Random Game 🎲</button>
-   </div>
-   <div class="container"></div>
+  <!-- Dropdown for settings -->
+  <div id="dropdown">
+    <h2>Settings</h2>
+    <label>
+      <input type="checkbox" id="particles-toggle"> Show Particles
+    </label>
+  </div>
 
-   <div id="faq" class="section">
-      <h2>FAQ</h2>
-      <p><b>Q: Why isn't my game working on mobile?</b></p>
-      <p>A: Sometimes switching to desktop mode or mobile mode in the browser settings fixes interaction issues.</p>
-      <br>
-      <p><b>Q: How do I send feedback?</b></p>
-      <p>A: Visit the <a href="https://github.com/MajesticWafer/wafercafe/">GitHub</a> repository and create an issue.</p>
-      <br>
-   </div>
+  <!-- Game buttons container -->
+  <div class="random-button-container">
+    <button id="random-game">Random Game 🎲</button>
+  </div>
+  <div class="container"></div>
 
-   <div id="changelog" class="section">
-      <h2>Changelog</h2>
-      <p>New homepage created.</p>
-      <p>- Light/Dark mode</p>
-      <p>- Game search bar</p>
-      <p>- New button layout</p>
-      <p>- Button name overlay on hover</p>
-      <p>- Added FAQ and Changelog sections</p>
-   </div>
+  <!-- Sections for FAQ and Changelog -->
+  <div id="faq" class="section">
+    <h2>FAQ</h2>
+    <p><b>Q: Why isn't my game working on mobile?</b></p>
+    <p>A: Sometimes, switching to desktop mode can resolve interaction issues.</p>
+    <p><b>Q: How can I provide feedback?</b></p>
+    <p>A: Visit our <a href="https://github.com/MajesticWafer/wafercafe/">GitHub</a> and create an issue.</p>
+  </div>
 
-   <script>
-      // Function to handle reduced motion and particle display based on user settings
-      function handleParticles() {
-         const particlesToggle = document.getElementById('particles-toggle');
-         const particlesContainer = document.getElementById('particles-js');
+  <div id="changelog" class="section">
+    <h2>Changelog</h2>
+    <p>New homepage created.</p>
+    <ul>
+      <li>Light/Dark mode</li>
+      <li>Game search bar</li>
+      <li>New button layout</li>
+      <li>Button name overlay on hover</li>
+      <li>FAQ and changelog sections added</li>
+    </ul>
+  </div>
 
-         // Load saved particle preference from localStorage (default to true)
-         const showParticles = localStorage.getItem('particlesEnabled') !== 'false';
-         particlesToggle.checked = showParticles;
-         particlesContainer.style.display = showParticles ? 'block' : 'none';
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const particlesToggle = document.getElementById('particles-toggle');
+      const particlesContainer = document.getElementById('particles-js');
+      const title = document.getElementById('title');
+      const dropdown = document.getElementById('dropdown');
 
-         // Listen for particle toggle change
-         particlesToggle.addEventListener('change', function () {
-            const isEnabled = this.checked;
-            particlesContainer.style.display = isEnabled ? 'block' : 'none';
-            localStorage.setItem('particlesEnabled', isEnabled);
-         });
-      }
+      // Load and save particles setting in localStorage
+      const savedParticlesSetting = JSON.parse(localStorage.getItem('particlesEnabled')) ?? true;
+      particlesToggle.checked = savedParticlesSetting;
+      particlesContainer.style.display = savedParticlesSetting ? 'block' : 'none';
 
-      // Function to load particles based on the theme
-      function loadParticles(theme) {
-         const particlesConfig = theme === 'light-mode' ? 'dark-particles.json' : 'light-particles.json';
-         particlesJS.load('particles-js', `head/${particlesConfig}`, function () {
-            console.log(`Particles.js config (${particlesConfig}) loaded`);
-         });
-      }
-
-      // Theme toggle with localStorage
-      function handleThemeToggle() {
-         const themeToggle = document.getElementById('theme-toggle');
-         const savedTheme = localStorage.getItem('theme') || 'dark-mode'; // Default to dark mode
-         document.body.classList.add(savedTheme);
-         themeToggle.textContent = savedTheme === 'light-mode' ? '🌙' : '☀️';
-
-         // Load particles for the theme
-         loadParticles(savedTheme);
-
-         themeToggle.addEventListener('click', () => {
-            const isLightMode = document.body.classList.toggle('light-mode');
-            const newTheme = isLightMode ? 'light-mode' : 'dark-mode';
-            localStorage.setItem('theme', newTheme);
-            themeToggle.textContent = isLightMode ? '🌙' : '☀️';
-
-            // Reload particles for the new theme
-            loadParticles(newTheme);
-         });
-      }
-
-      document.addEventListener('DOMContentLoaded', () => {
-         handleThemeToggle();
-         handleParticles();
-
-         // Search functionality for games
-         const searchInput = document.getElementById('search');
-         searchInput.addEventListener('input', function () {
-            const searchTerm = searchInput.value.toLowerCase();
-            const games = document.querySelectorAll('.button-container');
-            games.forEach(game => {
-               const gameName = game.querySelector('.button-text').textContent.toLowerCase();
-               game.style.display = gameName.includes(searchTerm) ? 'block' : 'none';
-            });
-         });
-
-         // Handle random game button
-         document.getElementById('random-game').addEventListener('click', () => {
-            const games = document.querySelectorAll('.button-container');
-            const randomGame = games[Math.floor(Math.random() * games.length)];
-            const url = randomGame.getAttribute('onclick').match(/location\.href='([^']+)'/)[1];
-            window.location.href = url;
-         });
+      particlesToggle.addEventListener('change', function () {
+        const isChecked = particlesToggle.checked;
+        particlesContainer.style.display = isChecked ? 'block' : 'none';
+        localStorage.setItem('particlesEnabled', JSON.stringify(isChecked));
       });
 
-   </script>
+      title.addEventListener('click', function () {
+        dropdown.classList.toggle('open');
+      });
+
+      // Check and listen for reduced motion preference
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+      if (!prefersReducedMotion.matches || savedParticlesSetting) {
+        particlesContainer.style.display = 'block';
+        particlesJS.load('particles-js', 'head/light-particles.json');
+      }
+
+      // Theme toggle functionality
+      const themeToggle = document.getElementById('theme-toggle');
+      const savedTheme = localStorage.getItem('theme') || 'dark-mode';
+      document.body.classList.add(savedTheme);
+      themeToggle.textContent = savedTheme === 'light-mode' ? '🌙' : '☀️';
+
+      themeToggle.addEventListener('click', function () {
+        const isLightMode = document.body.classList.toggle('light-mode');
+        const newTheme = isLightMode ? 'light-mode' : 'dark-mode';
+        localStorage.setItem('theme', newTheme);
+        themeToggle.textContent = isLightMode ? '🌙' : '☀️';
+        particlesJS.load('particles-js', `head/${newTheme === 'light-mode' ? 'dark' : 'light'}-particles.json`);
+      });
+
+      // Random game button functionality
+      document.getElementById('random-game').addEventListener('click', function () {
+        const games = document.querySelectorAll('.button-container');
+        const randomGame = games[Math.floor(Math.random() * games.length)];
+        const onClickValue = randomGame.getAttribute('onclick');
+        const url = onClickValue.match(/location\.href='([^']+)'/)[1];
+        window.location.href = url;
+      });
+
+      // Game search functionality
+      const searchInput = document.getElementById('search');
+      searchInput.addEventListener('input', function () {
+        const searchTerm = searchInput.value.toLowerCase();
+        const games = document.querySelectorAll('.button-container');
+        games.forEach(game => {
+          const gameName = game.querySelector('.button-text').textContent.toLowerCase();
+          game.style.display = gameName.includes(searchTerm) ? 'block' : 'none';
+        });
+      });
+
+      // Fetch game buttons
+      fetch('games.json')
+        .then(response => response.json())
+        .then(data => {
+          const container = document.querySelector('.container');
+          data.games.forEach(game => {
+            const buttonContainer = document.createElement('div');
+            buttonContainer.classList.add('button-container');
+            buttonContainer.setAttribute('onclick', `location.href='${game.link}/'`);
+
+            const img = document.createElement('img');
+            img.src = `/${game.link}/img.jpeg`;
+            img.alt = game.name;
+
+            const span = document.createElement('span');
+            span.classList.add('button-text');
+            span.textContent = game.name;
+
+            buttonContainer.appendChild(img);
+            buttonContainer.appendChild(span);
+            container.appendChild(buttonContainer);
+          });
+        });
+    });
+  </script>
 </body>
 </html>
