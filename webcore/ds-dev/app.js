@@ -391,17 +391,17 @@ function uiAdjustVKLayout() {
     
     vkMap['b'].style = makeVKStyle(
         // Y position on screen
-        offTop + abxyHeight - vkh * 2,
+        offTop + abxyHeight - vkh * 1,
         // X position on screen
-        offLeft + abxyWidth / 2 - vkw * 0.5 / 2,
+        offLeft + abxyWidth / 2 - vkw * 0.25 / 2,
         // General sizing
         vkw, vkh, fontSize)
     
     vkMap['x'].style = makeVKStyle(
         // Y position on screen
-        offTop + abxyHeight - vkh * 0.5,
+        offTop + abxyHeight - vkh * 1,
         // X position on screen
-        offLeft + abxyWidth / 2 - vkw * 0.5 / 2,
+        offLeft + abxyWidth / 2 - vkw * 0.25 / 2,
         // General sizing
         vkw, vkh, fontSize)
     
