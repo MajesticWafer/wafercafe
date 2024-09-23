@@ -140,6 +140,34 @@
          height: 92vw; /* square */
          z-index: -1; /* Above particles, below bg */
          }
+               #settings-dropdown {
+         display: none;
+         position: absolute;
+         top: 50px;
+         right: 20px;
+         background-color: #f9f9f9;
+         min-width: 200px;
+         border: 1px solid #ccc;
+         box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+         z-index: 1;
+         padding: 10px;
+      }
+
+      #settings-dropdown.show {
+         display: block;
+      }
+
+      #settings-dropdown h2 {
+         font-family: 'Poppins', sans-serif;
+         font-weight: 600;
+         margin-bottom: 10px;
+      }
+
+      #settings-dropdown label {
+         font-family: 'Poppins', sans-serif;
+         font-weight: 400;
+         margin-bottom: 10px;
+      }
       </style>
    </head>
    <body>
