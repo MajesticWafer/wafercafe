@@ -317,7 +317,7 @@ function emuStart() {
     if (!emuIsGameLoaded) {
         return
     }
-    console.log('Start!')
+    console.log('Start!!!')
     emuIsRunning = true
     uiSwitchTo('player')
 }
@@ -339,6 +339,7 @@ function makeVKStyle(top, left, w, h, fontSize) {
     return 'top:' + top + 'px;left:' + left + 'px;width:' + w + 'px;height:' + h + 'px;' + 'font-size:' + fontSize + 'px;line-height:' + h + 'px;'
 }
 
+
 function uiAdjustVKLayout() {
     var baseSize = window.innerWidth * 0.14
     var fontSize = baseSize * 0.7
@@ -352,78 +353,24 @@ function uiAdjustVKLayout() {
     vkw = baseSize * 1.5
     vkh = baseSize * 0.6
     fontSize = baseSize * 0.5
-    vkMap['l'].style = makeVKStyle(
-        // Y position on screen
-        offTop,
-        // X position on screen
-        0,
-        // General sizing
-        vkw, vkh, fontSize)
-    
-    vkMap['r'].style = makeVKStyle(
-        // Y position on screen
-        offTop,
-        // X position on screen
-        window.innerWidth - vkw,
-        // General sizing
-        vkw, vkh, fontSize)
-    
-    $id('vk-menu').style = makeVKStyle(
-        // Y position on screen
-        offTop,
-        // X position on screen
-        window.innerWidth / 2 - vkw / 2,
-        // General sizing
-        vkw, vkh, fontSize)
+    vkMap['l'].style = makeVKStyle(offTop, 0, vkw, vkh, fontSize)
+    vkMap['r'].style = makeVKStyle(offTop, window.innerWidth - vkw, vkw, vkh, fontSize)
+    $id('vk-menu').style = makeVKStyle(offTop, window.innerWidth / 2 - vkw / 2, vkw, vkh, fontSize)
 
 
     offTop += baseSize * 0.62
-    vkw = baseSize * 0.78
-    vkh = baseSize * 0.78
+    vkw = baseSize
+    vkh = baseSize
     offLeft = window.innerWidth - abxyWidth
-    vkMap['a'].style = makeVKStyle(
-        // Y position on screen
-        offTop + abxyHeight / 2 - vkh / 2,
-        // X position on screen
-        offLeft + abxyWidth - vkw,
-        // General sizing
-        vkw, vkh, fontSize)
-    
-    vkMap['b'].style = makeVKStyle(
-        // Y position on screen
-        offTop + abxyHeight - vkh * 1,
-        // X position on screen
-        offLeft + abxyWidth / 2 - vkw * 0.25 / 2,
-        // General sizing
-        vkw, vkh, fontSize)
-    
-    vkMap['x'].style = makeVKStyle(
-        // Y position on screen
-        offTop + abxyHeight - vkh * 1,
-        // X position on screen
-        offLeft + abxyWidth / 2 - vkw * 0.25 / 2,
-        // General sizing
-        vkw, vkh, fontSize)
-    
-    vkMap['y'].style = makeVKStyle(
-        // Y position on screen
-        offTop + abxyHeight / 2 - vkh / 2,
-        // X position on screen
-        offLeft + abxyWidth / 2 - vkw * 2 / 2,
-        // General styling
-        vkw, vkh, fontSize)
+    vkMap['a'].style = makeVKStyle(offTop + abxyHeight / 2 - vkh / 2, offLeft + abxyWidth - vkw, vkw, vkh, fontSize)
+    vkMap['b'].style = makeVKStyle(offTop + abxyHeight - vkh, offLeft + abxyWidth / 2 - vkw / 2, vkw, vkh, fontSize)
+    vkMap['x'].style = makeVKStyle(offTop, offLeft + abxyWidth / 2 - vkw / 2, vkw, vkh, fontSize)
+    vkMap['y'].style = makeVKStyle(offTop + abxyHeight / 2 - vkh / 2, offLeft, vkw, vkh, fontSize)
 
     vkw = baseSize * 1.0
     vkh = baseSize * 1.0
     offLeft = 0
-    $id('vk-stick').style = makeVKStyle(
-        // Y position on screen
-        offTop + abxyHeight / 2 - vkh / 2,
-        // X position on screen
-        offLeft + abxyHeight / 2 - vkw / 2,
-        // General styling
-        vkw, vkh, fontSize)
-    
+    $id('vk-stick').style = makeVKStyle(offTop + abxyHeight / 2 - vkh / 2, offLeft + abxyHeight / 2 - vkw / 2, vkw, vkh, fontSize)
     vkStickPos = [offTop + abxyHeight / 2, offLeft + abxyHeight / 2, vkw, vkh, fontSize]
 
     vkw = baseSize * 0.4
