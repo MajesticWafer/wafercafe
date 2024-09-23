@@ -341,48 +341,43 @@ function makeVKStyle(top, left, w, h, fontSize) {
 
 
 function uiAdjustVKLayout() {
-    var baseSize = window.innerWidth * 0.14;
-    var fontSize = baseSize * 0.7;
-    var offTop = Math.min(fbSize[0][1] + fbSize[1][1], window.innerHeight - Math.ceil(baseSize * 3.62));
-    var offLeft = 0;
-    var abxyWidth = baseSize * 3;
-    var abxyHeight = baseSize * 3;
-    var vkw, vkh;
+    var baseSize = window.innerWidth * 0.14
+    var fontSize = baseSize * 0.7
+    var offTop = Math.min(fbSize[0][1] + fbSize[1][1], window.innerHeight - Math.ceil(baseSize * 3.62))
+    var offLeft = 0
+    var abxyWidth = baseSize * 3
+    var abxyHeight = baseSize * 3
+    var vkw = baseSize
+    var vkh = baseSize
 
-    // Adjust L and R buttons position and size
-    vkw = baseSize * 1.2; // Make L/R smaller
-    vkh = baseSize * 0.5; // Make L/R smaller
-    vkMap['l'].style = makeVKStyle(offTop + 10, 0, vkw, vkh, fontSize); // Move down
-    vkMap['r'].style = makeVKStyle(offTop + 10, window.innerWidth - vkw, vkw, vkh, fontSize); // Move down
+    vkw = baseSize * 1.5
+    vkh = baseSize * 0.6
+    fontSize = baseSize * 0.5
+    vkMap['l'].style = makeVKStyle(offTop, 0, vkw, vkh, fontSize)
+    vkMap['r'].style = makeVKStyle(offTop, window.innerWidth - vkw, vkw, vkh, fontSize)
+    $id('vk-menu').style = makeVKStyle(offTop, window.innerWidth / 2 - vkw / 2, vkw, vkh, fontSize)
 
-    // Update menu button position
-    $id('vk-menu').style = makeVKStyle(offTop + 20, window.innerWidth / 2 - vkw / 2, vkw, vkh, fontSize);
 
-    // Adjust A, B, X, Y button positions together
-    offTop += baseSize * 0.62;
-    vkw = baseSize * 0.78;
-    vkh = baseSize * 0.78;
-    offLeft = window.innerWidth - abxyWidth;
+    offTop += baseSize * 0.62
+    vkw = baseSize
+    vkh = baseSize
+    offLeft = window.innerWidth - abxyWidth
+    vkMap['a'].style = makeVKStyle(offTop + abxyHeight / 2 - vkh / 2, offLeft + abxyWidth - vkw, vkw, vkh, fontSize)
+    vkMap['b'].style = makeVKStyle(offTop + abxyHeight - vkh, offLeft + abxyWidth / 2 - vkw / 2, vkw, vkh, fontSize)
+    vkMap['x'].style = makeVKStyle(offTop, offLeft + abxyWidth / 2 - vkw / 2, vkw, vkh, fontSize)
+    vkMap['y'].style = makeVKStyle(offTop + abxyHeight / 2 - vkh / 2, offLeft, vkw, vkh, fontSize)
 
-    // Move A, B, X, Y buttons together
-    vkMap['a'].style = makeVKStyle(offTop, offLeft + abxyWidth - vkw, vkw, vkh, fontSize);
-    vkMap['b'].style = makeVKStyle(offTop + vkh, offLeft + abxyWidth / 2 - vkw / 2, vkw, vkh, fontSize);
-    vkMap['x'].style = makeVKStyle(offTop + vkh / 2, offLeft + abxyWidth / 2 - vkw / 2, vkw, vkh, fontSize);
-    vkMap['y'].style = makeVKStyle(offTop + vkh, offLeft, vkw, vkh, fontSize);
+    vkw = baseSize * 1.0
+    vkh = baseSize * 1.0
+    offLeft = 0
+    $id('vk-stick').style = makeVKStyle(offTop + abxyHeight / 2 - vkh / 2, offLeft + abxyHeight / 2 - vkw / 2, vkw, vkh, fontSize)
+    vkStickPos = [offTop + abxyHeight / 2, offLeft + abxyHeight / 2, vkw, vkh, fontSize]
 
-    // Adjust joystick size
-    vkw = baseSize * 0.9; // Make joystick smaller
-    vkh = baseSize * 0.9; // Make joystick smaller
-    offLeft = 0;
-    $id('vk-stick').style = makeVKStyle(offTop + abxyHeight / 2 - vkh / 2, offLeft + abxyHeight / 2 - vkw / 2, vkw, vkh, fontSize);
-    vkStickPos = [offTop + abxyHeight / 2, offLeft + abxyHeight / 2, vkw, vkh, fontSize];
-
-    // Adjust select and start buttons
-    vkw = baseSize * 0.4;
-    vkh = baseSize * 0.4;
-    fontSize = baseSize * 0.4;
-    vkMap['select'].style = makeVKStyle(offTop + abxyHeight - vkh, window.innerWidth / 2 - vkw * 1.5, vkw, vkh, fontSize);
-    vkMap['start'].style = makeVKStyle(offTop + abxyHeight - vkh, window.innerWidth / 2 + vkw * 0.5, vkw, vkh, fontSize);
+    vkw = baseSize * 0.4
+    vkh = baseSize * 0.4
+    fontSize = baseSize * 0.4
+    vkMap['select'].style = makeVKStyle(offTop + abxyHeight - vkh, window.innerWidth / 2 - vkw * 1.5, vkw, vkh, fontSize)
+    vkMap['start'].style = makeVKStyle(offTop + abxyHeight - vkh, window.innerWidth / 2 + vkw * 0.5, vkw, vkh, fontSize)
 }
 
 function uiUpdateLayout() {
@@ -831,5 +826,4 @@ function enableMicrophone() {
            
         });
 }
-
 
