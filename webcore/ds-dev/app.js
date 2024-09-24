@@ -358,7 +358,7 @@ function uiAdjustVKLayout() {
     $id('vk-menu').style = makeVKStyle(offTop, window.innerWidth / 2 - vkw / 2, vkw, vkh, fontSize)
 
 
-    offTop += baseSize * 0.62
+    offTop += baseSize * 0.48
     vkw = baseSize * 0.82
     vkh = baseSize * 0.82
     offLeft = window.innerWidth - abxyWidth
