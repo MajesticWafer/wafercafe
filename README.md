@@ -4,7 +4,7 @@ A user-friendly web assembly video game website, aimed to entertain users (durin
 
 ## About
 
-The Wafer Café strives to have fun games in the browser, while maintaining educational status of the users. Most games use Web Assembly to run, and some are made with JavaScript.
+The Wafer Café strives to have fun games in the browser, entertaining our users. Most games use Web Assembly to run, and some are made with JavaScript.
 
 'Features'
 - Simple GUI
