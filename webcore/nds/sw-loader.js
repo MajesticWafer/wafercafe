@@ -1,6 +1,6 @@
 // Register Service Worker
 if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/webcore/dsp/sw.js').then(function(reg) {
+    navigator.serviceWorker.register('/webcore/nds/sw.js').then(function(reg) {
         // registration worked
         console.log('Registration succeeded. Scope is ' + reg.scope);
     }).catch(function(error) {
