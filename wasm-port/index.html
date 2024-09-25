@@ -1,0 +1,105 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="dark.css" rel="stylesheet">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+</head>
+
+<body>
+    <style>
+        body {
+            background-color: black;
+        }
+    </style>
+    <input id="rom" type="file">
+    <canvas id="top" width="256" height="192"></canvas>
+    <canvas id="bottom" width="256" height="192"></canvas>
+    <script src="localforage.js"></script>
+    <script src="a.out.js"></script>
+    <script>
+        var fileInput = document.getElementById('rom')
+        async function save(name) { var buf = await fileInput.files[0].arrayBuffer(); await localforage.setItem(name, new Uint8Array(buf)) }
+        var MemU8 = new Uint8Array()
+        var Bios7
+        var Bios9
+        var Firmware
+        var ptrFrontBuffer
+        var FB = [[0,0],[0,0]]
+        var screenCanvas = [document.getElementById('top'), document.getElementById('bottom')]
+        var ctx2d = screenCanvas.map((v) => {return v.getContext('2d',{alpha:false})})
+
+        var frameCount = 0
+        var prevCalcFPSTime = 0
+
+        function runFrame() {
+            Module._runFrame()
+            var frontBuffer = MemU8[ptrFrontBuffer]
+            //console.log(frontBuffer)
+            ctx2d[0].putImageData(FB[frontBuffer][0], 0, 0)
+            ctx2d[1].putImageData(FB[frontBuffer][1], 0, 0)
+            frameCount ++
+            if (frameCount % 100 == 0) {
+                var time = performance.now()
+                fps = 100 / ((time - prevCalcFPSTime) / 1000)
+                prevCalcFPSTime = time
+                console.log('fps', fps)
+            }
+        }
+
+        async function wasmReady() {
+            MemU8 = Module.HEAPU8
+            ptrFrontBuffer = Module._getSymbol(5)
+            var fb = Module._getSymbol(4)
+            console.log(fb)
+            for (var i = 0; i < 4; i++) {
+                FB[i>>1][i%2] = new ImageData(new Uint8ClampedArray(MemU8.buffer).subarray(fb + 256*192*4*i,fb + 256*192*4*(i+1)), 256, 192)
+            }
+
+            Bios7 = await localforage.getItem('bios7')
+            Bios9 = await localforage.getItem('bios9')
+            Firmware = await localforage.getItem('firmware')
+            var ROM = await localforage.getItem('rom')
+            
+
+            Module._reset();
+            MemU8.set(Bios7, Module._getSymbol(0))
+            MemU8.set(Bios9, Module._getSymbol(1))
+            MemU8.set(Firmware, Module._getSymbol(2))
+            MemU8.set(ROM, Module._getSymbol(3))
+            Module._loadROM(ROM.length);
+
+            setInterval(runFrame, 1000 / 120)
+        }
+
+        fileInput.onchange = async () => {
+            var file = fileInput.files[0]
+            if (!file) {
+                return
+            }
+            var buf = new Uint8Array(await file.arrayBuffer())
+            var fileType = 'rom'
+            if (buf.length == 4096) {
+                fileType = 'bios9'
+            }
+            if (buf.length == 16384) {
+                fileType = 'bios7'
+            }
+            if (buf.length == 256*1024) {
+                fileType = 'firmware'
+            }
+
+            await localforage.setItem(fileType, buf)
+            alert(fileType + ' loaded!')
+
+        }
+        
+
+        
+    </script>
+</body>
+
+</html>
