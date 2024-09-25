@@ -1,0 +1,105 @@
+/* Root Variables for easy theming */
+:root {
+  --color-bg: #000000;
+  --color-text-main: #69F7BE;
+  --color-primary: #FFFF00;
+  --wrapper-height: 87vh;
+  --image-max-width: 300px;
+  --image-margin: 3rem;
+  --font-family: 'Courier New', monospace;
+  --font-family-header: 'Courier New', monospace;
+  --color-link: #69f7be;
+  --color-link-hover: #fff000;
+}
+
+/* Reset & Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family);
+  background-color: var(--color-bg);
+  color: var(--color-text-main);
+  line-height: 1.6;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+h1, h2, p {
+  margin-bottom: 1rem;
+}
+
+a {
+  color: var(--color-link);
+  text-decoration: none;
+  border-bottom: 2px solid var(--color-link);
+  transition: color 0.3s, border-bottom-color 0.3s;
+}
+
+a:hover {
+  color: var(--color-link-hover);
+  border-bottom-color: var(--color-link-hover);
+}
+
+.wrapper {
+  min-height: var(--wrapper-height);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+}
+
+.content {
+  max-width: 600px;
+  margin: auto;
+  text-align: left;
+}
+
+.portfolio-title {
+  font-family: var(--font-family-header);
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #ffffff;
+  border: 2px solid var(--color-primary);
+  padding: 1rem;
+  background-color: #222;
+}
+
+.instructions {
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+button {
+  font-family: inherit;
+  font-size: 1rem;
+  background-color: var(--color-primary);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  cursor: pointer;
+  color: #000;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  margin-top: 1rem;
+}
+
+button:hover {
+  background-color: #fff000;
+  transform: translateY(-3px);
+}
+
+button:active {
+  transform: translateY(2px);
+}
+
+.footer {
+  font-size: 0.85rem;
+  color: var(--color-text-main);
+  padding: 1rem;
+  text-align: center;
+  background-color: #222;
+}
