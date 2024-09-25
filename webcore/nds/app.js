@@ -133,7 +133,6 @@ if (isIOS) {
         var divIosHint = $id('ios-hint')
         divIosHint.hidden = false
         divIosHint.style = 'position: absolute; bottom: ' + divIosHint.clientHeight + 'px;'
-        alert('Important! You must save this page as a web clip in order to save your game progress. Press the share icon, then add this site to your home screen.')
     }
 }
 if (isMacOS) {
