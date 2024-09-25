@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="keywords" content="emulator, games, unblocked, gaming, game website, nintendo ds emulator, etc.">
+  <title>Wafer Café</title>
+  
+  <!-- Styles and Fonts -->
+  <link rel="stylesheet" href="../head/styles.css">
+  <link rel="icon" type="image/jpeg" href="head/favicon.jpeg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    #particles-js {
+      position: absolute;
+      width: 100vw;
+      height: 100vh;
+      top: 0;
+      left: 0;
+      z-index: -2;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="particles-js"></div>
+
+  <div id="header">
+    <div class="nav-links">
+      <button id="theme-toggle">☀️</button>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const particlesContainer = document.getElementById('particles-js');
+    const themeToggle = document.getElementById('theme-toggle');
+
+    // Function to load particles based on theme
+    function loadParticles(theme) {
+      const particlesConfig = theme === 'light-mode' ? 'dark-particles.json' : 'light-particles.json';
+      particlesJS.load('particles-js', `../head/${particlesConfig}`, function() {
+        console.log(`Particles.js config (${particlesConfig}) loaded`);
+      });
+    }
+
+    // Theme toggle functionality
+    const savedTheme = localStorage.getItem('theme') || 'dark-mode';
+    document.body.classList.add(savedTheme);
+    themeToggle.textContent = savedTheme === 'light-mode' ? '🌙' : '☀️';
+    loadParticles(savedTheme);
+
+    themeToggle.addEventListener('click', function () {
+      const isLightMode = document.body.classList.toggle('light-mode');
+      const newTheme = isLightMode ? 'light-mode' : 'dark-mode';
+      localStorage.setItem('theme', newTheme);
+      themeToggle.textContent = isLightMode ? '🌙' : '☀️';
+      loadParticles(newTheme);
+    });
+</script>
+
+</body>
+</html>
