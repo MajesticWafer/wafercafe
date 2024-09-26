@@ -75,19 +75,19 @@
         }
 
         function drawBlock(x, y, color) {
-            // Apply gradient
+            // Faithful shading inspired by Tetris Party
             const gradient = context.createLinearGradient(x, y, x + 20, y + 20);
             gradient.addColorStop(0, color);
             gradient.addColorStop(1, '#ffffff');
             
-            // Fill the block
             context.fillStyle = gradient;
             context.fillRect(x, y, 20, 20);
             
-            // Add shading
-            context.shadowBlur = 10;
-            context.shadowColor = "rgba(0, 0, 0, 0.5)";
-            context.strokeStyle = '#333';
+            // Add Tetris Party style shading
+            context.shadowBlur = 8;
+            context.shadowColor = "rgba(0, 0, 0, 0.6)";
+            context.strokeStyle = '#555'; // Subtle dark borders
+            context.lineWidth = 2;
             context.strokeRect(x, y, 20, 20);
         }
 
@@ -125,31 +125,43 @@
         }
 
         function clearLines() {
+            const linesToClear = [];
             for (let r = board.length - 1; r >= 0; r--) {
                 if (board[r].every(value => value !== 0)) {
-                    animateLineClear(r);  // Animate line clear
-                    setTimeout(() => {
-                        board.splice(r, 1);
-                        board.unshift(Array(10).fill(0));
-                        score++;
-                        updateScore();
-                    }, 300);  // Delay to match the animation
+                    linesToClear.push(r);
                 }
+            }
+            if (linesToClear.length > 0) {
+                animateClear(linesToClear);
             }
         }
 
-        function animateLineClear(row) {
+        function animateClear(lines) {
             let alpha = 1;
-            const fade = setInterval(() => {
-                context.clearRect(0, row * 20, canvas.width, 20);
+            let offset = 0;
+
+            const animation = setInterval(() => {
+                drawBoard();
+
                 context.globalAlpha = alpha;
-                drawBoard();  // Redraw the board with fading effect
+                lines.forEach(line => {
+                    context.clearRect(0, line * 20 + offset, canvas.width, 20);
+                });
+                
+                offset += 1;  // Simulate the fall off-grid
                 alpha -= 0.1;
+
                 if (alpha <= 0) {
-                    clearInterval(fade);
+                    clearInterval(animation);
+                    lines.forEach(line => {
+                        board.splice(line, 1);
+                        board.unshift(Array(10).fill(0));
+                    });
                     context.globalAlpha = 1;
+                    score += lines.length;
+                    updateScore();
                 }
-            }, 30);
+            }, 50);
         }
 
         function canMove(dx, dy) {
