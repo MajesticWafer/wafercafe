@@ -22,13 +22,13 @@
         const scoreElement = document.getElementById('score');
 
         const colors = {
-            T: '#7E4B8A', // T piece color
-            I: '#5BC0EB', // I piece color
-            O: '#FDE74C', // O piece color
-            S: '#0B8457', // S piece color
-            Z: '#D83A34', // Z piece color
-            L: '#F25F5C', // L piece color
-            J: '#3A57A8'  // J piece color
+            T: '#7E4B8A',
+            I: '#5BC0EB',
+            O: '#FDE74C',
+            S: '#0B8457',
+            Z: '#D83A34',
+            L: '#F25F5C',
+            J: '#3A57A8'
         };
 
         const shapes = [
@@ -46,7 +46,7 @@
         let currentPiece = null;
         let currentX = 0;
         let currentY = 0;
-        let dropInterval = 500; // Initial drop interval
+        let dropInterval = 500;
         let dropTime = 0;
         let gameOver = false;
 
@@ -75,32 +75,20 @@
         }
 
         function drawBlock(x, y, color) {
-            const gradient = context.createLinearGradient(x, y, x + 20, y + 20);
-            gradient.addColorStop(0, color);
-            gradient.addColorStop(1, shadeColor(color, -20)); // Slightly darker color
-            context.fillStyle = gradient;
+            context.fillStyle = color;
             context.fillRect(x, y, 20, 20);
-            context.strokeStyle = '#aaa'; // Outline color
+            context.strokeStyle = '#aaa';
             context.strokeRect(x, y, 20, 20);
-        }
-
-        function shadeColor(color, percent) {
-            const num = parseInt(color.slice(1), 16);
-            const amt = Math.round(2.55 * percent);
-            const R = (num >> 16) + amt;
-            const G = (num >> 8 & 0x00FF) + amt;
-            const B = (num & 0x0000FF) + amt;
-            return "#" + (0x1000000 + (R < 255 ? (R < 1 ? 0 : R) : 255) * 0x10000 + (G < 255 ? (G < 1 ? 0 : G) : 255) * 0x100 + (B < 255 ? (B < 1 ? 0 : B) : 255)).toString(16).slice(1);
         }
 
         function createPiece() {
             const randomIndex = Math.floor(Math.random() * shapes.length);
             currentPiece = shapes[randomIndex];
-            currentX = 3; // Start in the middle
-            currentY = 0; // Start at the top
+            currentX = 3;
+            currentY = 0;
 
             if (!canMove(0, 0)) {
-                gameOver = true; // Game over if piece can't spawn
+                gameOver = true;
                 alert('Game Over!');
                 resetGame();
             }
@@ -158,7 +146,7 @@
             currentPiece.shape = rotatedShape;
 
             if (!canMove(0, 0)) {
-                currentPiece.shape = originalShape; // Revert if rotation fails
+                currentPiece.shape = originalShape;
             }
         }
 
@@ -196,14 +184,14 @@
 
         setInterval(() => {
             if (!gameOver) {
-                dropTime += 100; // Increase drop time
+                dropTime += 100;
                 if (dropTime >= dropInterval) {
                     dropPiece();
                     dropTime = 0;
                 }
                 drawBoard();
             }
-        }, 100); // Update every 100ms
+        }, 100);
     </script>
 </body>
 </html>
