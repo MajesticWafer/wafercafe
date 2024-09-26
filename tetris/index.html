@@ -201,6 +201,12 @@
             createPiece();
         }
 
+        function softDrop() {
+            if (canMove(0, 1)) {
+                currentY++;
+            }
+        }
+
         function resetGame() {
             board = Array.from({ length: 20 }, () => Array(10).fill(0));
             score = 0;
@@ -210,14 +216,20 @@
         }
 
         document.addEventListener('keydown', (event) => {
-            if (event.key === 'ArrowLeft' && canMove(-1, 0)) {
-                currentX--;
-            } else if (event.key === 'ArrowRight' && canMove(1, 0)) {
-                currentX++;
-            } else if (event.key === 'ArrowUp') {
-                rotatePiece();
-            } else if (event.key === 'ArrowDown') {
+            if (event.key === 'ArrowLeft' || event.key === 'a') {
+                if (canMove(-1, 0)) {
+                    currentX--;
+                }
+            } else if (event.key === 'ArrowRight' || event.key === 'd') {
+                if (canMove(1, 0)) {
+                    currentX++;
+                }
+            } else if (event.key === 'ArrowUp' || event.key === 'w') {
+                softDrop();
+            } else if (event.key === 'ArrowDown' || event.key === 's') {
                 hardDrop();
+            } else if (event.key === 'r' || event.key === 'Shift') {
+                rotatePiece();
             }
         });
 
