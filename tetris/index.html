@@ -22,13 +22,13 @@
         const scoreElement = document.getElementById('score');
 
         const colors = {
-            T: '#7E4B8A',
-            I: '#5BC0EB',
-            O: '#FDE74C',
-            S: '#0B8457',
-            Z: '#D83A34',
-            L: '#F25F5C',
-            J: '#3A57A8'
+            T: '#8E44AD', // Vibrant purple
+            I: '#3498DB', // Bright blue
+            O: '#F1C40F', // Vibrant yellow
+            S: '#27AE60', // Bright green
+            Z: '#E74C3C', // Bright red
+            L: '#E67E22', // Vibrant orange
+            J: '#2980B9'  // Deep blue
         };
 
         const shapes = [
@@ -75,9 +75,19 @@
         }
 
         function drawBlock(x, y, color) {
-            context.fillStyle = color;
+            // Apply gradient
+            const gradient = context.createLinearGradient(x, y, x + 20, y + 20);
+            gradient.addColorStop(0, color);
+            gradient.addColorStop(1, '#ffffff');
+            
+            // Fill the block
+            context.fillStyle = gradient;
             context.fillRect(x, y, 20, 20);
-            context.strokeStyle = '#aaa';
+            
+            // Add shading
+            context.shadowBlur = 10;
+            context.shadowColor = "rgba(0, 0, 0, 0.5)";
+            context.strokeStyle = '#333';
             context.strokeRect(x, y, 20, 20);
         }
 
@@ -117,12 +127,29 @@
         function clearLines() {
             for (let r = board.length - 1; r >= 0; r--) {
                 if (board[r].every(value => value !== 0)) {
-                    board.splice(r, 1);
-                    board.unshift(Array(10).fill(0));
-                    score++;
+                    animateLineClear(r);  // Animate line clear
+                    setTimeout(() => {
+                        board.splice(r, 1);
+                        board.unshift(Array(10).fill(0));
+                        score++;
+                        updateScore();
+                    }, 300);  // Delay to match the animation
                 }
             }
-            updateScore();
+        }
+
+        function animateLineClear(row) {
+            let alpha = 1;
+            const fade = setInterval(() => {
+                context.clearRect(0, row * 20, canvas.width, 20);
+                context.globalAlpha = alpha;
+                drawBoard();  // Redraw the board with fading effect
+                alpha -= 0.1;
+                if (alpha <= 0) {
+                    clearInterval(fade);
+                    context.globalAlpha = 1;
+                }
+            }, 30);
         }
 
         function canMove(dx, dy) {
