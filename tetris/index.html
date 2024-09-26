@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<head>
+  <title>Tetris</title>
+  <style>
+    canvas {
+       border: 1px solid black;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="tetris" width="240" height="400"></canvas>
+  <div>Score: <span id="score">0</span></div>
+
+  <script>
+    const canvas = document.getElementById('tetris');
+const context = canvas.getContext('2d');
+const scoreElement = document.getElementById('score');
+
+// Define shapes and colors
+const shapes = [
+    { shape: [[1, 1, 1], [0, 1, 0]], color: 'cyan' }, // T
+    { shape: [[1, 1, 1, 1]], color: 'yellow' }, // I
+    // Add other shapes...
+];
+
+let board = Array.from({ length: 20 }, () => Array(10).fill(0));
+let score = 0;
+
+function drawBoard() {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    for (let r = 0; r < board.length; r++) {
+        for (let c = 0; c < board[r].length; c++) {
+            if (board[r][c]) {
+                context.fillStyle = shapes[board[r][c] - 1].color;
+                context.fillRect(c * 20, r * 20, 20, 20);
+            }
+        }
+    }
+}
+
+function dropPiece() {
+    // Logic for dropping piece
+    // Include collision detection and line clearing
+}
+
+function rotatePiece() {
+    // Logic for rotating the piece
+}
+
+function updateScore() {
+    scoreElement.textContent = score;
+}
+
+document.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowLeft') {
+        // Move left
+    } else if (event.key === 'ArrowRight') {
+        // Move right
+    } else if (event.key === 'ArrowUp') {
+        rotatePiece();
+    } else if (event.key === 'ArrowDown') {
+        dropPiece();
+    }
+});
+
+setInterval(() => {
+    dropPiece();
+    drawBoard();
+    updateScore();
+}, 1000);
+  </script>
+</body>
+</html>
