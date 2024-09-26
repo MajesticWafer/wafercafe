@@ -131,7 +131,7 @@
                     if (value) {
                         const newX = currentX + c + dx;
                         const newY = currentY + r + dy;
-                        return newX >= 0 && newX < 10 && newY < 20 && board[newY] && board[newY][newX] === 0;
+                        return newX >= 0 && newX < 12 && newY < 20 && board[newY] && board[newY][newX] === 0;
                     }
                     return true;
                 });
