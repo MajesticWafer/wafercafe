@@ -20,7 +20,6 @@
         const context = canvas.getContext('2d');
         const scoreElement = document.getElementById('score');
 
-        // Define shapes and colors
         const shapes = [
             { shape: [[1, 1, 1], [0, 1, 0]], color: 'cyan' }, // T
             { shape: [[1, 1, 1, 1]], color: 'yellow' }, // I
@@ -36,6 +35,9 @@
         let currentPiece = null;
         let currentX = 0;
         let currentY = 0;
+        let dropInterval = 500; // Initial drop interval
+        let dropTime = 0;
+        let gameOver = false;
 
         function drawBoard() {
             context.clearRect(0, 0, canvas.width, canvas.height);
@@ -68,25 +70,20 @@
             currentPiece = shapes[randomIndex];
             currentX = 3; // Start in the middle
             currentY = 0; // Start at the top
+
+            if (!canMove(0, 0)) {
+                gameOver = true; // Game over if piece can't spawn
+                alert('Game Over!');
+                resetGame();
+            }
         }
 
         function dropPiece() {
-            if (!currentPiece) {
-                createPiece();
-            }
-
-            // Logic for dropping piece
             if (canMove(0, 1)) {
                 currentY++;
             } else {
                 placePiece();
                 createPiece();
-                if (!canMove(0, 0)) {
-                    // Game over logic
-                    alert('Game Over!');
-                    board = Array.from({ length: 20 }, () => Array(10).fill(0));
-                    score = 0;
-                }
             }
         }
 
@@ -126,7 +123,7 @@
         }
 
         function rotatePiece() {
-            const rotatedShape = currentPiece.shape[0].map((_, index) => 
+            const rotatedShape = currentPiece.shape[0].map((_, index) =>
                 currentPiece.shape.map(row => row[index]).reverse()
             );
             const originalShape = currentPiece.shape;
@@ -141,6 +138,22 @@
             scoreElement.textContent = score;
         }
 
+        function hardDrop() {
+            while (canMove(0, 1)) {
+                currentY++;
+            }
+            placePiece();
+            createPiece();
+        }
+
+        function resetGame() {
+            board = Array.from({ length: 20 }, () => Array(10).fill(0));
+            score = 0;
+            gameOver = false;
+            updateScore();
+            createPiece();
+        }
+
         document.addEventListener('keydown', (event) => {
             if (event.key === 'ArrowLeft' && canMove(-1, 0)) {
                 currentX--;
@@ -149,14 +162,20 @@
             } else if (event.key === 'ArrowUp') {
                 rotatePiece();
             } else if (event.key === 'ArrowDown') {
-                dropPiece();
+                hardDrop();
             }
         });
 
         setInterval(() => {
-            dropPiece();
-            drawBoard();
-        }, 1000);
+            if (!gameOver) {
+                dropTime += 100; // Increase drop time
+                if (dropTime >= dropInterval) {
+                    dropPiece();
+                    dropTime = 0;
+                }
+                drawBoard();
+            }
+        }, 100); // Update every 100ms
     </script>
 </body>
 </html>
