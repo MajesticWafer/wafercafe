@@ -1,73 +1,162 @@
 <!DOCTYPE html>
+<html lang="en">
 <head>
-  <title>Tetris</title>
-  <style>
-    canvas {
-       border: 1px solid black;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tetris Clone</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
 </head>
 <body>
-  <canvas id="tetris" width="240" height="400"></canvas>
-  <div>Score: <span id="score">0</span></div>
+    <canvas id="tetris" width="240" height="400"></canvas>
+    <div style="text-align: center;">Score: <span id="score">0</span></div>
+    <script>
+        const canvas = document.getElementById('tetris');
+        const context = canvas.getContext('2d');
+        const scoreElement = document.getElementById('score');
 
-  <script>
-    const canvas = document.getElementById('tetris');
-const context = canvas.getContext('2d');
-const scoreElement = document.getElementById('score');
+        // Define shapes and colors
+        const shapes = [
+            { shape: [[1, 1, 1], [0, 1, 0]], color: 'cyan' }, // T
+            { shape: [[1, 1, 1, 1]], color: 'yellow' }, // I
+            { shape: [[1, 1], [1, 1]], color: 'orange' }, // O
+            { shape: [[0, 1, 1], [1, 1, 0]], color: 'blue' }, // S
+            { shape: [[1, 1, 0], [0, 1, 1]], color: 'green' }, // Z
+            { shape: [[1, 0, 0], [1, 1, 1]], color: 'purple' }, // L
+            { shape: [[0, 0, 1], [1, 1, 1]], color: 'red' } // J
+        ];
 
-// Define shapes and colors
-const shapes = [
-    { shape: [[1, 1, 1], [0, 1, 0]], color: 'cyan' }, // T
-    { shape: [[1, 1, 1, 1]], color: 'yellow' }, // I
-    // Add other shapes...
-];
+        let board = Array.from({ length: 20 }, () => Array(10).fill(0));
+        let score = 0;
+        let currentPiece = null;
+        let currentX = 0;
+        let currentY = 0;
 
-let board = Array.from({ length: 20 }, () => Array(10).fill(0));
-let score = 0;
-
-function drawBoard() {
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    for (let r = 0; r < board.length; r++) {
-        for (let c = 0; c < board[r].length; c++) {
-            if (board[r][c]) {
-                context.fillStyle = shapes[board[r][c] - 1].color;
-                context.fillRect(c * 20, r * 20, 20, 20);
+        function drawBoard() {
+            context.clearRect(0, 0, canvas.width, canvas.height);
+            for (let r = 0; r < board.length; r++) {
+                for (let c = 0; c < board[r].length; c++) {
+                    if (board[r][c]) {
+                        context.fillStyle = shapes[board[r][c] - 1].color;
+                        context.fillRect(c * 20, r * 20, 20, 20);
+                    }
+                }
+            }
+            if (currentPiece) {
+                drawPiece(currentPiece, currentX, currentY);
             }
         }
-    }
-}
 
-function dropPiece() {
-    // Logic for dropping piece
-    // Include collision detection and line clearing
-}
+        function drawPiece(piece, x, y) {
+            piece.shape.forEach((row, r) => {
+                row.forEach((value, c) => {
+                    if (value) {
+                        context.fillStyle = piece.color;
+                        context.fillRect((x + c) * 20, (y + r) * 20, 20, 20);
+                    }
+                });
+            });
+        }
 
-function rotatePiece() {
-    // Logic for rotating the piece
-}
+        function createPiece() {
+            const randomIndex = Math.floor(Math.random() * shapes.length);
+            currentPiece = shapes[randomIndex];
+            currentX = 3; // Start in the middle
+            currentY = 0; // Start at the top
+        }
 
-function updateScore() {
-    scoreElement.textContent = score;
-}
+        function dropPiece() {
+            if (!currentPiece) {
+                createPiece();
+            }
 
-document.addEventListener('keydown', (event) => {
-    if (event.key === 'ArrowLeft') {
-        // Move left
-    } else if (event.key === 'ArrowRight') {
-        // Move right
-    } else if (event.key === 'ArrowUp') {
-        rotatePiece();
-    } else if (event.key === 'ArrowDown') {
-        dropPiece();
-    }
-});
+            // Logic for dropping piece
+            if (canMove(0, 1)) {
+                currentY++;
+            } else {
+                placePiece();
+                createPiece();
+                if (!canMove(0, 0)) {
+                    // Game over logic
+                    alert('Game Over!');
+                    board = Array.from({ length: 20 }, () => Array(10).fill(0));
+                    score = 0;
+                }
+            }
+        }
 
-setInterval(() => {
-    dropPiece();
-    drawBoard();
-    updateScore();
-}, 1000);
-  </script>
+        function placePiece() {
+            currentPiece.shape.forEach((row, r) => {
+                row.forEach((value, c) => {
+                    if (value) {
+                        board[currentY + r][currentX + c] = shapes.indexOf(currentPiece) + 1;
+                    }
+                });
+            });
+            clearLines();
+        }
+
+        function clearLines() {
+            for (let r = board.length - 1; r >= 0; r--) {
+                if (board[r].every(value => value !== 0)) {
+                    board.splice(r, 1);
+                    board.unshift(Array(10).fill(0));
+                    score++;
+                }
+            }
+            updateScore();
+        }
+
+        function canMove(dx, dy) {
+            return currentPiece.shape.every((row, r) => {
+                return row.every((value, c) => {
+                    if (value) {
+                        const newX = currentX + c + dx;
+                        const newY = currentY + r + dy;
+                        return newX >= 0 && newX < 10 && newY < 20 && board[newY] && board[newY][newX] === 0;
+                    }
+                    return true;
+                });
+            });
+        }
+
+        function rotatePiece() {
+            const rotatedShape = currentPiece.shape[0].map((_, index) => 
+                currentPiece.shape.map(row => row[index]).reverse()
+            );
+            const originalShape = currentPiece.shape;
+            currentPiece.shape = rotatedShape;
+
+            if (!canMove(0, 0)) {
+                currentPiece.shape = originalShape; // Revert if rotation fails
+            }
+        }
+
+        function updateScore() {
+            scoreElement.textContent = score;
+        }
+
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'ArrowLeft' && canMove(-1, 0)) {
+                currentX--;
+            } else if (event.key === 'ArrowRight' && canMove(1, 0)) {
+                currentX++;
+            } else if (event.key === 'ArrowUp') {
+                rotatePiece();
+            } else if (event.key === 'ArrowDown') {
+                dropPiece();
+            }
+        });
+
+        setInterval(() => {
+            dropPiece();
+            drawBoard();
+        }, 1000);
+    </script>
 </body>
 </html>
