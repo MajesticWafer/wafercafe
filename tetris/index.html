@@ -1,4 +1,4 @@
-<!DOCTY<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -36,6 +36,11 @@
             border-radius: 10px;
             display: inline-block;
         }
+
+        #score-container {
+            font-size: 1.3rem;
+            color: #fff;
+        }
         
         #held-piece {
             display: inline-block;
@@ -44,15 +49,12 @@
             color: #fff;
         }
     </style>
-</body>
-</html>
-
 </head>
 <body onload="resetGame();">
     <canvas id="tetris" width="200" height="400"></canvas>
     
     <div id="score-container">
-        <div style="font-size: 1.3rem;">Score: <span id="score">0</span></div>
+        <div>Score: <span id="score">0</span></div>
         <div id="held-piece">Held Piece: <span id="held-shape">None</span></div>
     </div>
 
@@ -63,13 +65,13 @@
         const heldShapeElement = document.getElementById('held-shape');
 
         const colors = {
-            T: '#8E44AD', // Vibrant purple
-            I: '#3498DB', // Bright blue
-            O: '#F1C40F', // Vibrant yellow
-            S: '#27AE60', // Bright green
-            Z: '#E74C3C', // Bright red
-            L: '#E67E22', // Vibrant orange
-            J: '#2980B9'  // Deep blue
+            T: '#7E4B8A',
+            I: '#5BC0EB',
+            O: '#FDE74C',
+            S: '#0B8457',
+            Z: '#D83A34',
+            L: '#F25F5C',
+            J: '#3A57A8'
         };
 
         const shapes = [
@@ -118,16 +120,9 @@
         }
 
         function drawBlock(x, y, color) {
-            const gradient = context.createLinearGradient(x, y, x + 20, y + 20);
-            gradient.addColorStop(0, color);
-            gradient.addColorStop(1, '#ffffff');
-            context.fillStyle = gradient;
+            context.fillStyle = color;
             context.fillRect(x, y, 20, 20);
-
-            context.shadowBlur = 8;
-            context.shadowColor = "rgba(0, 0, 0, 0.6)";
-            context.strokeStyle = '#555';
-            context.lineWidth = 2;
+            context.strokeStyle = '#aaa';
             context.strokeRect(x, y, 20, 20);
         }
 
@@ -136,7 +131,6 @@
             currentPiece = shapes[randomIndex];
             currentX = 3;
             currentY = 0;
-            holdUsed = false; // Reset hold usage on new piece
 
             if (!canMove(0, 0)) {
                 gameOver = true;
@@ -166,43 +160,32 @@
         }
 
         function clearLines() {
-            const linesToClear = [];
+            let linesCleared = 0;
             for (let r = board.length - 1; r >= 0; r--) {
                 if (board[r].every(value => value !== 0)) {
-                    linesToClear.push(r);
+                    board.splice(r, 1);
+                    board.unshift(Array(10).fill(0));
+                    linesCleared++;
                 }
             }
-            if (linesToClear.length > 0) {
-                animateClear(linesToClear);
+
+            // Scoring system based on the number of lines cleared at once
+            switch (linesCleared) {
+                case 1:
+                    score += 100;
+                    break;
+                case 2:
+                    score += 300;
+                    break;
+                case 3:
+                    score += 500;
+                    break;
+                case 4:
+                    score += 800;
+                    break;
             }
-        }
 
-        function animateClear(lines) {
-            let alpha = 1;
-            let offset = 0;
-
-            const animation = setInterval(() => {
-                drawBoard();
-
-                context.globalAlpha = alpha;
-                lines.forEach(line => {
-                    context.clearRect(0, line * 20 + offset, canvas.width, 20);
-                });
-                
-                offset += 1;
-                alpha -= 0.1;
-
-                if (alpha <= 0) {
-                    clearInterval(animation);
-                    lines.forEach(line => {
-                        board.splice(line, 1);
-                        board.unshift(Array(10).fill(0));
-                    });
-                    context.globalAlpha = 1;
-                    score += lines.length;
-                    updateScore();
-                }
-            }, 50);
+            updateScore();
         }
 
         function canMove(dx, dy) {
@@ -230,12 +213,18 @@
             }
         }
 
+        function hardDrop() {
+            while (canMove(0, 1)) {
+                currentY++;
+            }
+            placePiece();
+            createPiece();
+        }
+
         function holdPiece() {
             if (!holdUsed) {
                 if (heldPiece) {
-                    const temp = heldPiece;
-                    heldPiece = currentPiece;
-                    currentPiece = temp;
+                    [currentPiece, heldPiece] = [heldPiece, currentPiece];
                     currentX = 3;
                     currentY = 0;
                 } else {
@@ -262,15 +251,63 @@
             heldShapeElement.textContent = 'None';
         }
 
+        // Touch and Mouse Events
+        let touchStartX = 0;
+        let touchStartY = 0;
+
+        function handleTouchStart(event) {
+            touchStartX = event.touches[0].clientX;
+            touchStartY = event.touches[0].clientY;
+        }
+
+        function handleTouchMove(event) {
+            const touchEndX = event.touches[0].clientX;
+            const touchEndY = event.touches[0].clientY;
+            const diffX = touchEndX - touchStartX;
+            const diffY = touchEndY - touchStartY;
+
+            // Horizontal swipe
+            if (Math.abs(diffX) > Math.abs(diffY)) {
+                if (diffX > 0) {
+                    if (canMove(1, 0)) currentX++;  // Swipe right
+                } else {
+                    if (canMove(-1, 0)) currentX--; // Swipe left
+                }
+            } else {
+                if (diffY > 0) {
+                    dropPiece(); // Swipe down for soft drop
+                } else {
+                    hardDrop();  // Swipe up for hard drop
+                }
+            }
+        }
+
+        function handleTouchEnd(event) {
+            // Reset touch start position for next touch input
+            touchStartX = 0;
+            touchStartY = 0;
+        }
+
+        function handleClick(event) {
+            rotatePiece(); // Rotate piece on mouse click or tap
+        }
+
+        // Event listeners for touch and mouse
+        document.addEventListener('touchstart', handleTouchStart);
+        document.addEventListener('touchmove', handleTouchMove);
+        document.addEventListener('touchend', handleTouchEnd);
+        document.addEventListener('click', handleClick);
+
+        // Keyboard Controls
         document.addEventListener('keydown', (event) => {
             if (event.key === 'ArrowLeft' || event.key === 'a') {
                 if (canMove(-1, 0)) currentX--;
             } else if (event.key === 'ArrowRight' || event.key === 'd') {
                 if (canMove(1, 0)) currentX++;
             } else if (event.key === 'ArrowUp' || event.key === 'w') {
-                dropPiece();
-            } else if (event.key === 'ArrowDown' || event.key === 's') {
                 hardDrop();
+            } else if (event.key === 'ArrowDown' || event.key === 's') {
+                dropPiece();
             } else if (event.key === 'r' || event.key === 'Shift') {
                 rotatePiece();
             } else if (event.key === 'c' || event.key === 'Control') {
@@ -278,16 +315,18 @@
             }
         });
 
-        setInterval(() => {
-            if (!gameOver) {
-                dropTime += 100;
-                if (dropTime >= dropInterval) {
-                    dropPiece();
-                    dropTime = 0;
-                }
-                drawBoard();
+        // Game Loop
+        function gameLoop(timestamp) {
+            if (gameOver) return;
+            if (timestamp - dropTime > dropInterval) {
+                dropPiece();
+                dropTime = timestamp;
             }
-        }, 100);
+            drawBoard();
+            requestAnimationFrame(gameLoop);
+        }
+
+        requestAnimationFrame(gameLoop);
     </script>
 </body>
 </html>
