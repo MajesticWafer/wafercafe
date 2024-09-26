@@ -9,6 +9,7 @@
             border: 1px solid black;
             display: block;
             margin: 0 auto;
+            background-color: #eaeaea;
         }
     </style>
 </head>
@@ -20,14 +21,24 @@
         const context = canvas.getContext('2d');
         const scoreElement = document.getElementById('score');
 
+        const colors = {
+            T: '#7E4B8A', // T piece color
+            I: '#5BC0EB', // I piece color
+            O: '#FDE74C', // O piece color
+            S: '#0B8457', // S piece color
+            Z: '#D83A34', // Z piece color
+            L: '#F25F5C', // L piece color
+            J: '#3A57A8'  // J piece color
+        };
+
         const shapes = [
-            { shape: [[1, 1, 1], [0, 1, 0]], color: 'cyan' }, // T
-            { shape: [[1, 1, 1, 1]], color: 'yellow' }, // I
-            { shape: [[1, 1], [1, 1]], color: 'orange' }, // O
-            { shape: [[0, 1, 1], [1, 1, 0]], color: 'blue' }, // S
-            { shape: [[1, 1, 0], [0, 1, 1]], color: 'green' }, // Z
-            { shape: [[1, 0, 0], [1, 1, 1]], color: 'purple' }, // L
-            { shape: [[0, 0, 1], [1, 1, 1]], color: 'red' } // J
+            { shape: [[1, 1, 1], [0, 1, 0]], color: colors.T }, // T
+            { shape: [[1, 1, 1, 1]], color: colors.I }, // I
+            { shape: [[1, 1], [1, 1]], color: colors.O }, // O
+            { shape: [[0, 1, 1], [1, 1, 0]], color: colors.S }, // S
+            { shape: [[1, 1, 0], [0, 1, 1]], color: colors.Z }, // Z
+            { shape: [[1, 0, 0], [1, 1, 1]], color: colors.L }, // L
+            { shape: [[0, 0, 1], [1, 1, 1]], color: colors.J }  // J
         ];
 
         let board = Array.from({ length: 20 }, () => Array(10).fill(0));
@@ -44,8 +55,7 @@
             for (let r = 0; r < board.length; r++) {
                 for (let c = 0; c < board[r].length; c++) {
                     if (board[r][c]) {
-                        context.fillStyle = shapes[board[r][c] - 1].color;
-                        context.fillRect(c * 20, r * 20, 20, 20);
+                        drawBlock(c * 20, r * 20, shapes[board[r][c] - 1].color);
                     }
                 }
             }
@@ -58,11 +68,29 @@
             piece.shape.forEach((row, r) => {
                 row.forEach((value, c) => {
                     if (value) {
-                        context.fillStyle = piece.color;
-                        context.fillRect((x + c) * 20, (y + r) * 20, 20, 20);
+                        drawBlock((x + c) * 20, (y + r) * 20, piece.color);
                     }
                 });
             });
+        }
+
+        function drawBlock(x, y, color) {
+            const gradient = context.createLinearGradient(x, y, x + 20, y + 20);
+            gradient.addColorStop(0, color);
+            gradient.addColorStop(1, shadeColor(color, -20)); // Slightly darker color
+            context.fillStyle = gradient;
+            context.fillRect(x, y, 20, 20);
+            context.strokeStyle = '#aaa'; // Outline color
+            context.strokeRect(x, y, 20, 20);
+        }
+
+        function shadeColor(color, percent) {
+            const num = parseInt(color.slice(1), 16);
+            const amt = Math.round(2.55 * percent);
+            const R = (num >> 16) + amt;
+            const G = (num >> 8 & 0x00FF) + amt;
+            const B = (num & 0x0000FF) + amt;
+            return "#" + (0x1000000 + (R < 255 ? (R < 1 ? 0 : R) : 255) * 0x10000 + (G < 255 ? (G < 1 ? 0 : G) : 255) * 0x100 + (B < 255 ? (B < 1 ? 0 : B) : 255)).toString(16).slice(1);
         }
 
         function createPiece() {
