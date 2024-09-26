@@ -1,25 +1,66 @@
-<!DOCTYPE html>
+<!DOCTY<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tetris Clone</title>
+    
+    <!-- Google Fonts Preconnect and Import for Poppins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+    
     <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #ffccd5, #a3d8f4); /* Wii Party-inspired gradient */
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        
         canvas {
-            border: 1px solid black;
+            border: 5px solid #fff;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
             display: block;
-            margin: 0 auto;
+            margin: 20px auto;
             background-color: #eaeaea;
         }
+
+        #score {
+            font-size: 2rem;
+            color: #fff;
+            background: #ff6b81;
+            padding: 10px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+        
+        #held-piece {
+            display: inline-block;
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: #fff;
+        }
     </style>
+</body>
+</html>
+
 </head>
 <body onload="resetGame();">
     <canvas id="tetris" width="200" height="400"></canvas>
-    <div style="text-align: center;">Score: <span id="score">0</span></div>
+    
+    <div id="score-container">
+        <div>Score: <span id="score">0</span></div>
+        <div id="held-piece">Held Piece: <span id="held-shape">None</span></div>
+    </div>
+
     <script>
         const canvas = document.getElementById('tetris');
         const context = canvas.getContext('2d');
         const scoreElement = document.getElementById('score');
+        const heldShapeElement = document.getElementById('held-shape');
 
         const colors = {
             T: '#8E44AD', // Vibrant purple
@@ -49,6 +90,8 @@
         let dropInterval = 500;
         let dropTime = 0;
         let gameOver = false;
+        let heldPiece = null;
+        let holdUsed = false;
 
         function drawBoard() {
             context.clearRect(0, 0, canvas.width, canvas.height);
@@ -75,18 +118,15 @@
         }
 
         function drawBlock(x, y, color) {
-            // Faithful shading inspired by Tetris Party
             const gradient = context.createLinearGradient(x, y, x + 20, y + 20);
             gradient.addColorStop(0, color);
             gradient.addColorStop(1, '#ffffff');
-            
             context.fillStyle = gradient;
             context.fillRect(x, y, 20, 20);
-            
-            // Add Tetris Party style shading
+
             context.shadowBlur = 8;
             context.shadowColor = "rgba(0, 0, 0, 0.6)";
-            context.strokeStyle = '#555'; // Subtle dark borders
+            context.strokeStyle = '#555';
             context.lineWidth = 2;
             context.strokeRect(x, y, 20, 20);
         }
@@ -96,6 +136,7 @@
             currentPiece = shapes[randomIndex];
             currentX = 3;
             currentY = 0;
+            holdUsed = false; // Reset hold usage on new piece
 
             if (!canMove(0, 0)) {
                 gameOver = true;
@@ -148,7 +189,7 @@
                     context.clearRect(0, line * 20 + offset, canvas.width, 20);
                 });
                 
-                offset += 1;  // Simulate the fall off-grid
+                offset += 1;
                 alpha -= 0.1;
 
                 if (alpha <= 0) {
@@ -189,47 +230,51 @@
             }
         }
 
+        function holdPiece() {
+            if (!holdUsed) {
+                if (heldPiece) {
+                    const temp = heldPiece;
+                    heldPiece = currentPiece;
+                    currentPiece = temp;
+                    currentX = 3;
+                    currentY = 0;
+                } else {
+                    heldPiece = currentPiece;
+                    createPiece();
+                }
+                holdUsed = true;
+                heldShapeElement.textContent = heldPiece ? heldPiece.color : 'None';
+            }
+        }
+
         function updateScore() {
             scoreElement.textContent = score;
-        }
-
-        function hardDrop() {
-            while (canMove(0, 1)) {
-                currentY++;
-            }
-            placePiece();
-            createPiece();
-        }
-
-        function softDrop() {
-            if (canMove(0, 1)) {
-                currentY++;
-            }
         }
 
         function resetGame() {
             board = Array.from({ length: 20 }, () => Array(10).fill(0));
             score = 0;
             gameOver = false;
+            heldPiece = null;
+            holdUsed = false;
             updateScore();
             createPiece();
+            heldShapeElement.textContent = 'None';
         }
 
         document.addEventListener('keydown', (event) => {
             if (event.key === 'ArrowLeft' || event.key === 'a') {
-                if (canMove(-1, 0)) {
-                    currentX--;
-                }
+                if (canMove(-1, 0)) currentX--;
             } else if (event.key === 'ArrowRight' || event.key === 'd') {
-                if (canMove(1, 0)) {
-                    currentX++;
-                }
+                if (canMove(1, 0)) currentX++;
             } else if (event.key === 'ArrowUp' || event.key === 'w') {
-                softDrop();
+                dropPiece();
             } else if (event.key === 'ArrowDown' || event.key === 's') {
                 hardDrop();
             } else if (event.key === 'r' || event.key === 'Shift') {
                 rotatePiece();
+            } else if (event.key === 'c' || event.key === 'Control') {
+                holdPiece();
             }
         });
 
