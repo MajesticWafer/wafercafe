@@ -59,14 +59,15 @@
         const scoreElement = document.getElementById('score');
         const heldShapeElement = document.getElementById('held-shape');
 
+        // Original Tetris Party Wii Colors
         const colors = {
-            T: '#8E44AD', // Vibrant purple
-            I: '#3498DB', // Bright blue
-            O: '#F1C40F', // Vibrant yellow
-            S: '#27AE60', // Bright green
-            Z: '#E74C3C', // Bright red
-            L: '#E67E22', // Vibrant orange
-            J: '#2980B9'  // Deep blue
+            T: '#924EAD', // Purple for T
+            I: '#00E5FF', // Cyan for I
+            O: '#FFDD00', // Yellow for O
+            S: '#00FF00', // Green for S
+            Z: '#FF0000', // Red for Z
+            L: '#FF9900', // Orange for L
+            J: '#0000FF'  // Blue for J
         };
 
         const shapes = [
@@ -101,6 +102,7 @@
             }
             if (currentPiece) {
                 drawPiece(currentPiece, currentX, currentY);
+                drawShadow(currentPiece, currentX, currentY);  // Draw shadow
             }
         }
 
@@ -128,6 +130,23 @@
             context.strokeRect(x, y, 20, 20);
         }
 
+        function drawShadow(piece, x, y) {
+            let shadowY = y;
+            while (canMove(0, shadowY - y + 1)) {
+                shadowY++;
+            }
+
+            context.globalAlpha = 0.2;  // Set transparency for shadow
+            piece.shape.forEach((row, r) => {
+                row.forEach((value, c) => {
+                    if (value) {
+                        drawBlock((x + c) * 20, (shadowY + r) * 20, piece.color);
+                    }
+                });
+            });
+            context.globalAlpha = 1;  // Reset transparency after drawing shadow
+        }
+
         function createPiece() {
             const randomIndex = Math.floor(Math.random() * shapes.length);
             currentPiece = shapes[randomIndex];
@@ -149,14 +168,6 @@
                 placePiece();
                 createPiece();
             }
-        }
-
-        function hardDrop() {
-            while (canMove(0, 1)) {
-                currentY++;
-            }
-            placePiece();
-            createPiece();
         }
 
         function placePiece() {
@@ -204,7 +215,8 @@
                         board.unshift(Array(10).fill(0));
                     });
                     context.globalAlpha = 1;
-                    updateScore(lines.length);
+                    score += lines.length;
+                    updateScore();
                 }
             }, 50);
         }
@@ -234,71 +246,68 @@
             }
         }
 
-        function holdPiece() {
-            if (!holdUsed) {
-                if (heldPiece) {
-                    const temp = heldPiece;
-                    heldPiece = currentPiece;
-                    currentPiece = temp;
-                    currentX = 3;
-                    currentY = 0;
-                } else {
-                    heldPiece = currentPiece;
-                    createPiece();
-                }
-                holdUsed = true;
-                heldShapeElement.textContent = heldPiece ? heldPiece.color : 'None';
-            }
-        }
-
-        function updateScore(linesCleared) {
-            switch (linesCleared) {
-                case 1: score += 100; break;  // Single
-                case 2: score += 300; break;  // Double
-                case 3: score += 500; break;  // Triple
-                case 4: score += 800; break;  // Tetris
-            }
+        function updateScore() {
             scoreElement.textContent = score;
         }
 
         function resetGame() {
             board = Array.from({ length: 20 }, () => Array(10).fill(0));
             score = 0;
-            currentPiece = null;
-            heldPiece = null;
-            currentX = 0;
-            currentY = 0;
-            dropInterval = 500;
-            gameOver = false;
-            scoreElement.textContent = 0;
-            heldShapeElement.textContent = 'None';
+            updateScore();
             createPiece();
+            gameOver = false;
         }
 
-        document.addEventListener('keydown', (event) => {
-            if (event.key === 'ArrowLeft' || event.key === 'a') {
-                if (canMove(-1, 0)) currentX--;
-            } else if (event.key === 'ArrowRight' || event.key === 'd') {
-                if (canMove(1, 0)) currentX++;
-            } else if (event.key === 'ArrowUp' || event.key === 'w') {
-                if (canMove(0, 1)) currentY++; // Soft drop
-            } else if (event.key === 'ArrowDown' || event.key === 's') {
-                hardDrop(); // Hard drop
-            } else if (event.key === 'r' || event.key === 'Shift') {
-                rotatePiece();
-            } else if (event.key === 'c' || event.key === 'Control') {
-                holdPiece();
+        function handleKeyPress(event) {
+            if (gameOver) return;
+            switch (event.key) {
+                case 'ArrowLeft':
+                    if (canMove(-1, 0)) currentX--;
+                    break;
+                case 'ArrowRight':
+                    if (canMove(1, 0)) currentX++;
+                    break;
+                case 'ArrowDown':
+                    dropPiece();
+                    break;
+                case 'ArrowUp':
+                    rotatePiece();
+                    break;
+                case ' ':
+                    while (canMove(0, 1)) {
+                        currentY++;
+                    }
+                    dropPiece();
+                    break;
+                case 'Shift':
+                    holdPiece();
+                    break;
             }
-        });
+            drawBoard();
+        }
 
+        function holdPiece() {
+            if (holdUsed) return;
+            const temp = heldPiece;
+            heldPiece = currentPiece;
+            heldShapeElement.textContent = currentPiece ? currentPiece.color : 'None';
+            if (temp) {
+                currentPiece = temp;
+            } else {
+                createPiece();
+            }
+            holdUsed = true;
+        }
+
+        document.addEventListener('keydown', handleKeyPress);
         setInterval(() => {
             if (!gameOver) {
                 dropTime += 100;
                 if (dropTime >= dropInterval) {
                     dropPiece();
+                    drawBoard();
                     dropTime = 0;
                 }
-                drawBoard();
             }
         }, 100);
     </script>
