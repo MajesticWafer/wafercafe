@@ -44,9 +44,6 @@
             color: #fff;
         }
     </style>
-</body>
-</html>
-
 </head>
 <body onload="resetGame();">
     <canvas id="tetris" width="200" height="400"></canvas>
@@ -154,6 +151,14 @@
             }
         }
 
+        function hardDrop() {
+            while (canMove(0, 1)) {
+                currentY++;
+            }
+            placePiece();
+            createPiece();
+        }
+
         function placePiece() {
             currentPiece.shape.forEach((row, r) => {
                 row.forEach((value, c) => {
@@ -199,8 +204,7 @@
                         board.unshift(Array(10).fill(0));
                     });
                     context.globalAlpha = 1;
-                    score += lines.length;
-                    updateScore();
+                    updateScore(lines.length);
                 }
             }, 50);
         }
@@ -247,19 +251,28 @@
             }
         }
 
-        function updateScore() {
+        function updateScore(linesCleared) {
+            switch (linesCleared) {
+                case 1: score += 100; break;  // Single
+                case 2: score += 300; break;  // Double
+                case 3: score += 500; break;  // Triple
+                case 4: score += 800; break;  // Tetris
+            }
             scoreElement.textContent = score;
         }
 
         function resetGame() {
             board = Array.from({ length: 20 }, () => Array(10).fill(0));
             score = 0;
-            gameOver = false;
+            currentPiece = null;
             heldPiece = null;
-            holdUsed = false;
-            updateScore();
-            createPiece();
+            currentX = 0;
+            currentY = 0;
+            dropInterval = 500;
+            gameOver = false;
+            scoreElement.textContent = 0;
             heldShapeElement.textContent = 'None';
+            createPiece();
         }
 
         document.addEventListener('keydown', (event) => {
@@ -268,9 +281,9 @@
             } else if (event.key === 'ArrowRight' || event.key === 'd') {
                 if (canMove(1, 0)) currentX++;
             } else if (event.key === 'ArrowUp' || event.key === 'w') {
-                hardDrop();
+                if (canMove(0, 1)) currentY++; // Soft drop
             } else if (event.key === 'ArrowDown' || event.key === 's') {
-                dropPiece();
+                hardDrop(); // Hard drop
             } else if (event.key === 'r' || event.key === 'Shift') {
                 rotatePiece();
             } else if (event.key === 'c' || event.key === 'Control') {
