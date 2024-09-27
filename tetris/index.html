@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tetris Clone</title>
-
+    
     <!-- Google Fonts Preconnect and Import for Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
-
+    
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -18,7 +18,7 @@
             margin: 0;
             padding: 0;
         }
-
+        
         canvas {
             border: 5px solid #fff;
             border-radius: 15px;
@@ -36,7 +36,7 @@
             border-radius: 10px;
             display: inline-block;
         }
-
+        
         #held-piece {
             display: inline-block;
             margin-top: 20px;
@@ -44,10 +44,13 @@
             color: #fff;
         }
     </style>
+</body>
+</html>
+
 </head>
 <body onload="resetGame();">
     <canvas id="tetris" width="200" height="400"></canvas>
-
+    
     <div id="score-container">
         <div style="font-size: 1.3rem;">Score: <span id="score">0</span></div>
         <div id="held-piece">Held Piece: <span id="held-shape">None</span></div>
@@ -60,13 +63,13 @@
         const heldShapeElement = document.getElementById('held-shape');
 
         const colors = {
-            T: '#7E4B8A',
-            I: '#5BC0EB',
-            O: '#FDE74C',
-            S: '#0B8457',
-            Z: '#D83A34',
-            L: '#F25F5C',
-            J: '#3A57A8'
+            T: '#8E44AD', // Vibrant purple
+            I: '#3498DB', // Bright blue
+            O: '#F1C40F', // Vibrant yellow
+            S: '#27AE60', // Bright green
+            Z: '#E74C3C', // Bright red
+            L: '#E67E22', // Vibrant orange
+            J: '#2980B9'  // Deep blue
         };
 
         const shapes = [
@@ -99,10 +102,7 @@
                     }
                 }
             }
-
-            // Draw ghost piece
             if (currentPiece) {
-                drawGhostPiece();
                 drawPiece(currentPiece, currentX, currentY);
             }
         }
@@ -118,9 +118,16 @@
         }
 
         function drawBlock(x, y, color) {
-            context.fillStyle = color;
+            const gradient = context.createLinearGradient(x, y, x + 20, y + 20);
+            gradient.addColorStop(0, color);
+            gradient.addColorStop(1, '#ffffff');
+            context.fillStyle = gradient;
             context.fillRect(x, y, 20, 20);
-            context.strokeStyle = '#aaa';
+
+            context.shadowBlur = 8;
+            context.shadowColor = "rgba(0, 0, 0, 0.6)";
+            context.strokeStyle = '#555';
+            context.lineWidth = 2;
             context.strokeRect(x, y, 20, 20);
         }
 
@@ -129,6 +136,7 @@
             currentPiece = shapes[randomIndex];
             currentX = 3;
             currentY = 0;
+            holdUsed = false; // Reset hold usage on new piece
 
             if (!canMove(0, 0)) {
                 gameOver = true;
@@ -143,7 +151,6 @@
             } else {
                 placePiece();
                 createPiece();
-                holdUsed = false;
             }
         }
 
@@ -159,54 +166,43 @@
         }
 
         function clearLines() {
-            let linesCleared = 0;
+            const linesToClear = [];
             for (let r = board.length - 1; r >= 0; r--) {
                 if (board[r].every(value => value !== 0)) {
-                    board.splice(r, 1);
-                    board.unshift(Array(10).fill(0));
-                    linesCleared++;
+                    linesToClear.push(r);
                 }
             }
-            updateScore(linesCleared);
+            if (linesToClear.length > 0) {
+                animateClear(linesToClear);
+            }
         }
 
-        function updateScore(linesCleared) {
-            switch (linesCleared) {
-                case 1:
-                    score += 100;  // Single line clear
-                    break;
-                case 2:
-                    score += 300;  // Double line clear
-                    break;
-                case 3:
-                    score += 500;  // Triple line clear
-                    break;
-                case 4:
-                    score += 800;  // Tetris (Four lines clear)
-                    break;
-            }
-            scoreElement.textContent = score;
-        }
+        function animateClear(lines) {
+            let alpha = 1;
+            let offset = 0;
 
-        function softDrop() {
-            let rowsDropped = 0;
-            while (canMove(0, 1)) {
-                currentY++;
-                rowsDropped++;
-            }
-            score += rowsDropped;  // 1 point per soft-dropped row
-            updateScore(0);
-        }
+            const animation = setInterval(() => {
+                drawBoard();
 
-        function hardDrop() {
-            let rowsDropped = 0;
-            while (canMove(0, 1)) {
-                currentY++;
-                rowsDropped++;
-            }
-            score += rowsDropped * 2;  // 2 points per hard-dropped row
-            placePiece();
-            createPiece();
+                context.globalAlpha = alpha;
+                lines.forEach(line => {
+                    context.clearRect(0, line * 20 + offset, canvas.width, 20);
+                });
+                
+                offset += 1;
+                alpha -= 0.1;
+
+                if (alpha <= 0) {
+                    clearInterval(animation);
+                    lines.forEach(line => {
+                        board.splice(line, 1);
+                        board.unshift(Array(10).fill(0));
+                    });
+                    context.globalAlpha = 1;
+                    score += lines.length;
+                    updateScore();
+                }
+            }, 50);
         }
 
         function canMove(dx, dy) {
@@ -237,48 +233,33 @@
         function holdPiece() {
             if (!holdUsed) {
                 if (heldPiece) {
-                    [currentPiece, heldPiece] = [heldPiece, currentPiece];
+                    const temp = heldPiece;
+                    heldPiece = currentPiece;
+                    currentPiece = temp;
                     currentX = 3;
                     currentY = 0;
                 } else {
                     heldPiece = currentPiece;
                     createPiece();
                 }
-                heldShapeElement.textContent = shapes.indexOf(heldPiece) !== -1 ? shapes.indexOf(heldPiece) + 1 : 'None';
                 holdUsed = true;
+                heldShapeElement.textContent = heldPiece ? heldPiece.color : 'None';
             }
         }
 
-        // Ghost Piece Functionality
-        function drawGhostPiece() {
-            let ghostY = currentY;
-            while (canMove(0, 1)) {
-                ghostY++;
-            }
-            context.globalAlpha = 0.4;  // Set transparency for the ghost piece
-            drawPiece(currentPiece, currentX, ghostY);
-            context.globalAlpha = 1.0;  // Reset transparency after drawing ghost piece
+        function updateScore() {
+            scoreElement.textContent = score;
         }
 
         function resetGame() {
             board = Array.from({ length: 20 }, () => Array(10).fill(0));
             score = 0;
+            gameOver = false;
             heldPiece = null;
             holdUsed = false;
-            gameOver = false;
-            scoreElement.textContent = score;
-            heldShapeElement.textContent = 'None';
+            updateScore();
             createPiece();
-        }
-
-        function update() {
-            const now = Date.now();
-            if (!gameOver && now - dropTime >= dropInterval) {
-                dropPiece();
-                dropTime = now;
-            }
-            drawBoard();
-            requestAnimationFrame(update);
+            heldShapeElement.textContent = 'None';
         }
 
         document.addEventListener('keydown', (event) => {
@@ -287,18 +268,26 @@
             } else if (event.key === 'ArrowRight' || event.key === 'd') {
                 if (canMove(1, 0)) currentX++;
             } else if (event.key === 'ArrowUp' || event.key === 'w') {
-                softDrop();  // Soft Drop
+                hardDrop();
             } else if (event.key === 'ArrowDown' || event.key === 's') {
-                hardDrop();  // Hard Drop
+                dropPiece();
             } else if (event.key === 'r' || event.key === 'Shift') {
-                rotatePiece();  // Rotate
+                rotatePiece();
             } else if (event.key === 'c' || event.key === 'Control') {
-                holdPiece();  // Hold piece
+                holdPiece();
             }
         });
 
-        resetGame();
-        update();
+        setInterval(() => {
+            if (!gameOver) {
+                dropTime += 100;
+                if (dropTime >= dropInterval) {
+                    dropPiece();
+                    dropTime = 0;
+                }
+                drawBoard();
+            }
+        }, 100);
     </script>
 </body>
 </html>
