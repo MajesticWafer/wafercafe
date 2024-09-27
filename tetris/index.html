@@ -210,9 +210,10 @@
 
                 if (alpha <= 0) {
                     clearInterval(animation);
+                    // Clear lines from the board and shift down
                     lines.forEach(line => {
-                        board.splice(line, 1);
-                        board.unshift(Array(10).fill(0));
+                        board.splice(line, 1); // Remove the line
+                        board.unshift(Array(10).fill(0)); // Add a new empty line at the top
                     });
                     context.globalAlpha = 1;
                     score += lines.length;
@@ -235,11 +236,8 @@
         }
 
         function rotatePiece() {
-            const rotatedShape = currentPiece.shape[0].map((_, index) =>
-                currentPiece.shape.map(row => row[index]).reverse()
-            );
             const originalShape = currentPiece.shape;
-            currentPiece.shape = rotatedShape;
+            currentPiece.shape = currentPiece.shape[0].map((_, index) => currentPiece.shape.map(row => row[index])).reverse();
 
             if (!canMove(0, 0)) {
                 currentPiece.shape = originalShape;
