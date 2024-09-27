@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tetris Clone</title>
-    
+
     <!-- Google Fonts Preconnect and Import for Poppins -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
-    
+
     <style>
         body {
             font-family: 'Poppins', sans-serif;
@@ -18,7 +18,7 @@
             margin: 0;
             padding: 0;
         }
-        
+
         canvas {
             border: 5px solid #fff;
             border-radius: 15px;
@@ -37,11 +37,6 @@
             display: inline-block;
         }
 
-        #score-container {
-            font-size: 1.3rem;
-            color: #fff;
-        }
-        
         #held-piece {
             display: inline-block;
             margin-top: 20px;
@@ -52,9 +47,9 @@
 </head>
 <body onload="resetGame();">
     <canvas id="tetris" width="200" height="400"></canvas>
-    
+
     <div id="score-container">
-        <div>Score: <span id="score">0</span></div>
+        <div style="font-size: 1.3rem;">Score: <span id="score">0</span></div>
         <div id="held-piece">Held Piece: <span id="held-shape">None</span></div>
     </div>
 
@@ -145,6 +140,7 @@
             } else {
                 placePiece();
                 createPiece();
+                holdUsed = false;
             }
         }
 
@@ -168,24 +164,46 @@
                     linesCleared++;
                 }
             }
+            updateScore(linesCleared);
+        }
 
-            // Scoring system based on the number of lines cleared at once
+        function updateScore(linesCleared) {
             switch (linesCleared) {
                 case 1:
-                    score += 100;
+                    score += 100;  // Single line clear
                     break;
                 case 2:
-                    score += 300;
+                    score += 300;  // Double line clear
                     break;
                 case 3:
-                    score += 500;
+                    score += 500;  // Triple line clear
                     break;
                 case 4:
-                    score += 800;
+                    score += 800;  // Tetris (Four lines clear)
                     break;
             }
+            scoreElement.textContent = score;
+        }
 
-            updateScore();
+        function softDrop() {
+            let rowsDropped = 0;
+            while (canMove(0, 1)) {
+                currentY++;
+                rowsDropped++;
+            }
+            score += rowsDropped;  // 1 point per soft-dropped row
+            updateScore(0);
+        }
+
+        function hardDrop() {
+            let rowsDropped = 0;
+            while (canMove(0, 1)) {
+                currentY++;
+                rowsDropped++;
+            }
+            score += rowsDropped * 2;  // 2 points per hard-dropped row
+            placePiece();
+            createPiece();
         }
 
         function canMove(dx, dy) {
@@ -213,14 +231,6 @@
             }
         }
 
-        function hardDrop() {
-            while (canMove(0, 1)) {
-                currentY++;
-            }
-            placePiece();
-            createPiece();
-        }
-
         function holdPiece() {
             if (!holdUsed) {
                 if (heldPiece) {
@@ -236,97 +246,45 @@
             }
         }
 
-        function updateScore() {
-            scoreElement.textContent = score;
-        }
-
         function resetGame() {
             board = Array.from({ length: 20 }, () => Array(10).fill(0));
             score = 0;
             gameOver = false;
             heldPiece = null;
             holdUsed = false;
-            updateScore();
+            updateScore(0);
             createPiece();
             heldShapeElement.textContent = 'None';
         }
 
-        // Touch and Mouse Events
-        let touchStartX = 0;
-        let touchStartY = 0;
-
-        function handleTouchStart(event) {
-            touchStartX = event.touches[0].clientX;
-            touchStartY = event.touches[0].clientY;
-        }
-
-        function handleTouchMove(event) {
-            const touchEndX = event.touches[0].clientX;
-            const touchEndY = event.touches[0].clientY;
-            const diffX = touchEndX - touchStartX;
-            const diffY = touchEndY - touchStartY;
-
-            // Horizontal swipe
-            if (Math.abs(diffX) > Math.abs(diffY)) {
-                if (diffX > 0) {
-                    if (canMove(1, 0)) currentX++;  // Swipe right
-                } else {
-                    if (canMove(-1, 0)) currentX--; // Swipe left
-                }
-            } else {
-                if (diffY > 0) {
-                    dropPiece(); // Swipe down for soft drop
-                } else {
-                    hardDrop();  // Swipe up for hard drop
-                }
+        function update() {
+            const now = Date.now();
+            if (!gameOver && now - dropTime >= dropInterval) {
+                dropPiece();
+                dropTime = now;
             }
+            drawBoard();
+            requestAnimationFrame(update);
         }
 
-        function handleTouchEnd(event) {
-            // Reset touch start position for next touch input
-            touchStartX = 0;
-            touchStartY = 0;
-        }
-
-        function handleClick(event) {
-            rotatePiece(); // Rotate piece on mouse click or tap
-        }
-
-        // Event listeners for touch and mouse
-        document.addEventListener('touchstart', handleTouchStart);
-        document.addEventListener('touchmove', handleTouchMove);
-        document.addEventListener('touchend', handleTouchEnd);
-        document.addEventListener('click', handleClick);
-
-        // Keyboard Controls
         document.addEventListener('keydown', (event) => {
             if (event.key === 'ArrowLeft' || event.key === 'a') {
                 if (canMove(-1, 0)) currentX--;
             } else if (event.key === 'ArrowRight' || event.key === 'd') {
                 if (canMove(1, 0)) currentX++;
             } else if (event.key === 'ArrowUp' || event.key === 'w') {
-                hardDrop();
+                softDrop();  // Soft Drop
             } else if (event.key === 'ArrowDown' || event.key === 's') {
-                dropPiece();
+                hardDrop();  // Hard Drop
             } else if (event.key === 'r' || event.key === 'Shift') {
-                rotatePiece();
+                rotatePiece();  // Rotate
             } else if (event.key === 'c' || event.key === 'Control') {
-                holdPiece();
+                holdPiece();  // Hold piece
             }
         });
 
-        // Game Loop
-        function gameLoop(timestamp) {
-            if (gameOver) return;
-            if (timestamp - dropTime > dropInterval) {
-                dropPiece();
-                dropTime = timestamp;
-            }
-            drawBoard();
-            requestAnimationFrame(gameLoop);
-        }
-
-        requestAnimationFrame(gameLoop);
+        resetGame();
+        update();
     </script>
 </body>
 </html>
