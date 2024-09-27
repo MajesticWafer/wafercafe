@@ -99,7 +99,10 @@
                     }
                 }
             }
+
+            // Draw ghost piece
             if (currentPiece) {
+                drawGhostPiece();
                 drawPiece(currentPiece, currentX, currentY);
             }
         }
@@ -241,20 +244,31 @@
                     heldPiece = currentPiece;
                     createPiece();
                 }
+                heldShapeElement.textContent = shapes.indexOf(heldPiece) !== -1 ? shapes.indexOf(heldPiece) + 1 : 'None';
                 holdUsed = true;
-                heldShapeElement.textContent = heldPiece ? heldPiece.color : 'None';
             }
+        }
+
+        // Ghost Piece Functionality
+        function drawGhostPiece() {
+            let ghostY = currentY;
+            while (canMove(0, 1)) {
+                ghostY++;
+            }
+            context.globalAlpha = 0.4;  // Set transparency for the ghost piece
+            drawPiece(currentPiece, currentX, ghostY);
+            context.globalAlpha = 1.0;  // Reset transparency after drawing ghost piece
         }
 
         function resetGame() {
             board = Array.from({ length: 20 }, () => Array(10).fill(0));
             score = 0;
-            gameOver = false;
             heldPiece = null;
             holdUsed = false;
-            updateScore(0);
-            createPiece();
+            gameOver = false;
+            scoreElement.textContent = score;
             heldShapeElement.textContent = 'None';
+            createPiece();
         }
 
         function update() {
