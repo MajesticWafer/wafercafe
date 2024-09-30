@@ -3,143 +3,95 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3D Box Simulator</title>
+  <title>Box Dropping Simulator</title>
   <style>
     body { margin: 0; }
     canvas { display: block; }
   </style>
 </head>
 <body>
-  <!-- Load Three.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <!-- Load Cannon.js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/cannon.js/0.6.2/cannon.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cannon-es/0.17.0/cannon-es.min.js"></script>
 
   <script>
-    let scene, camera, renderer, world, plane;
-    const boxes = [], boxMeshes = [];
+    let scene, camera, renderer;
+    let world;
+    let groundBody;
+    let objects = [];
 
-    try {
-      init();
-      animate();
-    } catch (error) {
-      alert("Initialization error: " + error.message);
-      console.error(error);
-    }
+    init();
+    animate();
 
     function init() {
-      console.log("Initializing scene...");
-
       // Scene setup
       scene = new THREE.Scene();
       camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-      renderer = new THREE.WebGLRenderer();
+      camera.position.set(0, 10, 20);
+
+      renderer = new THREE.WebGLRenderer({ antialias: true });
       renderer.setSize(window.innerWidth, window.innerHeight);
       document.body.appendChild(renderer.domElement);
 
-      // Ground (Plane)
-      const groundColor = 0x228B22;  // Fallback green color for the ground
-      const planeGeometry = new THREE.PlaneGeometry(1000, 1000);
-      const planeMaterial = new THREE.MeshLambertMaterial({ color: groundColor });
-      plane = new THREE.Mesh(planeGeometry, planeMaterial);
-      plane.rotation.x = - Math.PI / 2;
-      scene.add(plane);
-
-      console.log("Ground plane added to scene.");
-
       // Lighting
-      const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-      directionalLight.position.set(50, 100, 50);
-      scene.add(directionalLight);
-      const ambientLight = new THREE.AmbientLight(0x404040); // Soft light
-      scene.add(ambientLight);
-      console.log("Lighting added.");
+      const light = new THREE.DirectionalLight(0xffffff, 1);
+      light.position.set(0, 20, 10).normalize();
+      scene.add(light);
 
-      // Physics world
+      // Ground (Three.js)
+      const groundGeometry = new THREE.PlaneGeometry(100, 100);
+      const groundMaterial = new THREE.MeshStandardMaterial({ color: 0x808080 });
+      const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+      ground.rotation.x = -Math.PI / 2;
+      scene.add(ground);
+
+      // Physics world setup
       world = new CANNON.World();
       world.gravity.set(0, -9.82, 0);
 
-      // Ground physics
-      const groundBody = new CANNON.Body({
-        mass: 0, // Ground is immovable
-        shape: new CANNON.Plane(),
-      });
-      groundBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0); // Rotate to be horizontal
+      // Ground (Cannon.js)
+      const groundShape = new CANNON.Plane();
+      groundBody = new CANNON.Body({ mass: 0 });
+      groundBody.addShape(groundShape);
+      groundBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0);
       world.addBody(groundBody);
 
-      console.log("Physics world initialized.");
-
-      // Camera position
-      camera.position.set(0, 10, 30);
-      camera.lookAt(0, 0, 0);
-
-      console.log("Camera set at position: ", camera.position);
-
-      // Event listener for clicking
-      window.addEventListener('click', addBoxOnClick);
-      console.log("Click event listener added.");
+      // Event listeners for clicks or taps
+      window.addEventListener('click', addBox);
+      window.addEventListener('touchstart', addBox, false);
     }
 
-    function addBoxOnClick(event) {
-      console.log("Screen clicked.");
+    function addBox(event) {
+      // Box geometry and material (Three.js)
+      const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
+      const boxMaterial = new THREE.MeshStandardMaterial({ color: Math.random() * 0xffffff });
+      const box = new THREE.Mesh(boxGeometry, boxMaterial);
+      box.position.set((Math.random() - 0.5) * 5, 10, (Math.random() - 0.5) * 5);
+      scene.add(box);
 
-      try {
-        // Get mouse position in normalized device coordinates (NDC)
-        const mouse = new THREE.Vector2(
-          (event.clientX / window.innerWidth) * 2 - 1,
-          -(event.clientY / window.innerHeight) * 2 + 1
-        );
-        console.log("Mouse position in NDC: ", mouse);
+      // Box physics (Cannon.js)
+      const boxShape = new CANNON.Box(new CANNON.Vec3(0.5, 0.5, 0.5));
+      const boxBody = new CANNON.Body({ mass: 1 });
+      boxBody.addShape(boxShape);
+      boxBody.position.set(box.position.x, box.position.y, box.position.z);
+      world.addBody(boxBody);
 
-        // Convert NDC to 3D world coordinates
-        const raycaster = new THREE.Raycaster();
-        raycaster.setFromCamera(mouse, camera);
-        const intersects = raycaster.intersectObject(plane);
-
-        if (intersects.length > 0) {
-          const point = intersects[0].point;
-          console.log("Intersection point: ", point);
-
-          // Create Three.js box
-          const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
-          const boxMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 }); // Cardboard color
-          const boxMesh = new THREE.Mesh(boxGeometry, boxMaterial);
-          boxMesh.position.copy(point);
-          scene.add(boxMesh);
-          boxMeshes.push(boxMesh);
-
-          // Create Cannon.js box body
-          const boxShape = new CANNON.Box(new CANNON.Vec3(0.5, 0.5, 0.5));
-          const boxBody = new CANNON.Body({
-            mass: 1,
-            position: new CANNON.Vec3(point.x, point.y, point.z),
-            shape: boxShape
-          });
-          world.addBody(boxBody);
-          boxes.push(boxBody);
-
-          console.log("Box added at position: ", point);
-        } else {
-          console.warn("No intersection with the ground.");
-        }
-      } catch (error) {
-        alert("Error during box creation: " + error.message);
-        console.error(error);
-      }
+      // Store reference to update position
+      objects.push({ mesh: box, body: boxBody });
     }
 
     function animate() {
       requestAnimationFrame(animate);
-
-      // Update physics world
+      
+      // Update physics
       world.step(1 / 60);
+      
+      // Sync Three.js meshes with Cannon.js bodies
+      objects.forEach(obj => {
+        obj.mesh.position.copy(obj.body.position);
+        obj.mesh.quaternion.copy(obj.body.quaternion);
+      });
 
-      // Update box meshes positions
-      for (let i = 0; i < boxes.length; i++) {
-        boxMeshes[i].position.copy(boxes[i].position);
-        boxMeshes[i].quaternion.copy(boxes[i].quaternion);
-      }
-
+      // Render scene
       renderer.render(scene, camera);
     }
   </script>
