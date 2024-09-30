@@ -10,9 +10,7 @@
   </style>
 </head>
 <body>
-  <!-- Include Three.js library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-  <!-- Minecraft Clone Script -->
   <script>
     // Setup scene, camera, and renderer
     const scene = new THREE.Scene();
@@ -22,109 +20,67 @@
     document.body.appendChild(renderer.domElement);
 
     // Camera starting position
-    camera.position.set(8, 5, 16);
-    camera.lookAt(new THREE.Vector3(8, 2, 8));
+    camera.position.set(10, 10, 20);
+    camera.lookAt(new THREE.Vector3(8, 1, 8));
 
-    // Load block texture (optional, replace with paths to actual textures)
+    // Add ambient light
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(ambientLight);
+
+    // Add directional light to simulate sunlight
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    directionalLight.position.set(10, 20, 10).normalize();
+    scene.add(directionalLight);
+
+    // Load textures for grass and dirt
     const loader = new THREE.TextureLoader();
-    const grassTexture = loader.load('https://i.imgur.com/1yWx3PH.png');  // Example grass texture
+    const grassTexture = loader.load('https://i.imgur.com/KYpIIm8.png');  // Example grass texture
+    const dirtTexture = loader.load('https://i.imgur.com/9O0Er0g.png');  // Example dirt texture
 
-    // Create block (cube) geometry
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
+    // Block geometry (each block is 1x1x1 unit)
+    const blockGeometry = new THREE.BoxGeometry(1, 1, 1);
 
-    // Basic block material (you can use a texture as well)
-    const material = new THREE.MeshBasicMaterial({ map: grassTexture });
+    // Materials for grass and dirt
+    const grassMaterial = new THREE.MeshBasicMaterial({ map: grassTexture });
+    const dirtMaterial = new THREE.MeshBasicMaterial({ map: dirtTexture });
 
-    // Generate a chunk of blocks
+    // Create a chunk of blocks (16x16, 3 blocks tall)
     const chunkSize = 16;
-    const blocks = [];
+    const chunkHeight = 3;
 
-    function generateTerrain(chunkSize) {
+    function generateChunk() {
       for (let x = 0; x < chunkSize; x++) {
         for (let z = 0; z < chunkSize; z++) {
-          const height = Math.floor(Math.random() * 5);  // Random terrain height
-          for (let y = 0; y <= height; y++) {
-            const block = new THREE.Mesh(geometry, material);
+          for (let y = 0; y < chunkHeight; y++) {
+            let material;
+
+            // Grass on the top layer (y = 2), dirt below
+            if (y === 2) {
+              material = grassMaterial;
+            } else {
+              material = dirtMaterial;
+            }
+
+            // Create a block mesh
+            const block = new THREE.Mesh(blockGeometry, material);
             block.position.set(x, y, z);
             scene.add(block);
-            blocks.push(block);
           }
         }
       }
     }
 
-    generateTerrain(chunkSize);
+    generateChunk();
 
-    // Add lighting (optional)
-    const light = new THREE.DirectionalLight(0xffffff, 1);
-    light.position.set(10, 10, 10).normalize();
-    scene.add(light);
-
-    // Player movement
-    let moveSpeed = 0.1;
-    const controls = {
-      forward: false,
-      backward: false,
-      left: false,
-      right: false,
-      jump: false
-    };
-
-    document.addEventListener('keydown', (event) => {
-      switch (event.code) {
-        case 'KeyW': controls.forward = true; break;
-        case 'KeyS': controls.backward = true; break;
-        case 'KeyA': controls.left = true; break;
-        case 'KeyD': controls.right = true; break;
-        case 'Space': controls.jump = true; break;
-      }
-    });
-
-    document.addEventListener('keyup', (event) => {
-      switch (event.code) {
-        case 'KeyW': controls.forward = false; break;
-        case 'KeyS': controls.backward = false; break;
-        case 'KeyA': controls.left = false; break;
-        case 'KeyD': controls.right = false; break;
-        case 'Space': controls.jump = false; break;
-      }
-    });
-
-    function updateMovement() {
-      if (controls.forward) camera.position.z -= moveSpeed;
-      if (controls.backward) camera.position.z += moveSpeed;
-      if (controls.left) camera.position.x -= moveSpeed;
-      if (controls.right) camera.position.x += moveSpeed;
-      if (controls.jump) camera.position.y += moveSpeed;
-    }
-
-    // Block breaking (click to remove)
-    const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2();
-
-    document.addEventListener('mousedown', (event) => {
-      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-      raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObjects(blocks);
-
-      if (intersects.length > 0) {
-        const selectedBlock = intersects[0].object;
-        scene.remove(selectedBlock);
-      }
-    });
-
-    // Animation loop
+    // Rendering function
     function animate() {
       requestAnimationFrame(animate);
-      updateMovement();
       renderer.render(scene, camera);
     }
 
     animate();
 
-    // Adjust canvas size on window resize
+    // Adjust canvas size when the window is resized
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();
