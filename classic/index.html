@@ -92,6 +92,7 @@
     // Mouse controls
     let pitch = 0, yaw = 0;
     const mouseSensitivity = 0.002;
+    const maxPitch = Math.PI / 2; // Limit pitch to avoid flipping
 
     document.body.requestPointerLock = document.body.requestPointerLock || document.body.mozRequestPointerLock;
 
@@ -102,14 +103,19 @@
     document.addEventListener('mousemove', (event) => {
       yaw -= event.movementX * mouseSensitivity;
       pitch -= event.movementY * mouseSensitivity;
-      pitch = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, pitch)); // Clamp pitch to avoid flipping
+      pitch = Math.max(-maxPitch, Math.min(maxPitch, pitch)); // Clamp pitch
     });
 
-    // Collision detection
+    // Collision detection using AABB
     function checkCollision(nextPosition) {
       for (let block of blocks) {
-        const distance = block.position.distanceTo(nextPosition);
-        if (distance < 1) return true; // Collision occurs if distance is too close
+        const min = block.position.clone().sub(new THREE.Vector3(0.5, 0.5, 0.5));
+        const max = block.position.clone().add(new THREE.Vector3(0.5, 0.5, 0.5));
+        if (nextPosition.x >= min.x && nextPosition.x <= max.x &&
+            nextPosition.y >= min.y && nextPosition.y <= max.y &&
+            nextPosition.z >= min.z && nextPosition.z <= max.z) {
+          return true; // Collision detected
+        }
       }
       return false;
     }
@@ -142,7 +148,7 @@
 
       camera.position.copy(player.position);
       camera.position.y += 1.5; // Camera height
-      camera.rotation.set(pitch, yaw, 0); // Fix roll (z-axis)
+      camera.rotation.set(pitch, yaw, 0); // Lock roll (no tilt)
     }
 
     // Skybox creation
