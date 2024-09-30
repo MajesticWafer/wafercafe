@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple AI Neural Network</title>
+    <script src="https://cdn.jsdelivr.net/npm/brain.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        input, button {
+            padding: 10px;
+            font-size: 1rem;
+            margin: 10px;
+        }
+        #response {
+            font-size: 1.2rem;
+            color: blue;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>AI Neural Network Chat</h1>
+    <input type="text" id="userInput" placeholder="Ask something">
+    <button onclick="getResponse()">Ask AI</button>
+    <div id="response"></div>
+
+    <script src="ai.js"></script>
+</body>
+</html>
