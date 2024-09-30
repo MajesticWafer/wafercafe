@@ -19,23 +19,19 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
-    // Camera starting position (adjusted)
-    camera.position.set(10, 15, 30);  // Move camera farther back
-    camera.lookAt(new THREE.Vector3(8, 1, 8));
-
     // Add ambient light
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);  // Increased intensity
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
 
     // Add directional light to simulate sunlight
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);  // Increased intensity
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
     directionalLight.position.set(10, 20, 10).normalize();
     scene.add(directionalLight);
 
     // Load textures for grass and dirt
     const loader = new THREE.TextureLoader();
-    const grassTexture = loader.load('assets/grass.png');
-    const dirtTexture = loader.load('assets/dirt.png');
+    const grassTexture = loader.load('assets/grass.png');  // Example grass texture
+    const dirtTexture = loader.load('assets/dirt.png');    // Example dirt texture
 
     // Block geometry (each block is 1x1x1 unit)
     const blockGeometry = new THREE.BoxGeometry(1, 1, 1);
@@ -72,9 +68,97 @@
 
     generateChunk();
 
+    // Player setup
+    const player = {
+      position: new THREE.Vector3(8, 5, 8),
+      velocity: new THREE.Vector3(),
+      speed: 0.1
+    };
+
+    camera.position.copy(player.position);
+
+    // Movement controls
+    const keys = {
+      forward: false,
+      backward: false,
+      left: false,
+      right: false,
+      jump: false
+    };
+
+    document.addEventListener('keydown', (event) => {
+      switch (event.code) {
+        case 'KeyW': keys.forward = true; break;
+        case 'KeyS': keys.backward = true; break;
+        case 'KeyA': keys.left = true; break;
+        case 'KeyD': keys.right = true; break;
+        case 'Space': keys.jump = true; break;
+      }
+    });
+
+    document.addEventListener('keyup', (event) => {
+      switch (event.code) {
+        case 'KeyW': keys.forward = false; break;
+        case 'KeyS': keys.backward = false; break;
+        case 'KeyA': keys.left = false; break;
+        case 'KeyD': keys.right = false; break;
+        case 'Space': keys.jump = false; break;
+      }
+    });
+
+    // Mouse controls
+    let mouseSensitivity = 0.002;
+    let pitch = 0, yaw = 0;
+    document.body.requestPointerLock = document.body.requestPointerLock || document.body.mozRequestPointerLock;
+
+    document.addEventListener('click', () => {
+      document.body.requestPointerLock();
+    });
+
+    document.addEventListener('mousemove', (event) => {
+      yaw -= event.movementX * mouseSensitivity;
+      pitch -= event.movementY * mouseSensitivity;
+      pitch = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, pitch)); // Clamp pitch
+    });
+
+    // Update camera based on player's movement
+    function updatePlayer() {
+      // Calculate forward and right directions
+      const forward = new THREE.Vector3(Math.sin(yaw), 0, Math.cos(yaw));
+      const right = new THREE.Vector3(Math.cos(yaw), 0, -Math.sin(yaw));
+
+      // Update player's velocity based on input
+      player.velocity.set(0, 0, 0);
+
+      if (keys.forward) player.velocity.add(forward);
+      if (keys.backward) player.velocity.sub(forward);
+      if (keys.left) player.velocity.sub(right);
+      if (keys.right) player.velocity.add(right);
+
+      // Normalize velocity and apply speed
+      if (player.velocity.length() > 0) {
+        player.velocity.normalize();
+        player.velocity.multiplyScalar(player.speed);
+      }
+
+      // Update player position
+      player.position.add(player.velocity);
+
+      // Apply gravity (simple, no collision detection for now)
+      player.position.y = Math.max(1.5, player.position.y - 0.02); // Falling effect
+
+      // Update camera position
+      camera.position.copy(player.position);
+      camera.position.y += 1.5; // Camera height
+
+      // Update camera rotation
+      camera.rotation.set(pitch, yaw, 0);
+    }
+
     // Rendering function
     function animate() {
       requestAnimationFrame(animate);
+      updatePlayer();
       renderer.render(scene, camera);
     }
 
