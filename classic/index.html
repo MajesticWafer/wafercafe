@@ -11,13 +11,14 @@
 </head>
 <body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-  <script src="textures.js"></script> <!-- Load the texture management file -->
+  <script src="textures.js"></script> <!-- Texture management file -->
   <script>
     // Setup scene, camera, and renderer
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.shadowMap.enabled = true;  // Enable shadows
     document.body.appendChild(renderer.domElement);
     
     // Lighting setup
@@ -26,11 +27,12 @@
 
     const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
     directionalLight.position.set(10, 20, 10).normalize();
+    directionalLight.castShadow = true; // Enable shadow casting
     scene.add(directionalLight);
 
     // Create block geometry and material
     const blockGeometry = new THREE.BoxGeometry(1, 1, 1);
-    const dirtMaterial = new THREE.MeshBasicMaterial({ map: textures.dirt });
+    const dirtMaterial = new THREE.MeshStandardMaterial({ map: textures.dirt });
 
     // Generate a 16x16x3 chunk of blocks
     const chunkSize = 16;
@@ -43,13 +45,15 @@
           for (let y = 0; y < chunkHeight; y++) {
             let material;
             if (y === 2) {
-              material = createGrassBlockMaterial(); // Grass block on the top
+              material = createGrassBlockMaterial(); // Grass block on top
             } else {
               material = dirtMaterial; // Dirt block below
             }
 
             const block = new THREE.Mesh(blockGeometry, material);
             block.position.set(x, y, z);
+            block.castShadow = true;  // Enable block shadow casting
+            block.receiveShadow = true;  // Enable block shadow receiving
             scene.add(block);
             blocks.push(block); // Add block to array for collision
           }
@@ -63,13 +67,17 @@
     const player = {
       position: new THREE.Vector3(8, 5, 8),
       velocity: new THREE.Vector3(),
-      speed: 0.1
+      speed: 0.1,
+      isCrouching: false,
+      isJumping: false,
+      jumpStrength: 0.15,
+      crouchHeight: 0.5
     };
 
     camera.position.copy(player.position);
 
     // Movement controls
-    const keys = { forward: false, backward: false, left: false, right: false };
+    const keys = { forward: false, backward: false, left: false, right: false, jump: false, crouch: false };
 
     document.addEventListener('keydown', (event) => {
       switch (event.code) {
@@ -77,6 +85,8 @@
         case 'KeyS': keys.backward = true; break;
         case 'KeyA': keys.left = true; break;
         case 'KeyD': keys.right = true; break;
+        case 'Space': keys.jump = true; break;
+        case 'ShiftLeft': player.isCrouching = true; break;
       }
     });
 
@@ -86,6 +96,8 @@
         case 'KeyS': keys.backward = false; break;
         case 'KeyA': keys.left = false; break;
         case 'KeyD': keys.right = false; break;
+        case 'Space': keys.jump = false; break;
+        case 'ShiftLeft': player.isCrouching = false; break;
       }
     });
 
@@ -138,16 +150,31 @@
         player.velocity.multiplyScalar(player.speed);
       }
 
+      // Handle jumping
+      if (keys.jump && !player.isJumping) {
+        player.velocity.y += player.jumpStrength;
+        player.isJumping = true;
+      }
+
+      // Handle crouching
+      if (player.isCrouching) {
+        player.velocity.y -= player.crouchHeight;
+      }
+
+      // Gravity and jumping physics
+      player.velocity.y -= 0.05;  // Simulated gravity
+
       // Calculate next position
       const nextPosition = player.position.clone().add(player.velocity);
 
       // Apply collision detection and only move if no collision
       if (!checkCollision(nextPosition)) {
         player.position.add(player.velocity);
+        player.isJumping = player.velocity.y !== 0; // Reset jump state when not in air
       }
 
       camera.position.copy(player.position);
-      camera.position.y += 1.5; // Camera height
+      camera.position.y += player.isCrouching ? 0.5 : 1.5; // Adjust height for crouching
       camera.rotation.set(pitch, yaw, 0); // Lock roll (no tilt)
     }
 
