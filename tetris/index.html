@@ -89,24 +89,60 @@
 </head>
 <body onload="resetGame();">
     <h1>Mildly Broken Tetris Clone</h1>
+    
+    <!-- Control Buttons Left -->
+    <div id="left" class="controls">
+        <button id="hold">Hold</button>
+        <button id="rotate-left">Rotate</button>
+        <button id="move-left">Move Left</button>
+    </div>
+    
     <canvas id="tetris" width="200" height="400"></canvas>
+
+    <!-- Control Buttons Right -->
+    <div id="right" class="controls">
+        <button id="drop">Drop</button>
+        <button id="rotate-right">Rotate</button>
+        <button id="move-right">Move Right</button>
+    </div>
+        
     
     <div id="score-container">
         <div style="font-size: 1.3rem;">Score: <span id="score">0</span></div>
         <div id="held-piece">Held Piece: <span id="held-shape">None</span></div>
     </div>
 
-    <!-- Control Buttons -->
-    <div class="rotate-controls">
-        <button id="rotate-left">Rotate Left</button>
-        <button id="rotate-right">Rotate Right</button>
-    </div>
+    <!-- Button logic -->
+    <script>
+       const rotateL = document.getElementById('rotate-left');
+       const drop = document.getElementById('drop');
+       const moveL = document.getElementById('move-left');
+       const moveR = document.getElementById('move-right');
+       const hold = document.getElementById('hold');
+    
+        
+       rotate.addEventListener('click', () => {
+           rotatePiece();    
+       });
 
-    <div class="controls left-right">
-        <button id="move-left">Move Left</button>
-        <button id="move-right">Move Right</button>
-    </div>
+       drop.addEventListener('click', () => {
+           dropPiece();         
+       });
+        
+       moveL.addEventListener('click', () => {
+           moveLeft();     
+       });
 
+       moveR.addEventListener('click', () => {
+           moveRight();
+       });
+
+       hold.addEventListener('click', () => {
+           holdPiece();
+       });
+    </script>
+    
+    <!-- Tetris logic -->
     <script>
         const canvas = document.getElementById('tetris');
         const context = canvas.getContext('2d');
@@ -310,6 +346,14 @@
             gameOver = false;
         }
 
+        function moveLeft() {
+            if (canMove(-1, 0)) currentX--;
+        }
+        
+        function moveRight() {
+            if (canMove(1, 0)) currentX++;
+        }
+        
         function handleKeyPress(event) {
             if (gameOver) return;
             switch (event.key) {
