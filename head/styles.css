@@ -138,11 +138,12 @@ body {
 }
 
 .button-container span {
-    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
 .button-container:hover span {
-    display: block;
+    opacity: 1;
 }
 
 .button-container img {
@@ -153,11 +154,6 @@ body {
 
 .button-container:hover img {
     border-color: #d6caff; 
-}
-
-.button-text {
-    font-weight: 500;
-    font-size: 16px;
 }
 
 /* Header Buttons */
