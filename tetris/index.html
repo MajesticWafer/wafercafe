@@ -92,7 +92,7 @@
     <div class="container">
         <!-- Move controls -->
         <button onclick="moveLeft();">&lt;</button>
-        <button onclick="dropPiece();">v</button>
+        <button id="drop">v</button>
         <button onclick="moveRight();">&gt;</button>
         <br>
 
@@ -106,6 +106,29 @@
         <div id="held-piece">Held Piece: <span id="held-shape">None</span></div>
     </div>
 
+    <script>
+        let holdInterval;
+
+        const button = document.getElementById('drop');
+
+        // Start continuous action when button is pressed down
+        button.onmousedown = function() {
+          holdInterval = setInterval(function() {
+            dropPiece();
+          }, 100); // Repeat every 100ms
+        };
+
+        // Stop the action when the button is released or mouse leaves the button
+        button.onmouseup = button.onmouseleave = function() {
+          clearInterval(holdInterval);
+        };
+
+        // Prevent text selection during holding
+        button.onselectstart = function() {
+          return false; // Prevent selection
+        };
+    </script>
+    
     <!-- Method 3 of preventing zoom -->
     <script>
         let lastTouchEnd = 0;
