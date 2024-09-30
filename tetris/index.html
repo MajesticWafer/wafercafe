@@ -96,7 +96,7 @@
     <div class="container">
         <!-- Move controls -->
         <button onclick="moveLeft();">&lt;</button>
-        <button id="drop">v</button>
+        <button onclick="dropPiece();">v</button>
         <button onclick="moveRight();">&gt;</button>
         <br>
 
@@ -110,54 +110,25 @@
         <div id="held-piece">Held Piece: <span id="held-shape">None</span></div>
     </div>
 
+    <!-- Prevent selection -->
     <script>
-        let holdInterval;
-
-        const button = document.getElementById('holdButton');
-
-        // Function to start the continuous action
-        function startHoldAction() {
-          holdInterval = setInterval(function() {
-              dropPiece();
-          }, 100); // Adjust the speed as needed
-        }
-
-        // Function to stop the continuous action
-        function stopHoldAction() {
-          clearInterval(holdInterval);
-        }
-
-        // Add touchstart event for mobile and mousedown for fallback (desktop)
-        button.addEventListener('touchstart', function(e) {
-          e.preventDefault(); // Prevents touch events from triggering a click
-          startHoldAction();
-        });
-
-        // Add touchend and touchcancel to stop the action
-        button.addEventListener('touchend', function() {
-          stopHoldAction();
-        });
-        button.addEventListener('touchcancel', function() {
-          stopHoldAction();
-        });
-
-        // Add fallback for desktop users
-        button.addEventListener('mousedown', function() {
-          startHoldAction();
-        });
-
-        // Stop when mouse button is released or mouse leaves the button (desktop)
-        button.addEventListener('mouseup', function() {
-          stopHoldAction();
-        });
-        button.addEventListener('mouseleave', function() {
-          stopHoldAction();
-        });
-
         // Prevent text selection on mobile and desktop
         button.addEventListener('selectstart', function(e) {
           e.preventDefault(); // Prevent text selection
         });
+    </script>
+
+    <!-- Method 3 of preventing zoom -->
+    <script>
+        let lastTouchEnd = 0;
+
+        document.addEventListener('touchend', function(event) {
+            const now = new Date().getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault(); // Prevents zoom
+            }
+            lastTouchEnd = now;
+        }, false);
     </script>
     
     <script>
