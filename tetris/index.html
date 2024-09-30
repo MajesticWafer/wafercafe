@@ -15,9 +15,6 @@
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #ffccd5, #a3d8f4); /* Wii Party-inspired gradient */
             text-align: center;
-            display: flex;
-            justify-content: center;
-            align-items: center;
             margin: 0;
             padding: 0;
         }
@@ -32,6 +29,22 @@
             display: flex;
             flex-direction: column;
             gap: 10px;
+        }
+
+        .button-column button {
+            padding: 15px;
+            font-size: 1.2rem;
+            background-color: #ff6b81;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            margin: 5px;
+            cursor: pointer;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .button-column button:hover {
+            background-color: #ff4757;
         }
 
         .left {
