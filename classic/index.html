@@ -19,23 +19,23 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
-    // Camera starting position
-    camera.position.set(10, 10, 20);
+    // Camera starting position (adjusted)
+    camera.position.set(10, 15, 30);  // Move camera farther back
     camera.lookAt(new THREE.Vector3(8, 1, 8));
 
     // Add ambient light
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);  // Increased intensity
     scene.add(ambientLight);
 
     // Add directional light to simulate sunlight
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);  // Increased intensity
     directionalLight.position.set(10, 20, 10).normalize();
     scene.add(directionalLight);
 
     // Load textures for grass and dirt
     const loader = new THREE.TextureLoader();
-    const grassTexture = loader.load('https://i.imgur.com/KYpIIm8.png');  // Example grass texture
-    const dirtTexture = loader.load('https://i.imgur.com/9O0Er0g.png');  // Example dirt texture
+    const grassTexture = loader.load('assets/grass.png');
+    const dirtTexture = loader.load('assets/dirt.png');
 
     // Block geometry (each block is 1x1x1 unit)
     const blockGeometry = new THREE.BoxGeometry(1, 1, 1);
