@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Minecraft Clone</title>
   <style>
     body { margin: 0; overflow: hidden; }
@@ -9,24 +10,126 @@
   </style>
 </head>
 <body>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+  <!-- Include Three.js library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <!-- Minecraft Clone Script -->
   <script>
-    // Set up scene, camera, and renderer
+    // Setup scene, camera, and renderer
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
-    // Set the camera position
-    camera.position.z = 5;
+    // Camera starting position
+    camera.position.set(8, 5, 16);
+    camera.lookAt(new THREE.Vector3(8, 2, 8));
+
+    // Load block texture (optional, replace with paths to actual textures)
+    const loader = new THREE.TextureLoader();
+    const grassTexture = loader.load('https://i.imgur.com/1yWx3PH.png');  // Example grass texture
+
+    // Create block (cube) geometry
+    const geometry = new THREE.BoxGeometry(1, 1, 1);
+
+    // Basic block material (you can use a texture as well)
+    const material = new THREE.MeshBasicMaterial({ map: grassTexture });
+
+    // Generate a chunk of blocks
+    const chunkSize = 16;
+    const blocks = [];
+
+    function generateTerrain(chunkSize) {
+      for (let x = 0; x < chunkSize; x++) {
+        for (let z = 0; z < chunkSize; z++) {
+          const height = Math.floor(Math.random() * 5);  // Random terrain height
+          for (let y = 0; y <= height; y++) {
+            const block = new THREE.Mesh(geometry, material);
+            block.position.set(x, y, z);
+            scene.add(block);
+            blocks.push(block);
+          }
+        }
+      }
+    }
+
+    generateTerrain(chunkSize);
+
+    // Add lighting (optional)
+    const light = new THREE.DirectionalLight(0xffffff, 1);
+    light.position.set(10, 10, 10).normalize();
+    scene.add(light);
+
+    // Player movement
+    let moveSpeed = 0.1;
+    const controls = {
+      forward: false,
+      backward: false,
+      left: false,
+      right: false,
+      jump: false
+    };
+
+    document.addEventListener('keydown', (event) => {
+      switch (event.code) {
+        case 'KeyW': controls.forward = true; break;
+        case 'KeyS': controls.backward = true; break;
+        case 'KeyA': controls.left = true; break;
+        case 'KeyD': controls.right = true; break;
+        case 'Space': controls.jump = true; break;
+      }
+    });
+
+    document.addEventListener('keyup', (event) => {
+      switch (event.code) {
+        case 'KeyW': controls.forward = false; break;
+        case 'KeyS': controls.backward = false; break;
+        case 'KeyA': controls.left = false; break;
+        case 'KeyD': controls.right = false; break;
+        case 'Space': controls.jump = false; break;
+      }
+    });
+
+    function updateMovement() {
+      if (controls.forward) camera.position.z -= moveSpeed;
+      if (controls.backward) camera.position.z += moveSpeed;
+      if (controls.left) camera.position.x -= moveSpeed;
+      if (controls.right) camera.position.x += moveSpeed;
+      if (controls.jump) camera.position.y += moveSpeed;
+    }
+
+    // Block breaking (click to remove)
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+
+    document.addEventListener('mousedown', (event) => {
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObjects(blocks);
+
+      if (intersects.length > 0) {
+        const selectedBlock = intersects[0].object;
+        scene.remove(selectedBlock);
+      }
+    });
 
     // Animation loop
     function animate() {
       requestAnimationFrame(animate);
+      updateMovement();
       renderer.render(scene, camera);
     }
+
     animate();
+
+    // Adjust canvas size on window resize
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
   </script>
 </body>
 </html>
