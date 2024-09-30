@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Box Simulator</title>
+  <style>
+    body { margin: 0; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cannon-es/0.18.0/cannon-es.js"></script>
+
+  <script>
+    let scene, camera, renderer, world, plane;
+    const boxes = [], boxMeshes = [];
+
+    init();
+    animate();
+
+    function init() {
+      // Scene setup
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+      // Ground (Plane)
+      const groundTexture = new THREE.TextureLoader().load('https://example.com/grass_texture.jpg'); // Replace with a suitable texture
+      groundTexture.wrapS = groundTexture.wrapT = THREE.RepeatWrapping;
+      groundTexture.repeat.set(100, 100);
+      const planeGeometry = new THREE.PlaneGeometry(1000, 1000);
+      const planeMaterial = new THREE.MeshLambertMaterial({ map: groundTexture });
+      plane = new THREE.Mesh(planeGeometry, planeMaterial);
+      plane.rotation.x = - Math.PI / 2;
+      scene.add(plane);
+
+      // Lighting
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+      directionalLight.position.set(50, 100, 50);
+      scene.add(directionalLight);
+
+      const ambientLight = new THREE.AmbientLight(0x404040); // Soft light
+      scene.add(ambientLight);
+
+      // Physics world
+      world = new CANNON.World();
+      world.gravity.set(0, -9.82, 0);
+
+      // Ground physics
+      const groundBody = new CANNON.Body({
+        mass: 0, // Ground is immovable
+        shape: new CANNON.Plane(),
+      });
+      groundBody.quaternion.setFromEuler(-Math.PI / 2, 0, 0); // Rotate to be horizontal
+      world.addBody(groundBody);
+
+      // Camera position
+      camera.position.set(0, 10, 30);
+      camera.lookAt(0, 0, 0);
+
+      // Event listener for clicking
+      window.addEventListener('click', addBoxOnClick);
+    }
+
+    function addBoxOnClick(event) {
+      // Get mouse position in normalized device coordinates (NDC)
+      const mouse = new THREE.Vector2(
+        (event.clientX / window.innerWidth) * 2 - 1,
+        -(event.clientY / window.innerHeight) * 2 + 1
+      );
+
+      // Convert NDC to 3D world coordinates
+      const raycaster = new THREE.Raycaster();
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObject(plane);
+
+      if (intersects.length > 0) {
+        const point = intersects[0].point;
+
+        // Create Three.js box
+        const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
+        const boxMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 }); // Cardboard color
+        const boxMesh = new THREE.Mesh(boxGeometry, boxMaterial);
+        boxMesh.position.copy(point);
+        scene.add(boxMesh);
+        boxMeshes.push(boxMesh);
+
+        // Create Cannon.js box body
+        const boxShape = new CANNON.Box(new CANNON.Vec3(0.5, 0.5, 0.5));
+        const boxBody = new CANNON.Body({
+          mass: 1,
+          position: new CANNON.Vec3(point.x, point.y, point.z),
+          shape: boxShape
+        });
+        world.addBody(boxBody);
+        boxes.push(boxBody);
+      }
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      // Update physics world
+      world.step(1 / 60);
+
+      // Update box meshes positions
+      for (let i = 0; i < boxes.length; i++) {
+        boxMeshes[i].position.copy(boxes[i].position);
+        boxMeshes[i].quaternion.copy(boxes[i].quaternion);
+      }
+
+      renderer.render(scene, camera);
+    }
+  </script>
+</body>
+</html>
