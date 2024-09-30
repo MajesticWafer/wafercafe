@@ -15,10 +15,33 @@
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #ffccd5, #a3d8f4); /* Wii Party-inspired gradient */
             text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             margin: 0;
             padding: 0;
         }
 
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .button-column {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .left {
+            margin-right: 20px;
+        }
+
+        .right {
+          margin-left: 20px;
+        }
+        
         h1 {
             font-size: 1.6rem;
             color: #fff;
@@ -51,14 +74,27 @@
     </style>
 </head>
 <body onload="resetGame();">
-    <h1>Mildly Broken Tetris Clone</h1>
-    <canvas id="tetris" width="200" height="400"></canvas>
-    
-    <div id="score-container">
-        <div style="font-size: 1.3rem;">Score: <span id="score">0</span></div>
-        <div id="held-piece">Held Piece: <span id="held-shape">None</span></div>
-    </div>
+    <div class="container">
+        <h1>Mildly Broken Tetris Clone</h1>
 
+        <div class="button-column left">
+           <button onclick="holdPiece();">Hold</button>
+           <button onclick="rotatePiece();">Rotate</button>
+           <button onclick="moveLeft();">&lt;</button>
+        </div>
+        
+        <canvas id="tetris" width="200" height="400"></canvas>
+
+        <div class="button-column right">
+           <button onclick="dropPiece();">Drop</button>
+           <button onclick="moveRight();">&gt;</button>
+        </div>
+        
+        <div id="score-container">
+            <div style="font-size: 1.3rem;">Score: <span id="score">0</span></div>
+            <div id="held-piece">Held Piece: <span id="held-shape">None</span></div>
+        </div>
+    </div>
     <script>
         const canvas = document.getElementById('tetris');
         const context = canvas.getContext('2d');
@@ -262,6 +298,16 @@
             gameOver = false;
         }
 
+        // Callable functions
+        function moveLeft() {
+            if (canMove(-1, 0)) currentX--;
+        }
+
+        function moveRight() {
+            if (canMove(1, 0)) currentX++;
+        }
+
+        // Normal keypress functions
         function handleKeyPress(event) {
             if (gameOver) return;
             switch (event.key) {
