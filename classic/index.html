@@ -139,8 +139,8 @@
 
       player.velocity.set(0, 0, 0);
 
-      if (keys.forward) player.velocity.add(forward);
-      if (keys.backward) player.velocity.sub(forward);
+      if (keys.forward) player.velocity.sub(forward);
+      if (keys.backward) player.velocity.add(forward);
       if (keys.left) player.velocity.sub(right);
       if (keys.right) player.velocity.add(right);
 
