@@ -164,17 +164,16 @@
       // Calculate next position
       const nextPosition = player.position.clone().add(player.velocity).add(new THREE.Vector3(0, player.fallSpeed, 0));
 
-      // Apply collision detection and only move if no collision
-      if (!checkCollision(nextPosition)) {
-        player.position.add(player.velocity);
-        player.position.y += player.fallSpeed; // Only adjust y position for fall speed
+      // Check for collision with the ground
+      if (nextPosition.y <= 1) {
+        nextPosition.y = 1; // Snap to ground level
+        player.fallSpeed = 0; // Reset fall speed
+        player.isJumping = false; // Reset jump state
       }
 
-      // Reset jump state if on ground
-      if (player.position.y <= 1) {
-        player.position.y = 1; // Reset to ground level
-        player.isJumping = false; // Reset jump state
-        player.fallSpeed = 0; // Reset fall speed
+      // Apply collision detection for movement
+      if (!checkCollision(nextPosition)) {
+        player.position.copy(nextPosition); // Update position if no collision
       }
 
       camera.position.copy(player.position);
