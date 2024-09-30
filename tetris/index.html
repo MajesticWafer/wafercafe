@@ -23,6 +23,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            background-color: #0c0c0c;
+            box-shadow: 0 8px 8px rgba(0,0,0,0.23);
+            margin-left: 55px;
         }
 
         .button-column {
@@ -45,14 +48,6 @@
 
         .button-column button:hover {
             background-color: #ff4757;
-        }
-
-        .left {
-            margin-right: 20px;
-        }
-
-        .right {
-          margin-left: 20px;
         }
         
         h1 {
@@ -88,18 +83,19 @@
 </head>
 <body onload="resetGame();">
     <h1>Mildly Broken Tetris Clone</h1>
-
-    <div class="button-column left container">
-        <button onclick="holdPiece();">Hold</button>
-        <button onclick="rotatePiece();">Rotate</button>
-        <button onclick="moveLeft();">&lt;</button>
-    </div>
         
     <canvas id="tetris" width="200" height="400"></canvas>
 
-    <div class="button-column right container">
-        <button onclick="dropPiece();">Drop</button>
+    <div class="container">
+        <!-- Move controls -->
+        <button onclick="moveLeft();">&lt;</button>
+        <button onclick="dropPiece();">v</button>
         <button onclick="moveRight();">&gt;</button>
+        <br>
+
+        <!-- Other -->
+        <button onclick="holdPiece();">Hold</button>
+        <button onclick="rotatePiece();">Rotate</button>
     </div>
         
     <div id="score-container">
