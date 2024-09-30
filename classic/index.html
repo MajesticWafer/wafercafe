@@ -141,6 +141,7 @@
 
       player.velocity.set(0, player.fallSpeed, 0); // Reset velocity in y-axis for gravity
 
+      // Move the player based on key inputs
       if (keys.forward) player.velocity.sub(forward);
       if (keys.backward) player.velocity.add(forward);
       if (keys.left) player.velocity.sub(right);
@@ -153,7 +154,7 @@
       }
 
       // Handle jumping
-      if (keys.jump && !player.isJumping) {
+      if (keys.jump && !player.isJumping && player.position.y <= 1) { // Jump only if on the ground
         player.fallSpeed = player.jumpStrength; // Set fall speed for jumping
         player.isJumping = true;
       }
