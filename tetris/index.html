@@ -74,27 +74,26 @@
     </style>
 </head>
 <body onload="resetGame();">
-    <div class="container">
-        <h1>Mildly Broken Tetris Clone</h1>
+    <h1>Mildly Broken Tetris Clone</h1>
 
-        <div class="button-column left">
-           <button onclick="holdPiece();">Hold</button>
-           <button onclick="rotatePiece();">Rotate</button>
-           <button onclick="moveLeft();">&lt;</button>
-        </div>
-        
-        <canvas id="tetris" width="200" height="400"></canvas>
-
-        <div class="button-column right">
-           <button onclick="dropPiece();">Drop</button>
-           <button onclick="moveRight();">&gt;</button>
-        </div>
-        
-        <div id="score-container">
-            <div style="font-size: 1.3rem;">Score: <span id="score">0</span></div>
-            <div id="held-piece">Held Piece: <span id="held-shape">None</span></div>
-        </div>
+    <div class="button-column left container">
+        <button onclick="holdPiece();">Hold</button>
+        <button onclick="rotatePiece();">Rotate</button>
+        <button onclick="moveLeft();">&lt;</button>
     </div>
+        
+    <canvas id="tetris" width="200" height="400"></canvas>
+
+    <div class="button-column right container">
+        <button onclick="dropPiece();">Drop</button>
+        <button onclick="moveRight();">&gt;</button>
+    </div>
+        
+    <div id="score-container">
+        <div style="font-size: 1.3rem;">Score: <span id="score">0</span></div>
+        <div id="held-piece">Held Piece: <span id="held-shape">None</span></div>
+    </div>
+    
     <script>
         const canvas = document.getElementById('tetris');
         const context = canvas.getContext('2d');
