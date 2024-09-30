@@ -6,7 +6,7 @@
   <title>Minecraft Clone</title>
   <style>
     body { margin: 0; overflow: hidden; }
-    canvas { display: block; }
+    canvas { display: block; image-rendering: pixelated; }
   </style>
 </head>
 <body>
@@ -19,6 +19,9 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
+    // Set image rendering to pixelated
+    renderer.domElement.style.imageRendering = 'pixelated';
+
     // Add ambient light
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
@@ -30,8 +33,14 @@
 
     // Load textures for grass and dirt
     const loader = new THREE.TextureLoader();
-    const grassTexture = loader.load('assets/grass.png');  // Example grass texture
-    const dirtTexture = loader.load('assets/dirt.png');    // Example dirt texture
+    const grassTexture = loader.load('assets/grass.png', (texture) => {
+      texture.magFilter = THREE.NearestFilter; // Ensures pixelated look
+      texture.minFilter = THREE.NearestFilter;
+    });
+    const dirtTexture = loader.load('assets/dirt.png', (texture) => {
+      texture.magFilter = THREE.NearestFilter;
+      texture.minFilter = THREE.NearestFilter;
+    });
 
     // Block geometry (each block is 1x1x1 unit)
     const blockGeometry = new THREE.BoxGeometry(1, 1, 1);
@@ -76,6 +85,16 @@
     };
 
     camera.position.copy(player.position);
+
+    // Collision Detection - Check if player is within block bounds
+    function checkCollision(position) {
+      const blockX = Math.floor(position.x);
+      const blockY = Math.floor(position.y);
+      const blockZ = Math.floor(position.z);
+      return (blockY >= 0 && blockY < chunkHeight &&
+              blockX >= 0 && blockX < chunkSize &&
+              blockZ >= 0 && blockZ < chunkSize);
+    }
 
     // Movement controls
     const keys = {
@@ -141,8 +160,13 @@
         player.velocity.multiplyScalar(player.speed);
       }
 
-      // Update player position
-      player.position.add(player.velocity);
+      // Calculate next position
+      const nextPosition = player.position.clone().add(player.velocity);
+
+      // Apply collision detection
+      if (checkCollision(nextPosition)) {
+        player.position.add(player.velocity);  // Only move if no collision
+      }
 
       // Apply gravity (simple, no collision detection for now)
       player.position.y = Math.max(1.5, player.position.y - 0.02); // Falling effect
@@ -151,9 +175,26 @@
       camera.position.copy(player.position);
       camera.position.y += 1.5; // Camera height
 
-      // Update camera rotation
+      // Update camera rotation, and prevent roll axis rotation
       camera.rotation.set(pitch, yaw, 0);
     }
+
+    // Skybox creation
+    function createSkybox() {
+      const skyGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
+      const skyMaterials = [
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // right
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // left
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // top
+        new THREE.MeshBasicMaterial({ color: 0xA9A9A9, side: THREE.BackSide }), // bottom
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // front
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide })  // back
+      ];
+      const skybox = new THREE.Mesh(skyGeometry, skyMaterials);
+      scene.add(skybox);
+    }
+
+    createSkybox();
 
     // Rendering function
     function animate() {
