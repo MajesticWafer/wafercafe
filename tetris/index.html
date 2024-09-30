@@ -93,7 +93,7 @@
     <!-- Control Buttons Left -->
     <div id="left" class="controls">
         <button id="hold">Hold</button>
-        <button id="rotate-left">Rotate</button>
+        <button id="rotate">Rotate</button>
         <button id="move-left">Move Left</button>
     </div>
     
@@ -102,7 +102,6 @@
     <!-- Control Buttons Right -->
     <div id="right" class="controls">
         <button id="drop">Drop</button>
-        <button id="rotate-right">Rotate</button>
         <button id="move-right">Move Right</button>
     </div>
         
@@ -112,38 +111,35 @@
         <div id="held-piece">Held Piece: <span id="held-shape">None</span></div>
     </div>
 
-    <!-- Button logic -->
-    <script>
-       const rotateL = document.getElementById('rotate-left');
-       const drop = document.getElementById('drop');
-       const moveL = document.getElementById('move-left');
-       const moveR = document.getElementById('move-right');
-       const hold = document.getElementById('hold');
-    
+     <script>
+        // Button logic
+        const rotate = document.getElementById('rotate');
+        const drop = document.getElementById('drop');
+        const moveL = document.getElementById('move-left');
+        const moveR = document.getElementById('move-right');
+        const hold = document.getElementById('hold');
+     
+        rotate.addEventListener('click', () => {
+            rotatePiece();    
+        });
+
+        drop.addEventListener('click', () => {
+            dropPiece();         
+        });
         
-       rotate.addEventListener('click', () => {
-           rotatePiece();    
-       });
+        moveL.addEventListener('click', () => {
+            moveLeft();     
+        });
 
-       drop.addEventListener('click', () => {
-           dropPiece();         
-       });
-        
-       moveL.addEventListener('click', () => {
-           moveLeft();     
-       });
+        moveR.addEventListener('click', () => {
+            moveRight();
+        });
 
-       moveR.addEventListener('click', () => {
-           moveRight();
-       });
+        hold.addEventListener('click', () => {
+            holdPiece();
+        });
 
-       hold.addEventListener('click', () => {
-           holdPiece();
-       });
-    </script>
-    
-    <!-- Tetris logic -->
-    <script>
+        // Tetris logic
         const canvas = document.getElementById('tetris');
         const context = canvas.getContext('2d');
         const scoreElement = document.getElementById('score');
