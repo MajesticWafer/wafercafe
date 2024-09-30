@@ -71,7 +71,9 @@
       isCrouching: false,
       isJumping: false,
       jumpStrength: 0.15,
-      crouchHeight: 0.5
+      crouchHeight: 0.5,
+      gravity: -0.02,
+      fallSpeed: 0
     };
 
     camera.position.copy(player.position);
@@ -137,7 +139,7 @@
       const forward = new THREE.Vector3(Math.sin(yaw), 0, Math.cos(yaw));
       const right = new THREE.Vector3(Math.cos(yaw), 0, -Math.sin(yaw));
 
-      player.velocity.set(0, 0, 0);
+      player.velocity.set(0, player.fallSpeed, 0); // Reset velocity in y-axis for gravity
 
       if (keys.forward) player.velocity.sub(forward);
       if (keys.backward) player.velocity.add(forward);
@@ -152,25 +154,27 @@
 
       // Handle jumping
       if (keys.jump && !player.isJumping) {
-        player.velocity.y += player.jumpStrength;
+        player.fallSpeed = player.jumpStrength; // Set fall speed for jumping
         player.isJumping = true;
       }
 
-      // Handle crouching
-      if (player.isCrouching) {
-        player.velocity.y -= player.crouchHeight;
-      }
-
-      // Gravity and jumping physics
-      player.velocity.y -= 0.05;  // Simulated gravity
+      // Gravity
+      player.fallSpeed += player.gravity;
 
       // Calculate next position
-      const nextPosition = player.position.clone().add(player.velocity);
+      const nextPosition = player.position.clone().add(player.velocity).add(new THREE.Vector3(0, player.fallSpeed, 0));
 
       // Apply collision detection and only move if no collision
       if (!checkCollision(nextPosition)) {
         player.position.add(player.velocity);
-        player.isJumping = player.velocity.y !== 0; // Reset jump state when not in air
+        player.position.y += player.fallSpeed; // Only adjust y position for fall speed
+      }
+
+      // Reset jump state if on ground
+      if (player.position.y <= 1) {
+        player.position.y = 1; // Reset to ground level
+        player.isJumping = false; // Reset jump state
+        player.fallSpeed = 0; // Reset fall speed
       }
 
       camera.position.copy(player.position);
