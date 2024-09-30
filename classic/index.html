@@ -11,6 +11,7 @@
 </head>
 <body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="textures.js"></script> <!-- Load the texture management file -->
   <script>
     // Setup scene, camera, and renderer
     const scene = new THREE.Scene();
@@ -18,58 +19,39 @@
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
-
-    // Set image rendering to pixelated
-    renderer.domElement.style.imageRendering = 'pixelated';
-
-    // Add ambient light
+    
+    // Lighting setup
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
 
-    // Add directional light to simulate sunlight
     const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
     directionalLight.position.set(10, 20, 10).normalize();
     scene.add(directionalLight);
 
-    // Load textures for grass and dirt
-    const loader = new THREE.TextureLoader();
-    const grassTexture = loader.load('assets/grass.png', (texture) => {
-      texture.magFilter = THREE.NearestFilter; // Ensures pixelated look
-      texture.minFilter = THREE.NearestFilter;
-    });
-    const dirtTexture = loader.load('assets/dirt.png', (texture) => {
-      texture.magFilter = THREE.NearestFilter;
-      texture.minFilter = THREE.NearestFilter;
-    });
-
-    // Block geometry (each block is 1x1x1 unit)
+    // Create block geometry and material
     const blockGeometry = new THREE.BoxGeometry(1, 1, 1);
+    const dirtMaterial = new THREE.MeshBasicMaterial({ map: textures.dirt });
 
-    // Materials for grass and dirt
-    const grassMaterial = new THREE.MeshBasicMaterial({ map: grassTexture });
-    const dirtMaterial = new THREE.MeshBasicMaterial({ map: dirtTexture });
-
-    // Create a chunk of blocks (16x16, 3 blocks tall)
+    // Generate a 16x16x3 chunk of blocks
     const chunkSize = 16;
     const chunkHeight = 3;
+    const blocks = []; // Store block positions for collision detection
 
     function generateChunk() {
       for (let x = 0; x < chunkSize; x++) {
         for (let z = 0; z < chunkSize; z++) {
           for (let y = 0; y < chunkHeight; y++) {
             let material;
-
-            // Grass on the top layer (y = 2), dirt below
             if (y === 2) {
-              material = grassMaterial;
+              material = createGrassBlockMaterial(); // Grass block on the top
             } else {
-              material = dirtMaterial;
+              material = dirtMaterial; // Dirt block below
             }
 
-            // Create a block mesh
             const block = new THREE.Mesh(blockGeometry, material);
             block.position.set(x, y, z);
             scene.add(block);
+            blocks.push(block); // Add block to array for collision
           }
         }
       }
@@ -86,24 +68,8 @@
 
     camera.position.copy(player.position);
 
-    // Collision Detection - Check if player is within block bounds
-    function checkCollision(position) {
-      const blockX = Math.floor(position.x);
-      const blockY = Math.floor(position.y);
-      const blockZ = Math.floor(position.z);
-      return (blockY >= 0 && blockY < chunkHeight &&
-              blockX >= 0 && blockX < chunkSize &&
-              blockZ >= 0 && blockZ < chunkSize);
-    }
-
     // Movement controls
-    const keys = {
-      forward: false,
-      backward: false,
-      left: false,
-      right: false,
-      jump: false
-    };
+    const keys = { forward: false, backward: false, left: false, right: false };
 
     document.addEventListener('keydown', (event) => {
       switch (event.code) {
@@ -111,7 +77,6 @@
         case 'KeyS': keys.backward = true; break;
         case 'KeyA': keys.left = true; break;
         case 'KeyD': keys.right = true; break;
-        case 'Space': keys.jump = true; break;
       }
     });
 
@@ -121,13 +86,13 @@
         case 'KeyS': keys.backward = false; break;
         case 'KeyA': keys.left = false; break;
         case 'KeyD': keys.right = false; break;
-        case 'Space': keys.jump = false; break;
       }
     });
 
     // Mouse controls
-    let mouseSensitivity = 0.002;
     let pitch = 0, yaw = 0;
+    const mouseSensitivity = 0.002;
+
     document.body.requestPointerLock = document.body.requestPointerLock || document.body.mozRequestPointerLock;
 
     document.addEventListener('click', () => {
@@ -137,16 +102,23 @@
     document.addEventListener('mousemove', (event) => {
       yaw -= event.movementX * mouseSensitivity;
       pitch -= event.movementY * mouseSensitivity;
-      pitch = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, pitch)); // Clamp pitch
+      pitch = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, pitch)); // Clamp pitch to avoid flipping
     });
 
-    // Update camera based on player's movement
+    // Collision detection
+    function checkCollision(nextPosition) {
+      for (let block of blocks) {
+        const distance = block.position.distanceTo(nextPosition);
+        if (distance < 1) return true; // Collision occurs if distance is too close
+      }
+      return false;
+    }
+
+    // Update player's movement and apply collision detection
     function updatePlayer() {
-      // Calculate forward and right directions
       const forward = new THREE.Vector3(Math.sin(yaw), 0, Math.cos(yaw));
       const right = new THREE.Vector3(Math.cos(yaw), 0, -Math.sin(yaw));
 
-      // Update player's velocity based on input
       player.velocity.set(0, 0, 0);
 
       if (keys.forward) player.velocity.add(forward);
@@ -163,32 +135,26 @@
       // Calculate next position
       const nextPosition = player.position.clone().add(player.velocity);
 
-      // Apply collision detection
-      if (checkCollision(nextPosition)) {
-        player.position.add(player.velocity);  // Only move if no collision
+      // Apply collision detection and only move if no collision
+      if (!checkCollision(nextPosition)) {
+        player.position.add(player.velocity);
       }
 
-      // Apply gravity (simple, no collision detection for now)
-      player.position.y = Math.max(1.5, player.position.y - 0.02); // Falling effect
-
-      // Update camera position
       camera.position.copy(player.position);
       camera.position.y += 1.5; // Camera height
-
-      // Update camera rotation, and prevent roll axis rotation
-      camera.rotation.set(pitch, yaw, 0);
+      camera.rotation.set(pitch, yaw, 0); // Fix roll (z-axis)
     }
 
     // Skybox creation
     function createSkybox() {
       const skyGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
       const skyMaterials = [
-        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // right
-        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // left
-        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // top
-        new THREE.MeshBasicMaterial({ color: 0xA9A9A9, side: THREE.BackSide }), // bottom
-        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // front
-        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide })  // back
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }),
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }),
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }),
+        new THREE.MeshBasicMaterial({ color: 0xA9A9A9, side: THREE.BackSide }),
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }),
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide })
       ];
       const skybox = new THREE.Mesh(skyGeometry, skyMaterials);
       scene.add(skybox);
@@ -196,7 +162,7 @@
 
     createSkybox();
 
-    // Rendering function
+    // Render loop
     function animate() {
       requestAnimationFrame(animate);
       updatePlayer();
