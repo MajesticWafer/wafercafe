@@ -150,10 +150,11 @@ body {
     width: 100px;
     height: 100px;
     border: 2px solid var(--button-border);
+    transition: border-color 0.3s ease;
 }
 
 .button-container:hover img {
-    border-color: #d6caff; 
+    border-color: #d6caff
 }
 
 /* Header Buttons */
