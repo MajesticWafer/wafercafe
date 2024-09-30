@@ -18,7 +18,8 @@
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #ffccd5, #a3d8f4); /* Wii Party-inspired gradient */
             /* Method 2 of preventing zoom */
-            touch-action: manipulation;        
+            touch-action: manipulation;  
+            user-select: none;
             text-align: center;
             margin: 0;
             padding: 0;
@@ -31,10 +32,11 @@
             background-color: #0c0c0c;
             box-shadow: 0 8px 8px rgba(0,0,0,0.23);
             margin-left: 55px;
-            border-radius: 8%;
+            border-radius: 13% / 7%;
             margin: 0 auto;
             width: 315px;
             padding: 7px 5px;
+            user-select: none;
         }
 
         .container button {
@@ -47,6 +49,7 @@
             margin: 5px;
             cursor: pointer;
             box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+            user-select: none;
         }
 
         .container button:hover {
@@ -65,6 +68,7 @@
             display: block;
             margin: 20px auto;
             background-color: #eaeaea;
+            user-select: none;
         }
 
         #score {
