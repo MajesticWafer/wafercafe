@@ -2,7 +2,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Method 1 of preventing zoom -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"> 
+    
     <title>Tetris Clone</title>
     
     <!-- Google Fonts Preconnect and Import for Poppins -->
@@ -14,6 +17,8 @@
         body {
             font-family: 'Poppins', sans-serif;
             background: linear-gradient(135deg, #ffccd5, #a3d8f4); /* Wii Party-inspired gradient */
+            /* Method 2 of preventing zoom */
+            touch-action: manipulation;        
             text-align: center;
             margin: 0;
             padding: 0;
@@ -100,7 +105,19 @@
         <div style="font-size: 1.3rem;">Score: <span id="score">0</span></div>
         <div id="held-piece">Held Piece: <span id="held-shape">None</span></div>
     </div>
-    
+
+    <!-- Method 3 of preventing zoom -->
+    <script>
+        let lastTouchEnd = 0;
+
+        document.addEventListener('touchend', function(event) {
+            const now = new Date().getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault(); // Prevents zoom
+            }
+            lastTouchEnd = now;
+        }, false);
+    </script>
     <script>
         const canvas = document.getElementById('tetris');
         const context = canvas.getContext('2d');
