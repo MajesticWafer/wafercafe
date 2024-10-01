@@ -35,6 +35,8 @@
     const dirtMaterial = new THREE.MeshStandardMaterial({ map: textures.dirt });
     const stoneMaterial = new THREE.MeshStandardMaterial({ map: textures.stone });
     const bedrockMaterial = new THREE.MeshStandardMaterial({ map: textures.bedrock });
+    const woodMaterial = new THREE.MeshStandardMaterial({ map: textures.wood });
+    const leafMaterial = new THREE.MeshStandardMaterial({ map: textures.leaf });
 
     // Generate a 16x16x3 chunk of blocks
     const chunkSize = 32;
@@ -69,151 +71,39 @@
 
     generateChunk();
 
-    // Player setup
-    const player = {
-      position: new THREE.Vector3(8, 5, 8),
-      velocity: new THREE.Vector3(),
-      speed: 0.1,
-      isCrouching: false,
-      isJumping: false,
-      jumpStrength: 0.15,
-      crouchHeight: 0.5,
-      gravity: -0.02,
-      fallSpeed: 0
-    };
-
-    camera.position.copy(player.position);
-
-    // Movement controls
-    const keys = { forward: false, backward: false, left: false, right: false, jump: false, up: false, down: false };
-
-    document.addEventListener('keydown', (event) => {
-      switch (event.code) {
-        case 'KeyW': keys.forward = true; break;
-        case 'KeyS': keys.backward = true; break;
-        case 'KeyA': keys.left = true; break;
-        case 'KeyD': keys.right = true; break;
-        case 'Space': keys.jump = true; break;
+    // Function to add a tree at a specific position
+    function addTree(x, z) {
+      // Tree trunk (wood blocks)
+      for (let y = 5; y < 9; y++) {
+        const woodBlock = new THREE.Mesh(blockGeometry, woodMaterial);
+        woodBlock.position.set(x, y, z);
+        woodBlock.castShadow = true;
+        woodBlock.receiveShadow = true;
+        scene.add(woodBlock);
       }
-    });
 
-    document.addEventListener('keyup', (event) => {
-      switch (event.code) {
-        case 'KeyW': keys.forward = false; break;
-        case 'KeyS': keys.backward = false; break;
-        case 'KeyA': keys.left = false; break;
-        case 'KeyD': keys.right = false; break;
-        case 'Space': keys.jump = false; break;
-      }
-    });
+      // Leaves (leaf blocks)
+      for (let dx = -1; dx <= 1; dx++) {
+        for (let dz = -1; dz <= 1; dz++) {
+          const leafBlock1 = new THREE.Mesh(blockGeometry, leafMaterial);
+          leafBlock1.position.set(x + dx, 9, z + dz);
+          leafBlock1.castShadow = true;
+          leafBlock1.receiveShadow = true;
+          scene.add(leafBlock1);
 
-    // Mouse and Arrow Key controls for looking around
-    let pitch = 0, yaw = 0;
-    const mouseSensitivity = 0.002;
-    const arrowKeySensitivity = 0.1; // Increased sensitivity for faster camera movement
-    const maxPitch = Math.PI / 2; // Limit pitch to avoid flipping
-
-    // Mouse movement listener
-    document.body.requestPointerLock = document.body.requestPointerLock || document.body.mozRequestPointerLock;
-
-    document.addEventListener('click', () => {
-      document.body.requestPointerLock();
-    });
-
-    document.addEventListener('mousemove', (event) => {
-      yaw -= event.movementX * mouseSensitivity;
-      pitch -= event.movementY * mouseSensitivity;
-      pitch = Math.max(-maxPitch, Math.min(maxPitch, pitch)); // Clamp pitch
-    });
-
-    // Arrow key listener for looking around
-    document.addEventListener('keydown', (event) => {
-      switch (event.code) {
-        case 'ArrowUp': 
-          pitch -= arrowKeySensitivity; // Look up
-          pitch = Math.max(-maxPitch, Math.min(maxPitch, pitch)); // Clamp pitch
-          break;
-        case 'ArrowDown': 
-          pitch += arrowKeySensitivity; // Look down
-          pitch = Math.max(-maxPitch, Math.min(maxPitch, pitch)); // Clamp pitch
-          break;
-        case 'ArrowLeft': 
-          yaw += arrowKeySensitivity; // Swap left/right for correct rotation
-          break;
-        case 'ArrowRight': 
-          yaw -= arrowKeySensitivity; // Swap left/right for correct rotation
-          break;
-      }
-    });
-
-    // Collision detection using AABB
-    function checkCollision(nextPosition) {
-      for (let block of blocks) {
-        const min = block.position.clone().sub(new THREE.Vector3(0.5, 0.5, 0.5));
-        const max = block.position.clone().add(new THREE.Vector3(0.5, 0.5, 0.5));
-        if (nextPosition.x >= min.x && nextPosition.x <= max.x &&
-            nextPosition.y >= min.y && nextPosition.y <= max.y &&
-            nextPosition.z >= min.z && nextPosition.z <= max.z) {
-          return true; // Collision detected
+          if (Math.abs(dx) < 2 && Math.abs(dz) < 2) { // Create smaller layers
+            const leafBlock2 = new THREE.Mesh(blockGeometry, leafMaterial);
+            leafBlock2.position.set(x + dx, 8, z + dz);
+            leafBlock2.castShadow = true;
+            leafBlock2.receiveShadow = true;
+            scene.add(leafBlock2);
+          }
         }
       }
-      return false;
     }
 
-    // Update player's movement and apply collision detection
-    function updatePlayer() {
-      const forward = new THREE.Vector3(Math.sin(yaw), 0, Math.cos(yaw));
-      const right = new THREE.Vector3(Math.cos(yaw), 0, -Math.sin(yaw));
-
-      player.velocity.set(0, player.fallSpeed, 0); // Reset velocity in y-axis for gravity
-
-      // Move the player based on key inputs
-      if (keys.forward) player.velocity.sub(forward);
-      if (keys.backward) player.velocity.add(forward);
-      if (keys.left) player.velocity.sub(right);
-      if (keys.right) player.velocity.add(right);
-
-      // Normalize velocity and apply speed
-      if (player.velocity.length() > 0) {
-        player.velocity.normalize();
-        player.velocity.multiplyScalar(player.speed);
-      }
-
-      // Handle jumping
-      if (keys.jump && !player.isJumping && player.position.y <= 1.1) { // Jump only if on the ground
-        player.fallSpeed = player.jumpStrength; // Set fall speed for jumping
-        player.isJumping = true;
-      }
-
-      // Gravity
-      player.fallSpeed += player.gravity;
-
-      // Calculate next position (handle x, y, z axes separately)
-      let nextPosition = player.position.clone();
-      
-      let nextX = player.position.clone().add(new THREE.Vector3(player.velocity.x, 0, 0));
-      if (!checkCollision(nextX)) nextPosition.x = nextX.x;
-      
-      let nextY = player.position.clone().add(new THREE.Vector3(0, player.fallSpeed, 0));
-      if (!checkCollision(nextY)) {
-        nextPosition.y = nextY.y;
-      } else {
-        player.fallSpeed = 0; // Reset fall speed on collision with ground
-        player.isJumping = false; // Reset jump state
-      }
-      
-      let nextZ = player.position.clone().add(new THREE.Vector3(0, 0, player.velocity.z));
-      if (!checkCollision(nextZ)) nextPosition.z = nextZ.z;
-
-      player.position.copy(nextPosition); // Update position after checking all axes
-
-      // Update camera position based on player position and crouching
-      camera.position.copy(player.position);
-      camera.position.y += player.isCrouching ? 0.5 : 1.5; // Adjust height for crouching
-      camera.rotation.x = pitch; // Set pitch for looking up/down
-      camera.rotation.y = yaw; // Set yaw for looking left/right
-      // Removed camera.rotation.z to prevent rolling
-    }
+    // Place the tree in the chunk at (10, 5)
+    addTree(10, 5);
 
     // Skybox creation
     function createSkybox() {
@@ -234,7 +124,6 @@
     // Main animation loop
     function animate() {
       requestAnimationFrame(animate);
-      updatePlayer(); // Update player movement
       renderer.render(scene, camera);
     }
 
