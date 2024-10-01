@@ -30,15 +30,15 @@
     directionalLight.castShadow = true; // Enable shadow casting
     scene.add(directionalLight);
 
-    // Create block geometry and materials
+    // Create block geometry and material
     const blockGeometry = new THREE.BoxGeometry(1, 1, 1);
-    const bedrockMaterial = new THREE.MeshStandardMaterial({ map: textures.bedrock });
-    const stoneMaterial = new THREE.MeshStandardMaterial({ map: textures.stone });
     const dirtMaterial = new THREE.MeshStandardMaterial({ map: textures.dirt });
+    const stoneMaterial = new THREE.MeshStandardMaterial({ map: textures.stone });
+    const bedrockMaterial = new THREE.MeshStandardMaterial({ map: textures.bedrock });
 
-    // Generate a 16x16 chunk of blocks
+    // Generate a 16x16x3 chunk of blocks
     const chunkSize = 16;
-    const chunkHeight = 5; // Increase height to accommodate all layers
+    const chunkHeight = 3;
     const blocks = []; // Store block positions for collision detection
 
     function generateChunk() {
@@ -46,14 +46,14 @@
         for (let z = 0; z < chunkSize; z++) {
           for (let y = 0; y < chunkHeight; y++) {
             let material;
-            if (y === 0) {
-              material = bedrockMaterial; // Bedrock at bottom layer
-            } else if (y >= 1 && y <= 3) {
-              material = stoneMaterial; // Stone layers
-            } else if (y === 4) {
-              material = dirtMaterial; // Dirt layer
-            } else if (y === 5) {
-              material = createGrassBlockMaterial(); // Grass blocks on top
+            if (y === 5) {
+              material = createGrassBlockMaterial(); // Grass block on top
+            } else if(y === 4) {
+              material = dirtMaterial; // Dirt block below
+            } else if(y < 4 && y > 1) {
+              material = stoneMaterial; // Stone block below
+            } else if(y === 1) {
+              material = bedrockMaterial; // Bedrock block below
             }
 
             const block = new THREE.Mesh(blockGeometry, material);
@@ -71,7 +71,7 @@
 
     // Player setup
     const player = {
-      position: new THREE.Vector3(8, 7, 8),
+      position: new THREE.Vector3(8, 5, 8),
       velocity: new THREE.Vector3(),
       speed: 0.1,
       isCrouching: false,
@@ -205,24 +205,40 @@
       let nextZ = player.position.clone().add(new THREE.Vector3(0, 0, player.velocity.z));
       if (!checkCollision(nextZ)) nextPosition.z = nextZ.z;
 
-      player.position.copy(nextPosition); // Update player position
-      camera.position.copy(player.position); // Update camera position
+      player.position.copy(nextPosition); // Update position after checking all axes
+
+      // Update camera position based on player position and crouching
+      camera.position.copy(player.position);
+      camera.position.y += player.isCrouching ? 0.5 : 1.5; // Adjust height for crouching
+      camera.rotation.x = pitch; // Set pitch for looking up/down
+      camera.rotation.y = yaw; // Set yaw for looking left/right
+      // Removed camera.rotation.z to prevent rolling
     }
 
-    // Animate the scene
+    // Skybox creation
+    function createSkybox() {
+      const skyGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
+      const skyMaterials = [
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }),
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }),
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }),
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }),
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }),
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide })
+      ];
+      const skybox = new THREE.Mesh(skyGeometry, skyMaterials);
+      scene.add(skybox);
+    }
+    createSkybox();
+
+    // Main animation loop
     function animate() {
       requestAnimationFrame(animate);
-      updatePlayer();
+      updatePlayer(); // Update player movement
       renderer.render(scene, camera);
     }
-    animate();
 
-    // Handle window resizing
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
+    animate();
   </script>
 </body>
 </html>
