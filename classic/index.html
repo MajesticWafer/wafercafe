@@ -12,7 +12,6 @@
 <body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="textures.js"></script> <!-- Texture management file -->
-  <script src="chunkGenerator.js"></script> <!-- Chunk generator file -->
   <script>
     // Setup scene, camera, and renderer
     const scene = new THREE.Scene();
@@ -40,8 +39,29 @@
     const chunkHeight = 3;
     const blocks = []; // Store block positions for collision detection
 
-    // Call the chunk generation function
-    generateChunk(scene, blockGeometry, dirtMaterial, blocks);
+    function generateChunk() {
+      for (let x = 0; x < chunkSize; x++) {
+        for (let z = 0; z < chunkSize; z++) {
+          for (let y = 0; y < chunkHeight; y++) {
+            let material;
+            if (y === 2) {
+              material = createGrassBlockMaterial(); // Grass block on top
+            } else {
+              material = dirtMaterial; // Dirt block below
+            }
+
+            const block = new THREE.Mesh(blockGeometry, material);
+            block.position.set(x, y, z);
+            block.castShadow = true;  // Enable block shadow casting
+            block.receiveShadow = true;  // Enable block shadow receiving
+            scene.add(block);
+            blocks.push(block); // Add block to array for collision
+          }
+        }
+      }
+    }
+
+    generateChunk();
 
     // Player setup
     const player = {
@@ -208,17 +228,11 @@
     // Main animation loop
     function animate() {
       requestAnimationFrame(animate);
-      updatePlayer(); // Update player position
-      renderer.render(scene, camera); // Render the scene
+      updatePlayer(); // Update player movement
+      renderer.render(scene, camera);
     }
-    animate();
 
-    // Resize handling
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
+    animate();
   </script>
 </body>
 </html>
