@@ -104,7 +104,7 @@
     // Mouse and Arrow Key controls for looking around
     let pitch = 0, yaw = 0;
     const mouseSensitivity = 0.002;
-    const arrowKeySensitivity = 0.05; // Sensitivity for arrow keys
+    const arrowKeySensitivity = 0.1; // Increased sensitivity for faster camera movement
     const maxPitch = Math.PI / 2; // Limit pitch to avoid flipping
 
     // Mouse movement listener
@@ -174,7 +174,7 @@
       }
 
       // Handle jumping
-      if (keys.jump && !player.isJumping && player.position.y <= 1) { // Jump only if on the ground
+      if (keys.jump && !player.isJumping && player.position.y <= 1.1) { // Jump only if on the ground
         player.fallSpeed = player.jumpStrength; // Set fall speed for jumping
         player.isJumping = true;
       }
@@ -189,8 +189,12 @@
       if (!checkCollision(nextX)) nextPosition.x = nextX.x;
       
       let nextY = player.position.clone().add(new THREE.Vector3(0, player.fallSpeed, 0));
-      if (!checkCollision(nextY)) nextPosition.y = nextY.y;
-      else player.isJumping = false; // Reset jump if collision with ground
+      if (!checkCollision(nextY)) {
+        nextPosition.y = nextY.y;
+      } else {
+        player.fallSpeed = 0; // Reset fall speed on collision with ground
+        player.isJumping = false; // Reset jump state
+      }
       
       let nextZ = player.position.clone().add(new THREE.Vector3(0, 0, player.velocity.z));
       if (!checkCollision(nextZ)) nextPosition.z = nextZ.z;
