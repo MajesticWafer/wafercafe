@@ -38,7 +38,7 @@
 
     // Generate a 16x16x3 chunk of blocks
     const chunkSize = 32;
-    const chunkHeight = 5;
+    const chunkHeight = 24;
     const blocks = []; // Store block positions for collision detection
 
     function generateChunk() {
@@ -54,9 +54,7 @@
               material = stoneMaterial; // Stone block below
             } else if(y === 0) {
               material = bedrockMaterial; // Bedrock block below
-            }
-
-            if (x === 7 && z === 9 && y < 11 && y > 5) {
+            } else if (x === 7 && z === 9 && y < 11 && y > 5) {
               material = createLogMaterial();
             }
 
