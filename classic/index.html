@@ -38,11 +38,15 @@
 
     // Generate a 16x16x3 chunk of blocks
     const chunkSize = 32;
-    const chunkHeight = 5;
+    const chunkHeight = 7;
     const blocks = []; // Store block positions for collision detection
 
     function generateChunk() {
       for (let x = 0; x < chunkSize; x++) {
+        let material;
+        if (x === 4) {
+          material = dirtMaterial;
+        }
         for (let z = 0; z < chunkSize; z++) {
           for (let y = 0; y < chunkHeight; y++) {
             let material;
