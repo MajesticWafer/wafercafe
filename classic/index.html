@@ -54,8 +54,6 @@
               material = stoneMaterial; // Stone block below
             } else if(y === 0) {
               material = bedrockMaterial; // Bedrock block below
-            } else if (x === 4) {
-              material = dirtMaterial;
             }
 
             const block = new THREE.Mesh(blockGeometry, material);
