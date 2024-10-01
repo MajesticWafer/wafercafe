@@ -12,10 +12,8 @@
 <body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="textures.js"></script> <!-- Texture management file -->
-  <script type="module">
-    // Import the generateChunk function from the external script
-    import { generateChunk, blocks } from './chunkGenerator.js';
-
+  <script src="chunkGenerator.js"></script> <!-- Chunk generator file -->
+  <script>
     // Setup scene, camera, and renderer
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -33,7 +31,17 @@
     directionalLight.castShadow = true; // Enable shadow casting
     scene.add(directionalLight);
 
-    generateChunk();
+    // Create block geometry and material
+    const blockGeometry = new THREE.BoxGeometry(1, 1, 1);
+    const dirtMaterial = new THREE.MeshStandardMaterial({ map: textures.dirt });
+
+    // Generate a 16x16x3 chunk of blocks
+    const chunkSize = 16;
+    const chunkHeight = 3;
+    const blocks = []; // Store block positions for collision detection
+
+    // Call the chunk generation function
+    generateChunk(scene, blockGeometry, dirtMaterial, blocks);
 
     // Player setup
     const player = {
@@ -200,11 +208,17 @@
     // Main animation loop
     function animate() {
       requestAnimationFrame(animate);
-      updatePlayer(); // Update player movement
-      renderer.render(scene, camera);
+      updatePlayer(); // Update player position
+      renderer.render(scene, camera); // Render the scene
     }
-
     animate();
+
+    // Resize handling
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
   </script>
 </body>
 </html>
