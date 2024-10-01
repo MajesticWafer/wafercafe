@@ -38,7 +38,7 @@
 
     // Generate a 16x16x3 chunk of blocks
     const chunkSize = 16;
-    const chunkHeight = 32;
+    const chunkHeight = 5;
     const blocks = []; // Store block positions for collision detection
 
     function generateChunk() {
@@ -46,13 +46,13 @@
         for (let z = 0; z < chunkSize; z++) {
           for (let y = 0; y < chunkHeight; y++) {
             let material;
-            if (y === 5) {
+            if (y === 4) {
               material = createGrassBlockMaterial(); // Grass block on top
-            } else if(y === 4) {
+            } else if(y === 3) {
               material = dirtMaterial; // Dirt block below
-            } else if(y < 4 && y > 1) {
+            } else if(y < 3 && y > 0) {
               material = stoneMaterial; // Stone block below
-            } else if(y === 1) {
+            } else if(y === 0) {
               material = bedrockMaterial; // Bedrock block below
             }
 
