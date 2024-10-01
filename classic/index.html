@@ -85,7 +85,7 @@
     camera.position.copy(player.position);
 
     // Movement controls
-    const keys = { forward: false, backward: false, left: false, right: false, jump: false, up: false, down: false };
+    const keys = { forward: false, backward: false, left: false, right: false, jump: false };
 
     document.addEventListener('keydown', (event) => {
       switch (event.code) {
@@ -210,35 +210,40 @@
       // Update camera position based on player position and crouching
       camera.position.copy(player.position);
       camera.position.y += player.isCrouching ? 0.5 : 1.5; // Adjust height for crouching
-      camera.rotation.x = pitch; // Set pitch for looking up/down
-      camera.rotation.y = yaw; // Set yaw for looking left/right
-      // Removed camera.rotation.z to prevent rolling
     }
 
-    // Skybox creation
+    // Create skybox
     function createSkybox() {
-      const skyGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
-      const skyMaterials = [
-        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }),
-        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }),
-        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }),
-        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }),
-        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }),
-        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide })
+      const skyboxGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
+      const skyboxMaterials = [
+        new THREE.MeshBasicMaterial({ map: textures.sky }),
+        new THREE.MeshBasicMaterial({ map: textures.sky }),
+        new THREE.MeshBasicMaterial({ map: textures.sky }),
+        new THREE.MeshBasicMaterial({ map: textures.sky }),
+        new THREE.MeshBasicMaterial({ map: textures.sky }),
+        new THREE.MeshBasicMaterial({ map: textures.sky }),
       ];
-      const skybox = new THREE.Mesh(skyGeometry, skyMaterials);
+      const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterials);
       scene.add(skybox);
     }
-    createSkybox();
 
-    // Main animation loop
+    createSkybox(); // Add skybox to the scene
+
+    // Render loop
     function animate() {
       requestAnimationFrame(animate);
-      updatePlayer(); // Update player movement
-      renderer.render(scene, camera);
+      updatePlayer(); // Update player position and check collisions
+      renderer.render(scene, camera); // Render scene
     }
 
-    animate();
+    animate(); // Start the animation loop
+
+    // Window resize handling
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
   </script>
 </body>
 </html>
