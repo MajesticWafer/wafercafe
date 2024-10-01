@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>File Encrypt/Decrypt</title>
+  <title>File Encrypt/Decrypt with AES</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -41,10 +41,10 @@
 <body>
 
   <div class="container">
-    <h2>File Encrypt/Decrypt Tool</h2>
+    <h2>File Encrypt/Decrypt with AES</h2>
     
     <input type="file" id="fileInput" />
-    <button onclick="encryptFile()">Encrypt File</button>
+    <button onclick="encryptFile()">Encrypt & Download File</button>
     <button onclick="decryptFile()">Decrypt File</button>
     
     <h3>Output:</h3>
@@ -53,6 +53,7 @@
 
   <script>
     const key = "secret_key";  // Key for XOR encryption
+    let aesKey;  // AES encryption key
 
     // Convert a file to text
     function fileToText(file) {
@@ -90,6 +91,52 @@
       return str.split("").reverse().join("");
     }
 
+    // AES Encryption
+    async function aesEncrypt(data) {
+      const encoder = new TextEncoder();
+      const encodedData = encoder.encode(data);
+      const encrypted = await crypto.subtle.encrypt(
+        { name: "AES-GCM", iv: aesKey.iv },
+        aesKey.key,
+        encodedData
+      );
+      return new Uint8Array(encrypted);
+    }
+
+    // AES Decryption
+    async function aesDecrypt(encryptedData) {
+      const decrypted = await crypto.subtle.decrypt(
+        { name: "AES-GCM", iv: aesKey.iv },
+        aesKey.key,
+        encryptedData
+      );
+      const decoder = new TextDecoder();
+      return decoder.decode(decrypted);
+    }
+
+    // Generate AES key
+    async function generateAESKey() {
+      const key = await crypto.subtle.generateKey(
+        { name: "AES-GCM", length: 256 },
+        true,
+        ["encrypt", "decrypt"]
+      );
+      const iv = crypto.getRandomValues(new Uint8Array(12));  // IV for AES-GCM
+      aesKey = { key, iv };
+    }
+
+    // Download file as .crypt
+    function downloadFile(content, filename) {
+      const blob = new Blob([content], { type: 'application/octet-stream' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
     // Encrypt file contents
     async function encryptFile() {
       const fileInput = document.getElementById('fileInput');
@@ -97,6 +144,9 @@
         alert('Please select a file to encrypt.');
         return;
       }
+
+      // Generate AES key
+      await generateAESKey();
 
       const file = fileInput.files[0];
       const fileContent = await fileToText(file);
@@ -110,7 +160,13 @@
       // Layer 3: Reverse the string
       encryptedContent = reverseString(encryptedContent);
 
-      document.getElementById('output').value = encryptedContent;
+      // AES Encryption
+      const aesEncryptedContent = await aesEncrypt(encryptedContent);
+
+      // Download encrypted file
+      downloadFile(aesEncryptedContent, file.name + '.crypt');
+
+      document.getElementById('output').value = 'File encrypted and downloaded.';
     }
 
     // Decrypt file contents
@@ -124,8 +180,11 @@
       const file = fileInput.files[0];
       const fileContent = await fileToText(file);
       
+      // AES Decryption
+      const aesDecryptedContent = await aesDecrypt(new Uint8Array(fileContent.split(',').map(Number)));
+
       // Layer 3: Reverse the string (reverse of encryption)
-      let decryptedContent = reverseString(fileContent);
+      let decryptedContent = reverseString(aesDecryptedContent);
 
       // Layer 2: XOR Decryption (same function for encryption/decryption)
       decryptedContent = xorEncryptDecrypt(decryptedContent, key);
