@@ -216,7 +216,6 @@
     }
 
     // Skybox creation
-    // Animation loop
     function createSkybox() {
       const skyGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
       const skyMaterials = [
@@ -232,32 +231,14 @@
     }
     createSkybox();
 
-    // Animation loop
+    // Main animation loop
     function animate() {
       requestAnimationFrame(animate);
-      updatePlayer();
+      updatePlayer(); // Update player movement
       renderer.render(scene, camera);
     }
 
     animate();
-
-    // Adjust the canvas size when the window is resized
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-
-    // Function to create grass block material with multiple textures (top, bottom, sides)
-    function createGrassBlockMaterial() {
-      const materials = [
-        new THREE.MeshStandardMaterial({ map: textures.grassSide }), // Side material
-        new THREE.MeshStandardMaterial({ map: textures.dirt }), // Bottom material
-        new THREE.MeshStandardMaterial({ map: textures.grassTop }) // Top material
-      ];
-      return materials;
-    }
-
   </script>
 </body>
 </html>
