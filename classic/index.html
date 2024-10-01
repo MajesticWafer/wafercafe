@@ -212,7 +212,7 @@
       camera.position.y += player.isCrouching ? 0.5 : 1.5; // Adjust height for crouching
       camera.rotation.x = pitch; // Set pitch for looking up/down
       camera.rotation.y = yaw; // Set yaw for looking left/right
-      // Removed camera.rotation.z to prevent rolling
+      camera.rotation.z = 0; // Ensure rolling is zeroed out
     }
 
     // Skybox creation
