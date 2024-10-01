@@ -88,10 +88,6 @@
         case 'KeyA': keys.left = true; break;
         case 'KeyD': keys.right = true; break;
         case 'Space': keys.jump = true; break;
-        case 'ArrowUp': keys.forward = true; break; // Add arrow key movement
-        case 'ArrowDown': keys.backward = true; break;
-        case 'ArrowLeft': keys.left = true; break;
-        case 'ArrowRight': keys.right = true; break;
       }
     });
 
@@ -102,18 +98,16 @@
         case 'KeyA': keys.left = false; break;
         case 'KeyD': keys.right = false; break;
         case 'Space': keys.jump = false; break;
-        case 'ArrowUp': keys.forward = false; break; // Add arrow key movement
-        case 'ArrowDown': keys.backward = false; break;
-        case 'ArrowLeft': keys.left = false; break;
-        case 'ArrowRight': keys.right = false; break;
       }
     });
 
-    // Mouse controls
+    // Mouse and Arrow Key controls for looking around
     let pitch = 0, yaw = 0;
     const mouseSensitivity = 0.002;
+    const arrowKeySensitivity = 0.05; // Sensitivity for arrow keys
     const maxPitch = Math.PI / 2; // Limit pitch to avoid flipping
 
+    // Mouse movement listener
     document.body.requestPointerLock = document.body.requestPointerLock || document.body.mozRequestPointerLock;
 
     document.addEventListener('click', () => {
@@ -124,6 +118,26 @@
       yaw -= event.movementX * mouseSensitivity;
       pitch -= event.movementY * mouseSensitivity;
       pitch = Math.max(-maxPitch, Math.min(maxPitch, pitch)); // Clamp pitch
+    });
+
+    // Arrow key listener for looking around
+    document.addEventListener('keydown', (event) => {
+      switch (event.code) {
+        case 'ArrowUp': 
+          pitch -= arrowKeySensitivity;
+          pitch = Math.max(-maxPitch, Math.min(maxPitch, pitch)); // Clamp pitch
+          break;
+        case 'ArrowDown': 
+          pitch += arrowKeySensitivity;
+          pitch = Math.max(-maxPitch, Math.min(maxPitch, pitch)); // Clamp pitch
+          break;
+        case 'ArrowLeft': 
+          yaw -= arrowKeySensitivity;
+          break;
+        case 'ArrowRight': 
+          yaw += arrowKeySensitivity;
+          break;
+      }
     });
 
     // Collision detection using AABB
