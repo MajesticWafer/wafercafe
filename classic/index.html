@@ -12,7 +12,10 @@
 <body>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="textures.js"></script> <!-- Texture management file -->
-  <script>
+  <script type="module">
+    // Import the generateChunk function from the external script
+    import { generateChunk, blocks } from './chunkGenerator.js';
+
     // Setup scene, camera, and renderer
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -29,37 +32,6 @@
     directionalLight.position.set(10, 20, 10).normalize();
     directionalLight.castShadow = true; // Enable shadow casting
     scene.add(directionalLight);
-
-    // Create block geometry and material
-    const blockGeometry = new THREE.BoxGeometry(1, 1, 1);
-    const dirtMaterial = new THREE.MeshStandardMaterial({ map: textures.dirt });
-
-    // Generate a 16x16x3 chunk of blocks
-    const chunkSize = 16;
-    const chunkHeight = 3;
-    const blocks = []; // Store block positions for collision detection
-
-    function generateChunk() {
-      for (let x = 0; x < chunkSize; x++) {
-        for (let z = 0; z < chunkSize; z++) {
-          for (let y = 0; y < chunkHeight; y++) {
-            let material;
-            if (y === 2) {
-              material = createGrassBlockMaterial(); // Grass block on top
-            } else {
-              material = dirtMaterial; // Dirt block below
-            }
-
-            const block = new THREE.Mesh(blockGeometry, material);
-            block.position.set(x, y, z);
-            block.castShadow = true;  // Enable block shadow casting
-            block.receiveShadow = true;  // Enable block shadow receiving
-            scene.add(block);
-            blocks.push(block); // Add block to array for collision
-          }
-        }
-      }
-    }
 
     generateChunk();
 
