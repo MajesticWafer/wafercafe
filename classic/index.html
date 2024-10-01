@@ -36,9 +36,9 @@
     const stoneMaterial = new THREE.MeshStandardMaterial({ map: textures.stone });
     const bedrockMaterial = new THREE.MeshStandardMaterial({ map: textures.bedrock });
 
-    // Generate a 16x16x3 chunk of blocks
-    const chunkSize = 32;
-    const chunkHeight = 7;
+    // Generate a 16x16x5 chunk of blocks
+    const chunkSize = 16;
+    const chunkHeight = 5;
     const blocks = []; // Store block positions for collision detection
 
     function generateChunk() {
@@ -46,16 +46,14 @@
         for (let z = 0; z < chunkSize; z++) {
           for (let y = 0; y < chunkHeight; y++) {
             let material;
-            if (y === 4) {
+            if (y === 5) {
               material = createGrassBlockMaterial(); // Grass block on top
-            } else if(y === 3) {
+            } else if(y === 4) {
               material = dirtMaterial; // Dirt block below
-            } else if(y < 3 && y > 0) {
+            } else if(y < 4 && y > 1) {
               material = stoneMaterial; // Stone block below
-            } else if(y === 0) {
+            } else if(y === 1) {
               material = bedrockMaterial; // Bedrock block below
-            } else if (x === 4) {
-              material = dirtMaterial;
             }
 
             const block = new THREE.Mesh(blockGeometry, material);
