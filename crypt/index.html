@@ -11,18 +11,26 @@
     }
     body {
       font-family: 'Roboto', sans-serif;
-      background-color: #121212;
-      color: #e0e0e0;
+      background-color: #f0f0f0;
+      color: #333;
       margin: 0;
       padding: 0;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
+      background-image: linear-gradient(135deg, #e3f2fd 25%, #bbdefb 75%);
+      background-size: 400% 400%;
+      animation: gradient 15s ease infinite;
+    }
+    @keyframes gradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
     .container {
       max-width: 600px;
-      background: #1e1e1e;
+      background: white;
       padding: 30px;
       border-radius: 12px;
       box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
@@ -31,43 +39,45 @@
     h2 {
       font-weight: 500;
       margin-bottom: 20px;
+      color: #1976d2;
     }
     input[type="file"] {
       margin: 20px 0;
       padding: 10px;
       border-radius: 8px;
-      background: #2b2b2b;
-      border: none;
-      color: #e0e0e0;
+      border: 1px solid #1976d2;
+      color: #1976d2;
+      background: #e3f2fd;
     }
     button {
       margin: 10px;
       padding: 15px 30px;
       border-radius: 8px;
       border: none;
-      background-color: #4caf50;
+      background-color: #1976d2;
       color: white;
       font-size: 16px;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: background-color 0.3s, transform 0.3s;
     }
     button:hover {
-      background-color: #43a047;
+      background-color: #1565c0;
+      transform: scale(1.05);
     }
     textarea {
       width: 100%;
       height: 150px;
-      background-color: #1e1e1e;
-      color: #e0e0e0;
-      border: 1px solid #333;
+      background-color: #f9f9f9;
+      color: #333;
+      border: 1px solid #ccc;
       border-radius: 8px;
       padding: 10px;
       margin-top: 20px;
     }
     .loader {
-      border: 8px solid #2e2e2e;
+      border: 8px solid #e0e0e0;
       border-radius: 50%;
-      border-top: 8px solid #4caf50;
+      border-top: 8px solid #1976d2;
       width: 60px;
       height: 60px;
       animation: spin 1s linear infinite;
@@ -218,8 +228,11 @@
       // AES Encryption
       const aesEncryptedContent = await aesEncrypt(encryptedContent);
 
+      // Convert to Base64 for download
+      const base64Encrypted = base64Encode(String.fromCharCode(...aesEncryptedContent));
+
       // Download encrypted file
-      downloadFile(aesEncryptedContent, file.name + '.crypt');
+      downloadFile(base64Encrypted, file.name + '.crypt');
 
       document.getElementById('output').value = 'File encrypted and downloaded.';
 
@@ -241,8 +254,11 @@
       // Show loader
       showLoader(true);
       
+      // Convert Base64 to Uint8Array
+      const aesEncryptedContent = new Uint8Array(atob(fileContent).split('').map(c => c.charCodeAt(0)));
+
       // AES Decryption
-      const aesDecryptedContent = await aesDecrypt(new Uint8Array(fileContent.split(',').map(Number)));
+      const aesDecryptedContent = await aesDecrypt(aesEncryptedContent);
 
       // Layer 3: Reverse the string (reverse of encryption)
       let decryptedContent = reverseString(aesDecryptedContent);
