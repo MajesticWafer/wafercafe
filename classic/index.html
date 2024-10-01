@@ -56,6 +56,10 @@
               material = bedrockMaterial; // Bedrock block below
             }
 
+            if (x === 7 && z === 9 && y < 11 && y > 5) {
+              material = createLogMaterial();
+            }
+
             const block = new THREE.Mesh(blockGeometry, material);
             block.position.set(x, y, z);
             block.castShadow = true;  // Enable block shadow casting
