@@ -43,10 +43,6 @@
 
     function generateChunk() {
       for (let x = 0; x < chunkSize; x++) {
-        let material;
-        if (x === 4) {
-          material = dirtMaterial;
-        }
         for (let z = 0; z < chunkSize; z++) {
           for (let y = 0; y < chunkHeight; y++) {
             let material;
@@ -58,6 +54,8 @@
               material = stoneMaterial; // Stone block below
             } else if(y === 0) {
               material = bedrockMaterial; // Bedrock block below
+            } else if (x === 4) {
+              material = dirtMaterial;
             }
 
             const block = new THREE.Mesh(blockGeometry, material);
