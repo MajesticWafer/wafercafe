@@ -124,18 +124,18 @@
     document.addEventListener('keydown', (event) => {
       switch (event.code) {
         case 'ArrowUp': 
-          pitch -= arrowKeySensitivity;
+          pitch -= arrowKeySensitivity; // Look up
           pitch = Math.max(-maxPitch, Math.min(maxPitch, pitch)); // Clamp pitch
           break;
         case 'ArrowDown': 
-          pitch += arrowKeySensitivity;
+          pitch += arrowKeySensitivity; // Look down
           pitch = Math.max(-maxPitch, Math.min(maxPitch, pitch)); // Clamp pitch
           break;
         case 'ArrowLeft': 
-          yaw -= arrowKeySensitivity;
+          yaw += arrowKeySensitivity; // Swap left/right for correct rotation
           break;
         case 'ArrowRight': 
-          yaw += arrowKeySensitivity;
+          yaw -= arrowKeySensitivity; // Swap left/right for correct rotation
           break;
       }
     });
@@ -206,7 +206,7 @@
       camera.position.y += player.isCrouching ? 0.5 : 1.5; // Adjust height for crouching
       camera.rotation.x = pitch; // Set pitch for looking up/down
       camera.rotation.y = yaw; // Set yaw for looking left/right
-      camera.rotation.z = 0; // Prevent roll (lock the rolling axis)
+      // Removed camera.rotation.z to prevent rolling
     }
 
     // Skybox creation
