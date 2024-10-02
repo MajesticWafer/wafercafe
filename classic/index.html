@@ -132,6 +132,7 @@
       yaw -= event.movementX * mouseSensitivity;
       pitch -= event.movementY * mouseSensitivity;
       pitch = Math.max(-maxPitch, Math.min(maxPitch, pitch));
+      roll = 0;
     });
 
     // Arrow key listener for looking around
@@ -147,9 +148,11 @@
           break;
         case 'ArrowLeft': 
           yaw += arrowKeySensitivity;
+          roll = 0;
           break;
         case 'ArrowRight': 
           yaw -= arrowKeySensitivity;
+          roll = 0;
           break;
       }
     });
@@ -185,7 +188,7 @@
         player.velocity.multiplyScalar(player.speed);
       }
 
-      if (keys.jump && !player.isJumping && player.position.y <= 1.1) {
+      if (keys.jump && !player.isJumping && player.position.y <= 0.99) {
         player.fallSpeed = player.jumpStrength;
         player.isJumping = true;
       }
