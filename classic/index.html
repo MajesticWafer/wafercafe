@@ -13,6 +13,13 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="textures.js"></script> <!-- Texture management file -->
   <script>
+    // Helper function to log messages to the console
+    function log(message) {
+      console.log(`[DEBUG]: ${message}`);
+    }
+
+    log("Initializing scene...");
+
     // Scene, camera, renderer
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -21,14 +28,18 @@
     renderer.shadowMap.enabled = true;
     document.body.appendChild(renderer.domElement);
 
+    log("Scene, camera, and renderer set up.");
+
     // Lighting setup
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
+    log("Ambient light added.");
 
     const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
     directionalLight.position.set(10, 20, 10).normalize();
     directionalLight.castShadow = true;
     scene.add(directionalLight);
+    log("Directional light added.");
 
     // Skybox
     const loader = new THREE.CubeTextureLoader();
@@ -36,8 +47,10 @@
       'skybox/px.jpg', 'skybox/nx.jpg',
       'skybox/py.jpg', 'skybox/ny.jpg',
       'skybox/pz.jpg', 'skybox/nz.jpg'
-    ]);
+    ], () => log("Skybox loaded successfully."), undefined, () => log("Skybox loading failed."));
     scene.background = skyboxTexture;
+
+    log("Skybox setup initiated.");
 
     // Block geometry and materials
     const blockGeometry = new THREE.BoxGeometry(1, 1, 1);
@@ -45,8 +58,12 @@
     const stoneMaterial = new THREE.MeshStandardMaterial({ map: textures.stone });
     const bedrockMaterial = new THREE.MeshStandardMaterial({ map: textures.bedrock });
 
+    log("Block materials created.");
+
     // Perlin noise function with randomness (seed-based)
     const randomSeed = Math.random() * 1000;
+    log(`Random seed for terrain generation: ${randomSeed}`);
+
     function perlin(x, z) {
       return Math.sin((x + randomSeed) * 0.1) * Math.cos((z + randomSeed) * 0.1) * 4 + 4;
     }
@@ -59,9 +76,11 @@
     function generateTerrain() {
       for (let cx = -chunkRadius; cx <= chunkRadius; cx++) {
         for (let cz = -chunkRadius; cz <= chunkRadius; cz++) {
+          log(`Generating chunk at (${cx}, ${cz})`);
           generateChunk(cx, cz);
         }
       }
+      log("Terrain generation complete.");
     }
 
     function generateChunk(chunkX, chunkZ) {
@@ -99,7 +118,7 @@
 
     // Player setup
     const player = {
-      position: new THREE.Vector3(0, 10, 0),
+      position: new THREE.Vector3(0, 10, 0), // start above terrain
       velocity: new THREE.Vector3(),
       speed: 0.1,
       isJumping: false,
@@ -109,6 +128,8 @@
     };
 
     camera.position.copy(player.position);
+
+    log("Player initialized.");
 
     // Controls
     const keys = { forward: false, backward: false, left: false, right: false, jump: false };
@@ -215,6 +236,15 @@
     }
 
     animate();
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    log("Game initialized and running.");
   </script>
 </body>
 </html>
