@@ -1,3 +1,7 @@
+# ⚠️ IMPORTANT UPDATE ⚠️
+
+The Wafer Café has been blocked (locally) by my school district (HCSD). I will not be able to work on the website until I register and purchase a new domain. I plan to use https://wafercafe.site/ from now on, and I will update you all hopefully soon.
+
 # The Wafer Café
 
 A user-friendly web assembly video game website, aimed to entertain users (during work and school, too!).
