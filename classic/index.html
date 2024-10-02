@@ -21,14 +21,22 @@
     renderer.shadowMap.enabled = true;  // Enable shadows
     document.body.appendChild(renderer.domElement);
 
-    // Skybox setup
-    const loader = new THREE.CubeTextureLoader();
-    const skybox = loader.load([
-      'textures/sky_px.png', 'textures/sky_nx.png',
-      'textures/sky_py.png', 'textures/sky_ny.png',
-      'textures/sky_pz.png', 'textures/sky_nz.png'
-    ]);
-    scene.background = skybox;
+    // Create the skybox
+    function createSkybox() {
+      const skyGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
+      const skyMaterials = [
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Right
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Left
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Top
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Bottom
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Front
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide })  // Back
+      ];
+      const skybox = new THREE.Mesh(skyGeometry, skyMaterials);
+      scene.add(skybox);
+    }
+    
+    createSkybox(); // Call the function to create the skybox
 
     // Lighting setup
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
@@ -45,33 +53,20 @@
     const stoneMaterial = new THREE.MeshStandardMaterial({ map: textures.stone });
     const bedrockMaterial = new THREE.MeshStandardMaterial({ map: textures.bedrock });
 
-    // Random seed for terrain generation (new on every load)
-    const seed = Math.random() * 10000;
-
-    // Simple Perlin Noise-like function for random terrain generation
+    // Perlin Noise function (basic implementation for terrain generation)
     function perlin(x, z) {
-      return Math.sin((x + seed) * 0.1) * Math.cos((z + seed) * 0.1) * 4 + 4;
+      return Math.sin(x * 0.1) * Math.cos(z * 0.1) * 4 + 4;
     }
 
-    // Create a 7x7 chunk grid (each chunk is 16x16 blocks)
+    // Generate a 16x16 chunk of terrain with variable height
     const chunkSize = 16;
-    const chunkRadius = 3; // 3 chunks in each direction (center chunk at 0,0)
-    const blocks = [];
+    const maxTerrainHeight = 8;
+    const blocks = []; // Store block positions for collision detection
 
-    function generateTerrain() {
-      for (let cx = -chunkRadius; cx <= chunkRadius; cx++) {
-        for (let cz = -chunkRadius; cz <= chunkRadius; cz++) {
-          generateTerrainChunk(cx * chunkSize, cz * chunkSize);
-        }
-      }
-    }
-
-    function generateTerrainChunk(offsetX, offsetZ) {
+    function generateTerrainChunk() {
       for (let x = 0; x < chunkSize; x++) {
         for (let z = 0; z < chunkSize; z++) {
-          const worldX = x + offsetX;
-          const worldZ = z + offsetZ;
-          const terrainHeight = Math.floor(perlin(worldX, worldZ));
+          const terrainHeight = Math.floor(perlin(x, z));
 
           for (let y = 0; y <= terrainHeight; y++) {
             let material;
@@ -87,7 +82,7 @@
             }
 
             const block = new THREE.Mesh(blockGeometry, material);
-            block.position.set(worldX, y, worldZ);
+            block.position.set(x, y, z);
             block.castShadow = true;  // Enable block shadow casting
             block.receiveShadow = true;  // Enable block shadow receiving
             scene.add(block);
@@ -97,11 +92,11 @@
       }
     }
 
-    generateTerrain();
+    generateTerrainChunk();
 
     // Player setup
     const player = {
-      position: new THREE.Vector3(0, 10, 0),
+      position: new THREE.Vector3(8, 10, 8),
       velocity: new THREE.Vector3(),
       speed: 0.1,
       isCrouching: false,
@@ -222,8 +217,8 @@
       if (!checkCollision(nextY)) {
         nextPosition.y = nextY.y;
       } else {
-        player.fallSpeed = 0;
         player.isJumping = false;
+        player.fallSpeed = 0; // Reset fall speed when hitting the ground
       }
 
       let nextZ = player.position.clone().add(new THREE.Vector3(0, 0, player.velocity.z));
@@ -233,15 +228,23 @@
       camera.position.copy(player.position);
     }
 
-    // Animate the scene
+    // Animation loop
     function animate() {
       requestAnimationFrame(animate);
       updatePlayer();
-      camera.lookAt(player.position.x + Math.sin(yaw), player.position.y + Math.sin(pitch), player.position.z + Math.cos(yaw));
+      camera.position.y = player.position.y + 1; // Camera height adjustment
+      camera.lookAt(player.position.clone().add(new THREE.Vector3(Math.sin(yaw), pitch, Math.cos(yaw))));
       renderer.render(scene, camera);
     }
 
     animate();
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
   </script>
 </body>
 </html>
