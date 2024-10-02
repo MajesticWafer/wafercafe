@@ -13,102 +13,85 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="textures.js"></script> <!-- Texture management file -->
   <script>
-    // Helper function to log messages to the console
-    function log(message) {
-      console.log(`[DEBUG]: ${message}`);
-    }
-
-    log("Initializing scene...");
-
-    // Scene, camera, renderer
+    // Setup scene, camera, and renderer
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.enabled = true;  // Enable shadows
     document.body.appendChild(renderer.domElement);
 
-    log("Scene, camera, and renderer set up.");
+    // Skybox setup
+    const loader = new THREE.CubeTextureLoader();
+    const skybox = loader.load([
+      'textures/sky_px.png', 'textures/sky_nx.png',
+      'textures/sky_py.png', 'textures/sky_ny.png',
+      'textures/sky_pz.png', 'textures/sky_nz.png'
+    ]);
+    scene.background = skybox;
 
     // Lighting setup
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
-    log("Ambient light added.");
 
     const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
     directionalLight.position.set(10, 20, 10).normalize();
-    directionalLight.castShadow = true;
+    directionalLight.castShadow = true; // Enable shadow casting
     scene.add(directionalLight);
-    log("Directional light added.");
 
-    // Skybox
-    const loader = new THREE.CubeTextureLoader();
-    const skyboxTexture = loader.load([
-      'skybox/px.jpg', 'skybox/nx.jpg',
-      'skybox/py.jpg', 'skybox/ny.jpg',
-      'skybox/pz.jpg', 'skybox/nz.jpg'
-    ], () => log("Skybox loaded successfully."), undefined, () => log("Skybox loading failed."));
-    scene.background = skyboxTexture;
-
-    log("Skybox setup initiated.");
-
-    // Block geometry and materials
+    // Create block geometry and material
     const blockGeometry = new THREE.BoxGeometry(1, 1, 1);
     const dirtMaterial = new THREE.MeshStandardMaterial({ map: textures.dirt });
     const stoneMaterial = new THREE.MeshStandardMaterial({ map: textures.stone });
     const bedrockMaterial = new THREE.MeshStandardMaterial({ map: textures.bedrock });
 
-    log("Block materials created.");
+    // Random seed for terrain generation (new on every load)
+    const seed = Math.random() * 10000;
 
-    // Perlin noise function with randomness (seed-based)
-    const randomSeed = Math.random() * 1000;
-    log(`Random seed for terrain generation: ${randomSeed}`);
-
+    // Simple Perlin Noise-like function for random terrain generation
     function perlin(x, z) {
-      return Math.sin((x + randomSeed) * 0.1) * Math.cos((z + randomSeed) * 0.1) * 4 + 4;
+      return Math.sin((x + seed) * 0.1) * Math.cos((z + seed) * 0.1) * 4 + 4;
     }
 
-    // Generate a 7x7 chunk terrain (each chunk is 16x16 blocks)
+    // Create a 7x7 chunk grid (each chunk is 16x16 blocks)
     const chunkSize = 16;
-    const chunkRadius = 3; // 3 chunks in each direction (7x7)
+    const chunkRadius = 3; // 3 chunks in each direction (center chunk at 0,0)
     const blocks = [];
 
     function generateTerrain() {
       for (let cx = -chunkRadius; cx <= chunkRadius; cx++) {
         for (let cz = -chunkRadius; cz <= chunkRadius; cz++) {
-          log(`Generating chunk at (${cx}, ${cz})`);
-          generateChunk(cx, cz);
+          generateTerrainChunk(cx * chunkSize, cz * chunkSize);
         }
       }
-      log("Terrain generation complete.");
     }
 
-    function generateChunk(chunkX, chunkZ) {
+    function generateTerrainChunk(offsetX, offsetZ) {
       for (let x = 0; x < chunkSize; x++) {
         for (let z = 0; z < chunkSize; z++) {
-          const worldX = chunkX * chunkSize + x;
-          const worldZ = chunkZ * chunkSize + z;
+          const worldX = x + offsetX;
+          const worldZ = z + offsetZ;
           const terrainHeight = Math.floor(perlin(worldX, worldZ));
 
           for (let y = 0; y <= terrainHeight; y++) {
             let material;
 
             if (y === terrainHeight) {
-              material = createGrassBlockMaterial();
+              material = createGrassBlockMaterial(); // Grass block on top
             } else if (y < terrainHeight && y >= terrainHeight - 3) {
-              material = dirtMaterial;
+              material = dirtMaterial; // Dirt block below
             } else if (y < terrainHeight - 3) {
-              material = stoneMaterial;
+              material = stoneMaterial; // Stone block further down
             } else if (y === 0) {
-              material = bedrockMaterial;
+              material = bedrockMaterial; // Bedrock block
             }
 
             const block = new THREE.Mesh(blockGeometry, material);
             block.position.set(worldX, y, worldZ);
-            block.castShadow = true;
-            block.receiveShadow = true;
+            block.castShadow = true;  // Enable block shadow casting
+            block.receiveShadow = true;  // Enable block shadow receiving
             scene.add(block);
-            blocks.push(block);
+            blocks.push(block); // Add block to array for collision
           }
         }
       }
@@ -118,21 +101,21 @@
 
     // Player setup
     const player = {
-      position: new THREE.Vector3(0, 10, 0), // start above terrain
+      position: new THREE.Vector3(0, 10, 0),
       velocity: new THREE.Vector3(),
       speed: 0.1,
+      isCrouching: false,
       isJumping: false,
-      jumpStrength: 0.3,
+      jumpStrength: 0.15,
+      crouchHeight: 0.5,
       gravity: -0.02,
       fallSpeed: 0
     };
 
     camera.position.copy(player.position);
 
-    log("Player initialized.");
-
-    // Controls
-    const keys = { forward: false, backward: false, left: false, right: false, jump: false };
+    // Movement controls
+    const keys = { forward: false, backward: false, left: false, right: false, jump: false, up: false, down: false };
 
     document.addEventListener('keydown', (event) => {
       switch (event.code) {
@@ -154,18 +137,43 @@
       }
     });
 
-    // Mouse control for looking around
+    // Mouse and Arrow Key controls for looking around
     let pitch = 0, yaw = 0;
     const mouseSensitivity = 0.002;
+    const arrowKeySensitivity = 0.1;
     const maxPitch = Math.PI / 2;
 
+    // Mouse movement listener
     document.body.requestPointerLock = document.body.requestPointerLock || document.body.mozRequestPointerLock;
-    document.addEventListener('click', () => document.body.requestPointerLock());
+
+    document.addEventListener('click', () => {
+      document.body.requestPointerLock();
+    });
 
     document.addEventListener('mousemove', (event) => {
       yaw -= event.movementX * mouseSensitivity;
       pitch -= event.movementY * mouseSensitivity;
       pitch = Math.max(-maxPitch, Math.min(maxPitch, pitch));
+    });
+
+    // Arrow key listener for looking around
+    document.addEventListener('keydown', (event) => {
+      switch (event.code) {
+        case 'ArrowUp': 
+          pitch -= arrowKeySensitivity;
+          pitch = Math.max(-maxPitch, Math.min(maxPitch, pitch));
+          break;
+        case 'ArrowDown': 
+          pitch += arrowKeySensitivity;
+          pitch = Math.max(-maxPitch, Math.min(maxPitch, pitch));
+          break;
+        case 'ArrowLeft': 
+          yaw += arrowKeySensitivity;
+          break;
+        case 'ArrowRight': 
+          yaw -= arrowKeySensitivity;
+          break;
+      }
     });
 
     // Collision detection using AABB
@@ -182,7 +190,7 @@
       return false;
     }
 
-    // Update player movement
+    // Update player's movement and apply collision detection
     function updatePlayer() {
       const forward = new THREE.Vector3(Math.sin(yaw), 0, Math.cos(yaw));
       const right = new THREE.Vector3(Math.cos(yaw), 0, -Math.sin(yaw));
@@ -222,29 +230,18 @@
       if (!checkCollision(nextZ)) nextPosition.z = nextZ.z;
 
       player.position.copy(nextPosition);
-
       camera.position.copy(player.position);
-      camera.rotation.x = pitch;
-      camera.rotation.y = yaw;
-      camera.rotation.z = 0;
     }
 
+    // Animate the scene
     function animate() {
       requestAnimationFrame(animate);
       updatePlayer();
+      camera.lookAt(player.position.x + Math.sin(yaw), player.position.y + Math.sin(pitch), player.position.z + Math.cos(yaw));
       renderer.render(scene, camera);
     }
 
     animate();
-
-    // Handle window resize
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-
-    log("Game initialized and running.");
   </script>
 </body>
 </html>
