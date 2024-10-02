@@ -20,6 +20,8 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.shadowMap.enabled = true;  // Enable shadows
     document.body.appendChild(renderer.domElement);
+    
+    camera.up.set(0, 1, 0); // Ensure the camera's up is the global y-axis.
 
     // Lighting setup
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
