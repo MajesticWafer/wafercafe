@@ -20,7 +20,7 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.shadowMap.enabled = true;  // Enable shadows
     document.body.appendChild(renderer.domElement);
-    
+
     // Lighting setup
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
@@ -36,24 +36,32 @@
     const stoneMaterial = new THREE.MeshStandardMaterial({ map: textures.stone });
     const bedrockMaterial = new THREE.MeshStandardMaterial({ map: textures.bedrock });
 
-    // Generate a 16x16x5 chunk of blocks
+    // Perlin Noise function (basic implementation for terrain generation)
+    function perlin(x, z) {
+      return Math.sin(x * 0.1) * Math.cos(z * 0.1) * 4 + 4;
+    }
+
+    // Generate a 16x16 chunk of terrain with variable height
     const chunkSize = 16;
-    const chunkHeight = 5;
+    const maxTerrainHeight = 8;
     const blocks = []; // Store block positions for collision detection
 
-    function generateChunk() {
+    function generateTerrainChunk() {
       for (let x = 0; x < chunkSize; x++) {
         for (let z = 0; z < chunkSize; z++) {
-          for (let y = 0; y < chunkHeight; y++) {
+          const terrainHeight = Math.floor(perlin(x, z));
+
+          for (let y = 0; y <= terrainHeight; y++) {
             let material;
-            if (y === 4) {
+
+            if (y === terrainHeight) {
               material = createGrassBlockMaterial(); // Grass block on top
-            } else if(y === 3) {
+            } else if (y < terrainHeight && y >= terrainHeight - 3) {
               material = dirtMaterial; // Dirt block below
-            } else if(y < 3 && y > 0) {
-              material = stoneMaterial; // Stone block below
-            } else if(y === 0) {
-              material = bedrockMaterial; // Bedrock block below
+            } else if (y < terrainHeight - 3) {
+              material = stoneMaterial; // Stone block further down
+            } else if (y === 0) {
+              material = bedrockMaterial; // Bedrock block
             }
 
             const block = new THREE.Mesh(blockGeometry, material);
@@ -67,11 +75,11 @@
       }
     }
 
-    generateChunk();
+    generateTerrainChunk();
 
     // Player setup
     const player = {
-      position: new THREE.Vector3(8, 5, 8),
+      position: new THREE.Vector3(8, 10, 8),
       velocity: new THREE.Vector3(),
       speed: 0.1,
       isCrouching: false,
@@ -110,8 +118,8 @@
     // Mouse and Arrow Key controls for looking around
     let pitch = 0, yaw = 0;
     const mouseSensitivity = 0.002;
-    const arrowKeySensitivity = 0.1; // Increased sensitivity for faster camera movement
-    const maxPitch = Math.PI / 2; // Limit pitch to avoid flipping
+    const arrowKeySensitivity = 0.1;
+    const maxPitch = Math.PI / 2;
 
     // Mouse movement listener
     document.body.requestPointerLock = document.body.requestPointerLock || document.body.mozRequestPointerLock;
@@ -123,25 +131,25 @@
     document.addEventListener('mousemove', (event) => {
       yaw -= event.movementX * mouseSensitivity;
       pitch -= event.movementY * mouseSensitivity;
-      pitch = Math.max(-maxPitch, Math.min(maxPitch, pitch)); // Clamp pitch
+      pitch = Math.max(-maxPitch, Math.min(maxPitch, pitch));
     });
 
     // Arrow key listener for looking around
     document.addEventListener('keydown', (event) => {
       switch (event.code) {
         case 'ArrowUp': 
-          pitch -= arrowKeySensitivity; // Look up
-          pitch = Math.max(-maxPitch, Math.min(maxPitch, pitch)); // Clamp pitch
+          pitch -= arrowKeySensitivity;
+          pitch = Math.max(-maxPitch, Math.min(maxPitch, pitch));
           break;
         case 'ArrowDown': 
-          pitch += arrowKeySensitivity; // Look down
-          pitch = Math.max(-maxPitch, Math.min(maxPitch, pitch)); // Clamp pitch
+          pitch += arrowKeySensitivity;
+          pitch = Math.max(-maxPitch, Math.min(maxPitch, pitch));
           break;
         case 'ArrowLeft': 
-          yaw += arrowKeySensitivity; // Swap left/right for correct rotation
+          yaw += arrowKeySensitivity;
           break;
         case 'ArrowRight': 
-          yaw -= arrowKeySensitivity; // Swap left/right for correct rotation
+          yaw -= arrowKeySensitivity;
           break;
       }
     });
@@ -154,7 +162,7 @@
         if (nextPosition.x >= min.x && nextPosition.x <= max.x &&
             nextPosition.y >= min.y && nextPosition.y <= max.y &&
             nextPosition.z >= min.z && nextPosition.z <= max.z) {
-          return true; // Collision detected
+          return true;
         }
       }
       return false;
@@ -165,76 +173,52 @@
       const forward = new THREE.Vector3(Math.sin(yaw), 0, Math.cos(yaw));
       const right = new THREE.Vector3(Math.cos(yaw), 0, -Math.sin(yaw));
 
-      player.velocity.set(0, player.fallSpeed, 0); // Reset velocity in y-axis for gravity
+      player.velocity.set(0, player.fallSpeed, 0);
 
-      // Move the player based on key inputs
       if (keys.forward) player.velocity.sub(forward);
       if (keys.backward) player.velocity.add(forward);
       if (keys.left) player.velocity.sub(right);
       if (keys.right) player.velocity.add(right);
 
-      // Normalize velocity and apply speed
       if (player.velocity.length() > 0) {
         player.velocity.normalize();
         player.velocity.multiplyScalar(player.speed);
       }
 
-      // Handle jumping
-      if (keys.jump && !player.isJumping && player.position.y <= 1.1) { // Jump only if on the ground
-        player.fallSpeed = player.jumpStrength; // Set fall speed for jumping
+      if (keys.jump && !player.isJumping && player.position.y <= 1.1) {
+        player.fallSpeed = player.jumpStrength;
         player.isJumping = true;
       }
 
-      // Gravity
       player.fallSpeed += player.gravity;
 
-      // Calculate next position (handle x, y, z axes separately)
       let nextPosition = player.position.clone();
-      
       let nextX = player.position.clone().add(new THREE.Vector3(player.velocity.x, 0, 0));
       if (!checkCollision(nextX)) nextPosition.x = nextX.x;
-      
+
       let nextY = player.position.clone().add(new THREE.Vector3(0, player.fallSpeed, 0));
       if (!checkCollision(nextY)) {
         nextPosition.y = nextY.y;
       } else {
-        player.fallSpeed = 0; // Reset fall speed on collision with ground
-        player.isJumping = false; // Reset jump state
+        player.fallSpeed = 0;
+        player.isJumping = false;
       }
-      
+
       let nextZ = player.position.clone().add(new THREE.Vector3(0, 0, player.velocity.z));
       if (!checkCollision(nextZ)) nextPosition.z = nextZ.z;
 
-      player.position.copy(nextPosition); // Update position after checking all axes
+      player.position.copy(nextPosition);
 
-      // Update camera position based on player position and crouching
       camera.position.copy(player.position);
-      camera.position.y += player.isCrouching ? 0.5 : 1.5; // Adjust height for crouching
-      camera.rotation.x = pitch; // Set pitch for looking up/down
-      camera.rotation.y = yaw; // Set yaw for looking left/right
-      camera.rotation.z = pitch; // Ensure rolling is zeroed out
+      camera.position.y += player.isCrouching ? 0.5 : 1.5;
+      camera.rotation.x = pitch;
+      camera.rotation.y = yaw;
+      camera.rotation.z = 0;
     }
 
-    // Skybox creation
-    function createSkybox() {
-      const skyGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
-      const skyMaterials = [
-        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }),
-        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }),
-        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }),
-        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }),
-        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }),
-        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide })
-      ];
-      const skybox = new THREE.Mesh(skyGeometry, skyMaterials);
-      scene.add(skybox);
-    }
-    createSkybox();
-
-    // Main animation loop
     function animate() {
       requestAnimationFrame(animate);
-      updatePlayer(); // Update player movement
+      updatePlayer();
       renderer.render(scene, camera);
     }
 
