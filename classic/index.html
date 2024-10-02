@@ -82,11 +82,12 @@
       position: new THREE.Vector3(8, 10, 8),
       velocity: new THREE.Vector3(),
       speed: 0.1,
+      friction: 0.1, // Friction for slowing down
       isCrouching: false,
       isJumping: false,
       jumpStrength: 0.15,
       crouchHeight: 0.5,
-      gravity: -0.02,
+      gravity: -0.005, // Reduced gravity for smoother jumps
       fallSpeed: 0
     };
 
@@ -173,6 +174,12 @@
       const forward = new THREE.Vector3(Math.sin(yaw), 0, Math.cos(yaw));
       const right = new THREE.Vector3(Math.cos(yaw), 0, -Math.sin(yaw));
 
+      // Apply friction
+      if (player.velocity.length() > 0) {
+        player.velocity.multiplyScalar(1 - player.friction);
+      }
+
+      // Initialize player velocity for this frame
       player.velocity.set(0, player.fallSpeed, 0);
 
       if (keys.forward) player.velocity.sub(forward);
@@ -185,13 +192,16 @@
         player.velocity.multiplyScalar(player.speed);
       }
 
+      // Handle jumping
       if (keys.jump && !player.isJumping && player.position.y <= 1.1) {
-        player.fallSpeed = player.jumpStrength;
+        player.fallSpeed = player.jumpStrength; // Start jump
         player.isJumping = true;
       }
 
+      // Apply gravity
       player.fallSpeed += player.gravity;
 
+      // Check for collisions on the next position
       let nextPosition = player.position.clone();
       let nextX = player.position.clone().add(new THREE.Vector3(player.velocity.x, 0, 0));
       if (!checkCollision(nextX)) nextPosition.x = nextX.x;
@@ -200,42 +210,22 @@
       if (!checkCollision(nextY)) {
         nextPosition.y = nextY.y;
       } else {
-        player.fallSpeed = 0;
-        player.isJumping = false;
+        player.fallSpeed = 0; // Reset fall speed on ground contact
+        player.isJumping = false; // Allow jumping again
       }
 
       let nextZ = player.position.clone().add(new THREE.Vector3(0, 0, player.velocity.z));
       if (!checkCollision(nextZ)) nextPosition.z = nextZ.z;
 
       player.position.copy(nextPosition);
-
       camera.position.copy(player.position);
-      camera.position.y += player.isCrouching ? 0.5 : 1.5;
-      camera.rotation.x = pitch;
-      camera.rotation.y = yaw;
-      camera.rotation.z = 0;
     }
 
-    // Create the skybox
-    function createSkybox() {
-      const skyGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
-      const skyMaterials = [
-        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Right
-        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Left
-        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Top
-        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Bottom
-        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Front
-        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide })  // Back
-      ];
-      const skybox = new THREE.Mesh(skyGeometry, skyMaterials);
-      scene.add(skybox);
-    }
-    
-    createSkybox(); // Call the function to create the skybox
-
+    // Animation loop
     function animate() {
       requestAnimationFrame(animate);
       updatePlayer();
+      camera.rotation.set(pitch, yaw, 0);
       renderer.render(scene, camera);
     }
 
