@@ -21,23 +21,6 @@
     renderer.shadowMap.enabled = true;  // Enable shadows
     document.body.appendChild(renderer.domElement);
 
-    // Create the skybox
-    function createSkybox() {
-      const skyGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
-      const skyMaterials = [
-        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Right
-        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Left
-        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Top
-        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Bottom
-        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Front
-        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide })  // Back
-      ];
-      const skybox = new THREE.Mesh(skyGeometry, skyMaterials);
-      scene.add(skybox);
-    }
-    
-    createSkybox(); // Call the function to create the skybox
-
     // Lighting setup
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
@@ -217,34 +200,46 @@
       if (!checkCollision(nextY)) {
         nextPosition.y = nextY.y;
       } else {
+        player.fallSpeed = 0;
         player.isJumping = false;
-        player.fallSpeed = 0; // Reset fall speed when hitting the ground
       }
 
       let nextZ = player.position.clone().add(new THREE.Vector3(0, 0, player.velocity.z));
       if (!checkCollision(nextZ)) nextPosition.z = nextZ.z;
 
       player.position.copy(nextPosition);
+
       camera.position.copy(player.position);
+      camera.position.y += player.isCrouching ? 0.5 : 1.5;
+      camera.rotation.x = pitch;
+      camera.rotation.y = yaw;
+      camera.rotation.z = 0;
     }
 
-    // Animation loop
+    // Create the skybox
+    function createSkybox() {
+      const skyGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
+      const skyMaterials = [
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Right
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Left
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Top
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Bottom
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Front
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide })  // Back
+      ];
+      const skybox = new THREE.Mesh(skyGeometry, skyMaterials);
+      scene.add(skybox);
+    }
+    
+    createSkybox(); // Call the function to create the skybox
+
     function animate() {
       requestAnimationFrame(animate);
       updatePlayer();
-      camera.position.y = player.position.y + 1; // Camera height adjustment
-      camera.lookAt(player.position.clone().add(new THREE.Vector3(Math.sin(yaw), pitch, Math.cos(yaw))));
       renderer.render(scene, camera);
     }
 
     animate();
-
-    // Handle window resize
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
   </script>
 </body>
 </html>
