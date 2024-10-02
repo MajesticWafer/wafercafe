@@ -13,12 +13,12 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="textures.js"></script> <!-- Texture management file -->
   <script>
-    // Setup scene, camera, and renderer
+    // Scene, camera, renderer
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.shadowMap.enabled = true;  // Enable shadows
+    renderer.shadowMap.enabled = true;
     document.body.appendChild(renderer.domElement);
 
     // Lighting setup
@@ -27,73 +27,91 @@
 
     const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
     directionalLight.position.set(10, 20, 10).normalize();
-    directionalLight.castShadow = true; // Enable shadow casting
+    directionalLight.castShadow = true;
     scene.add(directionalLight);
 
-    // Create block geometry and material
+    // Skybox
+    const loader = new THREE.CubeTextureLoader();
+    const skyboxTexture = loader.load([
+      'skybox/px.jpg', 'skybox/nx.jpg',
+      'skybox/py.jpg', 'skybox/ny.jpg',
+      'skybox/pz.jpg', 'skybox/nz.jpg'
+    ]);
+    scene.background = skyboxTexture;
+
+    // Block geometry and materials
     const blockGeometry = new THREE.BoxGeometry(1, 1, 1);
     const dirtMaterial = new THREE.MeshStandardMaterial({ map: textures.dirt });
     const stoneMaterial = new THREE.MeshStandardMaterial({ map: textures.stone });
     const bedrockMaterial = new THREE.MeshStandardMaterial({ map: textures.bedrock });
 
-    // Perlin Noise function (basic implementation for terrain generation)
+    // Perlin noise function with randomness (seed-based)
+    const randomSeed = Math.random() * 1000;
     function perlin(x, z) {
-      return Math.sin(x * 0.1) * Math.cos(z * 0.1) * 4 + 4;
+      return Math.sin((x + randomSeed) * 0.1) * Math.cos((z + randomSeed) * 0.1) * 4 + 4;
     }
 
-    // Generate a 16x16 chunk of terrain with variable height
+    // Generate a 7x7 chunk terrain (each chunk is 16x16 blocks)
     const chunkSize = 16;
-    const maxTerrainHeight = 8;
-    const blocks = []; // Store block positions for collision detection
+    const chunkRadius = 3; // 3 chunks in each direction (7x7)
+    const blocks = [];
 
-    function generateTerrainChunk() {
+    function generateTerrain() {
+      for (let cx = -chunkRadius; cx <= chunkRadius; cx++) {
+        for (let cz = -chunkRadius; cz <= chunkRadius; cz++) {
+          generateChunk(cx, cz);
+        }
+      }
+    }
+
+    function generateChunk(chunkX, chunkZ) {
       for (let x = 0; x < chunkSize; x++) {
         for (let z = 0; z < chunkSize; z++) {
-          const terrainHeight = Math.floor(perlin(x, z));
+          const worldX = chunkX * chunkSize + x;
+          const worldZ = chunkZ * chunkSize + z;
+          const terrainHeight = Math.floor(perlin(worldX, worldZ));
 
           for (let y = 0; y <= terrainHeight; y++) {
             let material;
 
             if (y === terrainHeight) {
-              material = createGrassBlockMaterial(); // Grass block on top
+              material = createGrassBlockMaterial();
             } else if (y < terrainHeight && y >= terrainHeight - 3) {
-              material = dirtMaterial; // Dirt block below
+              material = dirtMaterial;
             } else if (y < terrainHeight - 3) {
-              material = stoneMaterial; // Stone block further down
+              material = stoneMaterial;
             } else if (y === 0) {
-              material = bedrockMaterial; // Bedrock block
+              material = bedrockMaterial;
             }
 
             const block = new THREE.Mesh(blockGeometry, material);
-            block.position.set(x, y, z);
-            block.castShadow = true;  // Enable block shadow casting
-            block.receiveShadow = true;  // Enable block shadow receiving
+            block.position.set(worldX, y, worldZ);
+            block.castShadow = true;
+            block.receiveShadow = true;
             scene.add(block);
-            blocks.push(block); // Add block to array for collision
+            blocks.push(block);
           }
         }
       }
     }
 
-    generateTerrainChunk();
+    generateTerrain();
 
     // Player setup
     const player = {
-      position: new THREE.Vector3(8, 10, 8),
+      position: new THREE.Vector3(0, 10, 0),
       velocity: new THREE.Vector3(),
       speed: 0.1,
-      isCrouching: false,
       isJumping: false,
-      jumpStrength: 0.15,
-      crouchHeight: 0.5,
+      jumpStrength: 0.3,
       gravity: -0.02,
       fallSpeed: 0
     };
 
     camera.position.copy(player.position);
 
-    // Movement controls
-    const keys = { forward: false, backward: false, left: false, right: false, jump: false, up: false, down: false };
+    // Controls
+    const keys = { forward: false, backward: false, left: false, right: false, jump: false };
 
     document.addEventListener('keydown', (event) => {
       switch (event.code) {
@@ -115,43 +133,18 @@
       }
     });
 
-    // Mouse and Arrow Key controls for looking around
+    // Mouse control for looking around
     let pitch = 0, yaw = 0;
     const mouseSensitivity = 0.002;
-    const arrowKeySensitivity = 0.1;
     const maxPitch = Math.PI / 2;
 
-    // Mouse movement listener
     document.body.requestPointerLock = document.body.requestPointerLock || document.body.mozRequestPointerLock;
-
-    document.addEventListener('click', () => {
-      document.body.requestPointerLock();
-    });
+    document.addEventListener('click', () => document.body.requestPointerLock());
 
     document.addEventListener('mousemove', (event) => {
       yaw -= event.movementX * mouseSensitivity;
       pitch -= event.movementY * mouseSensitivity;
       pitch = Math.max(-maxPitch, Math.min(maxPitch, pitch));
-    });
-
-    // Arrow key listener for looking around
-    document.addEventListener('keydown', (event) => {
-      switch (event.code) {
-        case 'ArrowUp': 
-          pitch -= arrowKeySensitivity;
-          pitch = Math.max(-maxPitch, Math.min(maxPitch, pitch));
-          break;
-        case 'ArrowDown': 
-          pitch += arrowKeySensitivity;
-          pitch = Math.max(-maxPitch, Math.min(maxPitch, pitch));
-          break;
-        case 'ArrowLeft': 
-          yaw += arrowKeySensitivity;
-          break;
-        case 'ArrowRight': 
-          yaw -= arrowKeySensitivity;
-          break;
-      }
     });
 
     // Collision detection using AABB
@@ -168,7 +161,7 @@
       return false;
     }
 
-    // Update player's movement and apply collision detection
+    // Update player movement
     function updatePlayer() {
       const forward = new THREE.Vector3(Math.sin(yaw), 0, Math.cos(yaw));
       const right = new THREE.Vector3(Math.cos(yaw), 0, -Math.sin(yaw));
@@ -210,7 +203,6 @@
       player.position.copy(nextPosition);
 
       camera.position.copy(player.position);
-      camera.position.y += player.isCrouching ? 0.5 : 1.5;
       camera.rotation.x = pitch;
       camera.rotation.y = yaw;
       camera.rotation.z = 0;
