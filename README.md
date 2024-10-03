@@ -21,7 +21,7 @@ The current URLs for the Wafer Café are:
 
 1. https://wafercafe.com/ (planned to be taken down soon)
 2. https://majesticwafer.github.io/wafercafe/
-3. https://wafercafe-flax.vercel.app/ (don't ask me why)
+3. https://wafer-cafe.vercel.app/
 
 ---
 
