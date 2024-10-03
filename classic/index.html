@@ -22,6 +22,7 @@
     renderer.setSize(window.innerWidth, window.innerHeigh);
     renderer.shadowMap.enabled = false;
     document.body.appendChild(renderer.domElement);
+    const canvas = renderer.domElement;
     
     camera.up.set(0, 1, 0); // Ensure the camera's up is the global y-axis.
 
