@@ -110,14 +110,7 @@
         case 'KeyA': keys.left = true; break;
         case 'KeyD': keys.right = true; break;
         case 'Space': keys.jump = true; break;
-        case 'Shift': keys.crouch = true; break;
-        case 'KeyR':
-          if (renderer.style.imageRendering === 'pixelated') {
-            renderer.style.imageRendering = 'smooth';
-          } else {
-            renderer.style.imageRendering = 'pixelated';
-          }
-          break;
+        case 'ShiftLeft': keys.crouch = true; break;
       }
     });
 
@@ -128,7 +121,7 @@
         case 'KeyA': keys.left = false; break;
         case 'KeyD': keys.right = false; break;
         case 'Space': keys.jump = false; break;
-        case 'Shift': keys.crouch = false; break;
+        case 'ShiftLeft': keys.crouch = false; break;
       }
     });
 
