@@ -211,6 +211,10 @@
         player.grounded = false;  // Player is no longer grounded once they jump
       } 
 
+      if (keys.crouch) {
+        player.isCrouching = true;
+      }
+
       player.fallSpeed += player.gravity;
 
       let nextPosition = player.position.clone();
