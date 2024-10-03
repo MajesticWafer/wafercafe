@@ -206,6 +206,8 @@
 
       if (keys.crouch) {
         player.isCrouching = true;
+      } else {
+        player.isCrouching = false;
       }
 
       player.fallSpeed += player.gravity;
