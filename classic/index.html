@@ -38,9 +38,12 @@
     const stoneMaterial = new THREE.MeshStandardMaterial({ map: textures.stone });
     const bedrockMaterial = new THREE.MeshStandardMaterial({ map: textures.bedrock });
 
+    // Use Math.random() to generate a seed value for randomness
+    const seed = Math.random() * 1000;
+
     // Perlin Noise function (basic implementation for terrain generation)
     function perlin(x, z) {
-      return Math.sin(x * 0.1) * Math.cos(z * 0.1) * 4 + 4;
+       return Math.sin((x + seed) * 0.1) * Math.cos((z + seed) * 0.1) * 4 + 4;
     }
 
     // Generate a 16x16 chunk of terrain with variable height
