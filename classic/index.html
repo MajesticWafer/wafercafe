@@ -9,7 +9,7 @@
     canvas { display: block; image-rendering: pixelated; }
   </style>
 </head>
-<body
+<body>
   <!-- scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="textures.js"></script> <!-- Texture management file -->
@@ -19,14 +19,11 @@
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeigh);
+    renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.shadowMap.enabled = false;
     document.body.appendChild(renderer.domElement);
-    const canvas = renderer.domElement;
     
     camera.up.set(0, 1, 0); // Ensure the camera's up is the global y-axis.
-
-    
 
     // Lighting setup
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
@@ -114,12 +111,11 @@
         case 'KeyD': keys.right = true; break;
         case 'Space': keys.jump = true; break;
         case 'Shift': keys.crouch = true; break;
-        // change rendering mode
-        case 'KeyR': 
-          if (canvas.style.imageRendering === 'pixelated') {
-            canvas.style.imageRendering = 'smooth';
+        case 'KeyR':
+          if (renderer.style.imageRendering === 'pixelated') {
+            renderer.style.imageRendering = 'smooth';
           } else {
-            canvas.style.imageRendering = 'pixelated';
+            renderer.style.imageRendering = 'pixelated';
           }
           break;
       }
