@@ -89,9 +89,9 @@
       speed: 0.1,
       isCrouching: false,
       isJumping: false,
-      jumpStrength: 0.275,
+      jumpStrength: 0.175,
       crouchHeight: 0.675,
-      gravity: -0.0167,
+      gravity: -0.0137,
       fallSpeed: 0,
       grounded: false
     };
@@ -99,7 +99,7 @@
     camera.position.copy(player.position);
 
     // Movement controls
-    const keys = { forward: false, backward: false, left: false, right: false, jump: false, up: false, down: false };
+    const keys = { forward: false, backward: false, left: false, right: false, jump: false, up: false, down: false, crouch: false};
 
     document.addEventListener('keydown', (event) => {
       switch (event.code) {
@@ -108,6 +108,7 @@
         case 'KeyA': keys.left = true; break;
         case 'KeyD': keys.right = true; break;
         case 'Space': keys.jump = true; break;
+        case 'Shift': keys.jump = true; break;
       }
     });
 
@@ -118,6 +119,7 @@
         case 'KeyA': keys.left = false; break;
         case 'KeyD': keys.right = false; break;
         case 'Space': keys.jump = false; break;
+        case 'Shift': keys.jump = false; break;
       }
     });
 
