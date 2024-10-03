@@ -7,6 +7,8 @@
   <style>
     body { margin: 0; overflow: hidden; }
     canvas { width: 100%; height: 100%; display: block; image-rendering: pixelated; }
+    button { margin: 7px; padding: 6px 4px; background-color: #426cf5; border-radius: 10px; color: white; }
+    button:hover { background-color: #1247f3; }
   </style>
 </head>
 <body
@@ -14,6 +16,9 @@
   <label for="scale">Quality:</label>
   <input type="range" id="scale" min="1" max="3" value="2">
   <p id="scale-p">Medium</p>
+
+  <button onclick="start();">Start</button>
+  <hr>
 
   <!-- scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
@@ -37,10 +42,11 @@
             p.textContent = 'High';
         }
     });
-</script>
+  </script>
 
   
   <script>
+    function start() {
     // Setup scene, camera, and renderer
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -49,11 +55,6 @@
     renderer.setSize(window.innerWidth / parseFloat(scale.value), window.innerHeight / parseFloat(scale.value));
     renderer.shadowMap.enabled = false;
     document.body.appendChild(renderer.domElement);
-
-    // dynamically change screen quality
-    scale.addEventListener('input', function() {
-      renderer.setSize(window.innerWidth / parseFloat(scale.value), window.innerHeight / parseFloat(scale.value));
-    }
     
     camera.up.set(0, 1, 0); // Ensure the camera's up is the global y-axis.
 
@@ -288,6 +289,7 @@
     }
 
     animate();
+  }
   </script>
 </body>
 </html>
