@@ -13,23 +13,6 @@
   <!-- scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="textures.js"></script> <!-- Texture management file -->
-
-  <script>
-    var canvas = renderer.domElement
-    
-    document.addEventListener('keydown', (event) => {
-      switch (event.code) {
-        case 'KeyR':
-
-          if (canvas.style.imageRendering === 'pixelated') {
-            canvas.style.imageRendering = 'smooth';
-          } else {
-            canvas.style.imageRendering = 'pixelated'
-          }
-          break;
-      }
-    });
-  </script>
   
   <script>
     // Setup scene, camera, and renderer
@@ -41,6 +24,8 @@
     document.body.appendChild(renderer.domElement);
     
     camera.up.set(0, 1, 0); // Ensure the camera's up is the global y-axis.
+
+    
 
     // Lighting setup
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
@@ -127,7 +112,15 @@
         case 'KeyA': keys.left = true; break;
         case 'KeyD': keys.right = true; break;
         case 'Space': keys.jump = true; break;
-        case 'Shift': keys.jump = true; break;
+        case 'Shift': keys.crouch = true; break;
+        // change rendering mode
+        case 'KeyR': 
+          if (canvas.style.imageRendering === 'pixelated') {
+            canvas.style.imageRendering = 'smooth';
+          } else {
+            canvas.style.imageRendering = 'pixelated';
+          }
+          break;
       }
     });
 
@@ -138,7 +131,7 @@
         case 'KeyA': keys.left = false; break;
         case 'KeyD': keys.right = false; break;
         case 'Space': keys.jump = false; break;
-        case 'Shift': keys.jump = false; break;
+        case 'Shift': keys.crouch = false; break;
       }
     });
 
