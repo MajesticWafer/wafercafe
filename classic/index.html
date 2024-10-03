@@ -6,7 +6,7 @@
   <title>Minecraft Clone</title>
   <style>
     body { margin: 0; overflow: hidden; }
-    canvas { width: 100%; height: 100%; display: block; image-rendering: pixelated; }
+    canvas { display: block; image-rendering: pixelated; }
     button { margin: 7px; padding: 6px 4px; background-color: #426cf5; border-radius: 10px; color: white; }
     button:hover { background-color: #1247f3; }
   </style>
@@ -36,10 +36,13 @@
         // Check the value of the slider
         if (scale.value == 3) {
             p.textContent = 'Low';
+            console.log('Scale value set to 3 (low)');
         } else if (scale.value == 2) {
             p.textContent = 'Medium';
+            console.log('Scale value set to 2 (medium)');
         } else if (scale.value == 1) {
             p.textContent = 'High';
+            console.log('Scale value set to 1 (high)');
         }
     });
   </script>
@@ -52,7 +55,7 @@
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer();
     var scale = document.getElementById('scale').value
-    renderer.setSize(window.innerWidth / parseFloat(scale.value), window.innerHeight / parseFloat(scale.value));
+    renderer.setSize(window.innerWidth / scale, window.innerHeight / scale);
     renderer.shadowMap.enabled = false;
     document.body.appendChild(renderer.domElement);
     
