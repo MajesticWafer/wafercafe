@@ -10,10 +10,24 @@ A user-friendly web assembly video game website, aimed to entertain users (durin
 
 The Wafer Café strives to have fun games in the browser, entertaining our users. Most games use Web Assembly to run, and some are made with JavaScript.
 
-'Features'
+Features
 - Simple GUI
-- Silly particle background
+- Entrancing particles background
 - Light/dark mode
+
+## URLs
+
+The current URLs for the Wafer Café are:
+
+1. https://wafercafe.com/ (planned to be taken down soon)
+2. https://majesticwafer.github.io/wafercafe/
+
+---
+
+Planned URLs:
+
+1. https://wafercafe.vercel.app/
+2. https://wafercafe.site/
 
 ## Info
 
