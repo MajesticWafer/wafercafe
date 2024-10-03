@@ -1,6 +1,6 @@
-# ⚠️ IMPORTANT UPDATE ⚠️
+# Chat, I goofed
 
-The Wafer Café has been blocked (locally) by my school district (HCSD). I will not be able to work on the website until I register and purchase a new domain. I plan to use https://wafercafe.site/ from now on, and I will update you all hopefully soon.
+Turns out most websites don't work on school devices at home. So I thought it was blocked. My fault, chat!
 
 # The Wafer Café
 
@@ -19,14 +19,14 @@ Features
 
 The current URLs for the Wafer Café are:
 
-1. https://wafercafe.com/ (planned to be taken down soon)
+1. https://wafercafe.com/
 2. https://wafer-cafe.vercel.app/
 
 ---
 
 Planned URLs:
 
-1. https://wafercafe.site/
+None
 
 ## Info
 
