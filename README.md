@@ -1,7 +1,3 @@
-# Chat, I goofed
-
-Turns out most websites don't work on school devices at home. So I thought it was blocked. My fault, chat!
-
 # The Wafer Café
 
 A user-friendly web assembly video game website, aimed to entertain users (during work and school, too!).
