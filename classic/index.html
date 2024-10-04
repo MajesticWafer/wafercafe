@@ -88,12 +88,12 @@
     const player = {
       position: new THREE.Vector3(8, 10, 8),
       velocity: new THREE.Vector3(),
-      speed: 4.0,  // Movement speed in units per second
+      speed: 4.317,  // Adjusted movement speed to Minecraft's 4.317 m/s
       isCrouching: false,
       isJumping: false,
-      jumpStrength: 5,  // Jump strength in units per second
-      crouchHeight: 0.675,
-      gravity: -9.8,  // Gravity in units per second²
+      jumpStrength: 11.0,  // Adjusted jump strength to match Minecraft's jump height (~1.252 blocks)
+      crouchHeight: 1.65,  // Adjusted crouch height to Minecraft's 1.65 blocks
+      gravity: -27.0,  // Adjusted gravity to Minecraft's gravity (~27 m/s²)
       fallSpeed: 0,
       grounded: false
     };
@@ -195,21 +195,16 @@
       if (keys.left) player.velocity.sub(right.multiplyScalar(movementSpeed));
       if (keys.right) player.velocity.add(right.multiplyScalar(movementSpeed));
 
-      if (player.velocity.length() > 0) {
-        player.velocity.normalize();
-        player.velocity.multiplyScalar(movementSpeed);
-      }
-
-      if (keys.jump && player.grounded) {  // Only jump if player is grounded
-        player.fallSpeed = player.jumpStrength * deltaTime;
-        player.isJumping = true;
-        player.grounded = false;
-      }
-
       if (keys.crouch) {
         player.isCrouching = true;
       } else {
         player.isCrouching = false;
+      }
+      
+      if (player.grounded && keys.jump) {
+        player.fallSpeed = player.jumpStrength;
+        player.isJumping = true;
+        player.grounded = false;
       }
 
       player.fallSpeed += player.gravity * deltaTime;
@@ -234,7 +229,7 @@
       player.position.copy(nextPosition);
 
       camera.position.copy(player.position);
-      camera.position.y += player.isCrouching ? 0.5 : 1.5;
+      camera.position.y += player.isCrouching ? player.crouchHeight : 1.8;
       camera.rotation.x = pitch;
       camera.rotation.y = yaw;
       camera.rotation.z = 0;
@@ -254,7 +249,7 @@
       const skybox = new THREE.Mesh(skyGeometry, skyMaterials);
       scene.add(skybox);
     }
-    
+
     createSkybox(); // Call the function to create the skybox
 
     // Main animation loop with delta time
