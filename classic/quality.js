@@ -1,28 +1,41 @@
-// quality.js
-let qualityLevel = 1; // Start with medium quality (0: Low, 1: Medium, 2: High)
+// Quality settings script to adjust quality and render distance
+const qualitySettings = {
+  low: {
+    scale: 0.75,
+    renderDistance: 12,
+  },
+  medium: {
+    scale: 1.0,
+    renderDistance: 16,
+  },
+  high: {
+    scale: 1.25,
+    renderDistance: 20,
+  },
+};
 
-const qualitySettings = [
-  { resolution: 0.5, renderDistance: 12 },  // Low Quality (0.75 chunks)
-  { resolution: 1, renderDistance: 16 },   // Medium Quality (1 chunk)
-  { resolution: 1.25, renderDistance: 20 } // High Quality (1.25 chunks)
-];
+let currentQuality = 'medium';
 
-function applyQualitySettings(renderer, scene) {
-  const settings = qualitySettings[qualityLevel];
-  
-  // Adjust canvas resolution to fit the viewport and zoom in/out accordingly
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(window.devicePixelRatio * settings.resolution);
-  
-  // Adjust render distance (set how far the player can see)
-  return settings.renderDistance;
+function adjustQuality(quality) {
+  currentQuality = quality;
+  const settings = qualitySettings[quality];
+  renderer.setSize(window.innerWidth * settings.scale, window.innerHeight * settings.scale);
+  camera.far = settings.renderDistance;
+  camera.updateProjectionMatrix();
 }
 
-// Handle quality change with '=' and '-' keys
 document.addEventListener('keydown', (event) => {
   if (event.key === '=') {
-    qualityLevel = Math.min(qualityLevel + 1, qualitySettings.length - 1); // Increase quality
+    if (currentQuality === 'low') {
+      adjustQuality('medium');
+    } else if (currentQuality === 'medium') {
+      adjustQuality('high');
+    }
   } else if (event.key === '-') {
-    qualityLevel = Math.max(qualityLevel - 1, 0); // Decrease quality
+    if (currentQuality === 'high') {
+      adjustQuality('medium');
+    } else if (currentQuality === 'medium') {
+      adjustQuality('low');
+    }
   }
 });
