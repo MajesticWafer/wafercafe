@@ -13,61 +13,8 @@
   <!-- scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="textures.js"></script> <!-- Texture management file -->
+  <script src="quality.js"></script> <!-- Quality settings file -->
 
-  <script>
-    let qualityLevel = 2; // Start with medium quality (0: Low, 1: Medium, 2: High)
-
-    const qualitySettings = [
-      { resolution: 0.5, shadowMapSize: 512, antialias: false },  // Low Quality
-      { resolution: 0.75, shadowMapSize: 1024, antialias: true },  // Medium Quality
-      { resolution: 1, shadowMapSize: 2048, antialias: true }      // High Quality
-    ];
-
-    function applyQualitySettings() {
-      const settings = qualitySettings[qualityLevel];
-  
-      // Adjust resolution
-      renderer.setSize(window.innerWidth * settings.resolution, window.innerHeight * settings.resolution);
-      renderer.setPixelRatio(window.devicePixelRatio * settings.resolution);
-
-      // Adjust shadow map size
-      directionalLight.shadow.mapSize.width = settings.shadowMapSize;
-      directionalLight.shadow.mapSize.height = settings.shadowMapSize;
-
-      // Enable or disable antialiasing (requires recreating renderer)
-      renderer = new THREE.WebGLRenderer({ antialias: settings.antialias });
-      renderer.shadowMap.enabled = true;
-      document.body.appendChild(renderer.domElement);
-  
-      // Reduce LOD or disable objects at lower quality levels
-      if (qualityLevel === 0) {
-        // Remove far away blocks or reduce terrain detail
-        blocks.forEach(block => {
-          if (block.position.distanceTo(camera.position) > 20) {
-            scene.remove(block);
-          }
-        });
-      }
-
-      console.log(`Quality set to: ${['Low', 'Medium', 'High'][qualityLevel]}`);
-    }
-
-
-    // Handle quality change with '=' and '-' keys
-    document.addEventListener('keydown', (event) => {
-      if (event.key === '=') {
-        qualityLevel = Math.min(qualityLevel + 1, qualitySettings.length - 1); // Increase quality
-        applyQualitySettings();
-      } else if (event.key === '-') {
-        qualityLevel = Math.max(qualityLevel - 1, 0); // Decrease quality
-        applyQualitySettings();
-      }
-    });
-
-    // Initialize with medium quality
-    applyQualitySettings();
-  </script>
-  
   <script>
     // Setup scene, camera, and renderer
     const scene = new THREE.Scene();
@@ -247,75 +194,21 @@
       if (keys.left) player.velocity.sub(right);
       if (keys.right) player.velocity.add(right);
 
-      if (player.velocity.length() > 0) {
-        player.velocity.normalize();
-        player.velocity.multiplyScalar(player.speed);
+      const nextPosition = player.position.clone().add(player.velocity.clone().multiplyScalar(player.speed));
+
+      if (!checkCollision(nextPosition)) {
+        player.position.copy(nextPosition);
+        camera.position.copy(player.position);
       }
-
-      if (keys.jump && player.grounded) {  // Only jump if player is grounded
-        player.fallSpeed = player.jumpStrength;
-        player.isJumping = true;
-        player.grounded = false;  // Player is no longer grounded once they jump
-      } 
-
-      if (keys.crouch) {
-        player.isCrouching = true;
-      } else {
-        player.isCrouching = false;
-      }
-
-      player.fallSpeed += player.gravity;
-
-      let nextPosition = player.position.clone();
-      let nextX = player.position.clone().add(new THREE.Vector3(player.velocity.x, 0, 0));
-      if (!checkCollision(nextX)) nextPosition.x = nextX.x;
-
-      let nextY = player.position.clone().add(new THREE.Vector3(0, player.fallSpeed, 0));
-      if (!checkCollision(nextY)) {
-        nextPosition.y = nextY.y;
-        player.grounded = false;
-      } else {
-        player.fallSpeed = 0;
-        player.isJumping = false;
-        player.grounded = true;
-      }
-
-      let nextZ = player.position.clone().add(new THREE.Vector3(0, 0, player.velocity.z));
-      if (!checkCollision(nextZ)) nextPosition.z = nextZ.z;
-
-      player.position.copy(nextPosition);
-
-      camera.position.copy(player.position);
-      camera.position.y += player.isCrouching ? 0.5 : 1.5;
-      camera.rotation.x = pitch;
-      camera.rotation.y = yaw;
-      camera.rotation.z = 0;
     }
 
-    // Create the skybox
-    function createSkybox() {
-      const skyGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
-      const skyMaterials = [
-        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Right
-        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Left
-        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Top
-        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Bottom
-        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Front
-        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide })  // Back
-      ];
-      const skybox = new THREE.Mesh(skyGeometry, skyMaterials);
-      scene.add(skybox);
-    }
-    
-    createSkybox(); // Call the function to create the skybox
-
-    function animate() {
-      requestAnimationFrame(animate);
+    function gameLoop() {
       updatePlayer();
       renderer.render(scene, camera);
+      requestAnimationFrame(gameLoop);
     }
 
-    animate();
+    gameLoop();
   </script>
 </body>
 </html>
