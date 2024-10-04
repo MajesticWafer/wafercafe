@@ -88,12 +88,12 @@
     const player = {
       position: new THREE.Vector3(8, 10, 8),
       velocity: new THREE.Vector3(),
-      speed: 0.1,
+      speed: 4.0,  // Movement speed in units per second
       isCrouching: false,
       isJumping: false,
-      jumpStrength: 0.175,
+      jumpStrength: 5,  // Jump strength in units per second
       crouchHeight: 0.675,
-      gravity: -0.0137,
+      gravity: -9.8,  // Gravity in units per second²
       fallSpeed: 0,
       grounded: false
     };
@@ -181,28 +181,30 @@
       return false;
     }
 
-    // Update player's movement and apply collision detection
-    function updatePlayer() {
+    // Update player's movement and apply collision detection with delta time
+    function updatePlayer(deltaTime) {
       const forward = new THREE.Vector3(Math.sin(yaw), 0, Math.cos(yaw));
       const right = new THREE.Vector3(Math.cos(yaw), 0, -Math.sin(yaw));
 
       player.velocity.set(0, player.fallSpeed, 0);
 
-      if (keys.forward) player.velocity.sub(forward);
-      if (keys.backward) player.velocity.add(forward);
-      if (keys.left) player.velocity.sub(right);
-      if (keys.right) player.velocity.add(right);
+      // Adjust movement based on deltaTime
+      const movementSpeed = player.speed * deltaTime;
+      if (keys.forward) player.velocity.sub(forward.multiplyScalar(movementSpeed));
+      if (keys.backward) player.velocity.add(forward.multiplyScalar(movementSpeed));
+      if (keys.left) player.velocity.sub(right.multiplyScalar(movementSpeed));
+      if (keys.right) player.velocity.add(right.multiplyScalar(movementSpeed));
 
       if (player.velocity.length() > 0) {
         player.velocity.normalize();
-        player.velocity.multiplyScalar(player.speed);
+        player.velocity.multiplyScalar(movementSpeed);
       }
 
       if (keys.jump && player.grounded) {  // Only jump if player is grounded
-        player.fallSpeed = player.jumpStrength;
+        player.fallSpeed = player.jumpStrength * deltaTime;
         player.isJumping = true;
-        player.grounded = false;  // Player is no longer grounded once they jump
-      } 
+        player.grounded = false;
+      }
 
       if (keys.crouch) {
         player.isCrouching = true;
@@ -210,7 +212,7 @@
         player.isCrouching = false;
       }
 
-      player.fallSpeed += player.gravity;
+      player.fallSpeed += player.gravity * deltaTime;
 
       let nextPosition = player.position.clone();
       let nextX = player.position.clone().add(new THREE.Vector3(player.velocity.x, 0, 0));
@@ -255,13 +257,18 @@
     
     createSkybox(); // Call the function to create the skybox
 
-    function animate() {
-      requestAnimationFrame(animate);
-      updatePlayer();
+    // Main animation loop with delta time
+    let lastTime = 0;
+    function animate(currentTime) {
+      const deltaTime = (currentTime - lastTime) / 1000; // Convert to seconds
+      lastTime = currentTime;
+      
+      updatePlayer(deltaTime);
       renderer.render(scene, camera);
+      requestAnimationFrame(animate);
     }
 
-    animate();
+    animate(0);  // Start animation loop
   </script>
 </body>
 </html>
