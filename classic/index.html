@@ -31,7 +31,7 @@
 
     const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
     directionalLight.position.set(10, 20, 10).normalize();
-    directionalLight.castShadow = true;
+    directionalLight.castShadow = true; // Enable shadow casting
     scene.add(directionalLight);
 
     // Create block geometry and material
@@ -48,14 +48,10 @@
        return Math.sin((x + seed) * 0.1) * Math.cos((z + seed) * 0.1) * 4 + 4;
     }
 
+    // Generate a 16x16 chunk of terrain with variable height
     const chunkSize = 48;
     const maxTerrainHeight = 8;
-    const blocks = [];
-
-    // Check if a neighboring block exists at the given coordinates
-    function blockExists(x, y, z) {
-      return blocks.some(b => b.position.x === x && b.position.y === y && b.position.z === z);
-    }
+    const blocks = []; // Store block positions for collision detection
 
     function generateTerrainChunk() {
       for (let x = 0; x < chunkSize; x++) {
@@ -75,28 +71,12 @@
               material = bedrockMaterial; // Bedrock block
             }
 
-            // Create individual faces based on visibility (no neighbor on that side)
-            const sides = [];
-
-            if (!blockExists(x + 1, y, z)) sides.push([1, 0, 0]); // Right face
-            if (!blockExists(x - 1, y, z)) sides.push([-1, 0, 0]); // Left face
-            if (!blockExists(x, y + 1, z)) sides.push([0, 1, 0]); // Top face
-            if (!blockExists(x, y - 1, z)) sides.push([0, -1, 0]); // Bottom face
-            if (!blockExists(x, y, z + 1)) sides.push([0, 0, 1]); // Front face
-            if (!blockExists(x, y, z - 1)) sides.push([0, 0, -1]); // Back face
-
-            // For each visible side, create a separate face mesh
-            for (let side of sides) {
-              const faceGeometry = new THREE.PlaneGeometry(1, 1);
-              const faceMesh = new THREE.Mesh(faceGeometry, material);
-              
-              // Position and rotate the face based on the side direction
-              faceMesh.position.set(x + 0.5 * side[0], y + 0.5 * side[1], z + 0.5 * side[2]);
-              faceMesh.lookAt(new THREE.Vector3(x + side[0], y + side[1], z + side[2]));
-              scene.add(faceMesh);
-            }
-
-            blocks.push(new THREE.Vector3(x, y, z)); // Track block position
+            const block = new THREE.Mesh(blockGeometry, material);
+            block.position.set(x, y, z);
+            block.castShadow = true;  // Enable block shadow casting
+            block.receiveShadow = true;  // Enable block shadow receiving
+            scene.add(block);
+            blocks.push(block); // Add block to array for collision
           }
         }
       }
