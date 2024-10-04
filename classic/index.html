@@ -13,6 +13,47 @@
   <!-- scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="textures.js"></script> <!-- Texture management file -->
+
+  <script>
+    let qualityLevel = 2; // Start with medium quality (0: Low, 1: Medium, 2: High)
+
+    const qualitySettings = [
+      { resolution: 0.5, shadowMapSize: 512, antialias: false },  // Low Quality
+      { resolution: 0.75, shadowMapSize: 1024, antialias: true },  // Medium Quality
+      { resolution: 1, shadowMapSize: 2048, antialias: true }      // High Quality
+    ];
+
+    function applyQualitySettings() {
+      const settings = qualitySettings[qualityLevel];
+    
+      // Adjust resolution by resizing the renderer
+      renderer.setSize(window.innerWidth * settings.resolution, window.innerHeight * settings.resolution);
+      renderer.setPixelRatio(window.devicePixelRatio * settings.resolution);
+    
+      // Adjust shadow map size
+      directionalLight.shadow.mapSize.width = settings.shadowMapSize;
+      directionalLight.shadow.mapSize.height = settings.shadowMapSize;
+    
+      // Enable or disable antialiasing
+      renderer.antialias = settings.antialias;
+    
+      console.log(`Quality set to: ${['Low', 'Medium', 'High'][qualityLevel]}`);
+    }
+
+    // Handle quality change with '=' and '-' keys
+    document.addEventListener('keydown', (event) => {
+      if (event.key === '=') {
+        qualityLevel = Math.min(qualityLevel + 1, qualitySettings.length - 1); // Increase quality
+        applyQualitySettings();
+      } else if (event.key === '-') {
+        qualityLevel = Math.max(qualityLevel - 1, 0); // Decrease quality
+        applyQualitySettings();
+      }
+    });
+
+    // Initialize with medium quality
+    applyQualitySettings();
+  </script>
   
   <script>
     // Setup scene, camera, and renderer
