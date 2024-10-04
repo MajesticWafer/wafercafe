@@ -36,9 +36,9 @@
 
     // Create block geometry and material
     const blockGeometry = new THREE.BoxGeometry(1, 1, 1);
-    const dirtMaterial = new THREE.MeshStandardMaterial({ map: textures.dirt });
-    const stoneMaterial = new THREE.MeshStandardMaterial({ map: textures.stone });
-    const bedrockMaterial = new THREE.MeshStandardMaterial({ map: textures.bedrock });
+    const dirtMaterial = new THREE.MeshStandardMaterial({ map: textures.dirt, side: THREE.FrontSide });
+    const stoneMaterial = new THREE.MeshStandardMaterial({ map: textures.stone, side: THREE.FrontSide });
+    const bedrockMaterial = new THREE.MeshStandardMaterial({ map: textures.bedrock, side: THREE.FrontSide });
 
     // Use Math.random() to generate a seed value for randomness
     const seed = Math.random() * 1000;
