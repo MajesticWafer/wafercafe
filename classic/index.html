@@ -13,8 +13,7 @@
   <!-- scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="textures.js"></script> <!-- Texture management file -->
-  <script src="quality.js"></script> <!-- Quality settings file -->
-
+  
   <script>
     // Setup scene, camera, and renderer
     const scene = new THREE.Scene();
@@ -32,7 +31,7 @@
 
     const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
     directionalLight.position.set(10, 20, 10).normalize();
-    directionalLight.castShadow = true; // Enable shadow casting
+    directionalLight.castShadow = true;
     scene.add(directionalLight);
 
     // Create block geometry and material
@@ -49,10 +48,14 @@
        return Math.sin((x + seed) * 0.1) * Math.cos((z + seed) * 0.1) * 4 + 4;
     }
 
-    // Generate a 16x16 chunk of terrain with variable height
     const chunkSize = 48;
     const maxTerrainHeight = 8;
-    const blocks = []; // Store block positions for collision detection
+    const blocks = [];
+
+    // Check if a neighboring block exists at the given coordinates
+    function blockExists(x, y, z) {
+      return blocks.some(b => b.position.x === x && b.position.y === y && b.position.z === z);
+    }
 
     function generateTerrainChunk() {
       for (let x = 0; x < chunkSize; x++) {
@@ -72,12 +75,28 @@
               material = bedrockMaterial; // Bedrock block
             }
 
-            const block = new THREE.Mesh(blockGeometry, material);
-            block.position.set(x, y, z);
-            block.castShadow = true;  // Enable block shadow casting
-            block.receiveShadow = true;  // Enable block shadow receiving
-            scene.add(block);
-            blocks.push(block); // Add block to array for collision
+            // Create individual faces based on visibility (no neighbor on that side)
+            const sides = [];
+
+            if (!blockExists(x + 1, y, z)) sides.push([1, 0, 0]); // Right face
+            if (!blockExists(x - 1, y, z)) sides.push([-1, 0, 0]); // Left face
+            if (!blockExists(x, y + 1, z)) sides.push([0, 1, 0]); // Top face
+            if (!blockExists(x, y - 1, z)) sides.push([0, -1, 0]); // Bottom face
+            if (!blockExists(x, y, z + 1)) sides.push([0, 0, 1]); // Front face
+            if (!blockExists(x, y, z - 1)) sides.push([0, 0, -1]); // Back face
+
+            // For each visible side, create a separate face mesh
+            for (let side of sides) {
+              const faceGeometry = new THREE.PlaneGeometry(1, 1);
+              const faceMesh = new THREE.Mesh(faceGeometry, material);
+              
+              // Position and rotate the face based on the side direction
+              faceMesh.position.set(x + 0.5 * side[0], y + 0.5 * side[1], z + 0.5 * side[2]);
+              faceMesh.lookAt(new THREE.Vector3(x + side[0], y + side[1], z + side[2]));
+              scene.add(faceMesh);
+            }
+
+            blocks.push(new THREE.Vector3(x, y, z)); // Track block position
           }
         }
       }
@@ -194,21 +213,75 @@
       if (keys.left) player.velocity.sub(right);
       if (keys.right) player.velocity.add(right);
 
-      const nextPosition = player.position.clone().add(player.velocity.clone().multiplyScalar(player.speed));
-
-      if (!checkCollision(nextPosition)) {
-        player.position.copy(nextPosition);
-        camera.position.copy(player.position);
+      if (player.velocity.length() > 0) {
+        player.velocity.normalize();
+        player.velocity.multiplyScalar(player.speed);
       }
+
+      if (keys.jump && player.grounded) {  // Only jump if player is grounded
+        player.fallSpeed = player.jumpStrength;
+        player.isJumping = true;
+        player.grounded = false;  // Player is no longer grounded once they jump
+      } 
+
+      if (keys.crouch) {
+        player.isCrouching = true;
+      } else {
+        player.isCrouching = false;
+      }
+
+      player.fallSpeed += player.gravity;
+
+      let nextPosition = player.position.clone();
+      let nextX = player.position.clone().add(new THREE.Vector3(player.velocity.x, 0, 0));
+      if (!checkCollision(nextX)) nextPosition.x = nextX.x;
+
+      let nextY = player.position.clone().add(new THREE.Vector3(0, player.fallSpeed, 0));
+      if (!checkCollision(nextY)) {
+        nextPosition.y = nextY.y;
+        player.grounded = false;
+      } else {
+        player.fallSpeed = 0;
+        player.isJumping = false;
+        player.grounded = true;
+      }
+
+      let nextZ = player.position.clone().add(new THREE.Vector3(0, 0, player.velocity.z));
+      if (!checkCollision(nextZ)) nextPosition.z = nextZ.z;
+
+      player.position.copy(nextPosition);
+
+      camera.position.copy(player.position);
+      camera.position.y += player.isCrouching ? 0.5 : 1.5;
+      camera.rotation.x = pitch;
+      camera.rotation.y = yaw;
+      camera.rotation.z = 0;
     }
 
-    function gameLoop() {
+    // Create the skybox
+    function createSkybox() {
+      const skyGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
+      const skyMaterials = [
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Right
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Left
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Top
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Bottom
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Front
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide })  // Back
+      ];
+      const skybox = new THREE.Mesh(skyGeometry, skyMaterials);
+      scene.add(skybox);
+    }
+    
+    createSkybox(); // Call the function to create the skybox
+
+    function animate() {
+      requestAnimationFrame(animate);
       updatePlayer();
       renderer.render(scene, camera);
-      requestAnimationFrame(gameLoop);
     }
 
-    gameLoop();
+    animate();
   </script>
 </body>
 </html>
