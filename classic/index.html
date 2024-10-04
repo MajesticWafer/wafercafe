@@ -25,20 +25,33 @@
 
     function applyQualitySettings() {
       const settings = qualitySettings[qualityLevel];
-    
-      // Adjust resolution by resizing the renderer
+  
+      // Adjust resolution
       renderer.setSize(window.innerWidth * settings.resolution, window.innerHeight * settings.resolution);
       renderer.setPixelRatio(window.devicePixelRatio * settings.resolution);
-    
+
       // Adjust shadow map size
       directionalLight.shadow.mapSize.width = settings.shadowMapSize;
       directionalLight.shadow.mapSize.height = settings.shadowMapSize;
-    
-      // Enable or disable antialiasing
-      renderer.antialias = settings.antialias;
-    
+
+      // Enable or disable antialiasing (requires recreating renderer)
+      renderer = new THREE.WebGLRenderer({ antialias: settings.antialias });
+      renderer.shadowMap.enabled = true;
+      document.body.appendChild(renderer.domElement);
+  
+      // Reduce LOD or disable objects at lower quality levels
+      if (qualityLevel === 0) {
+        // Remove far away blocks or reduce terrain detail
+        blocks.forEach(block => {
+          if (block.position.distanceTo(camera.position) > 20) {
+            scene.remove(block);
+          }
+        });
+      }
+
       console.log(`Quality set to: ${['Low', 'Medium', 'High'][qualityLevel]}`);
     }
+
 
     // Handle quality change with '=' and '-' keys
     document.addEventListener('keydown', (event) => {
