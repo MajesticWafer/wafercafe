@@ -141,6 +141,16 @@
                 font-weight: italic;
             }
         </style>
+	<script>
+	    function uiMenuBack() {
+                uiSaveConfig()
+                if (emuIsGameLoaded) {
+                    uiSwitchTo('player')
+                } else {
+                    uiSwitchTo('welcome')
+                }
+            }
+	</script>
     </head>
     <body>
         <div id="welcome" class="menu">
