@@ -17,9 +17,6 @@
 	        user-select: none;
 	        -webkit-touch-callout: none;
 	        cursor: inherit;
-        }
-
-        body {
 	        background-color: black;
 	        color: white;
 	        padding: 0;
@@ -27,24 +24,6 @@
 	        width: 100vw;
 	        height: 100vh;
 	        font-family: 'Myriad Set Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-        }
-
-        #bottom-text {
-               border: 2px solid #ffffff;
-               border-radius: 6px;
-               color: #fff;
-               background-color: #161f27;
-               font-family: inherit;
-               font-size: inherit;
-               position: fixed;
-               bottom: 40px;
-               left: 50%;
-               transform: translate(-50%, 50%);
-               width: 81.5%;
-               text-align: center;
-               padding: 5px; /* Reduce the padding to create a 5px gap */
-               box-sizing: border-box; /* Include the border in the width calculation */
-               box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
         }
 
         select {
@@ -59,48 +38,6 @@
                font-size: inherit;
 	       box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
         }
-
-        .container {
-               display: flex;
-               justify-content: space-between;
-               align-items: flex-start;
-               padding: 20px;
-        }
-
-        .container .button-list:not(:last-child) {
-               margin-right: 5%; /* Reduce the right margin by 15% */
-        }
-
-        .button-list {
-               color: #fff;
-               background-color: #161f27;
-               font-family: inherit;
-               font-size: inherit;
-               padding: 0; /* Remove the padding */
-               border: 2px white solid;
-               border-radius: 6px;
-               outline: none;
-               height: 75%;
-               width: 25%;
-               display: flex;
-               flex-direction: column;
-               align-items: center;
-               justify-content: center; /* Add this line to center the content vertically */
-               text-align: center;
-               box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.25);
-        }
-
-        .button-list img {
-               border-radius: 6px;
-               width: calc(100% - 20px); /* Subtract the desired margin from the width */
-               height: auto;
-               object-fit: contain;
-               margin: 10px; /* Add the desired margin */
-	}
-
-	.button-list .button-text {
-		transform: translateY(-35%); /* Vertically center the text */
-	}
 		
 	canvas {
 		position: absolute;
@@ -159,7 +96,7 @@
 		text-align: center;
 		vertical-align: middle;
 		display: inline-block;
-		border-radius: 10% / 35% !important;
+		border-radius: 10% / 25% !important;
 	}
 
 	.vk-square {
@@ -193,8 +130,6 @@
 		vertical-align: middle;
 		border-radius: 0%;
 		display: inline-block;
-		backdrop-filter: blur(1px); 
-                -webkit-backdrop-filter: blur(1px);
 	}
 		
 	.vk-touched {
@@ -206,91 +141,53 @@
                 font-weight: italic;
 	}
 	</style>
-	<script>
-	   if (localStorage.getItem('visitCount')) {
-               var lastVisitDate = localStorage.getItem('lastVisitDate');
-               var currentDate = new Date().getTime();
-               if (!lastVisitDate || (currentDate - lastVisitDate) > 7 * 24 * 60 * 60 * 1000) {
-                   localStorage.setItem('visitCount', 1);
-                   localStorage.setItem('lastVisitDate', currentDate);
-               } else {
-                   var visitCount = parseInt(localStorage.getItem('visitCount'));
-                   visitCount++;
-                   localStorage.setItem('visitCount', visitCount);
-                   if (visitCount === 5) {
-                       alert("It seems you've been using this software for quite some time. It is highly recommended that you back up your saves in the case of an error or mishap!");
-                   }
-               }
-           } else {
-               localStorage.setItem('visitCount', 1);
-               localStorage.setItem('lastVisitDate', new Date().getTime());
-           }
-	</script>
 </head>
 
 <body>
 	<div id="welcome" class="menu">
-		<button class="button" style="float: right; margin-top: 5px; margin-right: 20px; height: 50px;" onclick="uiSwitchTo('menu')">⚙ Settings...</button>
+		<button class="button" style="float: right; margin-top: 5px; margin-right: 20px; height: 50px;" onclick="uiSwitchTo('menu')">â Settings...</button>
 		<h1 style="margin-top: 25px; margin-left: 20px;">DS Player</h1>
 		<div style="margin-left: 20px;" id="loading">Loading...</div>
 		<div id="loadrom" hidden>
 			<input id="rom" type="file" hidden />
-			<button style="width: calc(100% - 2em); margin: 1em" id="btn-choose-file">Choose File (or
-				drag/drop)...</button><br />
+			<button style="width: calc(100% - 2em); margin: 1em" id="btn-choose-file">Choose File (or drag/drop)...</button><br />
 		</div>
+		
+		<!--
 		<p style="color: #e7e7e7; margin-left: 15px;">
 			This software should not be used to play games you have not legally obtained. In no way is this site associated with any of the vendors of the original game software and hardware.
 			<br />
 		</p>
+		-->
+		
 		<hr />
-		<div class="container">
-			<div class="button-list" onclick="openLink('https://archive.org/download/dsp-storage/Mario%20Kart%20DS.nds')">
-				<img src="mkds.jpeg" alt="Mario Kart DS">
-				<span class="button-text">Mario Kart DS</span>
-			</div>
-			<div class="button-list" onclick="openLink('https://archive.org/download/dsp-storage/Super%20Mario%2064%20DS.nds')">
-				<img src="sm64ds.jpeg" alt="Super Mario 64 DS">
-				<span class="button-text">Super Mario 64 DS</span>
-			</div>
-			<div class="button-list" onclick="openLink('https://archive.org/download/dsp-storage/NSMB%20DS.nds')">
-				<img src="nsmbds.jpeg" alt="New Super Mario Bros. DS">
-				<span class="button-text">New Super Mario Bros. DS</span>
-			</div>
-		</div>
 		<div id="pro" style="background-color: #333"></div>
 		<div id="ios-hint" hidden style="margin-left: 14px; bottom: 7px;">
-			⬇ Due to iOS Safari limitations, you have to add this page to your <b>Home Screen</b> in order to save your game progress. ⬇
+			Due to iOS Safari limitations, you have to add this page to your <b>Home Screen</b> in order to save your game progress.
 		</div>
 		<div id="mac-warning" hidden>
 			WARNING:<br />It looks like you are using macOS.<br />Due to macOS Safari <a href="https://webkit.org/tracking-prevention/">limitations</a>, ALL of you save data will be LOST after 7 days of inactivity.<br />For this reason, it is highly recommended to use a different browser. (For example: <a href="https://www.google.com/chrome/">Chrome</a>)
 		</div>
 	</div>
-	</div>
 	<div id="vk-layer" hidden>
-		<div class="vk-rectangle vk" data-k="menu" id="vk-menu">𝗠𝗲𝗻𝘂</div>
-		<div class="vk-trig vk" data-k="l">𝗟</div>
-		<div class="vk-trig vk" data-k="r">𝗥</div>
-		<div class="vk-round vk" data-k="a">𝗔</div>
-		<div class="vk-round vk" data-k="b">𝗕</div>
-		<div class="vk-round vk" data-k="x">𝗫</div>
-		<div class="vk-round vk" data-k="y">𝗬</div>
+		<div class="vk-rectangle vk" data-k="menu" id="vk-menu">Menu</div>
+		<div class="vk-trig vk" data-k="l">L</div>
+		<div class="vk-trig vk" data-k="r">R</div>
+		<div class="vk-round vk" data-k="a">A</div>
+		<div class="vk-round vk" data-k="b">B</div>
+		<div class="vk-round vk" data-k="x">X</div>
+		<div class="vk-round vk" data-k="y">Y</div>
 		<div class="vk-square vk" data-k="select">-</div>
 		<div class="vk-square vk" data-k="start">+</div>
                 <div class="vk-round vk" data-k="stick" id="vk-stick"></div>
-		<div class="vk-rectangle vk" data-k="mic">𝗠𝗶𝗰</div>
+		<div class="vk-rectangle vk" data-k="mic">Mic</div>
 	</div>
 	<div style="z-index: 2; position: absolute; bottom: 7px; right: 7px;" id="fps"></div>
 	<div id="msg-layer" hidden>
 		<p id="msg-text"></p>
 	</div>
 	<div id="menu" hidden>
-		<button id="back-menu" style="margin-top: 5px; margin-right: 5px;" onclick="uiMenuBack()">❮ Back</button> <button style="margin-top: 5px; margin-right: 5px;" onclick="runFunctions()">Enter Fullscreen</button>
-		<hr />
-		<label for="canvas-fullscreen" style="margin-left: 7px;">Fullscreen Selection:</label>
-		<select id="canvas-fullscreen" class="select">
-                  <option value="top">Top Canvas</option>
-                  <option value="bottom">Bottom Canvas</option>
-		</select>
+		<button id="back-menu" style="margin-top: 5px; margin-right: 5px;" onclick="uiMenuBack()">â® Back</button> <button style="margin-top: 5px; margin-right: 5px;" onclick="runFunctions()">Enter Fullscreen</button>
 		<hr />
 		<input type="checkbox" id="cfg-opt" style="margin-left: 7px;">
                 <label for="cfg-opt">Experimental optimization</label><br>
@@ -307,17 +204,19 @@
                 <hr />
 
 		<div style="position: fixed; bottom: 0; left: 0; padding: 10px;">
-                  <a href="/vba" style="font-size: 12px;">GBA Player</a>
+                  <a href="../gba" style="font-size: 12px;">GBA Player</a>
                 </div>
 		
-                <div style="position: fixed; bottom: 0; right: 0; padding: 10px;">
+                <!--
+		<div style="position: fixed; bottom: 0; right: 0; padding: 10px;">
                   <span style="font-size: 12px;">Version 0.1 | </span> <a onclick="whatsNew()" href="#" style="font-size: 12px;">What's New</a>
-                </div>
+	        </div>
+		-->
 
 		<div style="margin-left: 7px;" id="menu-savegame" hidden>
 			<input type="file" id="restore-file" onchange="uiSaveRestore()" hidden />
-			Save Data: <button onclick="uiSaveBackup()">↓ Export</button>  <button onclick="$id('restore-file').click()">
-				↑ Import
+			Save Data: <button onclick="uiSaveBackup()">â Export</button>  <button onclick="$id('restore-file').click()">
+				â Import
 			</button>
 			<hr />
 		</div>
@@ -348,24 +247,6 @@
 		}
 	</script>
 	<script>
-          function runFunctions() {
-            var canvas = document.getElementById("canvas-fullscreen").value;
-	    uiMenuBack();
-            openFullscreen(canvas);
-          }
-
-          function openFullscreen(canvasId) {
-            var elem = document.getElementById(canvasId);
-            if (elem.requestFullscreen) {
-              elem.requestFullscreen();
-            } else if (elem.webkitRequestFullscreen) { /* Safari */
-              elem.webkitRequestFullscreen();
-            } else if (elem.msRequestFullscreen) { /* IE11 */
-              elem.msRequestFullscreen();
-            }
-          }
-        </script>	
-	<script>
 		// Menu trigger function
 		var gamepadIndex = 0; // Change this value if you have multiple gamepads connected
 		var isTriggerPressed = false;
@@ -378,7 +259,7 @@
 		function gamepadLoop() {
 			var gamepad = navigator.getGamepads()[gamepadIndex];
 			if (gamepad) {
-				var currentState = gamepad.buttons[6].pressed; // Change the index to match the left trigger button on your gamepad
+				var currentState = gamepad.buttons[6].pressed;
 				if (currentState && !isTriggerPressed && !isWaiting) {
 					isTriggerPressed = true;
 					setTimeout(function () {
@@ -393,8 +274,8 @@
 						isWaiting = true;
 						setTimeout(function () {
 							isWaiting = false;
-						}, 500); // Wait for an additional 0.5 seconds before updating again
-					}, 500); // Wait for 0.5 seconds before checking if the trigger is still pressed
+						}, 500);
+					}, 500); 
 				}
 			}
 			requestAnimationFrame(gamepadLoop);
@@ -403,27 +284,21 @@
 		requestAnimationFrame(gamepadLoop);
 	</script>
 	<script>
-		// Add a global variable to store the selected screen layout
 		var screenLayout = 'tb';
 		document.addEventListener('DOMContentLoaded', function () {
-
-
-
-			// Add an event listener to handle the screen layout selection
 			document.getElementById('screen-layout').addEventListener('change', function () {
 				screenLayout = this.value;
 				updateScreenLayout();
 			});
 
-			// Define a function to update the screen layout based on the selected option
 			function updateScreenLayout() {
 				var topCanvas = document.getElementById('top');
 				var bottomCanvas = document.getElementById('bottom');
 
 				if (screenLayout === 'lbr') {
-					const canvasWidthBig = window.innerWidth * 0.75; // 75vw
+					const canvasWidthBig = window.innerWidth * 0.75;
 					const canvasHeightBig = canvasWidthBig * 0.75;
-					const canvasWidthSmall = window.innerWidth * 0.25; // 25vw
+					const canvasWidthSmall = window.innerWidth * 0.25;
 					const canvasHeightSmall = canvasWidthSmall * 0.75;
 
 					topCanvas.style.position = 'absolute';
@@ -437,7 +312,7 @@
 					bottomCanvas.style.width = `${canvasWidthSmall}px`;
 					bottomCanvas.style.height = `${canvasHeightSmall}px`;
 				} else if (screenLayout === 'lr') {
-					const canvasWidth = window.innerWidth * 0.5; // 50vw
+					const canvasWidth = window.innerWidth * 0.5;
 					const canvasHeight = canvasWidth * 0.75;
 
 					topCanvas.style.position = 'absolute';
