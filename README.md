@@ -18,19 +18,13 @@ The current URLs for the Wafer Café are:
 1. https://wafercafe.com/
 2. https://wafer-cafe.vercel.app/
 
----
-
-Planned URLs:
-
-None
-
 ## Info
 
 Please star if you fork, or simply find this useful!
 
 While the Wafer Café is intended to be be a game center, I also ocasionally run my school projects on this domain.
 
-MajesticWafer, 2023-2024
+Created by MajesticWafer, 2023-2024
 
 ## Contribution
 
