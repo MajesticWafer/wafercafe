@@ -1,79 +1,41 @@
-// textures.js
+// trees.js
 
-const loader = new THREE.TextureLoader();
+function generateTree(scene, x, y, z) {
+    const trunkHeight = Math.floor(Math.random() * 4) + 3; // Random height between 3 and 6 blocks
+    const leavesSize = 3; // Size of the leaf cluster
 
-// Load textures with pixelated filters
-const textures = {
-  grassTop: loader.load('assets/grass.png', (texture) => {
-    texture.magFilter = THREE.NearestFilter;
-    texture.minFilter = THREE.NearestFilter;
-  }),
-  dirt: loader.load('assets/dirt.png', (texture) => {
-    texture.magFilter = THREE.NearestFilter;
-    texture.minFilter = THREE.NearestFilter;
-  }),
-  grassSide: loader.load('assets/grass_dirt.png', (texture) => {
-    texture.magFilter = THREE.NearestFilter;
-    texture.minFilter = THREE.NearestFilter;
-  }),
-  bedrock: loader.load('assets/bedrock.png', (texture) => {
-    texture.magFilter = THREE.NearestFilter;
-    texture.minFilter = THREE.NearestFilter;
-  }),
-  gravel: loader.load('assets/gravel.png', (texture) => {
-    texture.magFilter = THREE.NearestFilter;
-    texture.minFilter = THREE.NearestFilter;
-  }),
-  leavesOpaque: loader.load('assets/leaves_opaque.png', (texture) => {
-    texture.magFilter = THREE.NearestFilter;
-    texture.minFilter = THREE.NearestFilter;
-  }),
-  rock: loader.load('assets/rock.png', (texture) => {
-    texture.magFilter = THREE.NearestFilter;
-    texture.minFilter = THREE.NearestFilter;
-  }),
-  sand: loader.load('assets/sand.png', (texture) => {
-    texture.magFilter = THREE.NearestFilter;
-    texture.minFilter = THREE.NearestFilter;
-  }),
-  stone: loader.load('assets/stone.png', (texture) => {
-    texture.magFilter = THREE.NearestFilter;
-    texture.minFilter = THREE.NearestFilter;
-  }),
-  treeSide: loader.load('assets/tree_side.png', (texture) => {
-    texture.magFilter = THREE.NearestFilter;
-    texture.minFilter = THREE.NearestFilter;
-  }),
-  treeTop: loader.load('assets/tree_top.png', (texture) => {
-    texture.magFilter = THREE.NearestFilter;
-    texture.minFilter = THREE.NearestFilter;
-  }),
-  wood: loader.load('assets/wood.png', (texture) => {
-    texture.magFilter = THREE.NearestFilter;
-    texture.minFilter = THREE.NearestFilter;
-  })
-};
+    // Create trunk geometry
+    const trunkGeometry = new THREE.BoxGeometry(1, 1, 1);
+    
+    // Use the log material from textures.js
+    const logMaterial = createLogMaterial();
 
-// Creating materials for each side of the grass block
-function createGrassBlockMaterial() {
-  return [
-    new THREE.MeshBasicMaterial({ map: textures.grassSide }), // left
-    new THREE.MeshBasicMaterial({ map: textures.grassSide }), // right
-    new THREE.MeshBasicMaterial({ map: textures.grassTop }),  // top
-    new THREE.MeshBasicMaterial({ map: textures.dirt }),      // bottom
-    new THREE.MeshBasicMaterial({ map: textures.grassSide }), // front
-    new THREE.MeshBasicMaterial({ map: textures.grassSide })  // back
-  ];
+    // Generate the trunk
+    for (let i = 0; i < trunkHeight; i++) {
+        const trunk = new THREE.Mesh(trunkGeometry, logMaterial);
+        trunk.position.set(x, y + i, z); // Stack the trunk vertically
+        scene.add(trunk);
+    }
+
+    // Create leaves geometry
+    const leavesGeometry = new THREE.BoxGeometry(leavesSize, leavesSize, leavesSize);
+    
+    // Use the leaves material from textures.js
+    const leavesMaterial = new THREE.MeshBasicMaterial({ map: textures.leavesOpaque });
+    
+    // Generate leaves at the top of the trunk
+    const leaves = new THREE.Mesh(leavesGeometry, leavesMaterial);
+    leaves.position.set(x, y + trunkHeight, z); // Position leaves above the trunk
+    scene.add(leaves);
 }
 
-// Creating materials for the tree logs
-function createLogMaterial() {
-  return [
-    new THREE.MeshBasicMaterial({ map: textures.treeSide }), // left
-    new THREE.MeshBasicMaterial({ map: textures.treeSide }), // right
-    new THREE.MeshBasicMaterial({ map: textures.treeTop }),  // top
-    new THREE.MeshBasicMaterial({ map: textures.treeTop }),  // bottom
-    new THREE.MeshBasicMaterial({ map: textures.treeSide }), // front
-    new THREE.MeshBasicMaterial({ map: textures.treeSide })  // back
-  ];
+// Generate multiple trees within a given area
+function generateForest(scene, areaX, areaZ, density) {
+    for (let i = 0; i < density; i++) {
+        const x = Math.floor(Math.random() * areaX);  // Random position in X axis
+        const z = Math.floor(Math.random() * areaZ);  // Random position in Z axis
+        const y = 0; // Trees start at ground level (y = 0)
+
+        generateTree(scene, x, y, z); // Generate tree at the random position
+    }
 }
