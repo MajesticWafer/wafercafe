@@ -142,6 +142,7 @@
       yaw -= event.movementX * mouseSensitivity;
       pitch -= event.movementY * mouseSensitivity;
       pitch = Math.max(-maxPitch, Math.min(maxPitch, pitch));
+      roll = 0;
     });
 
     // Arrow key listener for looking around
@@ -157,12 +158,28 @@
           break;
         case 'ArrowLeft': 
           yaw += arrowKeySensitivity;
+          roll = 0;
           break;
         case 'ArrowRight': 
           yaw -= arrowKeySensitivity;
+          roll = 0;
           break;
       }
     });
+
+    // Collision detection using AABB
+    function checkCollision(nextPosition) {
+      for (let block of blocks) {
+        const min = block.position.clone().sub(new THREE.Vector3(0.5, 0.5, 0.5));
+        const max = block.position.clone().add(new THREE.Vector3(0.5, 0.5, 0.5));
+        if (nextPosition.x >= min.x && nextPosition.x <= max.x &&
+            nextPosition.y >= min.y && nextPosition.y <= max.y &&
+            nextPosition.z >= min.z && nextPosition.z <= max.z) {
+          return true;
+        }
+      }
+      return false;
+    }
 
     // Update player's movement and apply collision detection with delta time
     function updatePlayer(deltaTime) {
@@ -211,45 +228,39 @@
 
       player.position.copy(nextPosition);
 
-      // Set camera position and rotation (only change here)
       camera.position.copy(player.position);
       camera.position.y += player.isCrouching ? player.crouchHeight : 1.8;
-      camera.rotation.set(pitch, yaw, 0, 'YXZ'); // Lock roll to 0
+      camera.rotation.x = pitch;
+      camera.rotation.y = yaw;
+      camera.rotation.z = 0;
+
+      const cameraRotation = new THREE.Euler(pitch, yaw, 0, 'YXZ'); // 'YXZ' order for yaw and pitch
+      camera.setRotationFromEuler(cameraRotation);
     }
 
     // Create the skybox
     function createSkybox() {
       const skyGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
       const skyMaterials = [
-        new THREE.MeshBasicMaterial({ map: textures.skybox.front, side: THREE.BackSide }),
-        new THREE.MeshBasicMaterial({ map: textures.skybox.back, side: THREE.BackSide }),
-        new THREE.MeshBasicMaterial({ map: textures.skybox.up, side: THREE.BackSide }),
-        new THREE.MeshBasicMaterial({ map: textures.skybox.down, side: THREE.BackSide }),
-        new THREE.MeshBasicMaterial({ map: textures.skybox.right, side: THREE.BackSide }),
-        new THREE.MeshBasicMaterial({ map: textures.skybox.left, side: THREE.BackSide }),
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Right
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Left
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Top
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Bottom
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Front
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide })  // Back
       ];
-
       const skybox = new THREE.Mesh(skyGeometry, skyMaterials);
       scene.add(skybox);
     }
 
-    createSkybox();
-
-    // Collision detection function (checks if player hits any block)
-    function checkCollision(position) {
-      for (let block of blocks) {
-        const distance = block.position.distanceTo(position);
-        if (distance < 0.5) return true;
-      }
-      return false;
-    }
+    createSkybox(); // Call the function to create the skybox
 
     // Main animation loop with delta time
     let lastTime = 0;
     function animate(currentTime) {
       const deltaTime = (currentTime - lastTime) / 1000; // Convert to seconds
       lastTime = currentTime;
-
+      
       updatePlayer(deltaTime);
       renderer.render(scene, camera);
       requestAnimationFrame(animate);
