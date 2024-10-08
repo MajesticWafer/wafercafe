@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Realistic 3D Asteroids with Planets and Stars</title>
+    <title>Realistic Asteroids with Nebula and Particles</title>
     <style>
         body { margin: 0; overflow: hidden; }
         canvas { display: block; }
@@ -16,17 +16,17 @@
 <script>
     // Setup scene, camera, and renderer using Three.js
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000); // Lower FOV for cinematic feel
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
-    // Lighting
-    const ambientLight = new THREE.AmbientLight(0x404040, 1.5); // Ambient light for general illumination
+    // Lighting setup
+    const ambientLight = new THREE.AmbientLight(0x303030, 1.5); // Softer ambient light
     scene.add(ambientLight);
 
     const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-    directionalLight.position.set(5, 10, 7).normalize(); // Position the light above the scene
+    directionalLight.position.set(5, 10, 7).normalize(); // Slightly softer directional light
     scene.add(directionalLight);
 
     // Create the physics world using Cannon.js
@@ -36,25 +36,33 @@
     // Array to store asteroid meshes and bodies
     const asteroids = [];
     const asteroidBodies = [];
+    const particles = [];
 
-    // Asteroid material with bump mapping to simulate craters
+    // Darker asteroid material with rough surface
     const asteroidMaterial = new THREE.MeshStandardMaterial({
-        color: 0x888888,      // Rocky color
-        roughness: 0.9,       // Very rough surface
-        bumpScale: 0.2        // Intensity of the craters and surface details
+        color: 0x444444,  // Dark gray rocky texture
+        roughness: 1,     // Rough surface
+        bumpScale: 0.4    // Emphasize the roughness for a more rocky look
     });
 
-    // Create procedural "craters" using a noise-based bump map
+    // Procedural noise-based bump map for asteroid surface
     const textureLoader = new THREE.TextureLoader();
-    const bumpMap = textureLoader.load('https://threejs.org/examples/textures/terrain/grasslight-big.jpg'); // Random noise for bumps
+    const bumpMap = textureLoader.load('https://threejs.org/examples/textures/terrain/grasslight-big.jpg'); // Using noise texture for bumps
     asteroidMaterial.bumpMap = bumpMap;
 
+    // Function to create oblong asteroids
     function createAsteroid() {
-        // Geometry for asteroid (irregular shape)
-        const asteroidGeometry = new THREE.IcosahedronGeometry(Math.random() * 0.5 + 0.2, 3);
+        const asteroidGeometry = new THREE.DodecahedronGeometry(Math.random() * 0.5 + 0.2, 1); // Irregular shape
         const asteroidMesh = new THREE.Mesh(asteroidGeometry, asteroidMaterial);
 
-        // Position randomly in space
+        // Scale randomly to create oblong effect
+        asteroidMesh.scale.set(
+            Math.random() * 2 + 0.5,
+            Math.random() * 0.5 + 0.5,
+            Math.random() * 1.5 + 0.5
+        );
+
+        // Random position in space
         asteroidMesh.position.set(
             (Math.random() - 0.5) * 10,
             (Math.random() - 0.5) * 10,
@@ -62,10 +70,10 @@
         );
         scene.add(asteroidMesh);
 
-        // Create corresponding physics body for the asteroid
-        const asteroidShape = new CANNON.Sphere(asteroidGeometry.parameters.radius);
+        // Create corresponding physics body
+        const asteroidShape = new CANNON.Sphere(asteroidGeometry.parameters.radius); // Simplified for physics
         const asteroidBody = new CANNON.Body({
-            mass: 1, // Set mass for collision behavior
+            mass: 1,
             position: new CANNON.Vec3(
                 asteroidMesh.position.x,
                 asteroidMesh.position.y,
@@ -74,19 +82,16 @@
             shape: asteroidShape,
         });
 
-        // Set a random velocity for the asteroid
+        // Random velocity for motion
         asteroidBody.velocity.set(
             (Math.random() - 0.5) * 5,
             (Math.random() - 0.5) * 5,
             (Math.random() - 0.5) * 5
         );
 
-        // Add the asteroid to the world
+        // Add asteroid to the world
         world.addBody(asteroidBody);
-
-        // Store the asteroid mesh and body
-        asteroids.push(asteroidMesh);
-        asteroidBodies.push(asteroidBody);
+        asteroids.push({ mesh: asteroidMesh, body: asteroidBody });
     }
 
     // Create multiple asteroids
@@ -94,45 +99,58 @@
         createAsteroid();
     }
 
-    // Add distant planets with emissive materials
-    function createPlanet(size, color, distance) {
-        const planetGeometry = new THREE.SphereGeometry(size, 32, 32);
-        const planetMaterial = new THREE.MeshStandardMaterial({
-            color: color,
-            emissive: color,      // Makes the planet glow slightly
-            emissiveIntensity: 0.5,
+    // Function to create particles (debris) when asteroids collide
+    function createParticles(position) {
+        const particleGeometry = new THREE.SphereGeometry(0.05, 8, 8);
+        const particleMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 }); // Bright yellow particles
+        const particleMesh = new THREE.Mesh(particleGeometry, particleMaterial);
+
+        particleMesh.position.copy(position);
+        scene.add(particleMesh);
+        particles.push(particleMesh);
+
+        // Remove particle after some time
+        setTimeout(() => {
+            scene.remove(particleMesh);
+        }, 500);  // Particles disappear after 0.5 seconds
+    }
+
+    // Add a nebula effect using a particle system
+    function createNebula() {
+        const nebulaGeometry = new THREE.BufferGeometry();
+        const nebulaParticles = 1000;
+        const positions = new Float32Array(nebulaParticles * 3); // XYZ for each particle
+
+        for (let i = 0; i < nebulaParticles; i++) {
+            positions[i * 3] = (Math.random() - 0.5) * 50;
+            positions[i * 3 + 1] = (Math.random() - 0.5) * 50;
+            positions[i * 3 + 2] = (Math.random() - 0.5) * 50;
+        }
+
+        nebulaGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+        const nebulaMaterial = new THREE.PointsMaterial({
+            color: 0x8800ff,  // Purple nebula color
+            size: 0.5,
+            opacity: 0.5,
+            transparent: true,
+            depthWrite: false,
         });
-        const planetMesh = new THREE.Mesh(planetGeometry, planetMaterial);
-        planetMesh.position.set(distance, distance * 0.5, -distance);  // Place planet far away
-        scene.add(planetMesh);
+
+        const nebula = new THREE.Points(nebulaGeometry, nebulaMaterial);
+        scene.add(nebula);
     }
 
-    // Create two planets
-    createPlanet(2, 0x003366, 20);   // Dark blue planet
-    createPlanet(1.5, 0x660000, 30); // Reddish planet
+    createNebula();  // Create nebula in the background
 
-    // Add stars (small spheres with point light)
-    function createStar(size, intensity, distance) {
-        const starGeometry = new THREE.SphereGeometry(size, 16, 16);
-        const starMaterial = new THREE.MeshBasicMaterial({ color: 0xffffcc });
-        const starMesh = new THREE.Mesh(starGeometry, starMaterial);
-        starMesh.position.set(
-            (Math.random() - 0.5) * distance,
-            (Math.random() - 0.5) * distance,
-            (Math.random() - 0.5) * distance
-        );
-        scene.add(starMesh);
-
-        // Add light source at the star's position
-        const starLight = new THREE.PointLight(0xffffcc, intensity, 50);
-        starLight.position.copy(starMesh.position);
-        scene.add(starLight);
-    }
-
-    // Create multiple stars
-    for (let i = 0; i < 20; i++) {
-        createStar(0.1, 0.5, 50);  // Small glowing stars
-    }
+    // Handle asteroid collisions
+    world.addEventListener('postStep', () => {
+        asteroids.forEach(asteroid => {
+            if (asteroid.body.velocity.lengthSquared() > 10) { // Detect collision impact
+                createParticles(asteroid.mesh.position); // Add particles at collision point
+            }
+        });
+    });
 
     // Animation loop
     function animate() {
@@ -141,23 +159,23 @@
         // Step the physics world
         world.step(1 / 60);
 
-        // Update Three.js meshes based on Cannon.js physics bodies
-        for (let i = 0; i < asteroids.length; i++) {
-            asteroids[i].position.copy(asteroidBodies[i].position);
-            asteroids[i].quaternion.copy(asteroidBodies[i].quaternion);
-        }
+        // Update asteroid positions
+        asteroids.forEach(asteroid => {
+            asteroid.mesh.position.copy(asteroid.body.position);
+            asteroid.mesh.quaternion.copy(asteroid.body.quaternion);
+        });
 
         // Render the scene
         renderer.render(scene, camera);
     }
 
-    // Position the camera
+    // Set camera position
     camera.position.z = 15;
 
-    // Start animation loop
+    // Start animation
     animate();
 
-    // Handle window resize
+    // Handle window resizing
     window.addEventListener('resize', () => {
         renderer.setSize(window.innerWidth, window.innerHeight);
         camera.aspect = window.innerWidth / window.innerHeight;
