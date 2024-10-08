@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Asteroids with Collisions</title>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        canvas { display: block; }
+    </style>
+</head>
+<body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cannon.js/0.6.2/cannon.min.js"></script>
+
+<script>
+    // Setup scene, camera, and renderer using Three.js
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Add ambient light
+    const light = new THREE.AmbientLight(0xffffff); // soft white light
+    scene.add(light);
+
+    // Create the physics world using Cannon.js
+    const world = new CANNON.World();
+    world.gravity.set(0, 0, 0); // No gravity, space-like
+
+    // Array to store asteroid meshes and bodies
+    const asteroids = [];
+    const asteroidBodies = [];
+
+    // Create asteroid material (rocky texture)
+    const asteroidMaterial = new THREE.MeshStandardMaterial({ color: 0x888888 });
+
+    function createAsteroid() {
+        // Geometry for asteroid (sphere shape)
+        const asteroidGeometry = new THREE.SphereGeometry(Math.random() * 0.5 + 0.2, 16, 16);
+        const asteroidMesh = new THREE.Mesh(asteroidGeometry, asteroidMaterial);
+
+        // Position randomly in space
+        asteroidMesh.position.set(
+            (Math.random() - 0.5) * 10,
+            (Math.random() - 0.5) * 10,
+            (Math.random() - 0.5) * 10
+        );
+        scene.add(asteroidMesh);
+
+        // Create corresponding physics body for the asteroid
+        const asteroidShape = new CANNON.Sphere(asteroidGeometry.parameters.radius);
+        const asteroidBody = new CANNON.Body({
+            mass: 1, // Set mass for collision behavior
+            position: new CANNON.Vec3(
+                asteroidMesh.position.x,
+                asteroidMesh.position.y,
+                asteroidMesh.position.z
+            ),
+            shape: asteroidShape,
+        });
+
+        // Set a random velocity for the asteroid
+        asteroidBody.velocity.set(
+            (Math.random() - 0.5) * 5,
+            (Math.random() - 0.5) * 5,
+            (Math.random() - 0.5) * 5
+        );
+
+        // Add the asteroid to the world
+        world.addBody(asteroidBody);
+
+        // Store the asteroid mesh and body
+        asteroids.push(asteroidMesh);
+        asteroidBodies.push(asteroidBody);
+    }
+
+    // Create multiple asteroids
+    for (let i = 0; i < 10; i++) {
+        createAsteroid();
+    }
+
+    // Animation loop
+    function animate() {
+        requestAnimationFrame(animate);
+
+        // Step the physics world
+        world.step(1 / 60);
+
+        // Update Three.js meshes based on Cannon.js physics bodies
+        for (let i = 0; i < asteroids.length; i++) {
+            asteroids[i].position.copy(asteroidBodies[i].position);
+            asteroids[i].quaternion.copy(asteroidBodies[i].quaternion);
+        }
+
+        // Render the scene
+        renderer.render(scene, camera);
+    }
+
+    // Position the camera
+    camera.position.z = 10;
+
+    // Start animation loop
+    animate();
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+    });
+</script>
+</body>
+</html>
