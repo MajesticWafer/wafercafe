@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3D Asteroids with Collisions</title>
+    <title>Realistic 3D Asteroids with Planets and Stars</title>
     <style>
         body { margin: 0; overflow: hidden; }
         canvas { display: block; }
@@ -21,9 +21,13 @@
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
 
-    // Add ambient light
-    const light = new THREE.AmbientLight(0xffffff); // soft white light
-    scene.add(light);
+    // Lighting
+    const ambientLight = new THREE.AmbientLight(0x404040, 1.5); // Ambient light for general illumination
+    scene.add(ambientLight);
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    directionalLight.position.set(5, 10, 7).normalize(); // Position the light above the scene
+    scene.add(directionalLight);
 
     // Create the physics world using Cannon.js
     const world = new CANNON.World();
@@ -33,12 +37,21 @@
     const asteroids = [];
     const asteroidBodies = [];
 
-    // Create asteroid material (rocky texture)
-    const asteroidMaterial = new THREE.MeshStandardMaterial({ color: 0x888888 });
+    // Asteroid material with bump mapping to simulate craters
+    const asteroidMaterial = new THREE.MeshStandardMaterial({
+        color: 0x888888,      // Rocky color
+        roughness: 0.9,       // Very rough surface
+        bumpScale: 0.2        // Intensity of the craters and surface details
+    });
+
+    // Create procedural "craters" using a noise-based bump map
+    const textureLoader = new THREE.TextureLoader();
+    const bumpMap = textureLoader.load('https://threejs.org/examples/textures/terrain/grasslight-big.jpg'); // Random noise for bumps
+    asteroidMaterial.bumpMap = bumpMap;
 
     function createAsteroid() {
-        // Geometry for asteroid (sphere shape)
-        const asteroidGeometry = new THREE.SphereGeometry(Math.random() * 0.5 + 0.2, 16, 16);
+        // Geometry for asteroid (irregular shape)
+        const asteroidGeometry = new THREE.IcosahedronGeometry(Math.random() * 0.5 + 0.2, 3);
         const asteroidMesh = new THREE.Mesh(asteroidGeometry, asteroidMaterial);
 
         // Position randomly in space
@@ -81,6 +94,46 @@
         createAsteroid();
     }
 
+    // Add distant planets with emissive materials
+    function createPlanet(size, color, distance) {
+        const planetGeometry = new THREE.SphereGeometry(size, 32, 32);
+        const planetMaterial = new THREE.MeshStandardMaterial({
+            color: color,
+            emissive: color,      // Makes the planet glow slightly
+            emissiveIntensity: 0.5,
+        });
+        const planetMesh = new THREE.Mesh(planetGeometry, planetMaterial);
+        planetMesh.position.set(distance, distance * 0.5, -distance);  // Place planet far away
+        scene.add(planetMesh);
+    }
+
+    // Create two planets
+    createPlanet(2, 0x003366, 20);   // Dark blue planet
+    createPlanet(1.5, 0x660000, 30); // Reddish planet
+
+    // Add stars (small spheres with point light)
+    function createStar(size, intensity, distance) {
+        const starGeometry = new THREE.SphereGeometry(size, 16, 16);
+        const starMaterial = new THREE.MeshBasicMaterial({ color: 0xffffcc });
+        const starMesh = new THREE.Mesh(starGeometry, starMaterial);
+        starMesh.position.set(
+            (Math.random() - 0.5) * distance,
+            (Math.random() - 0.5) * distance,
+            (Math.random() - 0.5) * distance
+        );
+        scene.add(starMesh);
+
+        // Add light source at the star's position
+        const starLight = new THREE.PointLight(0xffffcc, intensity, 50);
+        starLight.position.copy(starMesh.position);
+        scene.add(starLight);
+    }
+
+    // Create multiple stars
+    for (let i = 0; i < 20; i++) {
+        createStar(0.1, 0.5, 50);  // Small glowing stars
+    }
+
     // Animation loop
     function animate() {
         requestAnimationFrame(animate);
@@ -99,7 +152,7 @@
     }
 
     // Position the camera
-    camera.position.z = 10;
+    camera.position.z = 15;
 
     // Start animation loop
     animate();
