@@ -13,7 +13,261 @@
   <!-- scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="textures.js"></script> <!-- Texture management file -->
-  <script src="meshRendering.js"></script> <!-- Rendering managment file -->
-  <script src="controls.js"></script> <!-- Control managment file -->
+  
+  <script>
+    // Setup scene, camera, and renderer
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.shadowMap.enabled = false;
+    document.body.appendChild(renderer.domElement);
+    
+    camera.up.set(0, 1, 0); // Ensure the camera's up is the global y-axis.
+
+    // Lighting setup
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(ambientLight);
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+    directionalLight.position.set(10, 20, 10).normalize();
+    directionalLight.castShadow = true; // Enable shadow casting
+    scene.add(directionalLight);
+
+    // Create block geometry and material
+    const blockGeometry = new THREE.BoxGeometry(1, 1, 1);
+    const dirtMaterial = new THREE.MeshStandardMaterial({ map: textures.dirt, side: THREE.FrontSide });
+    const stoneMaterial = new THREE.MeshStandardMaterial({ map: textures.stone, side: THREE.FrontSide });
+    const bedrockMaterial = new THREE.MeshStandardMaterial({ map: textures.bedrock, side: THREE.FrontSide });
+
+    // Use Math.random() to generate a seed value for randomness
+    const seed = Math.random() * 1000;
+
+    // Perlin Noise function (basic implementation for terrain generation)
+    function perlin(x, z) {
+       return Math.sin((x + seed) * 0.1) * Math.cos((z + seed) * 0.1) * 4 + 4;
+    }
+
+    // Generate a 16x16 chunk of terrain with variable height
+    const chunkSize = 48;
+    const maxTerrainHeight = 8;
+    const blocks = []; // Store block positions for collision detection
+
+    function generateTerrainChunk() {
+      for (let x = 0; x < chunkSize; x++) {
+        for (let z = 0; z < chunkSize; z++) {
+          const terrainHeight = Math.floor(perlin(x, z));
+
+          for (let y = 0; y <= terrainHeight; y++) {
+            let material;
+
+            if (y === terrainHeight) {
+              material = createGrassBlockMaterial(); // Grass block on top
+            } else if (y < terrainHeight && y >= terrainHeight - 3) {
+              material = dirtMaterial; // Dirt block below
+            } else if (y < terrainHeight - 3) {
+              material = stoneMaterial; // Stone block further down
+            } else if (y === 0) {
+              material = bedrockMaterial; // Bedrock block
+            }
+
+            const block = new THREE.Mesh(blockGeometry, material);
+            block.position.set(x, y, z);
+            block.castShadow = true;  // Enable block shadow casting
+            block.receiveShadow = true;  // Enable block shadow receiving
+            scene.add(block);
+            blocks.push(block); // Add block to array for collision
+          }
+        }
+      }
+    }
+
+    generateTerrainChunk();
+
+    // Player setup
+    const player = {
+      position: new THREE.Vector3(8, 10, 8),
+      velocity: new THREE.Vector3(),
+      speed: 4.317,
+      isCrouching: false,
+      isJumping: false,
+      jumpStrength: 0.25,
+      crouchHeight: 1.65,
+      gravity: -1, 
+      fallSpeed: 0,
+      grounded: false
+    };
+
+    camera.position.copy(player.position);
+
+    // Movement controls
+    const keys = { forward: false, backward: false, left: false, right: false, jump: false, up: false, down: false, crouch: false};
+
+    document.addEventListener('keydown', (event) => {
+      switch (event.code) {
+        case 'KeyW': keys.forward = true; break;
+        case 'KeyS': keys.backward = true; break;
+        case 'KeyA': keys.left = true; break;
+        case 'KeyD': keys.right = true; break;
+        case 'Space': keys.jump = true; break;
+        case 'ShiftLeft': keys.crouch = true; break;
+      }
+    });
+
+    document.addEventListener('keyup', (event) => {
+      switch (event.code) {
+        case 'KeyW': keys.forward = false; break;
+        case 'KeyS': keys.backward = false; break;
+        case 'KeyA': keys.left = false; break;
+        case 'KeyD': keys.right = false; break;
+        case 'Space': keys.jump = false; break;
+        case 'ShiftLeft': keys.crouch = false; break;
+      }
+    });
+
+    // Mouse and Arrow Key controls for looking around
+    let pitch = 0, yaw = 0;
+    const mouseSensitivity = 0.002;
+    const arrowKeySensitivity = 0.1;
+    const maxPitch = Math.PI / 2;
+
+    // Mouse movement listener
+    document.body.requestPointerLock = document.body.requestPointerLock || document.body.mozRequestPointerLock;
+
+    document.addEventListener('click', () => {
+      document.body.requestPointerLock();
+    });
+
+    document.addEventListener('mousemove', (event) => {
+      yaw -= event.movementX * mouseSensitivity;
+      pitch -= event.movementY * mouseSensitivity;
+      pitch = Math.max(-maxPitch, Math.min(maxPitch, pitch));
+      roll = 0;
+    });
+
+    // Arrow key listener for looking around
+    document.addEventListener('keydown', (event) => {
+      switch (event.code) {
+        case 'ArrowUp': 
+          pitch -= arrowKeySensitivity;
+          pitch = Math.max(-maxPitch, Math.min(maxPitch, pitch));
+          break;
+        case 'ArrowDown': 
+          pitch += arrowKeySensitivity;
+          pitch = Math.max(-maxPitch, Math.min(maxPitch, pitch));
+          break;
+        case 'ArrowLeft': 
+          yaw += arrowKeySensitivity;
+          roll = 0;
+          break;
+        case 'ArrowRight': 
+          yaw -= arrowKeySensitivity;
+          roll = 0;
+          break;
+      }
+    });
+
+    // Collision detection using AABB
+    function checkCollision(nextPosition) {
+      for (let block of blocks) {
+        const min = block.position.clone().sub(new THREE.Vector3(0.5, 0.5, 0.5));
+        const max = block.position.clone().add(new THREE.Vector3(0.5, 0.5, 0.5));
+        if (nextPosition.x >= min.x && nextPosition.x <= max.x &&
+            nextPosition.y >= min.y && nextPosition.y <= max.y &&
+            nextPosition.z >= min.z && nextPosition.z <= max.z) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    // Update player's movement and apply collision detection with delta time
+    function updatePlayer(deltaTime) {
+      const forward = new THREE.Vector3(Math.sin(yaw), 0, Math.cos(yaw));
+      const right = new THREE.Vector3(Math.cos(yaw), 0, -Math.sin(yaw));
+
+      player.velocity.set(0, player.fallSpeed, 0);
+
+      // Adjust movement based on deltaTime
+      const movementSpeed = player.speed * deltaTime;
+      if (keys.forward) player.velocity.sub(forward.multiplyScalar(movementSpeed));
+      if (keys.backward) player.velocity.add(forward.multiplyScalar(movementSpeed));
+      if (keys.left) player.velocity.sub(right.multiplyScalar(movementSpeed));
+      if (keys.right) player.velocity.add(right.multiplyScalar(movementSpeed));
+
+      if (keys.crouch) {
+        player.isCrouching = true;
+      } else {
+        player.isCrouching = false;
+      }
+      
+      if (player.grounded && keys.jump) {
+        player.fallSpeed = player.jumpStrength;
+        player.isJumping = true;
+        player.grounded = false;
+      }
+
+
+      player.fallSpeed += player.gravity * deltaTime;
+
+      let nextPosition = player.position.clone();
+      let nextX = player.position.clone().add(new THREE.Vector3(player.velocity.x, 0, 0));
+      if (!checkCollision(nextX)) nextPosition.x = nextX.x;
+
+      let nextY = player.position.clone().add(new THREE.Vector3(0, player.fallSpeed, 0));
+      if (!checkCollision(nextY)) {
+          nextPosition.y = nextY.y;
+          player.grounded = false;
+      } else {
+          player.fallSpeed = 0;
+          player.isJumping = false;
+          player.grounded = true;
+      }
+
+      let nextZ = player.position.clone().add(new THREE.Vector3(0, 0, player.velocity.z));
+      if (!checkCollision(nextZ)) nextPosition.z = nextZ.z;
+
+      player.position.copy(nextPosition);
+
+      camera.position.copy(player.position);
+      camera.position.y += player.isCrouching ? player.crouchHeight : 1.8;
+      camera.rotation.x = pitch;
+      camera.rotation.y = yaw;
+      camera.rotation.z = 0;
+
+      const cameraRotation = new THREE.Euler(pitch, yaw, 0, 'YXZ'); // 'YXZ' order for yaw and pitch
+      camera.setRotationFromEuler(cameraRotation);
+    }
+
+    // Create the skybox
+    function createSkybox() {
+      const skyGeometry = new THREE.BoxGeometry(1000, 1000, 1000);
+      const skyMaterials = [
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Right
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Left
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Top
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Bottom
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide }), // Front
+        new THREE.MeshBasicMaterial({ color: 0x87CEEB, side: THREE.BackSide })  // Back
+      ];
+      const skybox = new THREE.Mesh(skyGeometry, skyMaterials);
+      scene.add(skybox);
+    }
+
+    createSkybox(); // Call the function to create the skybox
+
+    // Main animation loop with delta time
+    let lastTime = 0;
+    function animate(currentTime) {
+      const deltaTime = (currentTime - lastTime) / 1000; // Convert to seconds
+      lastTime = currentTime;
+      
+      updatePlayer(deltaTime);
+      renderer.render(scene, camera);
+      requestAnimationFrame(animate);
+    }
+
+    animate(0);  // Start animation loop
+  </script>
 </body>
 </html>
