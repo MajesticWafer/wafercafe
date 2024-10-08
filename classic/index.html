@@ -207,6 +207,7 @@
         player.grounded = false;
       }
 
+
       player.fallSpeed += player.gravity * deltaTime;
 
       let nextPosition = player.position.clone();
@@ -215,12 +216,12 @@
 
       let nextY = player.position.clone().add(new THREE.Vector3(0, player.fallSpeed, 0));
       if (!checkCollision(nextY)) {
-        nextPosition.y = nextY.y;
-        player.grounded = false;
+          nextPosition.y = nextY.y;
+          player.grounded = false;
       } else {
-        player.fallSpeed = 0;
-        player.isJumping = false;
-        player.grounded = true;
+          player.fallSpeed = 0;
+          player.isJumping = false;
+          player.grounded = true;
       }
 
       let nextZ = player.position.clone().add(new THREE.Vector3(0, 0, player.velocity.z));
