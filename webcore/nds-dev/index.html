@@ -85,30 +85,29 @@
 		var menu = document.getElementById('vk-menu')
                 if (this.checked) {
                     console.log("Menu enabled!");
-		    menu.style.display: 'block';
+		    menu.style.display: 'block !important';
                 } else {
                     console.log("Menu disabled!");
-		    menu.style.display: 'none';
+		    menu.style.display: 'none !important';
                 }
             });
 
-	    // L+R+A combo to open menu
+	    // "L + Select" combo to open menu
             // Track the state of each key
             const keyState = {
                 l: false,
-                r: false,
-                a: false
+                select: false
             };
 
-            // Function to execute when combo "L + R + A" is pressed
+            // Function to execute menu open when combo "L + Select" is pressed
             function comboDetected() {
-                console.log('L + R + A combo detected!');
+                console.log('L + Select combo detected!');
 		uiSwitchTo('menu');
             }
 
             // Helper function to check if all keys are pressed
             function checkCombo() {
-                if (keyState.l && keyState.r && keyState.a) {
+                if (keyState.l && keyState.select) {
                     comboDetected();
                 }
             }
