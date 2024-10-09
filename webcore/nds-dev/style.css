@@ -1,0 +1,92 @@
+html,
+body {
+	overflow-x: hidden;
+	-webkit-user-select: none;
+	user-select: none;
+	-webkit-touch-callout: none;
+	cursor: inherit;
+}
+
+body {
+	background-color: black;
+	color: white;
+	padding: 0;
+	margin: 0;
+	width: 100vw;
+	height: 100vh;
+	font-family: 'Myriad Set Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+canvas {
+	position: absolute;
+	z-index: 1;
+	image-rendering: pixelated;
+}
+
+#msg-layer {
+	position: absolute;
+	left: 0;
+	width: 100%;
+	top: 40vh;
+	background: rgba(0, 0, 0, 0.5);
+	z-index: 3;
+}
+
+#vk-layer {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 2;
+	touch-action: none;
+}
+
+#menu {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 4;
+	overflow: hidden scroll;
+	background: rgba(0, 127, 255, 0.5);
+}
+
+#menu button {
+	background: transparent;
+}
+
+#menu button:active {
+	background: rgba(255, 255, 255, 0.5);
+}
+
+a,
+a:visited {
+	color: white;
+}
+
+.vk-round {
+	text-align: center;
+	vertical-align: middle;
+	border-radius: 50%;
+	display: inline-block;
+}
+
+.vk {
+	color: rgba(0, 0, 0, 0.2);
+	background-color: rgba(255, 255, 255, 0.25);
+	position: absolute;
+	z-index: 1;
+	text-align: center;
+	vertical-align: middle;
+	display: inline-block;
+}
+
+.vk-touched {
+	background-color: rgba(255, 255, 255, 0.75) !important;
+}
+
+.link {
+	text-decoration: underline;
+}
