@@ -350,9 +350,9 @@ function uiAdjustVKLayout() {
     var vkw = baseSize
     var vkh = baseSize
 
-    vkw = baseSize * 1.5
-    vkh = baseSize * 0.6
-    fontSize = baseSize * 0.5
+    vkw = baseSize * 1.15
+    vkh = baseSize * 0.45
+    fontSize = baseSize * 0.4
     vkMap['l'].style = makeVKStyle(offTop, 0, vkw, vkh, fontSize)
     vkMap['r'].style = makeVKStyle(offTop, window.innerWidth - vkw, vkw, vkh, fontSize)
     $id('vk-menu').style = makeVKStyle(offTop, window.innerWidth / 2 - vkw / 2, vkw, vkh, fontSize)
