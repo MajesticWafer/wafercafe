@@ -149,12 +149,16 @@
         iframe.style.border = 'none';
         outputContainer.appendChild(iframe);
 
-        // Execute the code inside the iframe
+        // Pass parent elements to the iframe so the code can access it
         const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
         iframeDoc.open();
         iframeDoc.write(`
           <script>
+            // Provide access to the parent's output container
+            window.outputContainer = parent.outputContainer;
             window.console = parent.console;
+
+            // Allow the code to run in the iframe and append to output container
             try {
               ${codeInput.value}
             } catch (error) {
