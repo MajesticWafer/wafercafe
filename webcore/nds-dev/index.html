@@ -36,7 +36,7 @@
 	    </div>
 	</div>
 	<div id="vk-layer" hidden>
-	    <div class="vk-rect vk" data-k="menu" id="vk-menu">Menu</div>
+	    <!-- <div class="vk-rect vk" data-k="menu" id="vk-menu">Menu</div> -->
 	    <div class="vk-rect vk" data-k="l">L</div>
 	    <div class="vk-rect vk" data-k="r">R</div>
 	    <div class="vk-round vk" data-k="a">A</div>
@@ -57,16 +57,14 @@
 	    <input type="checkbox" id="power-save" />
 	    <label for="power-save">Power-save mode</label><br />
 	    <input type="checkbox" id="vk-enabled" />
-	    <label for="vk-enabled">Virtual keyboard</label><br />
-	    <input type="checkbox" id="menu-enabled" />
-	    <label for="menu-enabled">Menu button</label>&nbsp;<p>|</p>&nbsp;<p>Press [L+R+A] at the same time to open the menu</p><br />
+	    <label for="vk-enabled">Virtual keyboard</label><br /><br />
+	    <p>Info:</p><br />
+	    <p>Press [L+R+A] at the same time to open the menu</p><br />
 	    <hr />
 	    <div id="menu-savegame" hidden>
 		<input type="file" id="restore-file" onchange="uiSaveRestore()" hidden />
 		<p>Save Data:</p>
-		<button onclick="uiSaveBackup()">↓ Export</button>
-		<p>|</p>
-		<button onclick="$id('restore-file').click()">↑ Import</button>
+		<button onclick="uiSaveBackup()">↓ Export</button><p>|</p<button onclick="$id('restore-file').click()">↑ Import</button>
 		<hr />
 	    </div>
 	</div>
@@ -80,73 +78,21 @@
 	<script src="build/nds.js"></script>
 	<script src="sw-loader.js"></script>
 	<script>
-	    // Hide menu on settings check
-	    document.getElementById('menu-enabled').addEventListener('change', function() {
-		var menu = document.getElementById('vk-menu')
-                if (this.checked) {
-                    console.log("Menu enabled!");
-		    menu.style.display: 'block !important';
-                } else {
-                    console.log("Menu disabled!");
-		    menu.style.display: 'none !important';
-                }
-            });
-
-	    // "L + Select" combo to open menu
-            // Track the state of each key
-            const keyState = {
-                l: false,
-                select: false
-            };
-
-            // Function to execute menu open when combo "L + Select" is pressed
+	    // "L + Select" combo to open menu using emuKeyState
             function comboDetected() {
                 console.log('L + Select combo detected!');
-		uiSwitchTo('menu');
+                uiSwitchTo('menu');
             }
 
-            // Helper function to check if all keys are pressed
+            // Helper function to check if "L" and "Select" are both pressed
             function checkCombo() {
-                if (keyState.l && keyState.select) {
+                const lPressed = emuKeyState[10];
+                const selectPressed = emuKeyState[5];
+
+                if (lPressed && selectPressed) {
                     comboDetected();
                 }
             }
-
-            // Add event listeners for each button
-            document.querySelectorAll('.vk-rect.vk, .vk-round.vk').forEach(button => {
-                button.addEventListener('mousedown', (e) => {
-                    const key = e.target.getAttribute('data-k');
-                    if (key in keyState) {
-                        keyState[key] = true;
-                        checkCombo();
-                    }
-                });
-
-                button.addEventListener('mouseup', (e) => {
-                    const key = e.target.getAttribute('data-k');
-                    if (key in keyState) {
-                        keyState[key] = false;
-                    }
-                });
-            });
-
-            // Handle touch events for mobile devices
-            document.querySelectorAll('.vk-rect.vk, .vk-round.vk').forEach(button => {
-                button.addEventListener('touchstart', (e) => {
-                    const key = e.target.getAttribute('data-k');
-                    if (key in keyState) {
-                        keyState[key] = true;
-                        checkCombo();
-                    }
-                });
-
-                button.addEventListener('touchend', (e) => {
-                    const key = e.target.getAttribute('data-k');
-                    if (key in keyState) {
-                        keyState[key] = false;
-                    }
-                });
-            });
         </script>
     </body>
 </html>
