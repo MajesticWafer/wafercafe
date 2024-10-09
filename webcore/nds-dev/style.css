@@ -10,7 +10,7 @@ body {
 body {
 	background-color: black;
 	color: white;
-	padding: 0;
+	padding: 5px, 7px;
 	margin: 0;
 	width: 100vw;
 	height: 100vh;
@@ -28,8 +28,9 @@ canvas {
 	left: 0;
 	width: 100%;
 	top: 40vh;
-	background: rgba(0, 0, 0, 0.5);
 	z-index: 3;
+	backdrop-filter: blur(1px);
+	-webkit-backdrop-filter: blur(1px);
 }
 
 #vk-layer {
@@ -50,7 +51,8 @@ canvas {
 	height: 100%;
 	z-index: 4;
 	overflow: hidden scroll;
-	background: rgba(0, 127, 255, 0.5);
+	backdrop-filter: blur(1px);
+	-webkit-backdrop-filter: blur(1px);
 }
 
 #menu button {
@@ -69,7 +71,7 @@ a:visited {
 .vk-round {
 	text-align: center;
 	vertical-align: middle;
-	border-radius: 50%;
+	border-radius: 50% !important;
 	display: inline-block;
 }
 
@@ -81,6 +83,7 @@ a:visited {
 	text-align: center;
 	vertical-align: middle;
 	display: inline-block;
+	border-radius: 7%;
 }
 
 .vk-touched {
