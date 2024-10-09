@@ -58,6 +58,8 @@
 	    <label for="power-save">Power-save mode</label><br />
 	    <input type="checkbox" id="vk-enabled" />
 	    <label for="vk-enabled">Virtual keyboard</label><br />
+	    <input type="checkbox" id="menu-enabled" />
+	    <label for="menu-enabled">Menu button</label>&nbsp;<p>|</p>&nbsp;<p>Press [L+R+A] at the same time to open the menu</p><br />
 	    <hr />
 	    <div id="menu-savegame" hidden>
 		<input type="file" id="restore-file" onchange="uiSaveRestore()" hidden />
@@ -77,7 +79,75 @@
 	<script src="app.js"></script>
 	<script src="build/nds.js"></script>
 	<script src="sw-loader.js"></script>
-	<script src="GamepadsSpoof.js"></script>
-	<script src="Nostlan_ds_player.js"></script>
+	<script>
+	    // Hide menu on settings check
+	    document.getElementById('menu-enabled').addEventListener('change', function() {
+		var menu = document.getElementById('vk-menu')
+                if (this.checked) {
+                    console.log("Menu enabled!");
+		    menu.style.display: 'block';
+                } else {
+                    console.log("Menu disabled!");
+		    menu.style.display: 'none';
+                }
+            });
+
+	    // L+R+A combo to open menu
+            // Track the state of each key
+            const keyState = {
+                l: false,
+                r: false,
+                a: false
+            };
+
+            // Function to execute when combo "L + R + A" is pressed
+            function comboDetected() {
+                console.log('L + R + A combo detected!');
+		uiSwitchTo('menu');
+            }
+
+            // Helper function to check if all keys are pressed
+            function checkCombo() {
+                if (keyState.l && keyState.r && keyState.a) {
+                    comboDetected();
+                }
+            }
+
+            // Add event listeners for each button
+            document.querySelectorAll('.vk-rect.vk, .vk-round.vk').forEach(button => {
+                button.addEventListener('mousedown', (e) => {
+                    const key = e.target.getAttribute('data-k');
+                    if (key in keyState) {
+                        keyState[key] = true;
+                        checkCombo();
+                    }
+                });
+
+                button.addEventListener('mouseup', (e) => {
+                    const key = e.target.getAttribute('data-k');
+                    if (key in keyState) {
+                        keyState[key] = false;
+                    }
+                });
+            });
+
+            // Handle touch events for mobile devices
+            document.querySelectorAll('.vk-rect.vk, .vk-round.vk').forEach(button => {
+                button.addEventListener('touchstart', (e) => {
+                    const key = e.target.getAttribute('data-k');
+                    if (key in keyState) {
+                        keyState[key] = true;
+                        checkCombo();
+                    }
+                });
+
+                button.addEventListener('touchend', (e) => {
+                    const key = e.target.getAttribute('data-k');
+                    if (key in keyState) {
+                        keyState[key] = false;
+                    }
+                });
+            });
+        </script>
     </body>
 </html>
