@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rotating Cube with Zoom</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+    <title>Connecticut</title>
     <style>
         body {
             margin: 0;
@@ -12,6 +15,7 @@
             align-items: center;
             height: 100vh;
             background-color: #f0f0f0;
+            font-family: "Rubik", sans-serif;
         }
 
         .scene {
@@ -60,9 +64,15 @@
                 transform: rotateX(360deg) rotateY(360deg) scale(1.0);
             }
         }
+
+        h1 {
+            text-align: center;
+            font-style: bold;
+        }
     </style>
 </head>
 <body>
+    <h1>Connecticut Colony Project</h1>
     <div class="scene">
         <div class="cube">
             <div class="face front"></div>
