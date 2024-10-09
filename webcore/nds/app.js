@@ -91,7 +91,7 @@ async function uiSaveRestore() {
     localforage.setItem('sav-' + gameID, u8).then(() => {
         alert('Save data updated. \nThis page will be reloaded to apply the changes.')
         setTimeout(() => {
-            location.href = '/'
+            location.href = 'https://majesticwafer.github.io/dsp/'
         }, 1000)
     })
 }
@@ -133,6 +133,7 @@ if (isIOS) {
         var divIosHint = $id('ios-hint')
         divIosHint.hidden = false
         divIosHint.style = 'position: absolute; bottom: ' + divIosHint.clientHeight + 'px;'
+        alert('Important! You must save this page as a web clip in order to save your game progress. Press the share icon, then add this site to your home screen.')
     }
 }
 if (isMacOS) {
@@ -512,11 +513,9 @@ fileInput.onchange = async () => {
         return
     } else if (fileNameLower.endsWith('.gba')) {
         alert('This is a GBA file, redirecting to the GBA player...')
-        window.location.href = '../gba';
+        window.location.href = '/gba';
     } else if (fileNameLower.endsWith('.zip')) {
-        alert('ZIP file not supported yet! Please extract the file first.')
-    } else if (fileNameLower.endsWith('.7z')) {
-        alert('7z file not supported yet! Please extract the file first.')
+        alert('ZIP file not supported yet!')
     } else if (fileNameLower.endsWith('.nds')) {
         tryLoadROM(file)
         return
