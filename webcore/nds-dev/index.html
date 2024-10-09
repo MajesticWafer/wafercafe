@@ -1,108 +1,82 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8" />
-		<meta name="apple-mobile-web-app-capable" content="yes" />
-		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
-		<meta
-			name="viewport"
-			content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height"
-		/>
-		<link rel="manifest" href="manifest.json" />
-		<link rel="apple-touch-icon" href="icon.png" />
-		<link rel="preload" href="audio-worklet.js" as="script" />
-		<link href="dark.css" rel="stylesheet" />
-		<link rel="stylesheet" href="style.css" />
-		<title>DS Player</title>
-	</head>
-
-	<body>
-		<div id="welcome" class="menu">
-			<h1>DS Player</h1>
-			<div id="loading">Loading...</div>
-			<div id="loadrom" hidden>
-				<input id="rom" type="file" hidden />
-				<button style="width: calc(100% - 2em); margin: 1em" id="btn-choose-file">Choose File (or drag/drop)...</button
-				><br />
-			</div>
-			<p style="color: #888">
-				This software should not be used to play games you have not legally obtained.<br />
-				This site is in no way associated with any of the vendors of the original game software and hardware.
-				<br />
-			</p>
-			<hr />
-			<p>
-				Ver. 20220319 <a onclick="whatsNew()" href="#">What's New</a>&nbsp;|&nbsp;<a
-					href="#"
-					onclick="uiSwitchTo('menu')"
-					>⚙ Settings...</a
-				>
-			</p>
-			<p id="p-sns">
-				<a href="/gba">GBA Player</a>
-			</p>
-			<p>
-				<a href="https://www.patreon.com/posts/63984675">Help</a>&nbsp;|&nbsp;<a href="#" id="a-gamepad"
-					>Gamepad Disconnected</a
-				>
-			</p>
-			<div id="pro" style="background-color: #333"></div>
-			<div id="ios-hint" hidden>
-				Due to iOS Safari limitations, you have to add this page to your <b>Home Screen</b> in order to save your game
-				progress.
-				<p style="text-align: center">⬇⬇</p>
-			</div>
-			<div id="mac-warning" hidden>
-				WARNING:<br />
-				It looks like you are using macOS.<br />
-				Due to macOS Safari <a href="https://webkit.org/tracking-prevention/">limitations</a>, ALL of you save data will
-				be LOST after 7 days of inactivity.<br />
-				For this reason, it is highly recommended to use a different browser. (For example:
-				<a href="https://www.google.com/chrome/">Chrome</a>)
-			</div>
-		</div>
-		<div id="vk-layer" hidden>
-			<div class="vk-rect vk" data-k="menu" id="vk-menu">Menu</div>
-			<div class="vk-rect vk" data-k="l">L</div>
-			<div class="vk-rect vk" data-k="r">R</div>
-			<div class="vk-round vk" data-k="a">A</div>
-			<div class="vk-round vk" data-k="b">B</div>
-			<div class="vk-round vk" data-k="x">X</div>
-			<div class="vk-round vk" data-k="y">Y</div>
-			<div class="vk-rect vk" data-k="select">-</div>
-			<div class="vk-rect vk" data-k="start">+</div>
-			<div class="vk-round vk" data-k="stick" id="vk-stick"></div>
-		</div>
-		<div style="z-index: 2; position: absolute; bottom: 20px" id="fps"></div>
-		<div id="msg-layer" hidden>
-			<p id="msg-text"></p>
-		</div>
-		<div id="menu" hidden>
-			<button onclick="uiMenuBack()">❮ Back</button>
-			<hr />
-			<input type="checkbox" id="power-save" />
-			<label for="power-save">Power-save mode</label><br />
-			<input type="checkbox" id="vk-enabled" />
-			<label for="vk-enabled">Virtual keyboard</label><br />
-			<hr />
-			<div id="menu-savegame" hidden>
-				<input type="file" id="restore-file" onchange="uiSaveRestore()" hidden />
-				Save Data: <button onclick="uiSaveBackup()">↓ Export</button>|<button onclick="$id('restore-file').click()">
-					↑ Import
-				</button>
-				<hr />
-			</div>
-		</div>
-		<div id="player" hidden>
-			<canvas id="top" width="256" height="192"></canvas>
-			<canvas id="bottom" width="256" height="192"></canvas>
-		</div>
-		<script src="localforage.js"></script>
-		<script src="pako.min.js"></script>
-		<script src="app.js"></script>
-		<script src="build/nds.js"></script>
-		<script src="sw-loader.js"></script>
-		<script src="GamepadsSpoof.js"></script>
-		<script src="Nostlan_ds_player.js"></script>
-	</body>
+    <head>
+        <meta charset="utf-8" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+	<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
+	<link rel="manifest" href="manifest.json" />
+	<link rel="apple-touch-icon" href="icon.png" />
+	<link rel="preload" href="audio-worklet.js" as="script" />
+	<link href="dark.css" rel="stylesheet" />
+	<link rel="stylesheet" href="style.css" />
+	<title>DS Player</title>
+    </head>
+    <body>
+	<div id="welcome" class="menu">
+	    <h1>DS Player</h1>
+	    <div id="loading">Loading...</div>
+	    <div id="loadrom" hidden>
+		<input id="rom" type="file" hidden />
+		<button style="width: calc(100% - 2em); margin: 1em" id="btn-choose-file">Choose File (or drag/drop)...</button><br />
+	    </div>
+	    <p style="color: #888">This software should not be used to play games you have not legally obtained.<br />This site is in no way associated with any of the vendors of the original game software and hardware.<br /></p>
+	    <hr />
+	    <!-- <p>Ver. 20220319 <a onclick="whatsNew()" href="#">What's New</a>&nbsp;|&nbsp;<a href="#" onclick="uiSwitchTo('menu')">⚙ Settings...</a></p> -->
+	    <p id="p-sns"></p>
+	    <p><a href="https://www.patreon.com/posts/63984675">Help</a>&nbsp;|&nbsp;<a href="#" id="a-gamepad">Gamepad Disconnected</a></p>
+	    <div id="pro" style="background-color: #333"></div>
+	    <div id="ios-hint" hidden>
+	        <p>Due to iOS Safari limitations, you have to add this page to your <b>Home Screen</b> in order to save your game progress.</p>
+		<p style="text-align: center">⬇⬇</p>
+	    </div>
+	    <div id="mac-warning" hidden>
+		<p>WARNING:<br />It looks like you are using macOS.<br />Due to macOS Safari <a href="https://webkit.org/tracking-prevention/">limitations</a>, ALL of you save data will be LOST after 7 days of inactivity.<br />For this reason, it is highly recommended to use a different browser. (For example:<a href="https://www.google.com/chrome/">Chrome</a>)</p>
+	    </div>
+	</div>
+	<div id="vk-layer" hidden>
+	    <div class="vk-rect vk" data-k="menu" id="vk-menu">Menu</div>
+	    <div class="vk-rect vk" data-k="l">L</div>
+	    <div class="vk-rect vk" data-k="r">R</div>
+	    <div class="vk-round vk" data-k="a">A</div>
+	    <div class="vk-round vk" data-k="b">B</div>
+	    <div class="vk-round vk" data-k="x">X</div>
+	    <div class="vk-round vk" data-k="y">Y</div>
+	    <div class="vk-rect vk" data-k="select">-</div>
+	    <div class="vk-rect vk" data-k="start">+</div>
+	    <div class="vk-round vk" data-k="stick" id="vk-stick"></div>
+        </div>
+	<div style="z-index: 2; position: absolute; bottom: 20px" id="fps"></div>
+	<div id="msg-layer" hidden>
+	    <p id="msg-text"></p>
+	</div>
+	<div id="menu" hidden>
+	    <button onclick="uiMenuBack()">❮ Back</button>
+	    <hr />
+	    <input type="checkbox" id="power-save" />
+	    <label for="power-save">Power-save mode</label><br />
+	    <input type="checkbox" id="vk-enabled" />
+	    <label for="vk-enabled">Virtual keyboard</label><br />
+	    <hr />
+	    <div id="menu-savegame" hidden>
+		<input type="file" id="restore-file" onchange="uiSaveRestore()" hidden />
+		<p>Save Data:</p>
+		<button onclick="uiSaveBackup()">↓ Export</button>
+		<p>|</p>
+		<button onclick="$id('restore-file').click()">↑ Import</button>
+		<hr />
+	    </div>
+	</div>
+	<div id="player" hidden>
+	    <canvas id="top" width="256" height="192"></canvas>
+	    <canvas id="bottom" width="256" height="192"></canvas>
+	</div>
+	<script src="localforage.js"></script>
+	<script src="pako.min.js"></script>
+	<script src="app.js"></script>
+	<script src="build/nds.js"></script>
+	<script src="sw-loader.js"></script>
+	<script src="GamepadsSpoof.js"></script>
+	<script src="Nostlan_ds_player.js"></script>
+    </body>
 </html>
