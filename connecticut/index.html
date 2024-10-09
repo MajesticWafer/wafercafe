@@ -16,7 +16,7 @@
             height: 100vh;
             background-color: #f0f0f0;
             font-family: "Rubik", sans-serif;
-            flex-direction: column; /* Corrected this */
+            flex-direction: column;
         }
 
         .scene {
@@ -69,7 +69,30 @@
         h1 {
             text-align: center;
             font-weight: bold;
-            margin-bottom: 30px;
+            margin-bottom: 50px;
+        }
+
+        /* Default iframe styling */
+        iframe {
+            margin-top: 40px;
+            width: 100%;
+            height: 500px;
+        }
+
+        /* When the viewport width is smaller than 768px (like a tablet or phone) */
+        @media screen and (max-width: 768px) {
+            iframe {
+                width: 100%;
+                height: 300px;
+            }
+        }
+
+        /* When the viewport width is smaller than 480px (like a small phone) */
+        @media screen and (max-width: 480px) {
+            iframe {
+                width: 100%;
+                height: 200px;
+            }
         }
     </style>
 </head>
@@ -85,5 +108,6 @@
             <div class="face bottom"></div>
         </div>
     </div>
+    <iframe src="https://docs.google.com/presentation/d/1A8I50nPUeOPrMRXx_PNLAxpfgtEWSQqnm6LYwCpNFpU" id="slide"></iframe>
 </body>
 </html>
