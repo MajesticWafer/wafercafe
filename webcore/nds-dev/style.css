@@ -83,7 +83,7 @@ a:visited {
 	text-align: center;
 	vertical-align: middle;
 	display: inline-block;
-	border-radius: 7%;
+	border-radius: 7% / 10%;
 }
 
 .vk-touched {
