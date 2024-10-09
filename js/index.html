@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Code Runner</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+  <style>
+    body {
+      height: 100vh;
+      display: flex;
+      margin: 0;
+    }
+    #code-box {
+      width: 50%;
+      height: 100%;
+      padding: 10px;
+    }
+    #right-panel {
+      width: 50%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    #console-box, #running-box {
+      width: 100%;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+    #console-box {
+      height: 50%;
+      border-bottom: 2px solid #ddd;
+    }
+    #running-box {
+      height: 50%;
+      overflow: auto;
+    }
+    .button-bar {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Code Box -->
+  <div id="code-box">
+    <div class="button-bar">
+      <button id="run-btn" class="btn btn-success"><i class="bi bi-play-fill"></i> Run</button>
+      <button id="refresh-btn" class="btn btn-danger"><i class="bi bi-arrow-repeat"></i> Refresh</button>
+    </div>
+    <textarea id="code-input" class="form-control" rows="20" placeholder="Write your code here..."></textarea>
+  </div>
+
+  <!-- Right Panel (Console + Running Box) -->
+  <div id="right-panel">
+    <!-- Console -->
+    <div id="console-box" class="border bg-light">
+      <h5>Console</h5>
+      <pre id="console-output"></pre>
+    </div>
+
+    <!-- Running Box -->
+    <div id="running-box" class="border bg-light">
+      <h5>Running Environment</h5>
+      <div id="output-container"></div>
+    </div>
+  </div>
+
+  <script>
+    const runBtn = document.getElementById('run-btn');
+    const refreshBtn = document.getElementById('refresh-btn');
+    const codeInput = document.getElementById('code-input');
+    const consoleOutput = document.getElementById('console-output');
+    const outputContainer = document.getElementById('output-container');
+
+    // Run the code in the running box
+    runBtn.addEventListener('click', () => {
+      try {
+        // Clear the console and running box
+        consoleOutput.textContent = '';
+        outputContainer.innerHTML = '';
+
+        // Create a new iframe for sandboxed code execution
+        const iframe = document.createElement('iframe');
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+        iframe.style.border = 'none';
+        outputContainer.appendChild(iframe);
+
+        // Execute the code inside the iframe
+        const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+        iframeDoc.open();
+        iframeDoc.write(`<script>${codeInput.value}<\/script>`);
+        iframeDoc.close();
+      } catch (error) {
+        consoleOutput.textContent = error;
+      }
+    });
+
+    // Refresh the environment and code
+    refreshBtn.addEventListener('click', () => {
+      codeInput.value = '';
+      consoleOutput.textContent = '';
+      outputContainer.innerHTML = '';
+    });
+  </script>
+</body>
+</html>
