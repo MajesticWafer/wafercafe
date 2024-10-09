@@ -11,11 +11,16 @@
       height: 100vh;
       display: flex;
       margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
     }
     #code-box {
       width: 50%;
       height: 100%;
-      padding: 10px;
+      padding: 15px;
+      box-sizing: border-box;
+      background-color: #f0f0f0;
+      border-right: 2px solid #ddd;
     }
     #right-panel {
       width: 50%;
@@ -25,19 +30,45 @@
     }
     #console-box, #running-box {
       width: 100%;
-      padding: 10px;
+      padding: 15px;
       box-sizing: border-box;
+      overflow: auto;
+      background-color: #fff;
+      border: 2px solid #ddd;
+      border-radius: 5px;
+      margin-bottom: 10px;
     }
     #console-box {
       height: 50%;
-      border-bottom: 2px solid #ddd;
+      background-color: #f8f9fa;
     }
     #running-box {
       height: 50%;
-      overflow: auto;
     }
     .button-bar {
       margin-bottom: 10px;
+    }
+    h5 {
+      margin-top: 0;
+      font-size: 1.1rem;
+    }
+    #code-input {
+      width: 100%;
+      height: calc(100% - 50px);
+      font-family: monospace;
+      font-size: 14px;
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      padding: 10px;
+      resize: none;
+      box-sizing: border-box;
+    }
+    pre {
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-family: monospace;
+      font-size: 14px;
     }
   </style>
 </head>
@@ -49,19 +80,19 @@
       <button id="run-btn" class="btn btn-success"><i class="bi bi-play-fill"></i> Run</button>
       <button id="refresh-btn" class="btn btn-danger"><i class="bi bi-arrow-repeat"></i> Refresh</button>
     </div>
-    <textarea id="code-input" class="form-control" rows="20" placeholder="Write your code here..."></textarea>
+    <textarea id="code-input" class="form-control" placeholder="Write your code here..."></textarea>
   </div>
 
   <!-- Right Panel (Console + Running Box) -->
   <div id="right-panel">
     <!-- Console -->
-    <div id="console-box" class="border bg-light">
+    <div id="console-box">
       <h5>Console</h5>
       <pre id="console-output"></pre>
     </div>
 
     <!-- Running Box -->
-    <div id="running-box" class="border bg-light">
+    <div id="running-box">
       <h5>Running Environment</h5>
       <div id="output-container"></div>
     </div>
@@ -74,12 +105,42 @@
     const consoleOutput = document.getElementById('console-output');
     const outputContainer = document.getElementById('output-container');
 
+    // Capture console messages
+    function captureConsole() {
+      const originalLog = console.log;
+      const originalWarn = console.warn;
+      const originalError = console.error;
+
+      console.log = function(...args) {
+        originalLog.apply(console, args);
+        appendToConsole('[LOG]: ' + args.join(' '));
+      };
+
+      console.warn = function(...args) {
+        originalWarn.apply(console, args);
+        appendToConsole('[WARN]: ' + args.join(' '));
+      };
+
+      console.error = function(...args) {
+        originalError.apply(console, args);
+        appendToConsole('[ERROR]: ' + args.join(' '));
+      };
+    }
+
+    // Append messages to the console
+    function appendToConsole(message) {
+      consoleOutput.textContent += message + '\n';
+    }
+
     // Run the code in the running box
     runBtn.addEventListener('click', () => {
       try {
         // Clear the console and running box
         consoleOutput.textContent = '';
         outputContainer.innerHTML = '';
+
+        // Capture console messages
+        captureConsole();
 
         // Create a new iframe for sandboxed code execution
         const iframe = document.createElement('iframe');
@@ -91,10 +152,19 @@
         // Execute the code inside the iframe
         const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
         iframeDoc.open();
-        iframeDoc.write(`<script>${codeInput.value}<\/script>`);
+        iframeDoc.write(`
+          <script>
+            window.console = parent.console;
+            try {
+              ${codeInput.value}
+            } catch (error) {
+              window.console.error('[MAIN]: ' + error.message);
+            }
+          <\/script>
+        `);
         iframeDoc.close();
       } catch (error) {
-        consoleOutput.textContent = error;
+        appendToConsole('[MAIN]: ' + error.message);
       }
     });
 
