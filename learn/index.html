@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tryit Editor - HTML/CSS Runner</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+  <style>
+    body {
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+    }
+    #editor-container {
+      display: flex;
+      height: 100%;
+    }
+    #code-box {
+      width: 50%;
+      padding: 15px;
+      box-sizing: border-box;
+      background-color: #f1f1f1;
+      border-right: 2px solid #ddd;
+    }
+    #output-box {
+      width: 50%;
+      padding: 15px;
+      box-sizing: border-box;
+      background-color: #ffffff;
+    }
+    .button-bar {
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+    #code-input {
+      width: 100%;
+      height: calc(100vh - 100px);
+      font-family: monospace;
+      font-size: 14px;
+      background-color: #2d2d2d;
+      color: #f8f9fa;
+      border: none;
+      padding: 10px;
+      resize: none;
+      box-sizing: border-box;
+    }
+    iframe {
+      width: 100%;
+      height: calc(100vh - 100px);
+      border: none;
+      background-color: #fff;
+    }
+    button {
+      color: #fff;
+    }
+    .btn-success {
+      background-color: #28a745;
+    }
+    .btn-danger {
+      background-color: #dc3545;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="editor-container">
+    <!-- Code Box -->
+    <div id="code-box">
+      <div class="button-bar">
+        <button id="run-btn" class="btn btn-success"><i class="bi bi-play-fill"></i> Run</button>
+        <button id="refresh-btn" class="btn btn-danger"><i class="bi bi-arrow-repeat"></i> Refresh</button>
+      </div>
+      <textarea id="code-input" class="form-control" placeholder="Write your HTML/CSS here..."></textarea>
+    </div>
+
+    <!-- Output Box -->
+    <div id="output-box">
+      <iframe id="output-iframe"></iframe>
+    </div>
+  </div>
+
+  <script>
+    const runBtn = document.getElementById('run-btn');
+    const refreshBtn = document.getElementById('refresh-btn');
+    const codeInput = document.getElementById('code-input');
+    const outputIframe = document.getElementById('output-iframe');
+
+    // Run the code in the output iframe
+    runBtn.addEventListener('click', () => {
+      try {
+        const iframeDoc = outputIframe.contentDocument || outputIframe.contentWindow.document;
+        iframeDoc.open();
+        iframeDoc.write(codeInput.value);
+        iframeDoc.close();
+      } catch (error) {
+        console.error('[MAIN]: ' + error.message);
+      }
+    });
+
+    // Refresh the editor
+    refreshBtn.addEventListener('click', () => {
+      codeInput.value = '';
+      const iframeDoc = outputIframe.contentDocument || outputIframe.contentWindow.document;
+      iframeDoc.open();
+      iframeDoc.close();
+    });
+  </script>
+</body>
+</html>
