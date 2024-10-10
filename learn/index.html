@@ -1,112 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tryit Editor - HTML/CSS Runner</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
-  <style>
-    body {
-      height: 100vh;
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background-color: #f4f4f4;
-    }
-    #editor-container {
-      display: flex;
-      height: 100%;
-    }
-    #code-box {
-      width: 50%;
-      padding: 15px;
-      box-sizing: border-box;
-      background-color: #f1f1f1;
-      border-right: 2px solid #ddd;
-    }
-    #output-box {
-      width: 50%;
-      padding: 15px;
-      box-sizing: border-box;
-      background-color: #ffffff;
-    }
-    .button-bar {
-      margin-bottom: 10px;
-      display: flex;
-      justify-content: space-between;
-    }
-    #code-input {
-      width: 100%;
-      height: calc(100vh - 100px);
-      font-family: monospace;
-      font-size: 14px;
-      background-color: #2d2d2d;
-      color: #f8f9fa;
-      border: none;
-      padding: 10px;
-      resize: none;
-      box-sizing: border-box;
-    }
-    iframe {
-      width: 100%;
-      height: calc(100vh - 100px);
-      border: none;
-      background-color: #fff;
-    }
-    button {
-      color: #fff;
-    }
-    .btn-success {
-      background-color: #28a745;
-    }
-    .btn-danger {
-      background-color: #dc3545;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn | HTML TryIt Editor</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+        header a {
+            color: white;
+            text-decoration: none;
+            float: right;
+            padding-right: 20px;
+        }
+        .container {
+            display: flex;
+            height: 90vh;
+        }
+        #editor {
+            width: 50%;
+        }
+        #output {
+            width: 50%;
+            border-left: 2px solid #ccc;
+        }
+        iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        #codeEditor {
+            height: calc(100vh - 70px); /* Adjust to fit below the header */
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
 
-  <div id="editor-container">
-    <!-- Code Box -->
-    <div id="code-box">
-      <div class="button-bar">
-        <button id="run-btn" class="btn btn-success"><i class="bi bi-play-fill"></i> Run</button>
-        <button id="refresh-btn" class="btn btn-danger"><i class="bi bi-arrow-repeat"></i> Refresh</button>
-      </div>
-      <textarea id="code-input" class="form-control" placeholder="Write your HTML/CSS here..."></textarea>
+<header>
+    <h3>Learn | HTML</h3>
+    <a href="https://www.w3schools.com/html/" target="_blank">Documentation</a>
+</header>
+
+<div class="container">
+    <div id="editor">
+        <h3>Code Editor</h3>
+        <div id="codeEditor"></div>
+        <button class="btn btn-primary" onclick="runCode()">Run</button>
     </div>
-
-    <!-- Output Box -->
-    <div id="output-box">
-      <iframe id="output-iframe"></iframe>
+    <div id="output">
+        <h3>Live Preview</h3>
+        <iframe id="resultFrame"></iframe>
     </div>
-  </div>
+</div>
 
-  <script>
-    const runBtn = document.getElementById('run-btn');
-    const refreshBtn = document.getElementById('refresh-btn');
-    const codeInput = document.getElementById('code-input');
-    const outputIframe = document.getElementById('output-iframe');
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ace.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.14/ext-language_tools.js"></script>
 
-    // Run the code in the output iframe
-    runBtn.addEventListener('click', () => {
-      try {
-        const iframeDoc = outputIframe.contentDocument || outputIframe.contentWindow.document;
-        iframeDoc.open();
-        iframeDoc.write(codeInput.value);
-        iframeDoc.close();
-      } catch (error) {
-        console.error('[MAIN]: ' + error.message);
-      }
+<script>
+    // Setup the Ace Editor
+    var editor = ace.edit("codeEditor");
+    editor.setTheme("ace/theme/monokai"); // You can change the theme if desired
+    editor.session.setMode("ace/mode/html");
+    editor.setOptions({
+        enableBasicAutocompletion: true,
+        enableSnippets: true,
+        enableLiveAutocompletion: true
     });
 
-    // Refresh the editor
-    refreshBtn.addEventListener('click', () => {
-      codeInput.value = '';
-      const iframeDoc = outputIframe.contentDocument || outputIframe.contentWindow.document;
-      iframeDoc.open();
-      iframeDoc.close();
+    // Auto-close HTML tags
+    editor.commands.on("afterExec", function(event) {
+        if (event.command.name === "insertstring" && event.args === "/") {
+            var position = editor.getCursorPosition();
+            var line = editor.session.getLine(position.row);
+            var tag = line.match(/<(\w+)>$/); // Match the opening tag
+
+            if (tag) {
+                var closingTag = "</" + tag[1] + ">";
+                editor.insert(closingTag);
+            }
+        }
     });
-  </script>
+
+    // Tab indentation for 4 spaces
+    editor.commands.bindKey("Tab", function(editor) {
+        editor.insert("    ");
+    });
+
+    // Run the code in the iframe
+    function runCode() {
+        const htmlContent = editor.getValue();
+        const iframe = document.getElementById("resultFrame");
+        iframe.contentWindow.document.open();
+        iframe.contentWindow.document.write(htmlContent);
+        iframe.contentWindow.document.close();
+    }
+</script>
+
 </body>
 </html>
