@@ -22,12 +22,6 @@
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
             border-radius: 10px;
             background-color: #ffffff;
-            animation: float 3s ease-in-out infinite;
-        }
-        @keyframes float {
-            0% { transform: translatey(0px); }
-            50% { transform: translatey(-10px); }
-            100% { transform: translatey(0px); }
         }
         #editor {
             width: 50%;
@@ -40,6 +34,7 @@
         #output {
             width: 50%;
             background-color: #f5f5f5;
+            height: 100%;
         }
         iframe {
             width: 100%;
@@ -53,6 +48,8 @@
             border: 1px solid #ddd;
             border-radius: 5px;
             overflow: hidden; /* Prevent overflow */
+            width: calc(100% - 7px);
+            height: calc(100% - 8px);
         }
         .btn-run {
             margin-top: 10px;
