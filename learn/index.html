@@ -25,7 +25,7 @@
         }
         #editor {
             width: 50%;
-            padding: 20px;
+            padding: 5px 7px;
             display: flex;
             flex-direction: column;
             border-right: 1px solid #ccc;
@@ -38,7 +38,7 @@
         }
         iframe {
             width: 100%;
-            height: calc(100% - 50px); /* Adjust height to allow space for the button */
+            height: 100%;
             border: none;
             background-color: #fff;
             border-radius: 5px;
@@ -48,12 +48,10 @@
             border: 1px solid #ddd;
             border-radius: 5px;
             overflow: hidden; /* Prevent overflow */
-            width: calc(100% - 7px);
-            height: calc(100% - 8px);
         }
         .btn-run {
             margin-top: 10px;
-            width: 100%;
+            width: calc(100% - 10px);
             padding: 10px;
             background-color: #4CAF50;
             border: none;
@@ -73,7 +71,7 @@
 <div class="container">
     <div id="editor">
         <div id="codeEditor"></div>
-        <button class="btn-run" onclick="runCode()">Run</button>
+        <button class="btn-run" onclick="runCode()"><i class="bi bi-play-fill"></i>Run</button>
     </div>
     <div id="output">
         <iframe id="resultFrame"></iframe>
