@@ -5,24 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trash Throwing Simulator</title>
     <style>
-        canvas {
-            border: 1px solid #000;
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100%;
         }
         #game-container {
             position: relative;
-            width: 100%;
+            width: 100vw;
             height: 100vh;
             overflow: hidden;
+            background-color: #f0f0f0;
+        }
+        canvas {
+            display: block;
+        }
+        #recycle-icon {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            left: 20px;
+            bottom: 130px;
+            z-index: 10;
         }
     </style>
 </head>
 <body>
     <div id="game-container"></div>
+    <img id="recycle-icon" src="https://upload.wikimedia.org/wikipedia/commons/6/6b/Recycling_symbol.svg" alt="Recycle">
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
     <script>
         // Matter.js module aliases
-        const { Engine, Render, Runner, World, Bodies, Body, Events, Mouse, MouseConstraint } = Matter;
+        const { Engine, Render, Runner, World, Bodies, Body, Events, Mouse, MouseConstraint, Vector } = Matter;
 
         // Create engine and world
         const engine = Engine.create();
@@ -44,40 +60,46 @@
         const runner = Runner.create();
         Runner.run(runner, engine);
 
-        // Create recycling bin (static body)
-        const binWidth = 150;
-        const bin = Bodies.rectangle(window.innerWidth / 2, window.innerHeight - 50, binWidth, 20, {
+        // Create a floor (gray rectangle)
+        const floor = Bodies.rectangle(window.innerWidth / 2, window.innerHeight, window.innerWidth, 50, {
+            isStatic: true,
+            render: { fillStyle: 'gray' }
+        });
+        World.add(world, floor);
+
+        // Create recycling bin (blue, static body) on the left side
+        const binWidth = 100;
+        const binHeight = 200;
+        const bin = Bodies.rectangle(100, window.innerHeight - 100, binWidth, binHeight, {
             isStatic: true,
             render: {
-                fillStyle: 'green'
+                fillStyle: 'blue'
             }
         });
         World.add(world, bin);
 
-        // Create ground (static body)
-        const ground = Bodies.rectangle(window.innerWidth / 2, window.innerHeight, window.innerWidth, 20, {
-            isStatic: true
-        });
-        World.add(world, ground);
-
-        // Function to create a paper ball
-        function createPaper() {
-            const paper = Bodies.circle(Math.random() * window.innerWidth, 0, 20, {
-                restitution: 0.8,
+        // Function to create a crumpled paper ball
+        function createCrumpledPaper() {
+            const crumpleVariation = 30;
+            const paper = Bodies.polygon(Math.random() * window.innerWidth, 0, 8, 20, {
+                restitution: 0, // No bounce
                 render: {
                     fillStyle: 'white'
-                }
+                },
+                chamfer: { radius: [5, 10, 15, 20, 25] }
             });
+            Body.scale(paper, Math.random() * 0.2 + 0.9, Math.random() * 0.2 + 0.9); // Random wrinkles
             World.add(world, paper);
             return paper;
         }
 
         // Start with one paper
-        let currentPaper = createPaper();
+        let currentPaper = createCrumpledPaper();
 
         // Mouse and touch controls for throwing
         let isThrowing = false;
         let startPosition = null;
+        const forceMultiplier = 0.005; // Adjusted to reduce random shooting
 
         const handleStart = (event) => {
             event.preventDefault();
@@ -89,8 +111,8 @@
             if (!isThrowing) return;
 
             const currentPosition = event.touches ? event.touches[0] : event;
-            const forceX = (currentPosition.clientX - startPosition.clientX) * 0.01;
-            const forceY = (currentPosition.clientY - startPosition.clientY) * -0.01;
+            const forceX = (currentPosition.clientX - startPosition.clientX) * forceMultiplier;
+            const forceY = (currentPosition.clientY - startPosition.clientY) * -forceMultiplier;
 
             Body.applyForce(currentPaper, currentPaper.position, { x: forceX, y: forceY });
             isThrowing = false;
@@ -108,7 +130,7 @@
                 if (pair.bodyA === bin || pair.bodyB === bin) {
                     // New paper spawns when the previous one lands in the bin
                     World.remove(world, currentPaper);
-                    currentPaper = createPaper();
+                    currentPaper = createCrumpledPaper();
                 }
             });
         });
@@ -119,19 +141,24 @@
             mouse: mouse,
             constraint: {
                 stiffness: 0.1,
-                render: {
-                    visible: false
-                }
+                render: { visible: false }
             }
         });
         World.add(world, mouseConstraint);
+
+        // Fix bug: prevent high velocity after grabbing mid-air
+        Events.on(mouseConstraint, 'enddrag', (event) => {
+            if (event.body === currentPaper) {
+                Body.setVelocity(currentPaper, { x: 0, y: 0 });
+            }
+        });
 
         // Make the canvas responsive
         window.addEventListener('resize', () => {
             render.canvas.width = window.innerWidth;
             render.canvas.height = window.innerHeight;
-            Body.setPosition(ground, { x: window.innerWidth / 2, y: window.innerHeight });
-            Body.setPosition(bin, { x: window.innerWidth / 2, y: window.innerHeight - 50 });
+            Body.setPosition(floor, { x: window.innerWidth / 2, y: window.innerHeight });
+            Body.setPosition(bin, { x: 100, y: window.innerHeight - 100 });
         });
     </script>
 </body>
