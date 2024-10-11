@@ -25,11 +25,9 @@
 	    <!-- <p>Ver. 20220319 <a onclick="whatsNew()" href="#">What's New</a>&nbsp;|&nbsp;</p> -->
 	    <p><a href="#" onclick="uiSwitchTo('menu')">⚙ Settings</a></p>
 	    <p id="p-sns"></p>
-	    <p><a href="https://www.patreon.com/posts/63984675">Help</a>&nbsp;|&nbsp;<a href="#" id="a-gamepad">Gamepad Disconnected</a></p>
 	    <div id="pro" style="background-color: #333"></div>
-	    <div id="ios-hint" hidden>
-	        <p>Due to iOS Safari limitations, you have to add this page to your <b>Home Screen</b> in order to save your game progress.</p>
-		<p style="text-align: center">⬇⬇</p>
+	    <div style="text-align: center;" id="ios-hint" hidden>
+	        <p>Progress reminder: please save this page to your <b>Home Screen</b> to save your progress.</p>
 	    </div>
 	    <div id="mac-warning" hidden>
 		<p>WARNING:<br />It looks like you are using macOS.<br />Due to macOS Safari <a href="https://webkit.org/tracking-prevention/">limitations</a>, ALL of you save data will be LOST after 7 days of inactivity.<br />For this reason, it is highly recommended to use a different browser. (For example:<a href="https://www.google.com/chrome/">Chrome</a>)</p>
@@ -58,8 +56,7 @@
 	    <label for="power-save">Power-save mode</label><br />
 	    <input type="checkbox" id="vk-enabled" />
 	    <label for="vk-enabled">Virtual keyboard</label><br /><br />
-	    <p>Info:</p><br />
-	    <p>Press [L+R+A] at the same time to open the menu</p><br />
+	    <p id="a-gamepad">Gamepad Disconnected</p>
 	    <hr />
 	    <div id="menu-savegame" hidden>
 		<input type="file" id="restore-file" onchange="uiSaveRestore()" hidden />
@@ -77,22 +74,5 @@
 	<script src="app.js"></script>
 	<script src="build/nds.js"></script>
 	<script src="sw-loader.js"></script>
-	<script>
-	    // "L + Select" combo to open menu using emuKeyState
-            function comboDetected() {
-                console.log('L + Select combo detected!');
-                uiSwitchTo('menu');
-            }
-
-            // Helper function to check if "L" and "Select" are both pressed
-            function checkCombo() {
-                const lPressed = emuKeyState[10];
-                const selectPressed = emuKeyState[5];
-
-                if (lPressed && selectPressed) {
-                    comboDetected();
-                }
-            }
-        </script>
     </body>
 </html>
