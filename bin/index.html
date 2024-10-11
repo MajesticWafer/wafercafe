@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trash Throwing Simulator</title>
+    <style>
+        canvas {
+            border: 1px solid #000;
+        }
+        #game-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+    <script>
+        // Matter.js module aliases
+        const { Engine, Render, Runner, World, Bodies, Body, Events, Mouse, MouseConstraint } = Matter;
+
+        // Create engine and world
+        const engine = Engine.create();
+        const world = engine.world;
+
+        // Create a renderer
+        const render = Render.create({
+            element: document.getElementById('game-container'),
+            engine: engine,
+            options: {
+                width: window.innerWidth,
+                height: window.innerHeight,
+                wireframes: false,
+                background: '#f0f0f0'
+            }
+        });
+
+        Render.run(render);
+        const runner = Runner.create();
+        Runner.run(runner, engine);
+
+        // Create recycling bin (static body)
+        const binWidth = 150;
+        const bin = Bodies.rectangle(window.innerWidth / 2, window.innerHeight - 50, binWidth, 20, {
+            isStatic: true,
+            render: {
+                fillStyle: 'green'
+            }
+        });
+        World.add(world, bin);
+
+        // Create ground (static body)
+        const ground = Bodies.rectangle(window.innerWidth / 2, window.innerHeight, window.innerWidth, 20, {
+            isStatic: true
+        });
+        World.add(world, ground);
+
+        // Function to create a paper ball
+        function createPaper() {
+            const paper = Bodies.circle(Math.random() * window.innerWidth, 0, 20, {
+                restitution: 0.8,
+                render: {
+                    fillStyle: 'white'
+                }
+            });
+            World.add(world, paper);
+            return paper;
+        }
+
+        // Start with one paper
+        let currentPaper = createPaper();
+
+        // Mouse and touch controls for throwing
+        let isThrowing = false;
+        let startPosition = null;
+
+        const handleStart = (event) => {
+            event.preventDefault();
+            isThrowing = true;
+            startPosition = event.touches ? event.touches[0] : event;
+        };
+
+        const handleMove = (event) => {
+            if (!isThrowing) return;
+
+            const currentPosition = event.touches ? event.touches[0] : event;
+            const forceX = (currentPosition.clientX - startPosition.clientX) * 0.01;
+            const forceY = (currentPosition.clientY - startPosition.clientY) * -0.01;
+
+            Body.applyForce(currentPaper, currentPaper.position, { x: forceX, y: forceY });
+            isThrowing = false;
+        };
+
+        document.addEventListener('mousedown', handleStart);
+        document.addEventListener('mousemove', handleMove);
+        document.addEventListener('touchstart', handleStart);
+        document.addEventListener('touchmove', handleMove);
+
+        // Detect when paper is thrown into the bin
+        Events.on(engine, 'collisionStart', (event) => {
+            const pairs = event.pairs;
+            pairs.forEach(pair => {
+                if (pair.bodyA === bin || pair.bodyB === bin) {
+                    // New paper spawns when the previous one lands in the bin
+                    World.remove(world, currentPaper);
+                    currentPaper = createPaper();
+                }
+            });
+        });
+
+        // Mouse constraint for dragging the paper
+        const mouse = Mouse.create(render.canvas);
+        const mouseConstraint = MouseConstraint.create(engine, {
+            mouse: mouse,
+            constraint: {
+                stiffness: 0.1,
+                render: {
+                    visible: false
+                }
+            }
+        });
+        World.add(world, mouseConstraint);
+
+        // Make the canvas responsive
+        window.addEventListener('resize', () => {
+            render.canvas.width = window.innerWidth;
+            render.canvas.height = window.innerHeight;
+            Body.setPosition(ground, { x: window.innerWidth / 2, y: window.innerHeight });
+            Body.setPosition(bin, { x: window.innerWidth / 2, y: window.innerHeight - 50 });
+        });
+    </script>
+</body>
+</html>
