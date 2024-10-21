@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOS Alert Example</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+
+<script>
+    // Function to show TOS alert if not already accepted
+    function showTOSAlert() {
+        // Check if the user has already accepted the TOS (saved in localStorage)
+        if (!localStorage.getItem('tosAccepted')) {
+            Swal.fire({
+                title: 'Terms of Service',
+                text: 'By using this website, you agree to our Terms of Service.',
+                icon: 'info',
+                confirmButtonText: 'I Agree',
+                footer: '<a href="https://example.com/tos" target="_blank">Read our Terms of Service</a>'
+            }).then((result) => {
+                // If the user clicks "I Agree", save their acceptance in localStorage
+                if (result.isConfirmed) {
+                    localStorage.setItem('tosAccepted', 'true');
+                }
+            });
+        }
+    }
+
+    // Show the TOS alert when the page loads
+    window.onload = showTOSAlert;
+</script>
+
+</body>
+</html>
