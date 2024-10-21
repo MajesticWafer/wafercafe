@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="keywords" content="emulator, games, unblocked, gaming, game website, nintendo ds emulator, etc.">
+  <meta name="keywords" content="emulator, games, unblocked, gaming, game website, nintendo ds emulator">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <title>Wafer Café</title>
   
   <!-- Styles and Fonts -->
@@ -42,7 +43,31 @@
   </style>
 </head>
 <body>
+  
+  <script>
+    // Function to show TOS alert if not already accepted
+    function showTOSAlert() {
+        // Check if the user has already accepted the TOS (saved in localStorage)
+        if (!localStorage.getItem('tosAccepted')) {
+            Swal.fire({
+                title: 'Terms of Service',
+                text: 'By using this website, you agree to our Terms of Service.',
+                icon: 'info',
+                confirmButtonText: 'I Agree',
+                footer: '<a href="https://docs.google.com/document/d/10NeuRKM8f0QKSQwvNU6XvPKg2SqELGxTX_Zmep7AzWk" target="_blank">Read our Terms of Service</a>'
+            }).then((result) => {
+                // If the user clicks "I Agree", save their acceptance in localStorage
+                if (result.isConfirmed) {
+                    localStorage.setItem('tosAccepted', 'true');
+                }
+            });
+        }
+    }
 
+    // Show the TOS alert when the page loads
+    window.onload = showTOSAlert;
+  </script>
+  
   <!-- Particle container -->
   <div id="particles-js"></div>
   <div id="particles-fade"></div>
