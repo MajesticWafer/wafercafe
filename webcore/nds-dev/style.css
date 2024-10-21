@@ -55,6 +55,11 @@ canvas {
 	-webkit-backdrop-filter: blur(1px);
 }
 
+.home {
+	width: 28vw;
+	height: 15vh;
+}
+
 #menu button {
 	background: transparent;
 }
