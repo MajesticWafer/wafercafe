@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="keywords" content="emulator, games, unblocked, gaming, game website, nintendo ds emulator, etc.">
+  <meta name="keywords" content="emulator, games, unblocked, gaming, game website, nintendo ds emulator">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <title>Wafer Café</title>
   
   <!-- Styles and Fonts -->
@@ -42,7 +43,67 @@
   </style>
 </head>
 <body>
+  
+  <script>
+    // Function to show TOS alert if not already accepted
+    function showTOSAlert() {
+        if (!localStorage.getItem('tosAccepted')) {
+            Swal.fire({
+                title: 'Terms of Service',
+                text: 'By using this website, you agree to our Terms of Service.',
+                icon: 'info',
+                confirmButtonText: 'I Agree',
+                footer: '<a href="https://docs.google.com/document/d/10NeuRKM8f0QKSQwvNU6XvPKg2SqELGxTX_Zmep7AzWk" target="_blank">Read our Terms of Service</a>'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    localStorage.setItem('tosAccepted', 'true');
+                }
+            });
+        }
+    }
 
+    // Combined window.onload function to handle both the TOS alert and game loading
+    window.onload = function() {
+        // Show the TOS alert
+        showTOSAlert();
+
+        // Load game buttons dynamically from games.json
+        fetch('head/games.json')
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+          })
+          .then(data => {
+            const games = data.games;
+            const container = document.querySelector('.container');
+
+            Object.keys(games).forEach(gameName => {
+              const gameLink = games[gameName];
+              const buttonContainer = document.createElement('div');
+              buttonContainer.classList.add('button-container');
+              buttonContainer.setAttribute('onclick', `location.href='${gameLink}/'`);
+
+              const img = document.createElement('img');
+              img.src = `/${gameLink}/img.jpeg`;
+              img.alt = gameName;
+
+              const span = document.createElement('span');
+              span.classList.add('button-text');
+              span.textContent = gameName;
+
+              buttonContainer.appendChild(img);
+              buttonContainer.appendChild(span);
+              container.appendChild(buttonContainer);
+            });
+          })
+          .catch(error => {
+            console.error('There was a problem with the fetch operation:', error);
+          });
+    };
+  </script>
+  
   <!-- Particle container -->
   <div id="particles-js"></div>
   <div id="particles-fade"></div>
@@ -129,43 +190,6 @@
       window.location.href = url;
     });
   });
-
-  // Load game buttons dynamically from games.json
-  window.onload = function() {
-    fetch('head/games.json')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok ' + response.statusText);
-        }
-        return response.json();
-      })
-      .then(data => {
-        const games = data.games;
-        const container = document.querySelector('.container');
-
-        Object.keys(games).forEach(gameName => {
-          const gameLink = games[gameName];
-          const buttonContainer = document.createElement('div');
-          buttonContainer.classList.add('button-container');
-          buttonContainer.setAttribute('onclick', `location.href='${gameLink}/'`);
-
-          const img = document.createElement('img');
-          img.src = `/${gameLink}/img.jpeg`;
-          img.alt = gameName;
-
-          const span = document.createElement('span');
-          span.classList.add('button-text');
-          span.textContent = gameName;
-
-          buttonContainer.appendChild(img);
-          buttonContainer.appendChild(span);
-          container.appendChild(buttonContainer);
-        });
-      })
-      .catch(error => {
-        console.error('There was a problem with the fetch operation:', error);
-      });
-  };
 </script>
 
 </body>
