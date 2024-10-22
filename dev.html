@@ -226,7 +226,7 @@
     // Theme toggle functionality
     const savedTheme = localStorage.getItem('theme') || 'dark-mode';
     document.body.classList.add(savedTheme);
-    themeToggle.textContent = savedTheme === 'light-mode' ? '<i class="bi bi-moon"></i>' : '<i class="bi bi-sun"></i>';
+    themeToggle.innerHTML = savedTheme === 'light-mode' ? '<i class="bi bi-moon"></i>' : '<i class="bi bi-sun"></i>';
     loadParticles(savedTheme);
 
     themeToggle.addEventListener('click', function () {
