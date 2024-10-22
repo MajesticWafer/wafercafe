@@ -19,29 +19,29 @@
   
   <style>
     #particles-js {
-      position: absolute;
-      width: 100vw;
-      height: 100vh;
-      top: 0;
-      left: 0;
-      z-index: -2;
-      overflow: hidden;
-    }
+       position: absolute;
+       width: 100vw;
+       height: 100vh;
+       top: 0;
+       left: 0;
+       z-index: -2;
+       overflow: hidden;
+     }
 
-    #particles-fade {
-      position: absolute;
-      top: 8vw;
-      background-image: linear-gradient(rgba(0, 0, 0, 0), var(--background-color));
-      width: 100vw;
-      height: 92vh;
-      z-index: -1;
-    }
+     #particles-fade {
+       position: absolute;
+       top: 8vw;
+       background-image: linear-gradient(rgba(0, 0, 0, 0), var(--background-color));
+       width: 100vw;
+       height: 92vh;
+       z-index: -1;
+     }
 
-    .random-button-container {
-      margin-top: 20px;
-    }
+     .random-button-container {
+       margin-top: 20px;
+     }
 
-    #cp-footer {
+     #cp-footer {
       left: 0;
       position: fixed;
       bottom: 0;
@@ -53,19 +53,19 @@
       font-size: 14px;
       z-index: 1000;
       display: none; /* Hidden until needed */
-  }
+    }
 
-  #cp-footer p {
+    #cp-footer p {
       margin: 0;
       padding: 0;
-  }
+    }
 
-  #cp-footer a {
+    #cp-footer a {
       color: #00aaff;
       text-decoration: underline;
-  }
+    }
     
-  #cp-footer button {
+    #cp-footer button {
       background-color: #00aaff;
       border: none;
       color: white;
@@ -74,7 +74,25 @@
       cursor: pointer;
       border-radius: 4px;
       margin-left: 4px;
-  }
+    }
+
+    .search-container {
+      position: relative;
+      display: inline-block;
+    }
+
+    #search {
+      padding-left: 30px; /* Add space for the icon */
+      width: 200px; /* Adjust width as needed */
+    }
+
+    .search-container i {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: gray;
+    }
   </style>
 </head>
 <body>
@@ -149,7 +167,10 @@
       <a href="#games">Games</a>
       <a href="https://github.com/MajesticWafer/wafercafe/blob/main/faq.md">FAQ</a>
       <a href="https://github.com/MajesticWafer/wafercafe/blob/main/changelog.md">Changelog</a>
-      <input type="text" id="search" placeholder="Search for a game...">
+      <div class="search-container">
+        <input type="text" id="search" placeholder="Search for a game...">
+        <i class="bi bi-search"></i>
+      </div>
       <button id="theme-toggle"><i class="bi bi-sun"></i></button>
     </div>
   </div>
@@ -164,7 +185,7 @@
 
   <!-- Game buttons container -->
   <div class="random-button-container">
-    <button id="random-game">Random Game 🎲</button>
+    <button id="random-game">Random Game <i class="bi bi-dice-3-fill"></i></button>
   </div>
   <div class="container"></div>
 
