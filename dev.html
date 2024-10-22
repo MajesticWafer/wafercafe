@@ -1,258 +1,254 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="keywords" content="emulator, games, unblocked, gaming, game website, nintendo ds emulator">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-  <title>Wafer Café</title>
-  
-  <!-- Styles and Fonts -->
-  <link rel="stylesheet" href="head/styles.css">
-  <link rel="icon" type="image/jpeg" href="head/favicon.jpeg">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="keywords" content="emulator, games, unblocked, gaming, game website, nintendo ds emulator" />
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+		<title>Wafer Café</title>
 
-  <!-- Google AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3575178423806487" crossorigin="anonymous"></script>
-  
-  <style>
-    #particles-js {
-       position: absolute;
-       width: 100vw;
-       height: 100vh;
-       top: 0;
-       left: 0;
-       z-index: -2;
-       overflow: hidden;
-     }
+		<!-- Styles and Fonts -->
+		<link rel="stylesheet" href="head/styles.css" />
+		<link rel="icon" type="image/jpeg" href="head/favicon.jpeg" />
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
 
-     #particles-fade {
-       position: absolute;
-       top: 8vw;
-       background-image: linear-gradient(rgba(0, 0, 0, 0), var(--background-color));
-       width: 100vw;
-       height: 92vh;
-       z-index: -1;
-     }
+		<!-- Google AdSense -->
+		<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3575178423806487" crossorigin="anonymous"></script>
 
-     .random-button-container {
-       margin-top: 20px;
-     }
+		<style>
+			#particles-js {
+			   position: absolute;
+			   width: 100vw;
+			   height: 100vh;
+			   top: 0;
+			   left: 0;
+			   z-index: -2;
+			   overflow: hidden;
+			 }
 
-     #cp-footer {
-      left: 0;
-      position: fixed;
-      bottom: 0;
-      width: 100vw;
-      background-color: var(--background-color);
-      color: white;
-      text-align: center;
-      padding: 10px 0;
-      font-size: 14px;
-      z-index: 1000;
-      display: none; /* Hidden until needed */
-    }
+			 #particles-fade {
+			   position: absolute;
+			   top: 8vw;
+			   background-image: linear-gradient(rgba(0, 0, 0, 0), var(--background-color));
+			   width: 100vw;
+			   height: 92vh;
+			   z-index: -1;
+			 }
 
-    #cp-footer p {
-      margin: 0;
-      padding: 0;
-      display: inline;
-    }
+			 .random-button-container {
+			   margin-top: 20px;
+			 }
 
-    #cp-footer i {
-      margin-right: 8px; /* Add some space between icon and text */
-      vertical-align: middle; /* Align icon with text */
-    }
-    
-    #cp-footer a {
-      color: #00aaff;
-      text-decoration: underline;
-    }
-    
-    #cp-footer button {
-      background-color: #00aaff;
-      border: none;
-      color: white;
-      padding: 5px 10px;
-      font-size: 14px;
-      cursor: pointer;
-      border-radius: 4px;
-      margin-left: 4px;
-    }
+			 #cp-footer {
+			  left: 0;
+			  position: fixed;
+			  bottom: 0;
+			  width: 100vw;
+			  background-color: var(--background-color);
+			  color: white;
+			  text-align: center;
+			  padding: 10px 0;
+			  font-size: 14px;
+			  z-index: 1000;
+			  display: none; /* Hidden until needed */
+			}
 
-    .search-container {
-      position: relative;
-      display: inline-block;
-    }
+			#cp-footer p {
+			  margin: 0;
+			  padding: 0;
+			  display: inline;
+			}
 
-    #search {
-      padding-left: 30px; /* Add space for the icon */
-      width: 200px; /* Adjust width as needed */
-      height: 35px;
-    }
+			#cp-footer i {
+			  margin-right: 8px; /* Add some space between icon and text */
+			  vertical-align: middle; /* Align icon with text */
+			}
 
-    .search-container i {
-      position: absolute;
-      left: 10px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: gray;
-    }
-  </style>
-</head>
-<body>
+			#cp-footer a {
+			  color: #00aaff;
+			  text-decoration: underline;
+			}
 
-  <!-- CP Footer Bar -->
-  <div id="cp-footer">
-    <i class="bi bi-cookie"></i>
-    <p>By clicking “Accept all cookies”, you agree Wafer Café can store cookies on your device. <button id="agree-btn">Accept all cookies</button></p>
-  </div>
+			#cp-footer button {
+			  background-color: #00aaff;
+			  border: none;
+			  color: white;
+			  padding: 5px 10px;
+			  font-size: 14px;
+			  cursor: pointer;
+			  border-radius: 4px;
+			  margin-left: 4px;
+			}
 
-  <script>
-    window.onload = function() {
-        // Check if CP has been accepted
-        const cpAccepted = localStorage.getItem('cpAccepted');
+			.search-container {
+			  position: relative;
+			  display: inline-block;
+			}
 
-        if (!cpAccepted) {
-            // Show the CP footer if not accepted
-            document.getElementById('cp-footer').style.display = 'block';
-        }
-      
-        // Handle the "Allow all cookies" button
-        document.getElementById('agree-btn').addEventListener('click', function () {
-            localStorage.setItem('cpAccepted', 'true');
-            document.getElementById('cp-footer').style.display = 'none';
-        });
+			#search {
+			  padding-left: 30px; /* Add space for the icon */
+			  width: 200px;
+			  height: 30px;
+			}
 
-        // Load game buttons dynamically from games.json
-        fetch('head/games.json')
-          .then(response => {
-            if (!response.ok) {
-              throw new Error('Network response was not ok ' + response.statusText);
-            }
-            return response.json();
-          })
-          .then(data => {
-            const games = data.games;
-            const container = document.querySelector('.container');
+			.search-container i {
+			  position: absolute;
+			  left: 10px;
+			  top: 50%;
+			  transform: translateY(-50%);
+			  color: gray;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- CP Footer Bar -->
+		<div id="cp-footer">
+			<i class="bi bi-cookie"></i>
+			<p>By clicking “Accept all cookies”, you agree Wafer Café can store cookies on your device. <button id="agree-btn">Accept all cookies</button></p>
+		</div>
 
-            Object.keys(games).forEach(gameName => {
-              const gameLink = games[gameName];
-              const buttonContainer = document.createElement('div');
-              buttonContainer.classList.add('button-container');
-              buttonContainer.setAttribute('onclick', `location.href='${gameLink}/'`);
+		<script>
+			window.onload = function() {
+			    // Check if CP has been accepted
+			    const cpAccepted = localStorage.getItem('cpAccepted');
 
-              const img = document.createElement('img');
-              img.src = `/${gameLink}/img.jpeg`;
-              img.alt = gameName;
+			    if (!cpAccepted) {
+			        // Show the CP footer if not accepted
+			        document.getElementById('cp-footer').style.display = 'block';
+			    }
 
-              const span = document.createElement('span');
-              span.classList.add('button-text');
-              span.textContent = gameName;
+			    // Handle the "Allow all cookies" button
+			    document.getElementById('agree-btn').addEventListener('click', function () {
+			        localStorage.setItem('cpAccepted', 'true');
+			        document.getElementById('cp-footer').style.display = 'none';
+			    });
 
-              buttonContainer.appendChild(img);
-              buttonContainer.appendChild(span);
-              container.appendChild(buttonContainer);
-            });
-          })
-          .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
-          });
-    };
-  </script>
-  
-  <!-- Particle container -->
-  <div id="particles-js"></div>
-  <div id="particles-fade"></div>
+			    // Load game buttons dynamically from games.json
+			    fetch('head/games.json')
+			      .then(response => {
+			        if (!response.ok) {
+			          throw new Error('Network response was not ok ' + response.statusText);
+			        }
+			        return response.json();
+			      })
+			      .then(data => {
+			        const games = data.games;
+			        const container = document.querySelector('.container');
 
-  <!-- Header and Navigation -->
-  <div id="header">
-    <h1><a href="#" id="title">The Wafer Café</a></h1>
-    <div class="nav-links">
-      <a href="#games">Games</a>
-      <a href="https://github.com/MajesticWafer/wafercafe/blob/main/faq.md">FAQ</a>
-      <a href="https://github.com/MajesticWafer/wafercafe/blob/main/changelog.md">Changelog</a>
-      <div class="search-container">
-        <input type="text" id="search" placeholder="Search for a game...">
-        <i class="bi bi-search"></i>
-      </div>
-      <button id="theme-toggle"><i class="bi bi-sun"></i></button>
-    </div>
-  </div>
+			        Object.keys(games).forEach(gameName => {
+			          const gameLink = games[gameName];
+			          const buttonContainer = document.createElement('div');
+			          buttonContainer.classList.add('button-container');
+			          buttonContainer.setAttribute('onclick', `location.href='${gameLink}/'`);
 
-  <!-- Dropdown for settings -->
-  <div id="dropdown">
-    <h2>Settings</h2>
-    <label>
-      <input type="checkbox" id="particles-toggle" checked> Show Particles
-    </label>
-  </div>
+			          const img = document.createElement('img');
+			          img.src = `/${gameLink}/img.jpeg`;
+			          img.alt = gameName;
 
-  <!-- Game buttons container -->
-  <div class="random-button-container">
-    <button id="random-game">Random Game <i class="bi bi-dice-3-fill"></i></button>
-  </div>
-  <div class="container"></div>
+			          const span = document.createElement('span');
+			          span.classList.add('button-text');
+			          span.textContent = gameName;
 
-  <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-  <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const particlesToggle = document.getElementById('particles-toggle');
-    const particlesContainer = document.getElementById('particles-js');
-    const title = document.getElementById('title');
-    const dropdown = document.getElementById('dropdown');
-    const themeToggle = document.getElementById('theme-toggle');
-    
-    // Load and save particles setting in localStorage
-    const savedParticlesSetting = JSON.parse(localStorage.getItem('particlesEnabled')) ?? true;
-    particlesToggle.checked = savedParticlesSetting;
-    particlesContainer.style.display = savedParticlesSetting ? 'block' : 'none';
+			          buttonContainer.appendChild(img);
+			          buttonContainer.appendChild(span);
+			          container.appendChild(buttonContainer);
+			        });
+			      })
+			      .catch(error => {
+			        console.error('There was a problem with the fetch operation:', error);
+			      });
+			};
+		</script>
 
-    particlesToggle.addEventListener('change', function () {
-      const isChecked = particlesToggle.checked;
-      particlesContainer.style.display = isChecked ? 'block' : 'none';
-      localStorage.setItem('particlesEnabled', JSON.stringify(isChecked));
-    });
+		<!-- Particle container -->
+		<div id="particles-js"></div>
+		<div id="particles-fade"></div>
 
-    title.addEventListener('click', function () {
-      dropdown.classList.toggle('open');
-    });
+		<!-- Header and Navigation -->
+		<div id="header">
+			<h1><a href="#" id="title">The Wafer Café</a></h1>
+			<div class="nav-links">
+				<a href="#games">Games</a>
+				<a href="https://github.com/MajesticWafer/wafercafe/blob/main/faq.md">FAQ</a>
+				<a href="https://github.com/MajesticWafer/wafercafe/blob/main/changelog.md">Changelog</a>
+				<div class="search-container">
+					<input type="text" id="search" placeholder="Search for a game..." />
+					<i class="bi bi-search"></i>
+				</div>
+				<button id="theme-toggle"><i class="bi bi-sun"></i></button>
+			</div>
+		</div>
 
-    // Function to load particles based on theme
-    function loadParticles(theme) {
-      const particlesConfig = theme === 'light-mode' ? 'dark-particles.json' : 'light-particles.json';
-      particlesJS.load('particles-js', `head/${particlesConfig}`, function() {
-        console.log(`Particles.js config (${particlesConfig}) loaded`);
-      });
-    }
+		<!-- Dropdown for settings -->
+		<div id="dropdown">
+			<h2>Settings</h2>
+			<label> <input type="checkbox" id="particles-toggle" checked /> Show Particles </label>
+		</div>
 
-    // Theme toggle functionality
-    const savedTheme = localStorage.getItem('theme') || 'dark-mode';
-    document.body.classList.add(savedTheme);
-    themeToggle.innerHTML = savedTheme === 'light-mode' ? '<i class="bi bi-moon"></i>' : '<i class="bi bi-sun"></i>';
-    loadParticles(savedTheme);
+		<!-- Game buttons container -->
+		<div class="random-button-container">
+			<button id="random-game">Random Game <i class="bi bi-dice-3-fill"></i></button>
+		</div>
+		<div class="container"></div>
 
-    themeToggle.addEventListener('click', function () {
-      const isLightMode = document.body.classList.toggle('light-mode');
-      const newTheme = isLightMode ? 'light-mode' : 'dark-mode';
-      localStorage.setItem('theme', newTheme);
-      themeToggle.innerHTML = isLightMode ? '<i class="bi bi-moon"></i>' : '<i class="bi bi-sun"></i>';
-      loadParticles(newTheme);
-    });
+		<!-- Scripts -->
+		<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+		<script>
+			document.addEventListener('DOMContentLoaded', function () {
+			  const particlesToggle = document.getElementById('particles-toggle');
+			  const particlesContainer = document.getElementById('particles-js');
+			  const title = document.getElementById('title');
+			  const dropdown = document.getElementById('dropdown');
+			  const themeToggle = document.getElementById('theme-toggle');
 
-    // Random game function
-    document.getElementById('random-game').addEventListener('click', function () {
-      const games = document.querySelectorAll('.button-container');
-      const randomGame = games[Math.floor(Math.random() * games.length)];
-      const onClickValue = randomGame.getAttribute('onclick');
-      const url = onClickValue.match(/location\.href='([^']+)'/)[1];
-      window.location.href = url;
-    });
-  });
-</script>
+			  // Load and save particles setting in localStorage
+			  const savedParticlesSetting = JSON.parse(localStorage.getItem('particlesEnabled')) ?? true;
+			  particlesToggle.checked = savedParticlesSetting;
+			  particlesContainer.style.display = savedParticlesSetting ? 'block' : 'none';
 
-</body>
+			  particlesToggle.addEventListener('change', function () {
+			    const isChecked = particlesToggle.checked;
+			    particlesContainer.style.display = isChecked ? 'block' : 'none';
+			    localStorage.setItem('particlesEnabled', JSON.stringify(isChecked));
+			  });
+
+			  title.addEventListener('click', function () {
+			    dropdown.classList.toggle('open');
+			  });
+
+			  // Function to load particles based on theme
+			  function loadParticles(theme) {
+			    const particlesConfig = theme === 'light-mode' ? 'dark-particles.json' : 'light-particles.json';
+			    particlesJS.load('particles-js', `head/${particlesConfig}`, function() {
+			      console.log(`Particles.js config (${particlesConfig}) loaded`);
+			    });
+			  }
+
+			  // Theme toggle functionality
+			  const savedTheme = localStorage.getItem('theme') || 'dark-mode';
+			  document.body.classList.add(savedTheme);
+			  themeToggle.innerHTML = savedTheme === 'light-mode' ? '<i class="bi bi-moon"></i>' : '<i class="bi bi-sun"></i>';
+			  loadParticles(savedTheme);
+
+			  themeToggle.addEventListener('click', function () {
+			    const isLightMode = document.body.classList.toggle('light-mode');
+			    const newTheme = isLightMode ? 'light-mode' : 'dark-mode';
+			    localStorage.setItem('theme', newTheme);
+			    themeToggle.innerHTML = isLightMode ? '<i class="bi bi-moon"></i>' : '<i class="bi bi-sun"></i>';
+			    loadParticles(newTheme);
+			  });
+
+			  // Random game function
+			  document.getElementById('random-game').addEventListener('click', function () {
+			    const games = document.querySelectorAll('.button-container');
+			    const randomGame = games[Math.floor(Math.random() * games.length)];
+			    const onClickValue = randomGame.getAttribute('onclick');
+			    const url = onClickValue.match(/location\.href='([^']+)'/)[1];
+			    window.location.href = url;
+			  });
+			});
+		</script>
+	</body>
 </html>
