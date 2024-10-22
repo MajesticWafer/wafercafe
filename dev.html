@@ -160,9 +160,7 @@
     
     <!-- Header and Navigation -->
     <div id="header">
-      <h1>
-        <a href="#" id="title">The Wafer Café</a>
-      </h1>
+      <h1>The Wafer Café</h1>
       
       <div class="nav-links">
         <a href="#games">Games</a>
@@ -180,13 +178,6 @@
       </div>
     </div>
     
-    <!-- Dropdown for settings -->
-    <div id="dropdown">
-      <h2>Settings</h2>
-      <label>
-        <input type="checkbox" id="particles-toggle" checked>Show Particles</label>
-    </div>
-    
     <!-- Game buttons container -->
     <div class="random-button-container">
       <button id="random-game">Random Game <i class="bi bi-dice-3-fill"></i>
@@ -201,27 +192,10 @@
       document.addEventListener('DOMContentLoaded', function() {
         const particlesToggle = document.getElementById('particles-toggle');
         const particlesContainer = document.getElementById('particles-js');
-        const title = document.getElementById('title');
-        const dropdown = document.getElementById('dropdown');
         const themeToggle = document.getElementById('theme-toggle');
         // Load and save particles setting in localStorage
         const savedParticlesSetting = JSON.parse(localStorage.getItem('particlesEnabled')) ?? true;
-        particlesToggle.checked = savedParticlesSetting;
-        particlesContainer.style.display = savedParticlesSetting ? 'block' : 'none';
-        particlesToggle.addEventListener('change', function() {
-          const isChecked = particlesToggle.checked;
-          particlesContainer.style.display = isChecked ? 'block' : 'none';
-          localStorage.setItem('particlesEnabled', JSON.stringify(isChecked));
-        });
-        title.addEventListener('click', function() {
-          dropdown.classList.toggle('open');
-          
-          if (dropdown.style.display === 'none') {
-            dropdown.style.display = 'block';
-          } else {
-            dropdown.style.display ='none';
-          }
-        });
+    
         // Function to load particles based on theme
         function loadParticles(theme) {
           const particlesConfig = theme === 'light-mode' ? 'dark-particles.json' : 'light-particles.json';
@@ -229,6 +203,7 @@
             console.log(`Particles.js config (${particlesConfig}) loaded`);
           });
         }
+        
         // Theme toggle functionality
         const savedTheme = localStorage.getItem('theme') || 'dark-mode';
         document.body.classList.add(savedTheme);
