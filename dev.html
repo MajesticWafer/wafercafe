@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="keywords" content="emulator, games, unblocked, gaming, game website, nintendo ds emulator">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
   <title>Wafer Café</title>
   
   <!-- Styles and Fonts -->
@@ -45,7 +46,7 @@
       position: fixed;
       bottom: 0;
       width: 100vw;
-      background-color: rgba(0, 0, 0, 0.875);
+      background-color: var(--background-color);
       color: white;
       text-align: center;
       padding: 10px 0;
@@ -62,11 +63,6 @@
   #cp-footer a {
       color: #00aaff;
       text-decoration: underline;
-  }
-
-  #cp-footer .icon {
-      left: 0;
-      margin: 2px;
   }
     
   #cp-footer button {
@@ -85,7 +81,7 @@
 
   <!-- CP Footer Bar -->
   <div id="cp-footer">
-    <p class="icon">🍪</p>
+    <i class="bi bi-cookie"></i>
     <p>By clicking “Accept all cookies”, you agree Wafer Café can store cookies on your device. <button id="agree-btn">Accept all cookies</button></p>
   </div>
 
@@ -154,7 +150,7 @@
       <a href="https://github.com/MajesticWafer/wafercafe/blob/main/faq.md">FAQ</a>
       <a href="https://github.com/MajesticWafer/wafercafe/blob/main/changelog.md">Changelog</a>
       <input type="text" id="search" placeholder="Search for a game...">
-      <button id="theme-toggle">☀️</button>
+      <button id="theme-toggle"><i class="bi bi-sun"></i></button>
     </div>
   </div>
 
@@ -208,14 +204,14 @@
     // Theme toggle functionality
     const savedTheme = localStorage.getItem('theme') || 'dark-mode';
     document.body.classList.add(savedTheme);
-    themeToggle.textContent = savedTheme === 'light-mode' ? '🌙' : '☀️';
+    themeToggle.textContent = savedTheme === 'light-mode' ? '<i class="bi bi-moon"></i>' : '<i class="bi bi-sun"></i>';
     loadParticles(savedTheme);
 
     themeToggle.addEventListener('click', function () {
       const isLightMode = document.body.classList.toggle('light-mode');
       const newTheme = isLightMode ? 'light-mode' : 'dark-mode';
       localStorage.setItem('theme', newTheme);
-      themeToggle.textContent = isLightMode ? '🌙' : '☀️';
+      themeToggle.innerHTML = isLightMode ? '<i class="bi bi-moon"></i>' : '<i class="bi bi-sun"></i>';
       loadParticles(newTheme);
     });
 
