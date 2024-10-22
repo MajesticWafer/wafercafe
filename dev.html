@@ -153,39 +153,48 @@
         });
       };
     </script>
+    
     <!-- Particle container -->
-    <div id="particles-js"></div>
+    <div id="particles-js"></div>    
     <div id="particles-fade"></div>
+    
     <!-- Header and Navigation -->
     <div id="header">
       <h1>
         <a href="#" id="title">The Wafer Café</a>
       </h1>
+      
       <div class="nav-links">
         <a href="#games">Games</a>
         <a href="https://github.com/MajesticWafer/wafercafe/blob/main/faq.md">FAQ</a>
         <a href="https://github.com/MajesticWafer/wafercafe/blob/main/changelog.md">Changelog</a>
+        
         <div class="search-container">
           <input type="text" id="search" placeholder="Search for a game...">
           <i class="bi bi-search"></i>
         </div>
+        
         <button id="theme-toggle">
           <i class="bi bi-sun"></i>
         </button>
       </div>
     </div>
+    
     <!-- Dropdown for settings -->
     <div id="dropdown">
       <h2>Settings</h2>
       <label>
-        <input type="checkbox" id="particles-toggle" checked> Show Particles </label>
+        <input type="checkbox" id="particles-toggle" checked>Show Particles</label>
     </div>
+    
     <!-- Game buttons container -->
     <div class="random-button-container">
       <button id="random-game">Random Game <i class="bi bi-dice-3-fill"></i>
       </button>
     </div>
+    
     <div class="container"></div>
+    
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
@@ -206,6 +215,12 @@
         });
         title.addEventListener('click', function() {
           dropdown.classList.toggle('open');
+          
+          if (dropdown.style.display === 'none') {
+            dropdown.style.display = 'block';
+          } else {
+            dropdown.style.display ='none';
+          }
         });
         // Function to load particles based on theme
         function loadParticles(theme) {
