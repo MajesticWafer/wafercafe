@@ -24,7 +24,7 @@ body {
     color: var(--text-color);
     font-family: 'Poppins', sans-serif;
     transition: background-color 0.3s ease, color 0.3s ease;
-    overflow-x: none;
+    overflow-x: hidden;
 }
 
 #header {
@@ -196,46 +196,6 @@ body {
 
 .button-container:hover .button-text {
     opacity: 1;
-}
-
-/* Dropdown Menu */
-#dropdown {
-    opacity: 0;
-    position: absolute;
-    top: 50px;
-    right: 40px;
-    background-color: var(--button-background);
-    padding: 8px;
-    border-radius: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 150px;
-    transition: opacity 0.5s, top 0.5s;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
-    z-index: 2; /* Ensure dropdown is above buttons */
-    height: 100px;
-}
-
-#dropdown.open {
-    opacity: 1;
-    top: 0px;
-}
-
-#dropdown button {
-    border-radius: 10px;
-    padding: 10px 20px;
-    margin: 10px 0;
-    background-color: var(--button-background);
-    color: var(--text-color);
-    transition: transform 0.2s, background-color 0.2s;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-#dropdown button:hover {
-    background-color: var(--button-border);
-    transform: scale(1.05);
 }
 
 .section {
