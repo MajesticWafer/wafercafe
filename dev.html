@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="keywords" content="emulator, games, unblocked, gaming, game website, nintendo ds emulator">
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <title>Wafer Café</title>
   
   <!-- Styles and Fonts -->
@@ -40,32 +39,65 @@
     .random-button-container {
       margin-top: 20px;
     }
+
+    #tos-footer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+  font-size: 14px;
+  z-index: 1000;
+  display: none; /* Hidden until needed */
+}
+
+#tos-footer p {
+  margin: 0;
+  padding: 0;
+}
+
+#tos-footer a {
+  color: #00aaff;
+  text-decoration: underline;
+}
+
+#tos-footer button {
+  background-color: #00aaff;
+  border: none;
+  color: white;
+  padding: 5px 10px;
+  font-size: 14px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+
   </style>
 </head>
 <body>
-  
-  <script>
-    // Function to show TOS alert if not already accepted
-    function showTOSAlert() {
-        if (!localStorage.getItem('tosAccepted')) {
-            Swal.fire({
-                title: 'Terms of Service',
-                text: 'By using this website, you agree to our Terms of Service.',
-                icon: 'info',
-                confirmButtonText: 'I Agree',
-                footer: '<a href="https://docs.google.com/document/d/10NeuRKM8f0QKSQwvNU6XvPKg2SqELGxTX_Zmep7AzWk" target="_blank">Read our Terms of Service</a>'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    localStorage.setItem('tosAccepted', 'true');
-                }
-            });
-        }
-    }
 
-    // Combined window.onload function to handle both the TOS alert and game loading
+  <!-- TOS Footer Bar -->
+  <div id="tos-footer">
+    <p>By using this website, you agree to our <a href="https://docs.google.com/document/d/10NeuRKM8f0QKSQwvNU6XvPKg2SqELGxTX_Zmep7AzWk" target="_blank">Terms of Service</a>. <button id="agree-btn">I Agree</button></p>
+  </div>
+
+  <script>
     window.onload = function() {
-        // Show the TOS alert
-        showTOSAlert();
+        // Check if TOS has been accepted
+        const tosAccepted = localStorage.getItem('tosAccepted');
+
+        if (!tosAccepted) {
+            // Show the TOS footer if not accepted
+            document.getElementById('tos-footer').style.display = 'block';
+        }
+      
+        // Handle the "I Agree" button
+        document.getElementById('agree-btn').addEventListener('click', function () {
+            localStorage.setItem('tosAccepted', 'true');
+            document.getElementById('tos-footer').style.display = 'none';
+        });
 
         // Load game buttons dynamically from games.json
         fetch('head/games.json')
