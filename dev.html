@@ -40,7 +40,7 @@
       margin-top: 20px;
     }
 
-    #tos-footer {
+    #cp-footer {
       left: 0;
       position: fixed;
       bottom: 0;
@@ -54,17 +54,17 @@
       display: none; /* Hidden until needed */
   }
 
-  #tos-footer p {
+  #cp-footer p {
       margin: 0;
       padding: 0;
   }
 
-  #tos-footer a {
+  #cp-footer a {
       color: #00aaff;
       text-decoration: underline;
   }
 
-  #tos-footer button {
+  #cp-footer button {
       background-color: #00aaff;
       border: none;
       color: white;
@@ -78,25 +78,25 @@
 </head>
 <body>
 
-  <!-- TOS Footer Bar -->
-  <div id="tos-footer">
-    <p>By using this website, you agree to our <a href="https://docs.google.com/document/d/10NeuRKM8f0QKSQwvNU6XvPKg2SqELGxTX_Zmep7AzWk" target="_blank">Terms of Service</a>. <button id="agree-btn">I Agree</button></p>
+  <!-- CP Footer Bar -->
+  <div id="cp-footer">
+    <p>By clicking “Accept all cookies”, you agree Wafer Café can store cookies on your device and disclose information in accordance with our <a href="#" target="_blank">Cookie Policy</a>. <button id="agree-btn">Accept all cookies</button></p>
   </div>
 
   <script>
     window.onload = function() {
-        // Check if TOS has been accepted
-        const tosAccepted = localStorage.getItem('tosAccepted');
+        // Check if CP has been accepted
+        const cpAccepted = localStorage.getItem('cpAccepted');
 
-        if (!tosAccepted) {
-            // Show the TOS footer if not accepted
-            document.getElementById('tos-footer').style.display = 'block';
+        if (!cpAccepted) {
+            // Show the CP footer if not accepted
+            document.getElementById('cp-footer').style.display = 'block';
         }
       
-        // Handle the "I Agree" button
+        // Handle the "Allow all cookies" button
         document.getElementById('agree-btn').addEventListener('click', function () {
-            localStorage.setItem('tosAccepted', 'true');
-            document.getElementById('tos-footer').style.display = 'none';
+            localStorage.setItem('cpAccepted', 'true');
+            document.getElementById('cp-footer').style.display = 'none';
         });
 
         // Load game buttons dynamically from games.json
