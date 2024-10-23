@@ -137,22 +137,9 @@ body {
     border: 2px solid #d6caff;
 }
 
-.button-container.mobile {
-    border: 2px solid #d6caff;
-}
-
 .button-container span {
     opacity: 0;
     transition: opacity 0.3s ease;
-}
-
-.button-container:hover span {
-    opacity: 1;
-}
-
-.button-container.mobile span {
-    opacity: 1;
-    transition: none;
 }
 
 .button-container img {
@@ -163,10 +150,6 @@ body {
 }
 
 .button-container:hover img {
-    border-color: #d6caff;
-}
-
-.button-container.mobile img {
     border-color: #d6caff;
 }
 
@@ -208,10 +191,6 @@ body {
 }
 
 .button-container:hover .button-text {
-    opacity: 1;
-}
-
-.button-container.mobile .button-text {
     opacity: 1;
 }
 
