@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Extreme Battery Drainer 77777%</title>
+    <title>Ultimate Battery Drainer</title>
     <style>
         body {
             margin: 0;
@@ -12,6 +12,11 @@
         }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://threejs.org/examples/js/postprocessing/EffectComposer.js"></script>
+    <script src="https://threejs.org/examples/js/postprocessing/RenderPass.js"></script>
+    <script src="https://threejs.org/examples/js/postprocessing/UnrealBloomPass.js"></script>
+    <script src="https://threejs.org/examples/js/postprocessing/TAAPass.js"></script>
+    <script src="https://threejs.org/examples/js/postprocessing/FXAARenderPass.js"></script>
 </head>
 <body>
     <script>
@@ -19,26 +24,48 @@
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Use soft shadows
+
         document.body.appendChild(renderer.domElement);
 
+        // Set up bloom effect
+        const composer = new THREE.EffectComposer(renderer);
+        const renderPass = new THREE.RenderPass(scene, camera);
+        composer.addPass(renderPass);
+
+        const bloomPass = new THREE.UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 1.5, 0.4, 0.85);
+        composer.addPass(bloomPass);
+
         // Create a massive grid of spheres
-        const gridSize = 100; // Size of the grid
         const sphereCount = 5000; // Total number of spheres
         const geometry = new THREE.SphereGeometry(0.5, 16, 16);
+        const material = new THREE.MeshStandardMaterial({ color: Math.random() * 0xffffff, roughness: 0.5 });
 
         for (let i = 0; i < sphereCount; i++) {
-            const material = new THREE.MeshBasicMaterial({ color: Math.random() * 0xffffff });
             const sphere = new THREE.Mesh(geometry, material);
+            sphere.castShadow = true; // Enable shadow casting
+            sphere.receiveShadow = true; // Enable shadow receiving
 
             // Randomly position spheres in a larger area
             sphere.position.set(
-                Math.random() * gridSize - gridSize / 2,
-                Math.random() * gridSize - gridSize / 2,
-                Math.random() * gridSize - gridSize / 2
+                Math.random() * 200 - 100,
+                Math.random() * 100 - 50,
+                Math.random() * 200 - 100
             );
 
             scene.add(sphere);
         }
+
+        // Add a directional light for shadows
+        const light = new THREE.DirectionalLight(0xffffff, 1);
+        light.position.set(10, 20, 10);
+        light.castShadow = true;
+        scene.add(light);
+
+        // Add ambient light
+        const ambientLight = new THREE.AmbientLight(0x404040); // Soft white light
+        scene.add(ambientLight);
 
         camera.position.set(0, 80, 200);
         camera.lookAt(0, 0, 0);
@@ -54,9 +81,10 @@
         }
 
         function animate() {
-            // Rotate the scene for added complexity
-            scene.rotation.y += 0.002;
-            scene.rotation.x += 0.001;
+            // Render multiple times to simulate heavy load
+            for (let j = 0; j < 5; j++) {
+                composer.render();
+            }
 
             // Perform complex math calculations
             complexMath();
@@ -71,6 +99,7 @@
         window.addEventListener('resize', () => {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
+            composer.setSize(window.innerWidth, window.innerHeight);
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
     </script>
