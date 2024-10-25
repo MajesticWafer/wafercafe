@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Battery Drainer</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        const colors = ['#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#00FFFF'];
+        const particles = [];
+        const numberOfParticles = 100; // Adjust for more particles
+
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            particle.style.left = Math.random() * window.innerWidth + 'px';
+            particle.style.top = Math.random() * window.innerHeight + 'px';
+            document.body.appendChild(particle);
+            particles.push(particle);
+        }
+
+        function animateParticles() {
+            particles.forEach(particle => {
+                const x = Math.random() * 4 - 2; // Random horizontal movement
+                const y = Math.random() * 4 - 2; // Random vertical movement
+                const currentPosition = particle.getBoundingClientRect();
+                particle.style.left = currentPosition.left + x + 'px';
+                particle.style.top = currentPosition.top + y + 'px';
+            });
+        }
+
+        function changeColors() {
+            particles.forEach(particle => {
+                particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            });
+        }
+
+        for (let i = 0; i < numberOfParticles; i++) {
+            createParticle();
+        }
+
+        setInterval(() => {
+            animateParticles();
+            changeColors();
+        }, 16); // Approx. 60 FPS
+    </script>
+</body>
+</html>
