@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Battery Drainer with 3D Rendering</title>
+    <title>Extreme Battery Drainer 77777%</title>
     <style>
         body {
             margin: 0;
@@ -21,36 +21,42 @@
         renderer.setSize(window.innerWidth, window.innerHeight);
         document.body.appendChild(renderer.domElement);
 
-        // Create a geometry with multiple rotating cubes
-        const cubes = [];
-        const geometry = new THREE.BoxGeometry();
+        // Create a massive grid of spheres
+        const gridSize = 100; // Size of the grid
+        const sphereCount = 5000; // Total number of spheres
+        const geometry = new THREE.SphereGeometry(0.5, 16, 16);
 
-        for (let i = 0; i < 50; i++) {
+        for (let i = 0; i < sphereCount; i++) {
             const material = new THREE.MeshBasicMaterial({ color: Math.random() * 0xffffff });
-            const cube = new THREE.Mesh(geometry, material);
-            cube.position.x = Math.random() * 100 - 50;
-            cube.position.y = Math.random() * 100 - 50;
-            cube.position.z = Math.random() * 100 - 50;
-            cubes.push(cube);
-            scene.add(cube);
+            const sphere = new THREE.Mesh(geometry, material);
+
+            // Randomly position spheres in a larger area
+            sphere.position.set(
+                Math.random() * gridSize - gridSize / 2,
+                Math.random() * gridSize - gridSize / 2,
+                Math.random() * gridSize - gridSize / 2
+            );
+
+            scene.add(sphere);
         }
 
-        camera.position.z = 200;
+        camera.position.set(0, 80, 200);
+        camera.lookAt(0, 0, 0);
 
         function complexMath() {
             let result = 0;
-            for (let i = 0; i < 100000; i++) {
-                result += Math.sin(i) * Math.cos(i) * Math.tan(i);
+            // Perform very complex calculations
+            for (let i = 0; i < 1000000; i++) {
+                result += Math.sin(i) * Math.cos(i) * Math.tan(i) * Math.exp(i % 100) * Math.log(i + 1) * Math.sqrt(i);
+                result /= (i + 1); // Simulate more complexity
             }
             return result;
         }
 
         function animate() {
-            // Rotate cubes
-            cubes.forEach(cube => {
-                cube.rotation.x += 0.01;
-                cube.rotation.y += 0.01;
-            });
+            // Rotate the scene for added complexity
+            scene.rotation.y += 0.002;
+            scene.rotation.x += 0.001;
 
             // Perform complex math calculations
             complexMath();
