@@ -1,4 +1,3 @@
-// cc.js, cookie clicker cheats bookmarklet
 javascript:(function(){
   let categories = {
     "Cookies": {
