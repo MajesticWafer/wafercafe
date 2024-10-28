@@ -106,13 +106,6 @@
     </style>
   </head>
   <body>
-    <!-- Ad Container -->
-    <div id="ad-slot" style="width: 0; height: 0;">
-        <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
-    </div>
-
     <!-- JavaScript for Adblock Detection and Alert -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -145,12 +138,14 @@
             }, 2000); // delay to allow ad slot to load
         });
     </script>
+    
     <!-- CP Footer Bar -->
     <div id="cp-footer">
       <i class="bi bi-cookie"></i>
       <p>By clicking “Accept all cookies”, you agree Wafer Café can store cookies on your device. <button id="agree-btn">Accept all cookies</button>
       </p>
     </div>
+    
     <script>
       window.onload = function() {
         // Check if CP has been accepted
@@ -225,6 +220,13 @@
     </div>
     
     <div class="container"></div>
+
+    <!-- Ad Container -->
+    <div id="ad-slot" style="width: 300px; height: 250px;">
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
     
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
