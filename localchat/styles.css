@@ -37,7 +37,7 @@ body {
     width: 100%;
 }
 
-#message-input {
+#message-input, #join-id-input {
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
