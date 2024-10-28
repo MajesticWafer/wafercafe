@@ -4,7 +4,7 @@
     --text-color: white;
     --button-background: #2a2a2a;
     --button-border: #4c4c4c;
-    --background-image-fade-1: rgba(0,0,0,0);
+    --background-image-fade-1: rgba(0, 0, 0, 0);
 }
 
 /* Light mode */
@@ -12,7 +12,8 @@ body.light-mode {
     --background-color: #f0f0f0;
     --text-color: #000;
     --button-background: #fff;
-    --button-border: #ccc;;
+    --button-border: #ccc;
+    ;
 }
 
 html {
@@ -74,7 +75,8 @@ body {
 .random-button-container {
     display: flex;
     justify-content: center;
-    margin: 20px 0; /* Adjust spacing as needed */
+    margin: 20px 0;
+    /* Adjust spacing as needed */
 }
 
 #random-game {
@@ -104,7 +106,8 @@ body {
 /* Container for Game Buttons */
 .container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Ensure buttons wrap in rows */
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    /* Ensure buttons wrap in rows */
     gap: 14px;
     padding: 20px;
     max-width: 1200px;
@@ -112,8 +115,10 @@ body {
 }
 
 .button-container {
-    position: relative; /* Ensure it is placed within the stacking context */
-    z-index: 1; /* Place buttons above the particles */
+    position: relative;
+    /* Ensure it is placed within the stacking context */
+    z-index: 1;
+    /* Place buttons above the particles */
     height: 120px;
     width: 120px;
     border-radius: 10px;
@@ -171,23 +176,27 @@ body {
 .button-container-header button:hover {
     background-color: var(--button-border);
     transform: scale(1.05);
-} 
+}
 
 /* Faded Black Overlay for Text */
 .button-text {
     font-weight: 500;
     font-size: 14px;
     position: absolute;
-    bottom: 0; /* Positioned at the bottom */
+    bottom: 0;
+    /* Positioned at the bottom */
     left: 0;
     right: 0;
     color: white;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0)); /* Fade-out effect */
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0));
+    /* Fade-out effect */
     padding: 10px;
     text-align: center;
     opacity: 0;
-    border-radius: 0 0 10px 10px; /* Rounded corners at the bottom */
-    transition: opacity 0.3s ease; /* Smooth appearance */
+    border-radius: 0 0 10px 10px;
+    /* Rounded corners at the bottom */
+    transition: opacity 0.3s ease;
+    /* Smooth appearance */
 }
 
 .button-container:hover .button-text {
@@ -202,4 +211,69 @@ body {
 .section-games {
     padding: none !important;
     margin: none !important;
+}
+
+#cp-footer {
+    left: 0;
+    position: fixed;
+    bottom: 0;
+    width: 100vw;
+    background-color: var(--background-color);
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 14px;
+    z-index: 1000;
+    display: none;
+    /* Hidden until needed */
+}
+
+#cp-footer p {
+    margin: 0;
+    padding: 0;
+    display: inline;
+}
+
+#cp-footer i {
+    margin-right: 8px;
+    /* Add some space between icon and text */
+    vertical-align: middle;
+    /* Align icon with text */
+}
+
+#cp-footer a {
+    color: #00aaff;
+    text-decoration: underline;
+}
+
+#cp-footer button {
+    background-color: #00aaff;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-left: 4px;
+}
+
+.search-container {
+    position: relative;
+    display: inline-block;
+}
+
+#search {
+    padding-left: 30px;
+    /* Add space for the icon */
+    width: 200px;
+    /* Adjust width as needed */
+    height: 35px;
+}
+
+.search-container i {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: gray;
 }
