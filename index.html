@@ -4,16 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="emulator, games, unblocked, gaming, game website, nintendo ds emulator">
+    <meta name="description" content="Welcome to Wafer Café, your go-to destination for playing unblocked games and emulators online. Enjoy a variety of games with a sleek interface and engaging features.">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
-    <title>Wafer Café</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>Wafer Café - Play Your Favorite Games</title>
+    
     <!-- Styles and Fonts -->
     <link rel="stylesheet" href="head/styles.css">
     <link rel="icon" type="image/jpeg" href="head/favicon.jpeg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3575178423806487" crossorigin="anonymous"></script>
+    
     <style>
       #particles-js {
         position: absolute;
@@ -37,80 +42,49 @@
       .random-button-container {
         margin-top: 20px;
       }
-
-      #cp-footer {
-        left: 0;
-        position: fixed;
-        bottom: 0;
-        width: 100vw;
-        background-color: var(--background-color);
-        color: white;
-        text-align: center;
-        padding: 10px 0;
-        font-size: 14px;
-        z-index: 1000;
-        display: none;
-        /* Hidden until needed */
-      }
-
-      #cp-footer p {
-        margin: 0;
-        padding: 0;
-        display: inline;
-      }
-
-      #cp-footer i {
-        margin-right: 8px;
-        /* Add some space between icon and text */
-        vertical-align: middle;
-        /* Align icon with text */
-      }
-
-      #cp-footer a {
-        color: #00aaff;
-        text-decoration: underline;
-      }
-
-      #cp-footer button {
-        background-color: #00aaff;
-        border: none;
-        color: white;
-        padding: 5px 10px;
-        font-size: 14px;
-        cursor: pointer;
-        border-radius: 4px;
-        margin-left: 4px;
-      }
-
-      .search-container {
-        position: relative;
-        display: inline-block;
-      }
-
-      #search {
-        padding-left: 30px;
-        /* Add space for the icon */
-        width: 200px;
-        /* Adjust width as needed */
-        height: 35px;
-      }
-
-      .search-container i {
-        position: absolute;
-        left: 10px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: gray;
-      }
     </style>
   </head>
   <body>
+    <!-- JavaScript for Adblock Detection and Alert -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const adSlot = document.getElementById("ad-slot");
+            let adblockDetected = false;
+
+            // Method 1: Check if ad script runs
+            try {
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            } catch (e) {
+                adblockDetected = true;
+            }
+
+            // Method 2: Check ad slot visibility (backup for stricter network blocks)
+            setTimeout(() => {
+                if (adSlot.offsetHeight === 0) {
+                    adblockDetected = true;
+                }
+
+                if (adblockDetected) {
+                    Swal.fire({
+                        title: "Ad Blocker Detected!",
+                        text: "Our site relies on ads to stay free. Please consider disabling your ad blocker for the best experience.",
+                        icon: "warning",
+                        confirmButtonText: "Okay, I’ll disable it",
+                        showCancelButton: true,
+                        cancelButtonText: "Continue with Ads Blocked"
+                    });
+                }
+            }, 2000); // delay to allow ad slot to load
+        });
+    </script>
+    
     <!-- CP Footer Bar -->
     <div id="cp-footer">
       <i class="bi bi-cookie"></i>
       <p>By clicking “Accept all cookies”, you agree Wafer Café can store cookies on your device. <button id="agree-btn">Accept all cookies</button>
       </p>
     </div>
+    
     <script>
       window.onload = function() {
         // Check if CP has been accepted
@@ -185,6 +159,13 @@
     </div>
     
     <div class="container"></div>
+
+    <!-- Ad Container -->
+    <div id="ad-slot" style="width: 300px; height: 250px;">
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
     
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
