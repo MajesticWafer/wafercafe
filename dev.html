@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="emulator, games, unblocked, gaming, game website, nintendo ds emulator">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <title>Wafer Café</title>
     <!-- Styles and Fonts -->
     <link rel="stylesheet" href="head/styles.css">
@@ -112,17 +113,24 @@
         </script>
     </div>
 
-    <!-- Additional JavaScript to Handle Blocking -->
+    <!-- JavaScript for Adblock Detection and Alert -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const adSlot = document.getElementById("ad-slot");
 
-            // Retry to load ads if blocked
-            if (adSlot.offsetHeight === 0) {
-                console.log("Adblock detected, attempting to reload ads.");
-                alert("turn off ur adblocker dumbass");
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            }
+            // Check if the ad slot is blocked
+            setTimeout(() => {
+                if (adSlot.offsetHeight === 0) {
+                    Swal.fire({
+                        title: "Ad Blocker Detected!",
+                        text: "Our site depends on ads to stay free. Please consider disabling your ad blocker for the best experience.",
+                        icon: "warning",
+                        confirmButtonText: "Okay, I’ll disable it",
+                        showCancelButton: true,
+                        cancelButtonText: "Continue with Ads Blocked"
+                    });
+                }
+            }, 2000); // delay to allow ad slot to load
         });
     </script>
     <!-- CP Footer Bar -->
