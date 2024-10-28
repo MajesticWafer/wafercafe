@@ -117,13 +117,25 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const adSlot = document.getElementById("ad-slot");
+            let adblockDetected = false;
 
-            // Check if the ad slot is blocked
+            // Method 1: Check if ad script runs
+            try {
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            } catch (e) {
+                adblockDetected = true;
+            }
+
+            // Method 2: Check ad slot visibility (backup for stricter network blocks)
             setTimeout(() => {
                 if (adSlot.offsetHeight === 0) {
+                    adblockDetected = true;
+                }
+
+                if (adblockDetected) {
                     Swal.fire({
                         title: "Ad Blocker Detected!",
-                        text: "Our site depends on ads to stay free. Please consider disabling your ad blocker for the best experience.",
+                        text: "Our site relies on ads to stay free. Please consider disabling your ad blocker for the best experience.",
                         icon: "warning",
                         confirmButtonText: "Okay, I’ll disable it",
                         showCancelButton: true,
