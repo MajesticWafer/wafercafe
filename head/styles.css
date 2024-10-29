@@ -5,6 +5,7 @@
     --button-background: #2a2a2a;
     --button-border: #4c4c4c;
     --background-image-fade-1: rgba(0, 0, 0, 0);
+    --header-background-color: #1c1c1c;
 }
 
 /* Light mode */
@@ -13,7 +14,7 @@ body.light-mode {
     --text-color: #000;
     --button-background: #fff;
     --button-border: #ccc;
-    ;
+    --header-background-color: #f0f0f0;
 }
 
 html {
