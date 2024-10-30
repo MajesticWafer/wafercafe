@@ -44,72 +44,88 @@
         margin-top: 20px;
       }
 
-      #context-menu { display: none; background: #fff; border: 1px solid #ccc; padding: 10px; border-radius: 5px; box-shadow: 0px 4px 8px rgba(0,0,0,0.2); }
-      #context-menu button { display: block; background: none; border: none; padding: 8px; cursor: pointer; width: 100%; text-align: left; }
-      #context-menu button:hover { background-color: #f0f0f0; }
+      /* Right-click menu styling */
+      .context-menu {
+        display: none;
+        position: absolute;
+        background-color: #1e1e1e;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
+        padding: 8px 0;
+        width: 180px;
+        border-radius: 5px;
+        z-index: 10;
+      }
+
+      .context-menu-item {
+        color: #ffffff;
+        padding: 10px 15px;
+        cursor: pointer;
+        font-size: 14px;
+        font-family: 'Poppins', sans-serif;
+        transition: background-color 0.2s;
+      }
+
+      .context-menu-item:hover {
+        background-color: #333333;
+      }
     </style>
   </head>
   <body>
-    <div id="context-menu">
-       <button id="toggle-theme">Toggle Theme</button>
-       <button id="tab-cloak">Cloak Tab</button>
+    <!-- Right-click context menu -->
+    <div id="context-menu" class="context-menu">
+      <div id="change-theme" class="context-menu-item">Change Theme</div>
+      <div id="cloak-tab" class="context-menu-item">Cloak Tab</div>
+      <div id="remove-cloak" class="context-menu-item">Remove Cloak</div>
     </div>
 
     <!-- Popper JS context menu -->
     <script>
-      document.addEventListener("DOMContentLoaded", () => {
-        const contextMenu = document.getElementById("context-menu");
-        let popperInstance = null;
+      const contextMenu = document.getElementById('context-menu');
+      const pageTitle = document.getElementById('page-title');
+      let originalTitle = pageTitle.innerText;
 
-        // Right-click to open the context menu
-        document.addEventListener("contextmenu", (e) => {
-          e.preventDefault();
-          if (popperInstance) popperInstance.destroy();
-      
-          // Show context menu
-          contextMenu.style.display = "block";
+      // Handle right-click event to show the context menu
+      document.addEventListener('contextmenu', (event) => {
+        event.preventDefault();
+        contextMenu.style.display = 'block';
+        contextMenu.style.left = `${event.pageX}px`;
+        contextMenu.style.top = `${event.pageY}px`;
+      });
 
-          // Initialize Popper.js for context menu
-          popperInstance = Popper.createPopper(e.target, contextMenu, {
-            placement: 'right-start',
-            modifiers: [{ name: 'offset', options: { offset: [0, 8] }}],
-          });
+      // Hide context menu on left-click anywhere else
+      document.addEventListener('click', () => {
+        contextMenu.style.display = 'none';
+      });
 
-          // Position near cursor
-          contextMenu.style.left = `${e.pageX}px`;
-          contextMenu.style.top = `${e.pageY}px`;
-        });
+      // Cloak tab functionality
+      document.getElementById('cloak-tab').addEventListener('click', () => {
+        const userTitle = prompt("Enter a title to cloak this tab:");
+        if (userTitle) {
+          localStorage.setItem('cloakedTitle', userTitle);
+          pageTitle.innerText = userTitle;
+          document.title = userTitle;
+        }
+      });
 
-        // Hide the context menu on clicking elsewhere
-        document.addEventListener("click", () => {
-          contextMenu.style.display = "none";
-          if (popperInstance) popperInstance.destroy();
-        });
+      // Remove cloak functionality
+      document.getElementById('remove-cloak').addEventListener('click', () => {
+        localStorage.removeItem('cloakedTitle');
+        pageTitle.innerText = originalTitle;
+        document.title = originalTitle;
+      });
 
-        // Theme toggle button functionality
-        const themeToggle = document.getElementById("toggle-theme");
-        themeToggle.addEventListener("click", () => {
-          document.body.classList.toggle("dark-mode");
-          const currentTheme = document.body.classList.contains("dark-mode") ? "dark-mode" : "light-mode";
-          localStorage.setItem("theme", currentTheme);
-        });
+      // Apply cloaked title on page load if set
+      window.addEventListener('DOMContentLoaded', () => {
+        const cloakedTitle = localStorage.getItem('cloakedTitle');
+        if (cloakedTitle) {
+          pageTitle.innerText = cloakedTitle;
+          document.title = cloakedTitle;
+        }
+      });
 
-        // Tab cloaking functionality
-        const tabCloak = document.getElementById("tab-cloak");
-        tabCloak.addEventListener("click", () => {
-          const newTitle = prompt("Enter a new name for the tab:");
-          if (newTitle) {
-            localStorage.setItem("cloakedTitle", newTitle);
-            document.title = newTitle;
-          }
-        });
-
-        // Set theme and tab title on load
-        const savedTheme = localStorage.getItem("theme");
-        if (savedTheme) document.body.classList.add(savedTheme);
-
-        const cloakedTitle = localStorage.getItem("cloakedTitle");
-        if (cloakedTitle) document.title = cloakedTitle;
+      // Theme toggle functionality (example implementation)
+      document.getElementById('change-theme').addEventListener('click', () => {
+        document.body.classList.toggle('light-mode');
       });
     </script>
 
