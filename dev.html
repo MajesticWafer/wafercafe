@@ -82,20 +82,31 @@
     <script>
       const contextMenu = document.getElementById('context-menu');
       const pageTitle = document.getElementById('page-title');
+      const toggleMenuButton = document.getElementById('toggle-menu');
       let originalTitle = pageTitle.innerText;
 
-      // Handle right-click event to show the context menu
-      document.addEventListener('contextmenu', (event) => {
-        event.preventDefault();
-        contextMenu.style.display = 'block';
-        contextMenu.style.left = `${event.pageX}px`;
-        contextMenu.style.top = `${event.pageY}px`;
+      // Handle manual menu toggle for testing
+      toggleMenuButton.addEventListener('click', () => {
+        toggleContextMenu(window.innerWidth / 2, window.innerHeight / 2);
       });
 
-      // Hide context menu on left-click anywhere else
-      document.addEventListener('click', () => {
-        contextMenu.style.display = 'none';
+      // Keyboard shortcut (Ctrl + M) to open menu at screen center
+      document.addEventListener('keydown', (event) => {
+        if (event.ctrlKey && event.key === 'm') {
+          toggleContextMenu(window.innerWidth / 2, window.innerHeight / 2);
+        }
       });
+
+      // Toggle the display of the context menu at specified coordinates
+      function toggleContextMenu(x, y) {
+        if (contextMenu.style.display === 'block') {
+          contextMenu.style.display = 'none';
+        } else {
+          contextMenu.style.display = 'block';
+          contextMenu.style.left = `${x}px`;
+          contextMenu.style.top = `${y}px`;
+        }
+      }
 
       // Cloak tab functionality
       document.getElementById('cloak-tab').addEventListener('click', () => {
@@ -128,7 +139,7 @@
         document.body.classList.toggle('light-mode');
       });
     </script>
-
+    
     <!-- JavaScript for Adblock Detection and Alert -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -168,6 +179,8 @@
       <p>By clicking “Accept all cookies”, you agree Wafer Café can store cookies on your device. <button id="agree-btn">Accept all cookies</button>
       </p>
     </div>
+
+    <button id="toggle-menu" style="position: fixed; top: 20px; right: 20px;">Toggle Menu</button>
     
     <script>
       window.onload = function() {
