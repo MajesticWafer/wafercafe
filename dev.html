@@ -48,7 +48,7 @@
       .context-menu {
         display: none;
         position: absolute;
-        background-color: #1e1e1e;
+        background-color: #1c1c1c;
         box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.5);
         padding: 8px 0;
         width: 180px;
@@ -82,30 +82,13 @@
     <script>
       const contextMenu = document.getElementById('context-menu');
       const pageTitle = document.getElementById('page-title');
-      const toggleMenuButton = document.getElementById('toggle-menu');
       let originalTitle = pageTitle.innerText;
 
-      // Handle manual menu toggle for testing
-      toggleMenuButton.addEventListener('click', () => {
-        toggleContextMenu(window.innerWidth / 2, window.innerHeight / 2);
-      });
-
-      // Keyboard shortcut (Ctrl + M) to open menu at screen center
-      document.addEventListener('keydown', (event) => {
-        if (event.ctrlKey && event.key === 'm') {
-          toggleContextMenu(window.innerWidth / 2, window.innerHeight / 2);
-        }
-      });
-
-      // Toggle the display of the context menu at specified coordinates
+      // Toggle the context menu display at specific coordinates
       function toggleContextMenu(x, y) {
-        if (contextMenu.style.display === 'block') {
-          contextMenu.style.display = 'none';
-        } else {
-          contextMenu.style.display = 'block';
-          contextMenu.style.left = `${x}px`;
-          contextMenu.style.top = `${y}px`;
-        }
+        contextMenu.style.display = contextMenu.style.display === 'block' ? 'none' : 'block';
+        contextMenu.style.left = `${x}px`;
+        contextMenu.style.top = `${y}px`;
       }
 
       // Cloak tab functionality
@@ -134,9 +117,22 @@
         }
       });
 
-      // Theme toggle functionality (example implementation)
+      // Change theme functionality (example implementation)
       document.getElementById('change-theme').addEventListener('click', () => {
         document.body.classList.toggle('light-mode');
+      });
+
+      // Event listener to open context menu on right-click
+      document.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        toggleContextMenu(e.pageX, e.pageY);
+      });
+
+      // Close context menu on outside click
+      document.addEventListener('click', () => {
+        if (contextMenu.style.display === 'block') {
+          contextMenu.style.display = 'none';
+        }
       });
     </script>
     
