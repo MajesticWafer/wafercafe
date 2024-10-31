@@ -3,30 +3,21 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sleek Popper.js Right-Click Menu</title>
+  <title>Popper.js Right-Click Menu</title>
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f4f4f7;
-      margin: 0;
-      padding: 0;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
     .menu {
       display: none;
       position: absolute;
-      background: rgba(50, 50, 50, 0.8);
-      backdrop-filter: blur(10px);
-      color: #ffffff;
+      background-color: rgba(50, 50, 50, 0.8);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-      border-radius: 12px;
-      padding: 10px;
-      width: 180px;
+      backdrop-filter: blur(10px);
+      padding: 12px;
       z-index: 1000;
+      border-radius: 12px
     }
 
     .menu ul {
@@ -36,31 +27,22 @@
     }
 
     .menu li {
-      padding: 10px 16px;
+      padding: 8px 12px;
       cursor: pointer;
-      font-size: 0.9rem;
-      transition: background-color 0.2s;
-      border-radius: 8px;
+      border-radius: 8px
     }
 
     .menu li:hover {
-      background-color: rgba(255, 255, 255, 0.2);
-    }
-
-    p {
-      font-size: 1rem;
-      color: #333;
-      text-align: center;
+      background-color: #e0e0e0;
     }
   </style>
 </head>
 <body>
   <div id="contextMenu" class="menu">
     <ul>
-      <li>Open</li>
-      <li>Copy</li>
-      <li>Paste</li>
-      <li>Delete</li>
+      <li>Option 1</li>
+      <li>Option 2</li>
+      <li>Option 3</li>
     </ul>
   </div>
 
