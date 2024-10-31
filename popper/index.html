@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Popper.js Right-Click Menu</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .menu {
+      display: none;
+      position: absolute;
+      background-color: #f9f9f9;
+      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+      padding: 12px;
+      z-index: 1000;
+      border-radius: 8px;
+    }
+
+    .menu ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .menu li {
+      padding: 8px 12px;
+      cursor: pointer;
+    }
+
+    .menu li:hover {
+      background-color: #e0e0e0;
+    }
+  </style>
+</head>
+<body>
+  <div id="contextMenu" class="menu">
+    <ul>
+      <li>Option 1</li>
+      <li>Option 2</li>
+      <li>Option 3</li>
+    </ul>
+  </div>
+
+  <p>Right-click anywhere on this page to open the custom context menu.</p>
+
+  <script src="https://unpkg.com/@popperjs/core@2"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const contextMenu = document.getElementById("contextMenu");
+
+      // Function to hide the context menu
+      function hideContextMenu() {
+        contextMenu.style.display = "none";
+      }
+
+      // Event listener for right-click to show the context menu
+      document.addEventListener("contextmenu", (event) => {
+        event.preventDefault(); // Prevent default context menu
+
+        // Position the custom menu using Popper.js
+        contextMenu.style.display = "block";
+        Popper.createPopper(event.target, contextMenu, {
+          placement: 'bottom-start',
+          modifiers: [
+            {
+              name: 'offset',
+              options: { offset: [event.clientX, event.clientY] },
+            },
+          ],
+        });
+      });
+
+      // Event listener for click outside the menu to hide it
+      document.addEventListener("click", () => hideContextMenu());
+
+      // Hide menu when clicking a menu item
+      contextMenu.addEventListener("click", hideContextMenu);
+    });
+  </script>
+</body>
+</html>
