@@ -3,20 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Popper.js Right-Click Menu</title>
+  <title>Modern Right-Click Menu</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f5f5f5;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
     }
 
     .menu {
       display: none;
       position: absolute;
-      background-color: #f9f9f9;
-      box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-      padding: 12px;
+      background-color: #ffffff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      border-radius: 12px;
+      overflow: hidden;
+      opacity: 0;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      transform: scale(0.95);
       z-index: 1000;
-      border-radius: 8px;
     }
 
     .menu ul {
@@ -26,12 +35,15 @@
     }
 
     .menu li {
-      padding: 8px 12px;
+      padding: 10px 20px;
       cursor: pointer;
+      font-size: 14px;
+      color: #333;
+      transition: background-color 0.2s ease;
     }
 
     .menu li:hover {
-      background-color: #e0e0e0;
+      background-color: #e5e5e5;
     }
   </style>
 </head>
@@ -51,17 +63,30 @@
     document.addEventListener("DOMContentLoaded", () => {
       const contextMenu = document.getElementById("contextMenu");
 
-      // Function to hide the context menu
+      // Function to show the context menu with fade-in animation
+      function showContextMenu(x, y) {
+        contextMenu.style.display = "block";
+        contextMenu.style.opacity = "1";
+        contextMenu.style.transform = "scale(1)";
+        contextMenu.style.left = `${x}px`;
+        contextMenu.style.top = `${y}px`;
+      }
+
+      // Function to hide the context menu with fade-out animation
       function hideContextMenu() {
-        contextMenu.style.display = "none";
+        contextMenu.style.opacity = "0";
+        contextMenu.style.transform = "scale(0.95)";
+        setTimeout(() => {
+          contextMenu.style.display = "none";
+        }, 200); // match this to the CSS transition duration
       }
 
       // Event listener for right-click to show the context menu
       document.addEventListener("contextmenu", (event) => {
         event.preventDefault(); // Prevent default context menu
 
-        // Position the custom menu using Popper.js
-        contextMenu.style.display = "block";
+        // Set the position for the custom menu using Popper.js
+        showContextMenu(event.clientX, event.clientY);
         Popper.createPopper(event.target, contextMenu, {
           placement: 'bottom-start',
           modifiers: [
