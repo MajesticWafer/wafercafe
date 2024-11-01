@@ -31,20 +31,25 @@
         const geometry = new THREE.BoxGeometry(1, 1, 1);
         const material = new THREE.MeshStandardMaterial({ color: 0x808080 });
 
-        // Create the first cube at position (0, -1, 0)
+        // Create the first cube at position (-0.5, 0, 0)
         const cube1 = new THREE.Mesh(geometry, material);
-        cube1.position.set(0, -1, 0);
+        cube1.position.set(-0.5, 0, 0);
         scene.add(cube1);
 
-        // Create the second cube at position (0, 1, 0)
+        // Create the second cube at position (0.5, 0, 0)
         const cube2 = new THREE.Mesh(geometry, material);
-        cube2.position.set(0, 1, 0);
+        cube2.position.set(0.5, 0, 0);
         scene.add(cube2);
 
-        // Add a point light at position (3, 0, 0)
-        const light = new THREE.PointLight(0xffffff, 1, 100);
-        light.position.set(3, 0, 0);
-        scene.add(light);
+        // Add a point light at position (3, 0, 0) to the right of the cubes
+        const sideLight = new THREE.PointLight(0xffffff, 1, 100);
+        sideLight.position.set(3, 0, 0);
+        scene.add(sideLight);
+
+        // Add a central point light at position (0, 0, 0)
+        const centerLight = new THREE.PointLight(0xffffff, 1, 100);
+        centerLight.position.set(0, 0, 0);
+        scene.add(centerLight);
 
         // Render the scene
         function animate() {
