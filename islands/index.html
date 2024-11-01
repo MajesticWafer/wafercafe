@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive 3D Cubes</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            background: radial-gradient(circle, #2e2e2e, #000000);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #slider-container {
+            position: absolute;
+            bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #ffffff;
+        }
+        #slider-label {
+            margin-bottom: 5px;
+            font-size: 18px;
+            text-align: center;
+        }
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 300px;
+            height: 8px;
+            background: #444;
+            border-radius: 5px;
+            outline: none;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #1e90ff;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: #1e90ff;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div id="slider-container">
+    <div id="slider-label">Move Cubes</div>
+    <input type="range" id="moveSlider" min="0" max="1" step="1" value="0">
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+    // Set up scene, camera, and renderer
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Add lighting
+    const light = new THREE.DirectionalLight(0xffffff, 0.8);
+    light.position.set(5, 5, 5);
+    scene.add(light);
+    const ambientLight = new THREE.AmbientLight(0x404040);
+    scene.add(ambientLight);
+
+    // Create two cubes with materials
+    const geometry = new THREE.BoxGeometry();
+    const material1 = new THREE.MeshStandardMaterial({ color: 0xff5733, roughness: 0.5, metalness: 0.2 });
+    const material2 = new THREE.MeshStandardMaterial({ color: 0x33c4ff, roughness: 0.5, metalness: 0.2 });
+
+    const cube1 = new THREE.Mesh(geometry, material1);
+    const cube2 = new THREE.Mesh(geometry, material2);
+    cube1.position.set(-1, 0, 0);  // Position first cube slightly to the left
+    cube2.position.set(1, 0, 0);   // Position second cube slightly to the right
+
+    scene.add(cube1);
+    scene.add(cube2);
+
+    camera.position.z = 5;
+
+    // Initial cube state
+    let sliderState = 0;
+
+    // Handle slider input
+    document.getElementById("moveSlider").addEventListener("input", (event) => {
+        sliderState = Number(event.target.value);
+
+        if (sliderState === 1) {
+            // Move cubes apart and rotate the touching faces towards the camera
+            cube1.position.set(-2, 0, 0);
+            cube2.position.set(2, 0, 0);
+            cube1.rotation.y = Math.PI / 2;
+            cube2.rotation.y = -Math.PI / 2;
+        } else {
+            // Reset cubes to original position and rotation
+            cube1.position.set(-1, 0, 0);
+            cube2.position.set(1, 0, 0);
+            cube1.rotation.y = 0;
+            cube2.rotation.y = 0;
+        }
+    });
+
+    // Render loop
+    function animate() {
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    // Handle window resizing
+    window.addEventListener('resize', () => {
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+    });
+</script>
+
+</body>
+</html>
