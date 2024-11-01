@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive 3D Cubes</title>
+    <title>Interactive 3D Cubes with Smooth Animation</title>
     <style>
         body, html {
             margin: 0;
             padding: 0;
             overflow: hidden;
             font-family: Arial, sans-serif;
-            background: radial-gradient(circle, #2e2e2e, #000000);
+            background: #ffffff;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -22,7 +22,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            color: #ffffff;
+            color: #333333;
         }
         #slider-label {
             margin-bottom: 5px;
@@ -33,7 +33,7 @@
             -webkit-appearance: none;
             width: 300px;
             height: 8px;
-            background: #444;
+            background: #cccccc;
             border-radius: 5px;
             outline: none;
             opacity: 0.7;
@@ -44,14 +44,14 @@
             appearance: none;
             width: 20px;
             height: 20px;
-            background: #1e90ff;
+            background: #888888;
             border-radius: 50%;
             cursor: pointer;
         }
         input[type="range"]::-moz-range-thumb {
             width: 20px;
             height: 20px;
-            background: #1e90ff;
+            background: #888888;
             border-radius: 50%;
             cursor: pointer;
         }
@@ -71,6 +71,7 @@
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0xffffff);  // Set background to white
     document.body.appendChild(renderer.domElement);
 
     // Add lighting
@@ -80,13 +81,12 @@
     const ambientLight = new THREE.AmbientLight(0x404040);
     scene.add(ambientLight);
 
-    // Create two cubes with materials
+    // Create two cubes with light gray color materials
     const geometry = new THREE.BoxGeometry();
-    const material1 = new THREE.MeshStandardMaterial({ color: 0xff5733, roughness: 0.5, metalness: 0.2 });
-    const material2 = new THREE.MeshStandardMaterial({ color: 0x33c4ff, roughness: 0.5, metalness: 0.2 });
+    const material = new THREE.MeshStandardMaterial({ color: 0xd3d3d3, roughness: 0.5, metalness: 0.2 });
 
-    const cube1 = new THREE.Mesh(geometry, material1);
-    const cube2 = new THREE.Mesh(geometry, material2);
+    const cube1 = new THREE.Mesh(geometry, material);
+    const cube2 = new THREE.Mesh(geometry, material);
     cube1.position.set(-1, 0, 0);  // Position first cube slightly to the left
     cube2.position.set(1, 0, 0);   // Position second cube slightly to the right
 
@@ -97,29 +97,48 @@
 
     // Initial cube state
     let sliderState = 0;
+    let animationProgress = 0; // Animation progress from 0 to 1
+
+    // Cubic Bézier function for Blender-like smooth animation
+    function cubicBezier(t, p0, p1, p2, p3) {
+        const cX = 3 * (p1 - p0);
+        const bX = 3 * (p2 - p1) - cX;
+        const aX = p3 - p0 - cX - bX;
+        return ((aX * t + bX) * t + cX) * t + p0;
+    }
+
+    function animateCubes() {
+        const smoothProgress = cubicBezier(animationProgress, 0, 0.25, 0.75, 1); // Smooth easing curve
+
+        // Move and rotate cubes based on the slider state
+        if (sliderState === 1) {
+            cube1.position.set(-1 - smoothProgress, 0, 0);
+            cube2.position.set(1 + smoothProgress, 0, 0);
+            cube1.rotation.y = Math.PI / 2 * smoothProgress;
+            cube2.rotation.y = -Math.PI / 2 * smoothProgress;
+        } else {
+            cube1.position.set(-1 + smoothProgress, 0, 0);
+            cube2.position.set(1 - smoothProgress, 0, 0);
+            cube1.rotation.y = Math.PI / 2 * (1 - smoothProgress);
+            cube2.rotation.y = -Math.PI / 2 * (1 - smoothProgress);
+        }
+    }
 
     // Handle slider input
     document.getElementById("moveSlider").addEventListener("input", (event) => {
         sliderState = Number(event.target.value);
-
-        if (sliderState === 1) {
-            // Move cubes apart and rotate the touching faces towards the camera
-            cube1.position.set(-2, 0, 0);
-            cube2.position.set(2, 0, 0);
-            cube1.rotation.y = Math.PI / 2;
-            cube2.rotation.y = -Math.PI / 2;
-        } else {
-            // Reset cubes to original position and rotation
-            cube1.position.set(-1, 0, 0);
-            cube2.position.set(1, 0, 0);
-            cube1.rotation.y = 0;
-            cube2.rotation.y = 0;
-        }
+        animationProgress = 0; // Reset animation progress
     });
 
     // Render loop
     function animate() {
         requestAnimationFrame(animate);
+
+        if (animationProgress < 1) {
+            animationProgress += 0.02; // Adjust for smoother/slower animation if needed
+        }
+
+        animateCubes();
         renderer.render(scene, camera);
     }
     animate();
