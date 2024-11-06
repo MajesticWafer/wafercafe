@@ -9,9 +9,15 @@
 <body>
   <div id="contextMenu" class="menu">
     <ul>
-      <li>Option 1</li>
-      <li>Option 2</li>
-      <li>Option 3</li>
+      <li id="cloakTab">Cloak Tab</li>
+      <li id="removeCloak">Remove Cloak</li>
+      <hr style="border: 1px solid #ccc;">
+      <li>Change Theme</li>
+      <hr style="border: 1px solid #ccc;">
+      <li>
+        <label for="cloakInput">Enter Custom Cloak Name:</label>
+        <input type="text" id="cloakInput" placeholder="Enter a cloak name">
+      </li>
     </ul>
   </div>
 
@@ -21,6 +27,10 @@
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const contextMenu = document.getElementById("contextMenu");
+      const cloakTab = document.getElementById("cloakTab");
+      const removeCloak = document.getElementById("removeCloak");
+      const cloakInput = document.getElementById("cloakInput");
+      let originalTitle = document.title; // Save the original title
 
       // Function to hide the context menu
       function hideContextMenu() {
@@ -49,6 +59,22 @@
 
       // Hide menu when clicking a menu item
       contextMenu.addEventListener("click", hideContextMenu);
+
+      // Cloak the tab title with the custom input name
+      cloakTab.addEventListener("click", () => {
+        const customName = cloakInput.value.trim(); // Get the custom name entered by the user
+        if (customName) {
+          originalTitle = document.title; // Store the original title before cloaking
+          document.title = customName; // Set the tab title to the custom name
+        } else {
+          alert("Please enter a custom cloak name!");
+        }
+      });
+
+      // Remove the cloak from the tab title
+      removeCloak.addEventListener("click", () => {
+        document.title = originalTitle; // Restore the original title
+      });
     });
   </script>
 </body>
