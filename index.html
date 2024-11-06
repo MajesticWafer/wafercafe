@@ -11,6 +11,7 @@
     
     <!-- Styles and Fonts -->
     <link rel="stylesheet" href="head/styles.css">
+    <link rel="stylesheet" href="head/context-menu.css">
     <link rel="icon" type="image/jpeg" href="head/favicon.jpeg">
     
     <!-- Google AdSense -->
@@ -38,6 +39,71 @@
     </style>
   </head>
   <body>
+    <div id="contextMenu" class="menu">
+    <ul>
+      <li id="cloakTab">Cloak Tab</li>
+      <li id="removeCloak">Remove Cloak</li>
+      <hr style="border: 1px solid #ccc;">
+      <li>Change Theme</li>
+    </ul>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const contextMenu = document.getElementById("contextMenu");
+      const cloakTab = document.getElementById("cloakTab");
+      const removeCloak = document.getElementById("removeCloak");
+      let originalTitle = document.title; // Save the original title
+
+      // Function to hide the context menu
+      function hideContextMenu() {
+        contextMenu.style.display = "none";
+      }
+
+      // Event listener for right-click to show the context menu
+      document.addEventListener("contextmenu", (event) => {
+        event.preventDefault(); // Prevent default context menu
+
+        // Position the custom menu using Popper.js
+        contextMenu.style.display = "block";
+        Popper.createPopper(event.target, contextMenu, {
+          placement: 'bottom-start',
+          modifiers: [
+            {
+              name: 'offset',
+              options: { offset: [event.clientX, event.clientY] },
+            },
+          ],
+        });
+      });
+
+      // Event listener for click outside the menu to hide it
+      document.addEventListener("click", () => hideContextMenu());
+
+      // Hide menu when clicking a menu item
+      contextMenu.addEventListener("click", hideContextMenu);
+
+      // Cloak the tab title with the custom input name from the prompt
+      cloakTab.addEventListener("click", () => {
+        const customName = prompt("Enter a custom cloak name:"); // Show prompt to enter a name
+        if (customName && customName.trim() !== "") {
+          originalTitle = document.title; // Store the original title before cloaking
+          document.title = customName.trim(); // Set the tab title to the custom name
+        } else if (customName === null) {
+          // User clicked cancel on the prompt
+          alert("You canceled the cloak tab action.");
+        } else {
+          alert("Please enter a valid cloak name!");
+        }
+      });
+
+      // Remove the cloak from the tab title
+      removeCloak.addEventListener("click", () => {
+        document.title = originalTitle; // Restore the original title
+      });
+    });
+  </script>
+    
     <!-- JavaScript for Adblock Detection and Alert -->
     <script>
         document.addEventListener("DOMContentLoaded", function () {
