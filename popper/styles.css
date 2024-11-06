@@ -1,0 +1,52 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+.menu {
+    display: none;
+    position: absolute;
+    background-color: rgba(50, 50, 50, 0.95); /* Darker, more subtle background */
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3); /* Softer shadow */
+    backdrop-filter: blur(12px); /* Increased blur for a frosted effect */
+    padding: 10px; /* Slightly smaller padding */
+    z-index: 1000;
+    border-radius: 10px; /* Softer rounded corners */
+    border: 1px solid rgba(255, 255, 255, 0.1); /* Lighter, thin border */
+    color: white;
+    transition: opacity 0.2s ease, transform 0.1s ease;
+    transform: scale(0.95); /* Initial slight scale for animation */
+    opacity: 0;
+}
+
+.menu.show {
+    display: block;
+    transform: scale(1); /* Smooth scaling animation */
+    opacity: 1;
+}
+
+.menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu li {
+    padding: 10px 16px; /* Increased padding for a more spacious feel */
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background-color 0.15s ease; /* Smooth hover transition */
+    display: flex;
+    align-items: center;
+}
+
+.menu li:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Light hover effect */
+}
+
+.menu li::before {
+    content: "•"; /* Optional bullet icon for each item */
+    font-size: 1.2em;
+    color: #ccc;
+    margin-right: 8px;
+    opacity: 0.8;
+}
