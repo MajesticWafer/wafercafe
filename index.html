@@ -35,11 +35,6 @@
         height: 92vh;
         z-index: -1;
       }
-
-      .random-button-container {
-        margin-top: 20px;
-        font-family: 'SegoeUIVF', sans-serif;
-      }
     </style>
   </head>
   <body>
@@ -63,6 +58,9 @@
                 }
 
                 if (adblockDetected) {
+                  if (sessionStorage.getItem("ad-warning") === "false") {
+                    console.log("Ads warning already shown this browser session. Dismissing popup.");
+                  } else {
                     Swal.fire({
                         title: "Ad Blocker Detected!",
                         text: "Our site relies on ads to stay free. Please consider disabling your ad blocker for the best experience.",
@@ -70,7 +68,13 @@
                         confirmButtonText: "Okay, I’ll disable it",
                         showCancelButton: true,
                         cancelButtonText: "Continue with Ads Blocked"
+                    }).then((result) => {
+                        if (result.dismiss === Swal.DismissReason.cancel) {
+                            // will clear the value after browser session is closed
+                            sessionStorage.setItem("ad-warning", "false");
+                        }
                     });
+                  }
                 }
             }, 2000); // delay to allow ad slot to load
         });
@@ -150,12 +154,6 @@
       </div>
     </div>
     
-    <!-- Game buttons container -->
-    <div class="random-button-container">
-      <button id="random-game">Random Game <i class="bi bi-dice-3-fill"></i>
-      </button>
-    </div>
-    
     <div class="container"></div>
 
     <!-- Ad Container -->
@@ -194,14 +192,6 @@
           localStorage.setItem('theme', newTheme);
           themeToggle.innerHTML = isLightMode ? '<i class="bi bi-moon"></i>' : '<i class="bi bi-sun"></i>';
           loadParticles(newTheme);
-        });
-        // Random game function
-        document.getElementById('random-game').addEventListener('click', function() {
-          const games = document.querySelectorAll('.button-container');
-          const randomGame = games[Math.floor(Math.random() * games.length)];
-          const onClickValue = randomGame.getAttribute('onclick');
-          const url = onClickValue.match(/location\.href='([^']+)'/)[1];
-          window.location.href = url;
         });
       });
     </script>
