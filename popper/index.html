@@ -22,14 +22,19 @@
     document.addEventListener("DOMContentLoaded", () => {
       const contextMenu = document.getElementById("contextMenu");
 
-      // Function to show the context menu at the cursor's position
-      function showContextMenu(event) {
-        event.preventDefault();
-        
-        // Use Popper.js to position the menu at the click location
+      // Function to hide the context menu
+      function hideContextMenu() {
+        contextMenu.style.display = "none";
+      }
+
+      // Event listener for right-click to show the context menu
+      document.addEventListener("contextmenu", (event) => {
+        event.preventDefault(); // Prevent default context menu
+
+        // Position the custom menu using Popper.js
         contextMenu.style.display = "block";
-        Popper.createPopper(document.body, contextMenu, {
-          placement: 'right-start',
+        Popper.createPopper(event.target, contextMenu, {
+          placement: 'bottom-start',
           modifiers: [
             {
               name: 'offset',
@@ -37,24 +42,12 @@
             },
           ],
         });
-
-        // Manually adjust menu position based on mouse click coordinates
-        contextMenu.style.top = `${event.clientY}px`;
-        contextMenu.style.left = `${event.clientX}px`;
-      }
-
-      // Function to hide the context menu
-      function hideContextMenu() {
-        contextMenu.style.display = "none";
-      }
-
-      // Event listener for right-click to show the context menu
-      document.addEventListener("contextmenu", showContextMenu);
+      });
 
       // Event listener for click outside the menu to hide it
-      document.addEventListener("click", hideContextMenu);
+      document.addEventListener("click", () => hideContextMenu());
 
-      // Event listener to hide the menu when clicking a menu item
+      // Hide menu when clicking a menu item
       contextMenu.addEventListener("click", hideContextMenu);
     });
   </script>
