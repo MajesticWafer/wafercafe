@@ -13,15 +13,6 @@ body {
     border-radius: 10px; /* Softer rounded corners */
     border: 1px solid rgba(255, 255, 255, 0.1); /* Lighter, thin border */
     color: white;
-    transition: opacity 0.2s ease, transform 0.1s ease;
-    transform: scale(0.95); /* Initial slight scale for animation */
-    opacity: 0;
-}
-
-.menu.show {
-    display: block;
-    transform: scale(1); /* Smooth scaling animation */
-    opacity: 1;
 }
 
 .menu ul {
@@ -44,7 +35,7 @@ body {
 }
 
 .menu li::before {
-    content: "•"; /* Optional bullet icon for each item */
+    content: "•";
     font-size: 1.2em;
     color: #ccc;
     margin-right: 8px;
