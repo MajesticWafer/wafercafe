@@ -19,10 +19,15 @@ html {
     scroll-behavior: smooth;
 }
 
+@font-face {
+  font-family: 'SegoeUIVF';
+  src: url('SegoeUIVF.ttf') format('truetype');
+}
+
 body {
     background-color: var(--background-color);
     color: var(--text-color);
-    font-family: 'Poppins', sans-serif;
+    font-family: 'SegoeUIVF', sans-serif;
     transition: background-color 0.3s ease, color 0.3s ease;
     overflow-x: hidden;
 }
