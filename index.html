@@ -44,12 +44,53 @@
       <li id="cloakTab">Cloak Tab</li>
       <li id="removeCloak">Remove Cloak</li>
       <hr style="border: 1px solid #ccc;">
-      <li>Change Theme</li>
+      <li id="changeTheme">Change Theme</li>
     </ul>
-  </div>
+    </div>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const adSlot = document.getElementById("ad-slot");
+            let adblockDetected = false;
 
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
+            // Method 1: Check if ad script runs
+            try {
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            } catch (e) {
+                adblockDetected = true;
+            }
+
+            // Method 2: Check ad slot visibility (backup for stricter network blocks)
+            setTimeout(() => {
+                if (adSlot.offsetHeight === 0) {
+                    adblockDetected = true;
+                }
+
+                if (adblockDetected) {
+                  if (sessionStorage.getItem("ad-warning") === "false") {
+                    console.log("Ads warning already shown this browser session. Dismissing popup.");
+                  } else {
+                    Swal.fire({
+                        title: "Ad Blocker Detected!",
+                        text: "Our site relies on ads to stay free. Please consider disabling your ad blocker for the best experience.",
+                        icon: "warning",
+                        confirmButtonText: "Okay, I’ll disable it",
+                        showCancelButton: true,
+                        cancelButtonText: "Continue with Ads Blocked"
+                    }).then((result) => {
+                        if (result.dismiss === Swal.DismissReason.cancel) {
+                            // will clear the value after browser session is closed
+                            sessionStorage.setItem("ad-warning", "false");
+                        }
+                    });
+                  }
+                }
+            }, 2000); // delay to allow ad slot to load
+        });
+
+      // |------------|
+      // |Context Menu|
+      // |------------|
       const contextMenu = document.getElementById("contextMenu");
       const cloakTab = document.getElementById("cloakTab");
       const removeCloak = document.getElementById("removeCloak");
@@ -102,48 +143,6 @@
         document.title = originalTitle; // Restore the original title
       });
     });
-  </script>
-    
-    <!-- JavaScript for Adblock Detection and Alert -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const adSlot = document.getElementById("ad-slot");
-            let adblockDetected = false;
-
-            // Method 1: Check if ad script runs
-            try {
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            } catch (e) {
-                adblockDetected = true;
-            }
-
-            // Method 2: Check ad slot visibility (backup for stricter network blocks)
-            setTimeout(() => {
-                if (adSlot.offsetHeight === 0) {
-                    adblockDetected = true;
-                }
-
-                if (adblockDetected) {
-                  if (sessionStorage.getItem("ad-warning") === "false") {
-                    console.log("Ads warning already shown this browser session. Dismissing popup.");
-                  } else {
-                    Swal.fire({
-                        title: "Ad Blocker Detected!",
-                        text: "Our site relies on ads to stay free. Please consider disabling your ad blocker for the best experience.",
-                        icon: "warning",
-                        confirmButtonText: "Okay, I’ll disable it",
-                        showCancelButton: true,
-                        cancelButtonText: "Continue with Ads Blocked"
-                    }).then((result) => {
-                        if (result.dismiss === Swal.DismissReason.cancel) {
-                            // will clear the value after browser session is closed
-                            sessionStorage.setItem("ad-warning", "false");
-                        }
-                    });
-                  }
-                }
-            }, 2000); // delay to allow ad slot to load
-        });
     </script>
     
     <!-- CP Footer Bar -->
@@ -236,6 +235,7 @@
         const particlesToggle = document.getElementById('particles-toggle');
         const particlesContainer = document.getElementById('particles-js');
         const themeToggle = document.getElementById('theme-toggle');
+        const changeTheme = document.getElementById('changeTheme');
         // Load and save particles setting in localStorage
         const savedParticlesSetting = JSON.parse(localStorage.getItem('particlesEnabled')) ?? true;
     
@@ -257,6 +257,12 @@
           const newTheme = isLightMode ? 'light-mode' : 'dark-mode';
           localStorage.setItem('theme', newTheme);
           themeToggle.innerHTML = isLightMode ? '<i class="bi bi-moon"></i>' : '<i class="bi bi-sun"></i>';
+          loadParticles(newTheme);
+        });
+        changeTheme.addEventListener('click', function() {
+          const isLightMode = document.body.classList.toggle('light-mode');
+          const newTheme = isLightMode ? 'light-mode' : 'dark-mode';
+          localStorage.setItem('theme', newTheme);
           loadParticles(newTheme);
         });
       });
