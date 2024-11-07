@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 80%;
+        }
+        .translation-panel {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .translation-panel textarea {
+            width: 45%;
+            height: 200px;
+            font-size: 16px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .mirror-view .translated-text {
+            transform: scaleX(-1);
+        }
+        .options {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Language Translator</h1>
+        
+        <!-- Language Selection -->
+        <div>
+            <label for="source-lang">From:</label>
+            <select id="source-lang">
+                <option value="en">English</option>
+                <option value="zh">Chinese</option>
+                <option value="hi">Hindi</option>
+                <option value="es">Spanish</option>
+                <option value="fr">French</option>
+                <option value="ar">Arabic</option>
+                <option value="bn">Bengali</option>
+                <option value="ru">Russian</option>
+                <option value="pt">Portuguese</option>
+                <option value="id">Indonesian</option>
+            </select>
+
+            <label for="target-lang">To:</label>
+            <select id="target-lang">
+                <option value="en">English</option>
+                <option value="zh">Chinese</option>
+                <option value="hi">Hindi</option>
+                <option value="es">Spanish</option>
+                <option value="fr">French</option>
+                <option value="ar">Arabic</option>
+                <option value="bn">Bengali</option>
+                <option value="ru">Russian</option>
+                <option value="pt">Portuguese</option>
+                <option value="id">Indonesian</option>
+            </select>
+        </div>
+        
+        <!-- Text Translation Area -->
+        <div class="translation-panel" id="translationPanel">
+            <textarea id="input-text" placeholder="Type text here..."></textarea>
+            <textarea id="translated-text" readonly placeholder="Translated text will appear here..."></textarea>
+        </div>
+        
+        <!-- Options for View Mode -->
+        <div class="options">
+            <label><input type="radio" name="view-mode" value="normal" checked> Side-by-Side View</label>
+            <label><input type="radio" name="view-mode" value="mirror"> Mirrored View</label>
+        </div>
+    </div>
+
+    <script>
+        // Set up event listeners for translation and view mode
+        const inputText = document.getElementById('input-text');
+        const translatedText = document.getElementById('translated-text');
+        const sourceLang = document.getElementById('source-lang');
+        const targetLang = document.getElementById('target-lang');
+        const translationPanel = document.getElementById('translationPanel');
+        
+        document.querySelectorAll('input[name="view-mode"]').forEach((radio) => {
+            radio.addEventListener('change', () => {
+                translationPanel.className = radio.value === 'mirror' ? 'translation-panel mirror-view' : 'translation-panel';
+            });
+        });
+
+        // Translate function using LibreTranslate API
+        async function translateText(text, source, target) {
+            try {
+                const response = await fetch("https://translate.argosopentech.com/translate", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        q: text,
+                        source: source,
+                        target: target,
+                        format: "text"
+                    })
+                });
+                const data = await response.json();
+                translatedText.value = data.translatedText;
+            } catch (error) {
+                translatedText.value = "Translation failed. Please try again.";
+            }
+        }
+
+        inputText.addEventListener('input', () => {
+            translateText(inputText.value, sourceLang.value, targetLang.value);
+        });
+    </script>
+</body>
+</html>
