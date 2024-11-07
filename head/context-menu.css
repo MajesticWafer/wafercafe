@@ -14,6 +14,7 @@
 .menu.light-mode {
     background-color: rgba(205, 205, 205, 0.95); /* Lighter, more subtle background */
     border: 1px solid rgba(0, 0, 0, 0.1); /* Lighter, thin border */
+    color: black;
 }
 
 .menu ul {
@@ -45,4 +46,8 @@
     color: #ccc;
     margin-right: 8px;
     opacity: 0.8;
+}
+
+.menu.light-mode li::before {
+    color: #333;
 }
