@@ -248,9 +248,12 @@
         
         // Theme toggle functionality
         const savedTheme = localStorage.getItem('theme') || 'dark-mode';
+        const context = document.getElementById("contextMenu");
         document.body.classList.add(savedTheme);
+        context.classList.add("light-mode");
         themeToggle.innerHTML = savedTheme === 'light-mode' ? '<i class="bi bi-moon"></i>' : '<i class="bi bi-sun"></i>';
         loadParticles(savedTheme);
+        
         themeToggle.addEventListener('click', function() {
           const isLightMode = document.body.classList.toggle('light-mode');
           const newTheme = isLightMode ? 'light-mode' : 'dark-mode';
@@ -258,6 +261,7 @@
           themeToggle.innerHTML = isLightMode ? '<i class="bi bi-moon"></i>' : '<i class="bi bi-sun"></i>';
           loadParticles(newTheme);
         });
+        
         changeTheme.addEventListener('click', function() {
           const isLightMode = document.body.classList.toggle('light-mode');
           const newTheme = isLightMode ? 'light-mode' : 'dark-mode';
