@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ads/title>
+    
+    <!-- Styles -->
+    <link rel="stylesheet" href="head/styles.css">
+    <link rel="icon" type="image/jpeg" href="head/favicon.jpeg">
+    
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3575178423806487" crossorigin="anonymous"></script>
+  </head>
+  <body>   
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const adSlot = document.getElementById("ad-slot");
+            let adblockDetected = false;
+
+            // Method 1: Check if ad script runs
+            try {
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            } catch (e) {
+                adblockDetected = true;
+            }
+
+            // Method 2: Check ad slot visibility (backup for stricter network blocks)
+            setTimeout(() => {
+                if (adSlot.offsetHeight === 0) {
+                    adblockDetected = true;
+                }
+
+                if (adblockDetected) {
+                  alert("Adblock was detected.");
+                } else {
+                  alert("Adblock was not detected.");
+                }
+            }, 2000); // delay to allow ad slot to load
+        });
+    </script>
+
+    <!-- Ad Container -->
+    <div id="ad-slot" style="width: 300px; height: 250px;">
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+  </body>
+</html>
