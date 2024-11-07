@@ -250,7 +250,7 @@
         const savedTheme = localStorage.getItem('theme') || 'dark-mode';
         const context = document.getElementById("contextMenu");
         document.body.classList.add(savedTheme);
-        context.classList.add("light-mode");
+        context.classList.add(savedTheme);
         themeToggle.innerHTML = savedTheme === 'light-mode' ? '<i class="bi bi-moon"></i>' : '<i class="bi bi-sun"></i>';
         loadParticles(savedTheme);
         
