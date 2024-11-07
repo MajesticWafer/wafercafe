@@ -51,3 +51,11 @@
 .menu.light-mode li::before {
     color: #333;
 }
+
+hr {
+    border: 1px solid #ccc;
+}
+
+hr.light-mode {
+    border: 1px solid #333;
+}
