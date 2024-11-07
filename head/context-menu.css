@@ -11,6 +11,11 @@
     color: white;
 }
 
+.menu.light-mode {
+    background-color: rgba(205, 205, 205, 0.95); /* Lighter, more subtle background */
+    border: 1px solid rgba(0, 0, 0, 0.1); /* Lighter, thin border */
+}
+
 .menu ul {
     list-style: none;
     padding: 0;
@@ -28,6 +33,10 @@
 
 .menu li:hover {
     background-color: rgba(255, 255, 255, 0.1); /* Light hover effect */
+}
+
+.menu.light-mode li:hover {
+    background-color: rgba(0, 0, 0, 0.1); /* Light hover effect */
 }
 
 .menu li::before {
