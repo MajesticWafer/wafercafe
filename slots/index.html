@@ -17,7 +17,7 @@
       color: #fff;
       overflow: hidden;
     }
-   .slot-machine {
+    .slot-machine {
       text-align: center;
       padding: 20px;
       border-radius: 10px;
@@ -43,7 +43,15 @@
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
       overflow: hidden;
-      font-size: 4rem;
+    }
+    .slot .emoji {
+      display: flex;
+      flex-direction: column;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-100%); }
     }
     .buttons {
       margin-top: 20px;
@@ -82,7 +90,7 @@
       font-size: 2rem;
       position: absolute;
       opacity: 1;
-      animation: fall 4s linear forwards, fadeOut 2s ease-out 3s; /* Fade starts after falling */
+      animation: fall 4s linear forwards, fadeOut 2s ease-out 3s;
     }
     .money.cash {
       animation: featherFall 4s ease-in-out forwards, fadeOut 2s ease-out 3s;
@@ -100,19 +108,24 @@
       0% { opacity: 1; }
       100% { opacity: 0; }
     }
-    @keyframes spin {
-      0% { transform: translateY(0); }
-      100% { transform: translateY(-100%); }
-    }
   </style>
 </head>
 <body>
+  <div class="controls">
+    <div class="control-button" onclick="toggleAudio()">
+      <i id="audio-icon" class="bi bi-volume-mute-fill"></i>
+    </div>
+    <div class="control-button" onclick="toggleGame()">
+      <i id="play-pause-icon" class="bi bi-play-fill"></i>
+    </div>
+  </div>
+  
   <div class="slot-machine" id="slot-machine">
     <h1>🎰 Slot Machine 🎰</h1>
     <div class="slots">
-      <div class="slot" id="slot1">🍒</div>
-      <div class="slot" id="slot2">🍋</div>
-      <div class="slot" id="slot3">🍉</div>
+      <div class="slot" id="slot1"><div class="emoji">🍒</div></div>
+      <div class="slot" id="slot2"><div class="emoji">🍋</div></div>
+      <div class="slot" id="slot3"><div class="emoji">🍉</div></div>
     </div>
     <div class="buttons">
       <button class="btn" onclick="spin()">Spin</button>
@@ -120,56 +133,98 @@
     <p id="result"></p>
   </div>
 
+  <audio id="background-audio" src="casino-music.mp3" loop></audio>
+
+  <div class="money-rain" id="money-rain"></div>
+
   <script>
     const emojis = ["🍒", "🍋", "🍉", "🍇", "🔔", "⭐", "💎"];
-    let spinIntervals = []; // To keep track of intervals
+    const audio = document.getElementById("background-audio");
+    const audioIcon = document.getElementById("audio-icon");
+    const playPauseIcon = document.getElementById("play-pause-icon");
+    const slotMachine = document.getElementById("slot-machine");
+    const moneyRainDiv = document.getElementById("money-rain");
+    
+    let isAudioPlaying = false;
+    let isGameActive = true;
 
     function spin() {
-      // Clear existing intervals
-      spinIntervals.forEach(interval => clearInterval(interval));
-      spinIntervals = [];
-      document.getElementById("result").textContent = ""; // Clear result text
+      if (!isGameActive) return;
 
-      const slots = [document.getElementById("slot1"), document.getElementById("slot2"), document.getElementById("slot3")];
-      
+      const slots = [
+        document.getElementById("slot1"),
+        document.getElementById("slot2"),
+        document.getElementById("slot3")
+      ];
+      const result = document.getElementById("result");
+
       slots.forEach((slot, index) => {
-        // Start spinning each slot
-        let count = 0;
-        spinIntervals[index] = setInterval(() => {
-          slot.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-        }, 50); // Fast spin speed
-
-        // Stop the spin gradually
+        const emojiElement = slot.querySelector('.emoji');
+        emojiElement.style.animation = `spin 0.1s linear infinite`;
+        
         setTimeout(() => {
-          clearInterval(spinIntervals[index]);
-          spinIntervals[index] = setInterval(() => {
-            slot.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-          }, 100 + index * 50); // Slow down per slot
-
-          // Finally, stop on a random emoji
-          setTimeout(() => {
-            clearInterval(spinIntervals[index]);
-            slot.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-
-            // Check for the jackpot result when the last slot stops
-            if (index === slots.length - 1) {
-              checkResult();
-            }
-          }, 1000 + index * 500); // Stop delay per slot for left-to-right suspense
-        }, 1500); // Initial spinning time
+          const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+          emojiElement.textContent = randomEmoji;
+          emojiElement.style.animation = '';
+          
+          if (index === slots.length - 1) {
+            checkWin();
+          }
+        }, 1000 + index * 500);
       });
     }
 
-    function checkResult() {
-      const slot1 = document.getElementById("slot1").textContent;
-      const slot2 = document.getElementById("slot2").textContent;
-      const slot3 = document.getElementById("slot3").textContent;
+    function checkWin() {
+      const [slot1, slot2, slot3] = [document.getElementById("slot1"), document.getElementById("slot2"), document.getElementById("slot3")].map(slot => slot.querySelector('.emoji').textContent);
 
-      const result = document.getElementById("result");
       if (slot1 === slot2 && slot2 === slot3) {
-        result.textContent = "🎉 Jackpot! 🎉";
+        document.getElementById("result").textContent = "🎉 Jackpot! 🎉";
+        slotMachine.style.boxShadow = "0 0 20px gold";
+        moneyRain();
+        setTimeout(() => slotMachine.style.boxShadow = "", 500);
       } else {
-        result.textContent = "Try Again!";
+        document.getElementById("result").textContent = "Try Again!";
+        slotMachine.style.boxShadow = "0 0 20px red";
+        setTimeout(() => slotMachine.style.boxShadow = "", 500);
+      }
+    }
+
+    function toggleAudio() {
+      isAudioPlaying = !isAudioPlaying;
+      if (isAudioPlaying) {
+        audio.play();
+        audioIcon.classList.replace("bi-volume-mute-fill", "bi-volume-up-fill");
+      } else {
+        audio.pause();
+        audioIcon.classList.replace("bi-volume-up-fill", "bi-volume-mute-fill");
+      }
+    }
+
+    function toggleGame() {
+      isGameActive = !isGameActive;
+      playPauseIcon.classList.toggle("bi-play-fill", !isGameActive);
+      playPauseIcon.classList.toggle("bi-pause-fill", isGameActive);
+    }
+
+    function moneyRain() {
+      moneyRainDiv.innerHTML = "";
+
+      for (let i = 0; i < 20; i++) {
+        const money = document.createElement("div");
+        money.classList.add("money");
+
+        if (Math.random() > 0.5) {
+          money.textContent = "💵";
+          money.classList.add("cash");
+        } else {
+          money.textContent = "💰";
+        }
+
+        money.style.left = Math.random() * 100 + "vw";
+        money.style.animationDuration = (Math.random() * 1 + 4) + "s";
+        moneyRainDiv.appendChild(money);
+
+        setTimeout(() => money.remove(), 5000);
       }
     }
   </script>
