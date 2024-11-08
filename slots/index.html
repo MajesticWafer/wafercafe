@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Emoji Slot Machine</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
   <style>
@@ -58,10 +58,14 @@
     .btn:hover {
       background-color: #218838;
     }
-    .audio-toggle {
+    .controls {
       position: absolute;
       top: 10px;
       right: 10px;
+      display: flex;
+      gap: 10px;
+    }
+    .control-button {
       font-size: 1.5rem;
       cursor: pointer;
       color: #fff;
@@ -75,18 +79,37 @@
     .money {
       font-size: 2rem;
       position: absolute;
-      animation: fall 2s linear infinite;
+      opacity: 1;
+      animation: fall 2s linear infinite, fadeOut 4s ease-out;
+    }
+    .money.cash {
+      animation: featherFall 5s ease-in-out infinite, fadeOut 5s ease-out;
     }
     @keyframes fall {
       0% { transform: translateY(-100vh); }
       100% { transform: translateY(100vh); }
     }
+    @keyframes featherFall {
+      0% { transform: translateY(-100vh) rotate(0deg); }
+      50% { transform: translateY(50vh) rotate(180deg); }
+      100% { transform: translateY(100vh) rotate(360deg); }
+    }
+    @keyframes fadeOut {
+      0% { opacity: 1; }
+      100% { opacity: 0; }
+    }
   </style>
 </head>
 <body>
-  <div class="audio-toggle" onclick="toggleAudio()">
-    <i id="audio-icon" class="bi bi-volume-mute-fill"></i>
+  <div class="controls">
+    <div class="control-button" onclick="toggleAudio()">
+      <i id="audio-icon" class="bi bi-volume-mute-fill"></i>
+    </div>
+    <div class="control-button" onclick="toggleGame()">
+      <i id="play-pause-icon" class="bi bi-play-fill"></i>
+    </div>
   </div>
+  
   <div class="slot-machine" id="slot-machine">
     <h1>🎰 Slot Machine 🎰</h1>
     <div class="slots">
@@ -108,14 +131,20 @@
     const emojis = ["🍒", "🍋", "🍉", "🍇", "🔔", "⭐", "💎"];
     const audio = document.getElementById("background-audio");
     const audioIcon = document.getElementById("audio-icon");
+    const playPauseIcon = document.getElementById("play-pause-icon");
+    const slotMachine = document.getElementById("slot-machine");
+    const moneyRainDiv = document.getElementById("money-rain");
+    
     let isAudioPlaying = false;
+    let isGameActive = true;
 
     function spin() {
+      if (!isGameActive) return;
+
       const slot1 = document.getElementById("slot1");
       const slot2 = document.getElementById("slot2");
       const slot3 = document.getElementById("slot3");
       const result = document.getElementById("result");
-      const slotMachine = document.getElementById("slot-machine");
 
       const emoji1 = emojis[Math.floor(Math.random() * emojis.length)];
       const emoji2 = emojis[Math.floor(Math.random() * emojis.length)];
@@ -148,20 +177,32 @@
       }
     }
 
+    function toggleGame() {
+      isGameActive = !isGameActive;
+      playPauseIcon.classList.toggle("bi-play-fill", !isGameActive);
+      playPauseIcon.classList.toggle("bi-pause-fill", isGameActive);
+    }
+
     function moneyRain() {
-      const moneyRainDiv = document.getElementById("money-rain");
       moneyRainDiv.innerHTML = ""; // Clear previous money rain
 
       for (let i = 0; i < 20; i++) {
         const money = document.createElement("div");
         money.classList.add("money");
-        money.textContent = Math.random() > 0.5 ? "💵" : "💰";
+
+        if (Math.random() > 0.5) {
+          money.textContent = "💵";
+          money.classList.add("cash"); // Feather-like physics for cash
+        } else {
+          money.textContent = "💰"; // Normal physics for bags
+        }
+
         money.style.left = Math.random() * 100 + "vw";
-        money.style.animationDuration = Math.random() * 2 + 2 + "s";
+        money.style.animationDuration = (Math.random() * 1 + 4) + "s"; // Random fall duration
         moneyRainDiv.appendChild(money);
 
         // Remove each money symbol after animation completes
-        setTimeout(() => money.remove(), 4000);
+        setTimeout(() => money.remove(), 5000);
       }
     }
   </script>
