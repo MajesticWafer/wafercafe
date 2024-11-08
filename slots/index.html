@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real Casino Slot Machine</title>
-    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+    <title>Realistic Slot Machine</title>
     <style>
         * {
             margin: 0;
@@ -13,24 +12,24 @@
         }
 
         body {
-            font-family: 'Luckiest Guy', cursive;
-            background-color: #000;
+            background-color: #1c1c1c;
+            font-family: sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             color: #fff;
-            overflow: hidden;
         }
 
         .slot-machine {
-            text-align: center;
+            background-color: #333;
             border: 10px solid #FFD700;
-            padding: 50px;
             border-radius: 20px;
-            background-color: #222;
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.9);
-            width: 500px;
+            padding: 30px;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+            position: relative;
+            width: 400px;
+            text-align: center;
         }
 
         h1 {
@@ -45,21 +44,21 @@
         }
 
         .slot {
-            font-size: 5rem;
-            padding: 20px;
-            width: 120px;
+            font-size: 3rem;
+            width: 100px;
             height: 120px;
             background-color: #111;
             border: 5px solid #FFD700;
-            margin: 0 15px;
+            margin: 0 10px;
             display: flex;
             justify-content: center;
             align-items: center;
             border-radius: 10px;
-            font-family: 'Luckiest Guy', cursive;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            transform: perspective(300px) rotateX(10deg);
         }
 
-        button {
+        #spinButton {
             padding: 15px 30px;
             font-size: 1.2rem;
             background-color: #E60000;
@@ -68,13 +67,40 @@
             cursor: pointer;
             color: white;
             font-weight: bold;
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
             transition: all 0.3s ease;
         }
 
-        button:hover {
+        #spinButton:hover {
             background-color: #FF3D3D;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.9);
+        }
+
+        .lever {
+            position: absolute;
+            bottom: -40px;
+            left: 150px;
+            width: 50px;
+            height: 100px;
+            background-color: #FFD700;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            transform: rotate(180deg);
+            transition: transform 0.2s ease;
+        }
+
+        .lever:hover {
+            transform: rotate(160deg);
+        }
+
+        .lever::after {
+            content: '';
+            width: 10px;
+            height: 40px;
+            background-color: #FFD700;
+            border-radius: 5px;
         }
 
         #result {
@@ -90,51 +116,35 @@
         .losing {
             color: #FF3D3D;
         }
-
-        audio {
-            display: none;
-        }
     </style>
 </head>
 <body>
     <div class="slot-machine">
-        <h1>Real Casino Slot Machine</h1>
+        <h1>Slot Machine</h1>
         <div class="slots-container">
-            <div class="slot" id="slot1"><img src="cherry.png" alt="Cherry" width="70"></div>
-            <div class="slot" id="slot2"><img src="bar.png" alt="Bar" width="70"></div>
-            <div class="slot" id="slot3"><img src="seven.png" alt="Seven" width="70"></div>
+            <div class="slot" id="slot1">🍒</div>
+            <div class="slot" id="slot2">🍫</div>
+            <div class="slot" id="slot3">7️⃣</div>
         </div>
         <button id="spinButton">Spin</button>
+        <div class="lever" id="lever"></div>
         <p id="result"></p>
     </div>
 
-    <audio id="casinoMusic" loop>
-        <source src="casino-theme.mp3" type="audio/mp3">
-        Your browser does not support the audio element.
-    </audio>
-
     <script>
-        // Play casino music on load
-        window.onload = function() {
-            document.getElementById('casinoMusic').play();
-        }
-
-        // Slot Machine Spin Logic
         document.getElementById('spinButton').addEventListener('click', function() {
-            const symbols = [
-                'cherry.png', 
-                'bar.png', 
-                'seven.png', 
-                'bell.png', 
-                'plum.png', 
-                'diamond.png'
-            ];
+            const symbols = ['🍒', '🍫', '7️⃣', '🍀', '🍉', '💎'];
             let result = [];
 
-            // Spin each slot
+            // Spin each slot and apply 3D effect
             for (let i = 1; i <= 3; i++) {
                 let randomIndex = Math.floor(Math.random() * symbols.length);
-                document.getElementById('slot' + i).innerHTML = `<img src="${symbols[randomIndex]}" alt="Slot" width="70">`;
+                let slot = document.getElementById('slot' + i);
+                slot.innerHTML = symbols[randomIndex];
+                slot.style.animation = 'spin 0.5s ease-in-out forwards';
+                setTimeout(() => {
+                    slot.style.animation = ''; // Reset animation after it's done
+                }, 500);
                 result.push(symbols[randomIndex]);
             }
 
@@ -149,6 +159,22 @@
                 document.getElementById('result').classList.remove('winning');
             }
         });
+
+        document.getElementById('lever').addEventListener('click', function() {
+            // When the lever is clicked, trigger the spin
+            document.getElementById('spinButton').click();
+        });
     </script>
+
+    <style>
+        @keyframes spin {
+            0% {
+                transform: rotateX(10deg);
+            }
+            100% {
+                transform: rotateX(0deg);
+            }
+        }
+    </style>
 </body>
 </html>
