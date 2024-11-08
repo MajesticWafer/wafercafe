@@ -19,6 +19,12 @@
     }
     .slot-machine {
       text-align: center;
+      padding: 20px;
+      border-radius: 10px;
+      background-color: #111;
+      border: 4px solid #444;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+      transition: box-shadow 0.3s;
     }
     .slots {
       font-size: 3rem;
@@ -28,8 +34,8 @@
       margin: 20px 0;
     }
     .slot {
-      width: 60px;
-      height: 60px;
+      width: 80px;
+      height: 80px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -60,13 +66,28 @@
       cursor: pointer;
       color: #fff;
     }
+    .money-rain {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      pointer-events: none;
+    }
+    .money {
+      font-size: 2rem;
+      position: absolute;
+      animation: fall 2s linear infinite;
+    }
+    @keyframes fall {
+      0% { transform: translateY(-100vh); }
+      100% { transform: translateY(100vh); }
+    }
   </style>
 </head>
 <body>
   <div class="audio-toggle" onclick="toggleAudio()">
     <i id="audio-icon" class="bi bi-volume-mute-fill"></i>
   </div>
-  <div class="slot-machine">
+  <div class="slot-machine" id="slot-machine">
     <h1>🎰 Slot Machine 🎰</h1>
     <div class="slots">
       <div class="slot" id="slot1">🍒</div>
@@ -81,6 +102,8 @@
 
   <audio id="background-audio" src="casino-music.mp3" loop></audio>
 
+  <div class="money-rain" id="money-rain"></div>
+
   <script>
     const emojis = ["🍒", "🍋", "🍉", "🍇", "🔔", "⭐", "💎"];
     const audio = document.getElementById("background-audio");
@@ -92,6 +115,7 @@
       const slot2 = document.getElementById("slot2");
       const slot3 = document.getElementById("slot3");
       const result = document.getElementById("result");
+      const slotMachine = document.getElementById("slot-machine");
 
       const emoji1 = emojis[Math.floor(Math.random() * emojis.length)];
       const emoji2 = emojis[Math.floor(Math.random() * emojis.length)];
@@ -103,8 +127,13 @@
 
       if (emoji1 === emoji2 && emoji2 === emoji3) {
         result.textContent = "🎉 Jackpot! 🎉";
+        slotMachine.style.boxShadow = "0 0 20px gold";
+        moneyRain();
+        setTimeout(() => slotMachine.style.boxShadow = "", 500);
       } else {
         result.textContent = "Try Again!";
+        slotMachine.style.boxShadow = "0 0 20px red";
+        setTimeout(() => slotMachine.style.boxShadow = "", 500);
       }
     }
 
@@ -116,6 +145,23 @@
       } else {
         audio.pause();
         audioIcon.classList.replace("bi-volume-up-fill", "bi-volume-mute-fill");
+      }
+    }
+
+    function moneyRain() {
+      const moneyRainDiv = document.getElementById("money-rain");
+      moneyRainDiv.innerHTML = ""; // Clear previous money rain
+
+      for (let i = 0; i < 20; i++) {
+        const money = document.createElement("div");
+        money.classList.add("money");
+        money.textContent = Math.random() > 0.5 ? "💵" : "💰";
+        money.style.left = Math.random() * 100 + "vw";
+        money.style.animationDuration = Math.random() * 2 + 2 + "s";
+        moneyRainDiv.appendChild(money);
+
+        // Remove each money symbol after animation completes
+        setTimeout(() => money.remove(), 4000);
       }
     }
   </script>
