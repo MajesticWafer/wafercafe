@@ -80,10 +80,10 @@
       font-size: 2rem;
       position: absolute;
       opacity: 1;
-      animation: fall 2s linear infinite, fadeOut 4s ease-out;
+      animation: fall 4s linear forwards, fadeOut 2s ease-out 3s; /* Fade starts after falling */
     }
     .money.cash {
-      animation: featherFall 5s ease-in-out infinite, fadeOut 5s ease-out;
+      animation: featherFall 4s ease-in-out forwards, fadeOut 2s ease-out 3s;
     }
     @keyframes fall {
       0% { transform: translateY(-100vh); }
