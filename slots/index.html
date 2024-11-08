@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GTA Slot Machine</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #121212;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #fff;
+        }
+
+        .slot-machine {
+            text-align: center;
+            border: 5px solid #FFD700;
+            padding: 30px;
+            border-radius: 20px;
+            background-color: #2A2A2A;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+        }
+
+        .slots-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .slot {
+            font-size: 4rem;
+            padding: 20px;
+            width: 120px;
+            height: 120px;
+            background-color: #333;
+            border: 3px solid #FFD700;
+            margin: 0 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            font-family: 'Impact', sans-serif;
+        }
+
+        button {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            background-color: #E60000;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #FF3D3D;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.9);
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .winning {
+            color: #FFD700;
+        }
+
+        .losing {
+            color: #FF3D3D;
+        }
+    </style>
+</head>
+<body>
+    <div class="slot-machine">
+        <h1>GTA Slot Machine</h1>
+        <div class="slots-container">
+            <div class="slot" id="slot1">💎</div>
+            <div class="slot" id="slot2">🍌</div>
+            <div class="slot" id="slot3">💵</div>
+        </div>
+        <button id="spinButton">Spin</button>
+        <p id="result"></p>
+    </div>
+
+    <script>
+        document.getElementById('spinButton').addEventListener('click', function() {
+            const symbols = ['💎', '🍌', '💵', '🤑', '🍉', '💰'];
+            let result = [];
+
+            // Spin each slot
+            for (let i = 1; i <= 3; i++) {
+                let randomIndex = Math.floor(Math.random() * symbols.length);
+                document.getElementById('slot' + i).textContent = symbols[randomIndex];
+                result.push(symbols[randomIndex]);
+            }
+
+            // Check the result
+            if (result[0] === result[1] && result[1] === result[2]) {
+                document.getElementById('result').textContent = "You Win!";
+                document.getElementById('result').classList.add('winning');
+                document.getElementById('result').classList.remove('losing');
+            } else {
+                document.getElementById('result').textContent = "Try Again!";
+                document.getElementById('result').classList.add('losing');
+                document.getElementById('result').classList.remove('winning');
+            }
+        });
+    </script>
+</body>
+</html>
