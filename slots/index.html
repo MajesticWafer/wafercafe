@@ -42,16 +42,6 @@
       background: #333;
       border-radius: 10px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-      overflow: hidden;
-    }
-    .slot .emoji {
-      display: flex;
-      flex-direction: column;
-      animation: spin 1s linear infinite;
-    }
-    @keyframes spin {
-      0% { transform: translateY(0); }
-      100% { transform: translateY(-100%); }
     }
     .buttons {
       margin-top: 20px;
@@ -90,7 +80,7 @@
       font-size: 2rem;
       position: absolute;
       opacity: 1;
-      animation: fall 4s linear forwards, fadeOut 2s ease-out 3s;
+      animation: fall 4s linear forwards, fadeOut 2s ease-out 3s; /* Fade starts after falling */
     }
     .money.cash {
       animation: featherFall 4s ease-in-out forwards, fadeOut 2s ease-out 3s;
@@ -123,9 +113,9 @@
   <div class="slot-machine" id="slot-machine">
     <h1>🎰 Slot Machine 🎰</h1>
     <div class="slots">
-      <div class="slot" id="slot1"><div class="emoji">🍒</div></div>
-      <div class="slot" id="slot2"><div class="emoji">🍋</div></div>
-      <div class="slot" id="slot3"><div class="emoji">🍉</div></div>
+      <div class="slot" id="slot1">🍒</div>
+      <div class="slot" id="slot2">🍋</div>
+      <div class="slot" id="slot3">🍉</div>
     </div>
     <div class="buttons">
       <button class="btn" onclick="spin()">Spin</button>
@@ -151,39 +141,26 @@
     function spin() {
       if (!isGameActive) return;
 
-      const slots = [
-        document.getElementById("slot1"),
-        document.getElementById("slot2"),
-        document.getElementById("slot3")
-      ];
+      const slot1 = document.getElementById("slot1");
+      const slot2 = document.getElementById("slot2");
+      const slot3 = document.getElementById("slot3");
       const result = document.getElementById("result");
 
-      slots.forEach((slot, index) => {
-        const emojiElement = slot.querySelector('.emoji');
-        emojiElement.style.animation = `spin 0.1s linear infinite`;
-        
-        setTimeout(() => {
-          const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
-          emojiElement.textContent = randomEmoji;
-          emojiElement.style.animation = '';
-          
-          if (index === slots.length - 1) {
-            checkWin();
-          }
-        }, 1000 + index * 500);
-      });
-    }
+      const emoji1 = emojis[Math.floor(Math.random() * emojis.length)];
+      const emoji2 = emojis[Math.floor(Math.random() * emojis.length)];
+      const emoji3 = emojis[Math.floor(Math.random() * emojis.length)];
 
-    function checkWin() {
-      const [slot1, slot2, slot3] = [document.getElementById("slot1"), document.getElementById("slot2"), document.getElementById("slot3")].map(slot => slot.querySelector('.emoji').textContent);
+      slot1.textContent = emoji1;
+      slot2.textContent = emoji2;
+      slot3.textContent = emoji3;
 
-      if (slot1 === slot2 && slot2 === slot3) {
-        document.getElementById("result").textContent = "🎉 Jackpot! 🎉";
+      if (emoji1 === emoji2 && emoji2 === emoji3) {
+        result.textContent = "🎉 Jackpot! 🎉";
         slotMachine.style.boxShadow = "0 0 20px gold";
         moneyRain();
         setTimeout(() => slotMachine.style.boxShadow = "", 500);
       } else {
-        document.getElementById("result").textContent = "Try Again!";
+        result.textContent = "Try Again!";
         slotMachine.style.boxShadow = "0 0 20px red";
         setTimeout(() => slotMachine.style.boxShadow = "", 500);
       }
@@ -207,7 +184,7 @@
     }
 
     function moneyRain() {
-      moneyRainDiv.innerHTML = "";
+      moneyRainDiv.innerHTML = ""; // Clear previous money rain
 
       for (let i = 0; i < 20; i++) {
         const money = document.createElement("div");
@@ -215,15 +192,16 @@
 
         if (Math.random() > 0.5) {
           money.textContent = "💵";
-          money.classList.add("cash");
+          money.classList.add("cash"); // Feather-like physics for cash
         } else {
-          money.textContent = "💰";
+          money.textContent = "💰"; // Normal physics for bags
         }
 
         money.style.left = Math.random() * 100 + "vw";
-        money.style.animationDuration = (Math.random() * 1 + 4) + "s";
+        money.style.animationDuration = (Math.random() * 1 + 4) + "s"; // Random fall duration
         moneyRainDiv.appendChild(money);
 
+        // Remove each money symbol after animation completes
         setTimeout(() => money.remove(), 5000);
       }
     }
