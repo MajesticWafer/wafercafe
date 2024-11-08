@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GTA Slot Machine</title>
+    <title>Real Casino Slot Machine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,22 +13,29 @@
         }
 
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #121212;
+            font-family: 'Luckiest Guy', cursive;
+            background-color: #000;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             color: #fff;
+            overflow: hidden;
         }
 
         .slot-machine {
             text-align: center;
-            border: 5px solid #FFD700;
-            padding: 30px;
+            border: 10px solid #FFD700;
+            padding: 50px;
             border-radius: 20px;
-            background-color: #2A2A2A;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+            background-color: #222;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.9);
+            width: 500px;
+        }
+
+        h1 {
+            color: #FFD700;
+            margin-bottom: 30px;
         }
 
         .slots-container {
@@ -37,18 +45,18 @@
         }
 
         .slot {
-            font-size: 4rem;
+            font-size: 5rem;
             padding: 20px;
             width: 120px;
             height: 120px;
-            background-color: #333;
-            border: 3px solid #FFD700;
+            background-color: #111;
+            border: 5px solid #FFD700;
             margin: 0 15px;
             display: flex;
             justify-content: center;
             align-items: center;
             border-radius: 10px;
-            font-family: 'Impact', sans-serif;
+            font-family: 'Luckiest Guy', cursive;
         }
 
         button {
@@ -82,29 +90,51 @@
         .losing {
             color: #FF3D3D;
         }
+
+        audio {
+            display: none;
+        }
     </style>
 </head>
 <body>
     <div class="slot-machine">
-        <h1>GTA Slot Machine</h1>
+        <h1>Real Casino Slot Machine</h1>
         <div class="slots-container">
-            <div class="slot" id="slot1">💎</div>
-            <div class="slot" id="slot2">🍌</div>
-            <div class="slot" id="slot3">💵</div>
+            <div class="slot" id="slot1"><img src="cherry.png" alt="Cherry" width="70"></div>
+            <div class="slot" id="slot2"><img src="bar.png" alt="Bar" width="70"></div>
+            <div class="slot" id="slot3"><img src="seven.png" alt="Seven" width="70"></div>
         </div>
         <button id="spinButton">Spin</button>
         <p id="result"></p>
     </div>
 
+    <audio id="casinoMusic" loop>
+        <source src="casino-theme.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
+
     <script>
+        // Play casino music on load
+        window.onload = function() {
+            document.getElementById('casinoMusic').play();
+        }
+
+        // Slot Machine Spin Logic
         document.getElementById('spinButton').addEventListener('click', function() {
-            const symbols = ['💎', '🍌', '💵', '🤑', '🍉', '💰'];
+            const symbols = [
+                'cherry.png', 
+                'bar.png', 
+                'seven.png', 
+                'bell.png', 
+                'plum.png', 
+                'diamond.png'
+            ];
             let result = [];
 
             // Spin each slot
             for (let i = 1; i <= 3; i++) {
                 let randomIndex = Math.floor(Math.random() * symbols.length);
-                document.getElementById('slot' + i).textContent = symbols[randomIndex];
+                document.getElementById('slot' + i).innerHTML = `<img src="${symbols[randomIndex]}" alt="Slot" width="70">`;
                 result.push(symbols[randomIndex]);
             }
 
