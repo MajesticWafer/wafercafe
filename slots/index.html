@@ -1,210 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Real Casino Slot Machine</title>
-    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Luckiest Guy', cursive;
-            background-color: #000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            color: #fff;
-            overflow: hidden;
-        }
-
-        .slot-machine-casing {
-            background-color: #222;
-            border-radius: 20px;
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.9);
-            padding: 20px;
-            position: relative;
-        }
-
-        .slot-machine {
-            text-align: center;
-            padding: 30px;
-            border-radius: 15px;
-            background-color: #111;
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.7);
-            width: 500px;
-            position: relative;
-        }
-
-        h1 {
-            color: #FFD700;
-            margin-bottom: 30px;
-        }
-
-        .slots-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-
-        .slot {
-            font-size: 5rem;
-            padding: 20px;
-            width: 120px;
-            height: 120px;
-            background-color: #111;
-            border: 5px solid #FFD700;
-            margin: 0 15px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 10px;
-        }
-
-        button {
-            padding: 15px 30px;
-            font-size: 1.2rem;
-            background-color: #E60000;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            color: white;
-            font-weight: bold;
-            box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
-            transition: all 0.3s ease;
-        }
-
-        button:hover {
-            background-color: #FF3D3D;
-            box-shadow: 0 0 15px rgba(255, 0, 0, 0.9);
-        }
-
-        #result {
-            margin-top: 20px;
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .winning {
-            color: #FFD700;
-        }
-
-        .losing {
-            color: #FF3D3D;
-        }
-
-        .cash-rain {
-            position: absolute;
-            top: -10%;
-            left: 50%;
-            transform: translateX(-50%);
-            animation: rain 2s infinite;
-            font-size: 3rem;
-        }
-
-        @keyframes rain {
-            0% {
-                top: -10%;
-            }
-            100% {
-                top: 100%;
-            }
-        }
-
-        .red-glow {
-            animation: glow 0.5s ease-out;
-        }
-
-        @keyframes glow {
-            0% {
-                box-shadow: 0 0 20px red;
-            }
-            100% {
-                box-shadow: none;
-            }
-        }
-
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Emoji Slot Machine</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #222;
+      color: #fff;
+      overflow: hidden;
+    }
+    .slot-machine {
+      text-align: center;
+    }
+    .slots {
+      font-size: 3rem;
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin: 20px 0;
+    }
+    .slot {
+      width: 60px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #333;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+    .buttons {
+      margin-top: 20px;
+    }
+    .btn {
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      background-color: #28a745;
+      border: none;
+      color: #fff;
+      border-radius: 5px;
+    }
+    .btn:hover {
+      background-color: #218838;
+    }
+    .audio-toggle {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #fff;
+    }
+  </style>
 </head>
 <body>
-    <div class="slot-machine-casing">
-        <div class="slot-machine" id="slotMachine">
-            <h1>Real Casino Slot Machine</h1>
-            <div class="slots-container">
-                <div class="slot" id="slot1">🍒</div>
-                <div class="slot" id="slot2">🍉</div>
-                <div class="slot" id="slot3">🔔</div>
-            </div>
-            <button id="spinButton">Spin</button>
-            <p id="result"></p>
-        </div>
+  <div class="audio-toggle" onclick="toggleAudio()">
+    <i id="audio-icon" class="bi bi-volume-mute-fill"></i>
+  </div>
+  <div class="slot-machine">
+    <h1>🎰 Slot Machine 🎰</h1>
+    <div class="slots">
+      <div class="slot" id="slot1">🍒</div>
+      <div class="slot" id="slot2">🍋</div>
+      <div class="slot" id="slot3">🍉</div>
     </div>
+    <div class="buttons">
+      <button class="btn" onclick="spin()">Spin</button>
+    </div>
+    <p id="result"></p>
+  </div>
 
-    <audio id="casinoMusic" loop>
-        <source src="casino-theme.mp3" type="audio/mp3">
-        Your browser does not support the audio element.
-    </audio>
+  <audio id="background-audio" src="casino-music.mp3" loop></audio>
 
-    <script>
-        // Play casino music on load
-        window.onload = function() {
-            document.getElementById('casinoMusic').play();
-        }
-    </script>
+  <script>
+    const emojis = ["🍒", "🍋", "🍉", "🍇", "🔔", "⭐", "💎"];
+    const audio = document.getElementById("background-audio");
+    const audioIcon = document.getElementById("audio-icon");
+    let isAudioPlaying = false;
 
-    <div class="cash-rain" id="cashRain"></div>
+    function spin() {
+      const slot1 = document.getElementById("slot1");
+      const slot2 = document.getElementById("slot2");
+      const slot3 = document.getElementById("slot3");
+      const result = document.getElementById("result");
 
-    <script>
-        const cashRain = document.getElementById('cashRain');
-        const slotMachine = document.getElementById('slotMachine');
-        const resultElement = document.getElementById('result');
-        const symbols = ['🍒', '🍉', '🔔', '🍀', '💰'];
-        
-        document.getElementById('spinButton').addEventListener('click', function() {
-            const result = [];
+      const emoji1 = emojis[Math.floor(Math.random() * emojis.length)];
+      const emoji2 = emojis[Math.floor(Math.random() * emojis.length)];
+      const emoji3 = emojis[Math.floor(Math.random() * emojis.length)];
 
-            // Spin each slot
-            for (let i = 1; i <= 3; i++) {
-                let randomIndex = Math.floor(Math.random() * symbols.length);
-                document.getElementById('slot' + i).textContent = symbols[randomIndex];
-                result.push(symbols[randomIndex]);
-            }
+      slot1.textContent = emoji1;
+      slot2.textContent = emoji2;
+      slot3.textContent = emoji3;
 
-            // Check the result
-            if (result[0] === result[1] && result[1] === result[2]) {
-                // Winning case
-                resultElement.textContent = "You Win!";
-                resultElement.classList.add('winning');
-                resultElement.classList.remove('losing');
-                triggerCashRain();
-            } else {
-                // Losing case
-                resultElement.textContent = "Try Again!";
-                resultElement.classList.add('losing');
-                resultElement.classList.remove('winning');
-                triggerRedGlow();
-            }
-        });
+      if (emoji1 === emoji2 && emoji2 === emoji3) {
+        result.textContent = "🎉 Jackpot! 🎉";
+      } else {
+        result.textContent = "Try Again!";
+      }
+    }
 
-        function triggerCashRain() {
-            // Add cash emoji rain effect
-            cashRain.innerHTML = '💰💰💰💰💰';
-            setTimeout(() => {
-                cashRain.innerHTML = '';
-            }, 2000); // Remove cash rain after 2 seconds
-        }
-
-        function triggerRedGlow() {
-            slotMachine.classList.add('red-glow');
-            setTimeout(() => {
-                slotMachine.classList.remove('red-glow');
-            }, 500); // Glow lasts 0.5 seconds
-        }
-    </script>
+    function toggleAudio() {
+      isAudioPlaying = !isAudioPlaying;
+      if (isAudioPlaying) {
+        audio.play();
+        audioIcon.classList.replace("bi-volume-mute-fill", "bi-volume-up-fill");
+      } else {
+        audio.pause();
+        audioIcon.classList.replace("bi-volume-up-fill", "bi-volume-mute-fill");
+      }
+    }
+  </script>
 </body>
 </html>
