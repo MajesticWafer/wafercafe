@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Realistic Slot Machine</title>
+    <title>Real Casino Slot Machine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,24 +13,32 @@
         }
 
         body {
-            background-color: #1c1c1c;
-            font-family: sans-serif;
+            font-family: 'Luckiest Guy', cursive;
+            background-color: #000;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             color: #fff;
+            overflow: hidden;
+        }
+
+        .slot-machine-casing {
+            background-color: #222;
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.9);
+            padding: 20px;
+            position: relative;
         }
 
         .slot-machine {
-            background-color: #333;
-            border: 10px solid #FFD700;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
-            position: relative;
-            width: 400px;
             text-align: center;
+            padding: 30px;
+            border-radius: 15px;
+            background-color: #111;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.7);
+            width: 500px;
+            position: relative;
         }
 
         h1 {
@@ -44,21 +53,20 @@
         }
 
         .slot {
-            font-size: 3rem;
-            width: 100px;
+            font-size: 5rem;
+            padding: 20px;
+            width: 120px;
             height: 120px;
             background-color: #111;
             border: 5px solid #FFD700;
-            margin: 0 10px;
+            margin: 0 15px;
             display: flex;
             justify-content: center;
             align-items: center;
             border-radius: 10px;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
-            transform: perspective(300px) rotateX(10deg);
         }
 
-        #spinButton {
+        button {
             padding: 15px 30px;
             font-size: 1.2rem;
             background-color: #E60000;
@@ -67,40 +75,13 @@
             cursor: pointer;
             color: white;
             font-weight: bold;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
             transition: all 0.3s ease;
         }
 
-        #spinButton:hover {
+        button:hover {
             background-color: #FF3D3D;
-        }
-
-        .lever {
-            position: absolute;
-            bottom: -40px;
-            left: 150px;
-            width: 50px;
-            height: 100px;
-            background-color: #FFD700;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            transform: rotate(180deg);
-            transition: transform 0.2s ease;
-        }
-
-        .lever:hover {
-            transform: rotate(160deg);
-        }
-
-        .lever::after {
-            content: '';
-            width: 10px;
-            height: 40px;
-            background-color: #FFD700;
-            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.9);
         }
 
         #result {
@@ -116,65 +97,114 @@
         .losing {
             color: #FF3D3D;
         }
+
+        .cash-rain {
+            position: absolute;
+            top: -10%;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: rain 2s infinite;
+            font-size: 3rem;
+        }
+
+        @keyframes rain {
+            0% {
+                top: -10%;
+            }
+            100% {
+                top: 100%;
+            }
+        }
+
+        .red-glow {
+            animation: glow 0.5s ease-out;
+        }
+
+        @keyframes glow {
+            0% {
+                box-shadow: 0 0 20px red;
+            }
+            100% {
+                box-shadow: none;
+            }
+        }
+
     </style>
 </head>
 <body>
-    <div class="slot-machine">
-        <h1>Slot Machine</h1>
-        <div class="slots-container">
-            <div class="slot" id="slot1">🍒</div>
-            <div class="slot" id="slot2">🍫</div>
-            <div class="slot" id="slot3">7️⃣</div>
+    <div class="slot-machine-casing">
+        <div class="slot-machine" id="slotMachine">
+            <h1>Real Casino Slot Machine</h1>
+            <div class="slots-container">
+                <div class="slot" id="slot1">🍒</div>
+                <div class="slot" id="slot2">🍉</div>
+                <div class="slot" id="slot3">🔔</div>
+            </div>
+            <button id="spinButton">Spin</button>
+            <p id="result"></p>
         </div>
-        <button id="spinButton">Spin</button>
-        <div class="lever" id="lever"></div>
-        <p id="result"></p>
     </div>
 
-    <script>
-        document.getElementById('spinButton').addEventListener('click', function() {
-            const symbols = ['🍒', '🍫', '7️⃣', '🍀', '🍉', '💎'];
-            let result = [];
+    <audio id="casinoMusic" loop>
+        <source src="casino-theme.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
 
-            // Spin each slot and apply 3D effect
+    <script>
+        // Play casino music on load
+        window.onload = function() {
+            document.getElementById('casinoMusic').play();
+        }
+    </script>
+
+    <div class="cash-rain" id="cashRain"></div>
+
+    <script>
+        const cashRain = document.getElementById('cashRain');
+        const slotMachine = document.getElementById('slotMachine');
+        const resultElement = document.getElementById('result');
+        const symbols = ['🍒', '🍉', '🔔', '🍀', '💰'];
+        
+        document.getElementById('spinButton').addEventListener('click', function() {
+            const result = [];
+
+            // Spin each slot
             for (let i = 1; i <= 3; i++) {
                 let randomIndex = Math.floor(Math.random() * symbols.length);
-                let slot = document.getElementById('slot' + i);
-                slot.innerHTML = symbols[randomIndex];
-                slot.style.animation = 'spin 0.5s ease-in-out forwards';
-                setTimeout(() => {
-                    slot.style.animation = ''; // Reset animation after it's done
-                }, 500);
+                document.getElementById('slot' + i).textContent = symbols[randomIndex];
                 result.push(symbols[randomIndex]);
             }
 
             // Check the result
             if (result[0] === result[1] && result[1] === result[2]) {
-                document.getElementById('result').textContent = "You Win!";
-                document.getElementById('result').classList.add('winning');
-                document.getElementById('result').classList.remove('losing');
+                // Winning case
+                resultElement.textContent = "You Win!";
+                resultElement.classList.add('winning');
+                resultElement.classList.remove('losing');
+                triggerCashRain();
             } else {
-                document.getElementById('result').textContent = "Try Again!";
-                document.getElementById('result').classList.add('losing');
-                document.getElementById('result').classList.remove('winning');
+                // Losing case
+                resultElement.textContent = "Try Again!";
+                resultElement.classList.add('losing');
+                resultElement.classList.remove('winning');
+                triggerRedGlow();
             }
         });
 
-        document.getElementById('lever').addEventListener('click', function() {
-            // When the lever is clicked, trigger the spin
-            document.getElementById('spinButton').click();
-        });
-    </script>
-
-    <style>
-        @keyframes spin {
-            0% {
-                transform: rotateX(10deg);
-            }
-            100% {
-                transform: rotateX(0deg);
-            }
+        function triggerCashRain() {
+            // Add cash emoji rain effect
+            cashRain.innerHTML = '💰💰💰💰💰';
+            setTimeout(() => {
+                cashRain.innerHTML = '';
+            }, 2000); // Remove cash rain after 2 seconds
         }
-    </style>
+
+        function triggerRedGlow() {
+            slotMachine.classList.add('red-glow');
+            setTimeout(() => {
+                slotMachine.classList.remove('red-glow');
+            }, 500); // Glow lasts 0.5 seconds
+        }
+    </script>
 </body>
 </html>
