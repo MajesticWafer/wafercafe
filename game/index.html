@@ -45,10 +45,11 @@
                     throw new Error(`Failed to fetch games.json. Status: ${response.status}`);
                 }
 
-                const games = await response.json();
+                const data = await response.json();
+                const games = data.games;  // Access the "games" object within the JSON
                 logMessage("Games loaded from games.json: " + JSON.stringify(games));
 
-                // Search for the game name case-insensitively
+                // Search for the game name case-insensitively within games
                 const foundGame = Object.keys(games).find(key => key.toLowerCase() === gameName);
                 logMessage("Found game path in games.json: " + (foundGame ? games[foundGame] : "Game not found"));
 
