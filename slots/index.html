@@ -16,6 +16,7 @@
       background-color: #222;
       color: #fff;
       overflow: hidden;
+      flex-direction: column;
     }
     .slot-machine {
       text-align: center;
@@ -98,9 +99,18 @@
       0% { opacity: 1; }
       100% { opacity: 0; }
     }
+    .score {
+      font-size: 1.5rem;
+      font-weight: bold;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+    }
   </style>
 </head>
 <body>
+  <div class="score" id="score">Score: 0 | High Score: 0</div>
+
   <div class="controls">
     <div class="control-button" onclick="toggleAudio()">
       <i id="audio-icon" class="bi bi-volume-mute-fill"></i>
@@ -131,9 +141,14 @@
     const emojis = ["🍒", "🍋", "🍉", "🍇", "🔔", "⭐", "💎"];
     const slotMachine = document.getElementById("slot-machine");
     const moneyRainDiv = document.getElementById("money-rain");
+    const scoreDisplay = document.getElementById("score");
+    let score = 0;
+    let highScore = getCookie("highScore") || 0;
     
-    function spin() {
+    // Update high score
+    scoreDisplay.textContent = `Score: ${score} | High Score: ${highScore}`;
 
+    function spin() {
       const slot1 = document.getElementById("slot1");
       const slot2 = document.getElementById("slot2");
       const slot3 = document.getElementById("slot3");
@@ -149,6 +164,8 @@
 
       if (emoji1 === emoji2 && emoji2 === emoji3) {
         result.textContent = "🎉 Jackpot! 🎉";
+        score += 100;
+        updateHighScore();
         slotMachine.style.boxShadow = "0 0 20px gold";
         moneyRain();
         setTimeout(() => slotMachine.style.boxShadow = "", 500);
@@ -156,6 +173,15 @@
         result.textContent = "Try Again!";
         slotMachine.style.boxShadow = "0 0 20px red";
         setTimeout(() => slotMachine.style.boxShadow = "", 500);
+      }
+
+      scoreDisplay.textContent = `Score: ${score} | High Score: ${highScore}`;
+    }
+
+    function updateHighScore() {
+      if (score > highScore) {
+        highScore = score;
+        setCookie("highScore", highScore, 365);
       }
     }
 
@@ -193,6 +219,24 @@
         // Remove each money symbol after animation completes
         setTimeout(() => money.remove(), 5000);
       }
+    }
+
+    // Cookie functions to get and set high score
+    function setCookie(name, value, days) {
+      const expires = new Date();
+      expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+      document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+    }
+
+    function getCookie(name) {
+      const nameEQ = name + "=";
+      const ca = document.cookie.split(';');
+      for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+      }
+      return null;
     }
   </script>
 </body>
