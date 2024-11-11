@@ -9,50 +9,59 @@
     <div id="game-container">
         <!-- Game content will be embedded here -->
     </div>
+    <div id="log-container" style="padding: 10px; background-color: #f0f0f0; font-family: monospace;">
+        <strong>Log Output:</strong><br>
+    </div>
 
     <script>
+        function logMessage(message) {
+            console.log(message);  // Still logs to console
+            const logContainer = document.getElementById("log-container");
+            logContainer.innerHTML += message + "<br>";
+        }
+
         async function loadGame() {
-            console.log("Starting to load game...");
+            logMessage("Starting to load game...");
 
             const urlParams = new URLSearchParams(window.location.search);
             let gameName = urlParams.get("game");
-            console.log("URL parameter 'game' value:", gameName);
+            logMessage("URL parameter 'game' value: " + gameName);
 
             if (!gameName) {
                 document.getElementById("game-container").innerText = "No game specified.";
-                console.warn("No game specified in URL.");
+                logMessage("No game specified in URL.");
                 return;
             }
 
             // Replace underscores with spaces and make it case-insensitive
             gameName = decodeURIComponent(gameName.replace(/_/g, " ")).toLowerCase();
-            console.log("Processed game name after decoding and replacing underscores:", gameName);
+            logMessage("Processed game name after decoding and replacing underscores: " + gameName);
 
             try {
+                logMessage("Fetching games.json...");
                 const response = await fetch("../head/games.json");
-                console.log("Fetching games.json...");
                 
                 if (!response.ok) {
                     throw new Error(`Failed to fetch games.json. Status: ${response.status}`);
                 }
 
                 const games = await response.json();
-                console.log("Games loaded from games.json:", games);
+                logMessage("Games loaded from games.json: " + JSON.stringify(games));
 
                 // Search for the game name case-insensitively
                 const foundGame = Object.keys(games).find(key => key.toLowerCase() === gameName);
-                console.log("Found game path in games.json:", foundGame ? games[foundGame] : "Game not found");
+                logMessage("Found game path in games.json: " + (foundGame ? games[foundGame] : "Game not found"));
 
                 if (foundGame) {
                     const gamePath = `../${games[foundGame]}/index.html`;
-                    console.log("Embedding game from path:", gamePath);
+                    logMessage("Embedding game from path: " + gamePath);
                     document.getElementById("game-container").innerHTML = `<iframe src="${gamePath}" width="100%" height="100%"></iframe>`;
                 } else {
                     document.getElementById("game-container").innerText = "Game not found.";
-                    console.warn("Game not found in games.json for name:", gameName);
+                    logMessage("Game not found in games.json for name: " + gameName);
                 }
             } catch (error) {
-                console.error("Error loading game data:", error);
+                logMessage("Error loading game data: " + error);
                 document.getElementById("game-container").innerText = "Error loading game data.";
             }
         }
