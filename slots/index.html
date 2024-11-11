@@ -129,8 +129,6 @@
 
   <script>
     const emojis = ["🍒", "🍋", "🍉", "🍇", "🔔", "⭐", "💎"];
-    const audio = document.getElementById("background-audio");
-    const audioIcon = document.getElementById("audio-icon");
     const slotMachine = document.getElementById("slot-machine");
     const moneyRainDiv = document.getElementById("money-rain");
     
@@ -162,6 +160,9 @@
     }
 
     function toggleAudio() {
+      const audio = document.getElementById("background-audio");
+      const audioIcon = document.getElementById("audio-icon");
+      
       if (audio.muted) {
         audio.muted = false;
         audioIcon.classList.replace("bi-volume-up-fill", "bi-volume-mute-fill");
