@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Loader</title>
+</head>
+<body>
+    <div id="game-container">
+        <!-- Game content will be embedded here -->
+    </div>
+
+    <script>
+        async function loadGame() {
+            const urlParams = new URLSearchParams(window.location.search);
+            let gameName = urlParams.get("game");
+            if (!gameName) {
+                document.getElementById("game-container").innerText = "No game specified.";
+                return;
+            }
+
+            // Replace underscores with spaces and capitalize each word
+            gameName = decodeURIComponent(gameName.replace(/_/g, " ")).toLowerCase();
+
+            try {
+                const response = await fetch("../head/games.json");
+                const games = await response.json();
+
+                // Search for the game name case-insensitively
+                const foundGame = Object.keys(games).find(key => key.toLowerCase() === gameName);
+
+                if (foundGame) {
+                    const gamePath = `../${games[foundGame]}/index.html`;
+                    document.getElementById("game-container").innerHTML = `<iframe src="${gamePath}" width="100%" height="100%"></iframe>`;
+                } else {
+                    document.getElementById("game-container").innerText = "Game not found.";
+                }
+            } catch (error) {
+                console.error("Error loading game data:", error);
+                document.getElementById("game-container").innerText = "Error loading game data.";
+            }
+        }
+
+        loadGame();
+    </script>
+</body>
+</html>
