@@ -105,9 +105,6 @@
     <div class="control-button" onclick="toggleAudio()">
       <i id="audio-icon" class="bi bi-volume-mute-fill"></i>
     </div>
-    <div class="control-button" onclick="toggleGame()">
-      <i id="play-pause-icon" class="bi bi-play-fill"></i>
-    </div>
   </div>
   
   <div class="slot-machine" id="slot-machine">
@@ -131,15 +128,12 @@
     const emojis = ["🍒", "🍋", "🍉", "🍇", "🔔", "⭐", "💎"];
     const audio = document.getElementById("background-audio");
     const audioIcon = document.getElementById("audio-icon");
-    const playPauseIcon = document.getElementById("play-pause-icon");
     const slotMachine = document.getElementById("slot-machine");
     const moneyRainDiv = document.getElementById("money-rain");
     
     let isAudioPlaying = false;
-    let isGameActive = true;
 
-    function spin() {
-      if (!isGameActive) return;
+    function spin() 
 
       const slot1 = document.getElementById("slot1");
       const slot2 = document.getElementById("slot2");
@@ -175,12 +169,6 @@
         audio.pause();
         audioIcon.classList.replace("bi-volume-up-fill", "bi-volume-mute-fill");
       }
-    }
-
-    function toggleGame() {
-      isGameActive = !isGameActive;
-      playPauseIcon.classList.toggle("bi-play-fill", !isGameActive);
-      playPauseIcon.classList.toggle("bi-pause-fill", isGameActive);
     }
 
     function moneyRain() {
