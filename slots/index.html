@@ -120,7 +120,10 @@
     <p id="result"></p>
   </div>
 
-  <audio id="background-audio" src="casino-music.mp3" loop></audio>
+  <audio id="background-audio">
+     <source src="casino-music.mp3" loop></source>
+     Your browser does not support the audio element.
+  </audio>
 
   <div class="money-rain" id="money-rain"></div>
 
@@ -130,8 +133,6 @@
     const audioIcon = document.getElementById("audio-icon");
     const slotMachine = document.getElementById("slot-machine");
     const moneyRainDiv = document.getElementById("money-rain");
-    
-    let isAudioPlaying = false;
     
     function spin() {
 
@@ -161,13 +162,12 @@
     }
 
     function toggleAudio() {
-      isAudioPlaying = !isAudioPlaying;
-      if (isAudioPlaying) {
-        audio.play();
-        audioIcon.classList.replace("bi-volume-mute-fill", "bi-volume-up-fill");
-      } else {
-        audio.pause();
+      if (audio.muted) {
+        audio.muted = false;
         audioIcon.classList.replace("bi-volume-up-fill", "bi-volume-mute-fill");
+      } else {
+        audio.muted = true;
+        audioIcon.classList.replace("bi-volume-mute-fill", "bi-volume-up-fill");
       }
     }
 
