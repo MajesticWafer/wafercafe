@@ -58,18 +58,6 @@
     .btn:hover {
       background-color: #218838;
     }
-    .controls {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      display: flex;
-      gap: 10px;
-    }
-    .control-button {
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: #fff;
-    }
     .money-rain {
       position: fixed;
       top: 0;
@@ -101,12 +89,6 @@
   </style>
 </head>
 <body>
-  <div class="controls">
-    <div class="control-button" onclick="toggleAudio()">
-      <i id="audio-icon" class="bi bi-volume-mute-fill"></i>
-    </div>
-  </div>
-  
   <div class="slot-machine" id="slot-machine">
     <h1>🎰 Slot Machine 🎰</h1>
     <div class="slots">
@@ -120,7 +102,7 @@
     <p id="result"></p>
   </div>
 
-  <audio id="background-audio" autoplay muted>
+  <audio autoplay>
      <source src="casino-music.mp3" loop></source>
      Your browser does not support the audio element.
   </audio>
@@ -156,19 +138,6 @@
         result.textContent = "Try Again!";
         slotMachine.style.boxShadow = "0 0 20px red";
         setTimeout(() => slotMachine.style.boxShadow = "", 500);
-      }
-    }
-
-    function toggleAudio() {
-      const audio = document.getElementById("background-audio");
-      const audioIcon = document.getElementById("audio-icon");
-      
-      if (audio.muted) {
-        audio.muted = false;
-        audioIcon.classList.replace("bi-volume-up-fill", "bi-volume-mute-fill");
-      } else {
-        audio.muted = true;
-        audioIcon.classList.replace("bi-volume-mute-fill", "bi-volume-up-fill");
       }
     }
 
