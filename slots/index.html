@@ -99,7 +99,7 @@
       0% { opacity: 1; }
       100% { opacity: 0; }
     }
-    .cmoney {
+    .currency {
       font-size: 1.25rem;
       font-weight: bold;
       position: absolute;
@@ -109,7 +109,7 @@
   </style>
 </head>
 <body>
-  <div class="cmoney" id="curr">Money: 0</div>
+  <div class="currency" id="currency">Moolah: 0</div>
 
   <div class="controls">
     <div class="control-button" onclick="toggleAudio()">
@@ -146,12 +146,13 @@
     const emojis = ["🍒", "🍋", "🍉", "🍇", "🔔", "⭐", "💎"];
     const slotMachine = document.getElementById("slot-machine");
     const moneyRainDiv = document.getElementById("money-rain");
-    const moneyDisplay = document.getElementById("money");
-    let curr = getCookie("savedCurr") || 0;
-    let curr = ${curr};
+    const currencyDisplay = document.getElementById("currency");
+    let currency = 0;
+    let newCurrency = parseInt(getCookie("savedCurrency") || 0);
+    currency += newCurrency;
     
     // Update high score
-    currDisplay.textContent = `Money: $${curr}`;
+    currencyDisplay.textContent = `Moolah: ${currency}`;
 
     function pullsfx() {
         const sfx = document.getElementById("pull-audio");
@@ -159,9 +160,6 @@
     }
     
     function spin() {
-      curr -= 5;
-      updateMoney();
-      
       const slot1 = document.getElementById("slot1");
       const slot2 = document.getElementById("slot2");
       const slot3 = document.getElementById("slot3");
@@ -180,8 +178,8 @@
     
       if (emoji1 === emoji2 && emoji2 === emoji3) {
         result.textContent = "🎉 Jackpot! 🎉";
-        curr += 100;
-        updateMoney();
+        currency += 100;
+        updateSavedCurrency();
         slotMachine.style.boxShadow = "0 0 20px gold";
         moneyRain();
         setTimeout(() => slotMachine.style.boxShadow = "", 500);
@@ -193,13 +191,13 @@
 
       setTimeout(() => spinButton.disabled = false, 800);
 
-      moneyDisplay.textContent = `Money: ${money}`;
+      currencyDisplay.textContent = `Moolah: ${currency}`;
     }
 
-    function updateMoney() {
-      if (curr > savedCurr) {
-        savedCurr = curr;
-        setCookie("savedCurr", savedCurr, 365);
+    function updateSavedCurrency() {
+      if (currency > savedCurrency) {
+        savedCurrency = currency;
+        setCookie("savedCurrency", savedCurrency, 365);
       }
     }
 
