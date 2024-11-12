@@ -99,7 +99,7 @@
       0% { opacity: 1; }
       100% { opacity: 0; }
     }
-    .score {
+    .money {
       font-size: 1.25rem;
       font-weight: bold;
       position: absolute;
@@ -109,7 +109,7 @@
   </style>
 </head>
 <body>
-  <div class="score" id="score">Score: 0 | High Score: 0</div>
+  <div class="money" id="money">Money: 0</div>
 
   <div class="controls">
     <div class="control-button" onclick="toggleAudio()">
@@ -146,12 +146,11 @@
     const emojis = ["🍒", "🍋", "🍉", "🍇", "🔔", "⭐", "💎"];
     const slotMachine = document.getElementById("slot-machine");
     const moneyRainDiv = document.getElementById("money-rain");
-    const scoreDisplay = document.getElementById("score");
-    let score = 0;
-    let highScore = getCookie("highScore") || 0;
+    const moneyDisplay = document.getElementById("money");
+    let money = getCookie("savedMoney") || 0;
     
     // Update high score
-    scoreDisplay.textContent = `Score: ${score} | High Score: ${highScore}`;
+    scoreDisplay.textContent = `Money: $${money}`;
 
     function pullsfx() {
         const sfx = document.getElementById("pull-audio");
@@ -159,6 +158,9 @@
     }
     
     function spin() {
+      money -= 5;
+      updateMoney();
+      
       const slot1 = document.getElementById("slot1");
       const slot2 = document.getElementById("slot2");
       const slot3 = document.getElementById("slot3");
@@ -177,8 +179,8 @@
     
       if (emoji1 === emoji2 && emoji2 === emoji3) {
         result.textContent = "🎉 Jackpot! 🎉";
-        score += 100;
-        updateHighScore();
+        money += 100;
+        updateMoney();
         slotMachine.style.boxShadow = "0 0 20px gold";
         moneyRain();
         setTimeout(() => slotMachine.style.boxShadow = "", 500);
@@ -190,13 +192,13 @@
 
       setTimeout(() => spinButton.disabled = false, 800);
 
-      scoreDisplay.textContent = `Score: ${score} | High Score: ${highScore}`;
+      moneyDisplay.textContent = `Money: ${money}`;
     }
 
-    function updateHighScore() {
-      if (score > highScore) {
-        highScore = score;
-        setCookie("highScore", highScore, 365);
+    function updateMoney() {
+      if (money > savedMoney) {
+        savedMoney = money;
+        setCookie("savedMoney", savedMoney, 365);
       }
     }
 
