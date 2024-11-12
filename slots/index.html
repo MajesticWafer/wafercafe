@@ -125,7 +125,7 @@
       <div class="slot" id="slot3">🍉</div>
     </div>
     <div class="buttons">
-      <button class="btn" onclick="spin()">Spin</button>
+      <button class="btn" onclick="spin(); pullsfx();">Spin</button>
     </div>
     <p id="result">Take a spin!</p>
   </div>
@@ -134,11 +134,10 @@
      <source src="casino-theme.mp3"></source>
      Your browser does not support the audio element.
   </audio>
-  
-  <!-- Add the pull.mp3 audio element here -->
-  <audio id="spin-sound" muted>
-    <source src="pull.mp3" type="audio/mp3">
-    Your browser does not support the audio element.
+
+  <audio id="pull-audio" muted>
+     <source src="pull.mp3"></source>
+     Your browser does not support the audio element.
   </audio>
 
   <div class="money-rain" id="money-rain"></div>
@@ -154,6 +153,11 @@
     // Update high score
     scoreDisplay.textContent = `Score: ${score} | High Score: ${highScore}`;
 
+    function pullsfx()
+        const sfx = document.getElementById("pull-audio");
+        sfx.play();
+    }
+    
     function spin() {
       const slot1 = document.getElementById("slot1");
       const slot2 = document.getElementById("slot2");
@@ -167,11 +171,7 @@
       slot1.textContent = emoji1;
       slot2.textContent = emoji2;
       slot3.textContent = emoji3;
-
-      // Play the pull sound
-      const spinSound = document.getElementById("spin-sound");
-      spinSound.play();
-
+    
       if (emoji1 === emoji2 && emoji2 === emoji3) {
         result.textContent = "🎉 Jackpot! 🎉";
         score += 100;
@@ -197,10 +197,10 @@
 
     function toggleAudio() {
       const bgm = document.getElementById("background-audio");
-      const sfx = document.getElementById("spin-sound");
+      const sfx = document.getElementById("spin-audio");
       const audioIcon = document.getElementById("audio-icon");
       
-      if (bgm.muted & sfx.mited) {
+      if (bgm.muted) {
         bgm.muted = false;
         sfx.muted = false;
         audioIcon.classList.replace("bi-volume-mute-fill", "bi-volume-up-fill");
@@ -246,8 +246,8 @@
       const ca = document.cookie.split(';');
       for (let i = 0; i < ca.length; i++) {
         let c = ca[i];
-        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
       }
       return null;
     }
