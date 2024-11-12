@@ -136,7 +136,7 @@
   </audio>
   
   <!-- Add the pull.mp3 audio element here -->
-  <audio id="spin-sound">
+  <audio id="spin-sound" muted>
     <source src="pull.mp3" type="audio/mp3">
     Your browser does not support the audio element.
   </audio>
@@ -196,14 +196,17 @@
     }
 
     function toggleAudio() {
-      const audio = document.getElementById("background-audio");
+      const bgm = document.getElementById("background-audio");
+      const sfx = document.getElementById("spin-sound");
       const audioIcon = document.getElementById("audio-icon");
       
-      if (audio.muted) {
-        audio.muted = false;
+      if (bgm.muted & sfx.mited) {
+        bgm.muted = false;
+        sfx.muted = false;
         audioIcon.classList.replace("bi-volume-mute-fill", "bi-volume-up-fill");
       } else {
-        audio.muted = true;
+        bgm.muted = true;
+        sfx.muted = true;
         audioIcon.classList.replace("bi-volume-up-fill", "bi-volume-mute-fill");
       }
     }
