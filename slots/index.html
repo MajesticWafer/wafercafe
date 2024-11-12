@@ -109,7 +109,7 @@
   </style>
 </head>
 <body>
-  <div class="cmoney" id="money">Money: 0</div>
+  <div class="cmoney" id="curr">Money: 0</div>
 
   <div class="controls">
     <div class="control-button" onclick="toggleAudio()">
@@ -147,10 +147,11 @@
     const slotMachine = document.getElementById("slot-machine");
     const moneyRainDiv = document.getElementById("money-rain");
     const moneyDisplay = document.getElementById("money");
-    let money = getCookie("savedMoney") || 0;
+    let curr = getCookie("savedCurr") || 0;
+    let curr = ${curr};
     
     // Update high score
-    scoreDisplay.textContent = `Money: $${money}`;
+    currDisplay.textContent = `Money: $${curr}`;
 
     function pullsfx() {
         const sfx = document.getElementById("pull-audio");
@@ -158,7 +159,7 @@
     }
     
     function spin() {
-      money -= 5;
+      curr -= 5;
       updateMoney();
       
       const slot1 = document.getElementById("slot1");
@@ -179,7 +180,7 @@
     
       if (emoji1 === emoji2 && emoji2 === emoji3) {
         result.textContent = "🎉 Jackpot! 🎉";
-        money += 100;
+        curr += 100;
         updateMoney();
         slotMachine.style.boxShadow = "0 0 20px gold";
         moneyRain();
@@ -196,9 +197,9 @@
     }
 
     function updateMoney() {
-      if (money > savedMoney) {
-        savedMoney = money;
-        setCookie("savedMoney", savedMoney, 365);
+      if (curr > savedCurr) {
+        savedCurr = curr;
+        setCookie("savedCurr", savedCurr, 365);
       }
     }
 
