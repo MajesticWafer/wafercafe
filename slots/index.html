@@ -134,6 +134,12 @@
      <source src="casino-theme.mp3"></source>
      Your browser does not support the audio element.
   </audio>
+  
+  <!-- Add the pull.mp3 audio element here -->
+  <audio id="spin-sound">
+    <source src="pull.mp3" type="audio/mp3">
+    Your browser does not support the audio element.
+  </audio>
 
   <div class="money-rain" id="money-rain"></div>
 
@@ -161,6 +167,10 @@
       slot1.textContent = emoji1;
       slot2.textContent = emoji2;
       slot3.textContent = emoji3;
+
+      // Play the pull sound
+      const spinSound = document.getElementById("spin-sound");
+      spinSound.play();
 
       if (emoji1 === emoji2 && emoji2 === emoji3) {
         result.textContent = "🎉 Jackpot! 🎉";
@@ -233,8 +243,8 @@
       const ca = document.cookie.split(';');
       for (let i = 0; i < ca.length; i++) {
         let c = ca[i];
-        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
       }
       return null;
     }
