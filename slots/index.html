@@ -181,18 +181,14 @@
         updateHighScore();
         slotMachine.style.boxShadow = "0 0 20px gold";
         moneyRain();
-        setTimeout(() => { 
-          slotMachine.style.boxShadow = "";
-          spinButton.disabled = false;
-        }, 500);
+        setTimeout(() => slotMachine.style.boxShadow = "", 500);
       } else {
         result.textContent = "Try Again!";
         slotMachine.style.boxShadow = "0 0 20px red";
-        setTimeout(() => { 
-          slotMachine.style.boxShadow = "";
-          spinButton.disabled = false;
-        }, 500);
+        setTimeout(() => slotMachine.style.boxShadow = "", 500);
       }
+
+      setTimeout(() => spinButton.disabled = false, 800);
 
       scoreDisplay.textContent = `Score: ${score} | High Score: ${highScore}`;
     }
