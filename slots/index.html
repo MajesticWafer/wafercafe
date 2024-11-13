@@ -157,8 +157,8 @@
     function pullsfx() {
         const sfx = document.getElementById("pull-audio");
 
-        if (sound === "false") {
-          return
+        if (!sound) {
+          return;
         } else {
           sfx.play();
         }
@@ -228,12 +228,12 @@
       if (bgm.paused) {
         bgm.play();
         sfx.play();
-        sound = "true";
+        sound = true;
         audioIcon.classList.replace("bi-volume-mute-fill", "bi-volume-up-fill");
       } else {
         bgm.pause();
         sfx.pause();
-        sound = "false";
+        sound = false;
         audioIcon.classList.replace("bi-volume-up-fill", "bi-volume-mute-fill");
       }
     }
