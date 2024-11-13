@@ -147,6 +147,7 @@
     const slotMachine = document.getElementById("slot-machine");
     const moneyRainDiv = document.getElementById("money-rain");
     const scoreDisplay = document.getElementById("score");
+    var sound = false
     let score = 0;
     let highScore = getCookie("highScore") || 0;
     
@@ -155,7 +156,12 @@
 
     function pullsfx() {
         const sfx = document.getElementById("pull-audio");
-        sfx.play();
+
+        if (sound === "false") {
+          return
+        } else {
+          sfx.play();
+        }
     }
     
     function spin() {
@@ -222,10 +228,12 @@
       if (bgm.paused) {
         bgm.play();
         sfx.play();
+        sound = "true";
         audioIcon.classList.replace("bi-volume-mute-fill", "bi-volume-up-fill");
       } else {
         bgm.pause();
         sfx.pause();
+        sound = "false";
         audioIcon.classList.replace("bi-volume-up-fill", "bi-volume-mute-fill");
       }
     }
