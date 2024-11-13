@@ -158,8 +158,8 @@
         const sfx = document.getElementById("pull-audio");
 
         if (!sound) {
-          return;
-        } else {
+          sfx.pause();
+        } else if (sound) {
           sfx.play();
         }
     }
