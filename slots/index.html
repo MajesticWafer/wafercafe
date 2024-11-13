@@ -157,9 +157,9 @@
     function pullsfx() {
         const sfx = document.getElementById("pull-audio");
 
-        if (!sound) {
+        if (sound === "0" {
           sfx.pause();
-        } else if (sound) {
+        } else if (sound === "1") {
           sfx.play();
         }
     }
@@ -222,18 +222,15 @@
 
     function toggleAudio() {
       const bgm = document.getElementById("background-audio");
-      const sfx = document.getElementById("spin-audio");
       const audioIcon = document.getElementById("audio-icon");
       
       if (bgm.paused) {
         bgm.play();
-        sfx.play();
-        sound = true;
+        sound = "1";
         audioIcon.classList.replace("bi-volume-mute-fill", "bi-volume-up-fill");
       } else {
         bgm.pause();
-        sfx.pause();
-        sound = false;
+        sound = "0";
         audioIcon.classList.replace("bi-volume-up-fill", "bi-volume-mute-fill");
       }
     }
