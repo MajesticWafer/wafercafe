@@ -133,9 +133,12 @@
             } else {
                 // Diagonal checkerboard pattern with squares
                 checkerboard.style.background = `
-                    repeating-conic-gradient(
-                        #1c1c1c 0 25%, 
-                        #2b2b2b 0 50%
+                    repeating-linear-gradient(
+                        90deg,
+                        #1c1c1c 0px,
+                        #1c1c1c 50px,
+                        #2b2b2b 50px,
+                        #2b2b2b 100px
                     )`;
             }
         });
