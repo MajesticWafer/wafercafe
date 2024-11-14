@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infinite Moving Checkerboard Background</title>
+    <style>
+        /* Basic reset for body */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            overflow: hidden;
+        }
+
+        /* Container for checkerboard pattern */
+        .checkerboard {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 200%;
+            background: repeating-linear-gradient(
+                45deg,
+                #1c1c1c 0px,
+                #1c1c1c 50px,
+                #2b2b2b 50px,
+                #2b2b2b 100px
+            );
+            animation: moveLeft 10s linear infinite;
+        }
+
+        /* Animation for infinite movement */
+        @keyframes moveLeft {
+            from {
+                transform: translateX(0);
+            }
+            to {
+                transform: translateX(-50%);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="checkerboard"></div>
+</body>
+</html>
