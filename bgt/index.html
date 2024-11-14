@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Infinite Moving Checkerboard Background</title>
+    <title>Toggle Checkerboard Pattern</title>
     <style>
         /* Basic reset for body */
         * {
@@ -13,6 +13,12 @@
         }
         body {
             overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #1c1c1c;
+            font-family: Arial, sans-serif;
         }
 
         /* Container for checkerboard pattern */
@@ -41,9 +47,100 @@
                 transform: translateX(-50%);
             }
         }
+
+        /* Toggle switch styles */
+        .switch-container {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 10;
+        }
+        .switch-label {
+            color: #fff;
+            margin-right: 5px;
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
     </style>
 </head>
 <body>
+    <!-- Checkerboard pattern container -->
     <div class="checkerboard"></div>
+
+    <!-- Switch container -->
+    <div class="switch-container">
+        <span class="switch-label">Toggle Pattern</span>
+        <label class="switch">
+            <input type="checkbox" id="patternSwitch">
+            <span class="slider"></span>
+        </label>
+    </div>
+
+    <script>
+        // JavaScript to toggle between diagonal and straight checkerboard patterns
+        const checkerboard = document.querySelector('.checkerboard');
+        const patternSwitch = document.getElementById('patternSwitch');
+
+        patternSwitch.addEventListener('change', () => {
+            if (patternSwitch.checked) {
+                // Straight checkerboard pattern
+                checkerboard.style.background = `
+                    repeating-linear-gradient(
+                        90deg,
+                        #1c1c1c 0px,
+                        #1c1c1c 50px,
+                        #2b2b2b 50px,
+                        #2b2b2b 100px
+                    )`;
+            } else {
+                // Diagonal checkerboard pattern
+                checkerboard.style.background = `
+                    repeating-linear-gradient(
+                        45deg,
+                        #1c1c1c 0px,
+                        #1c1c1c 50px,
+                        #2b2b2b 50px,
+                        #2b2b2b 100px
+                    )`;
+            }
+        });
+    </script>
 </body>
 </html>
