@@ -36,7 +36,7 @@
     let dy = 4;  // Speed in the Y direction (initial upward motion)
 
     // Gravity constant (affects the ball's downward acceleration)
-    const gravity = 0.2;
+    const gravity = 0.5;
     const friction = 0.99; // Slight friction to simulate air resistance (optional)
 
     // Function to draw the ball
@@ -50,7 +50,7 @@
 
     // Function to update ball's position and simulate physics
     function updateBallPosition() {
-      // Apply gravity to the vertical speed
+      // Apply gravity to the vertical speed (dy)
       dy += gravity;
 
       // Bounce off left and right walls
