@@ -39,6 +39,14 @@
     const gravity = 0.5;
     const friction = 0.99; // Slight friction to simulate air resistance (optional)
 
+    // Function to generate random direction for the ball
+    function randomDirection() {
+      // Randomly set dx to be between -4 and 4 for horizontal speed
+      dx = Math.random() * 8 - 4;
+      // Randomly set dy to be between -4 and 4 for vertical speed
+      dy = Math.random() * 8 - 4;
+    }
+
     // Function to draw the ball
     function drawBall() {
       ctx.beginPath();
@@ -82,6 +90,8 @@
       requestAnimationFrame(draw);  // Call draw() repeatedly
     }
 
+    // Initialize with random direction and start the animation
+    randomDirection();
     draw();  // Start the animation
   </script>
 </body>
