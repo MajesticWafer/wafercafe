@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Three.js Cloth Sim</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r146/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dat.gui"></script>
+</head>
+<body style="margin: 0; overflow: hidden;">
+  <script>
+    // Scene, camera, and renderer setup
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Basic controls
+    camera.position.set(0, 2, 5);
+
+    // Add lights
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(ambientLight);
+    const pointLight = new THREE.PointLight(0xffffff, 1);
+    pointLight.position.set(2, 5, 3);
+    scene.add(pointLight);
+
+    // Cloth settings
+    const clothSize = 10; // Cloth width/height
+    let clothResolution = 20; // Number of particles per side
+    let clothGeometry, clothMesh;
+
+    // Objects to interact with
+    const sphere = new THREE.Mesh(new THREE.SphereGeometry(1, 32, 32), new THREE.MeshStandardMaterial({ color: 0xff0000 }));
+    sphere.position.y = 1;
+    scene.add(sphere);
+
+    const cube = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), new THREE.MeshStandardMaterial({ color: 0x00ff00 }));
+    cube.position.y = 1;
+    cube.visible = false; // Start with the sphere visible
+    scene.add(cube);
+
+    const plane = new THREE.Mesh(new THREE.PlaneGeometry(10, 10), new THREE.MeshStandardMaterial({ color: 0x999999, side: THREE.DoubleSide }));
+    plane.rotation.x = -Math.PI / 2;
+    scene.add(plane);
+
+    // Initialize cloth
+    function initCloth() {
+      if (clothMesh) scene.remove(clothMesh);
+
+      clothGeometry = new THREE.PlaneGeometry(clothSize, clothSize, clothResolution - 1, clothResolution - 1);
+      const clothMaterial = new THREE.MeshStandardMaterial({
+        color: 0x0000ff,
+        side: THREE.DoubleSide,
+        wireframe: true,
+      });
+
+      clothMesh = new THREE.Mesh(clothGeometry, clothMaterial);
+      clothMesh.position.y = 4; // Start above objects
+      scene.add(clothMesh);
+    }
+
+    initCloth();
+
+    // Simple cloth physics (manual for simplicity)
+    function updateCloth() {
+      const vertices = clothGeometry.attributes.position.array;
+      const step = clothSize / (clothResolution - 1);
+
+      for (let i = 0; i < vertices.length; i += 3) {
+        const x = vertices[i];
+        const y = vertices[i + 1];
+        const z = vertices[i + 2];
+
+        if (y > 0.01) {
+          vertices[i + 1] -= 0.01; // Gravity effect
+        }
+
+        // Collision with sphere
+        const dist = new THREE.Vector3(x, y, z).distanceTo(sphere.position);
+        if (dist < 1) vertices[i + 1] = sphere.position.y + 1;
+
+        // Collision with cube
+        if (cube.visible && x > cube.position.x - 0.5 && x < cube.position.x + 0.5 &&
+            y > cube.position.y - 0.5 && y < cube.position.y + 0.5 &&
+            z > cube.position.z - 0.5 && z < cube.position.z + 0.5) {
+          vertices[i + 1] = cube.position.y + 0.5;
+        }
+      }
+
+      clothGeometry.attributes.position.needsUpdate = true;
+    }
+
+    // GUI controls
+    const gui = new dat.GUI();
+    gui.add({ resolution: clothResolution }, 'resolution', 10, 50, 1).onChange(value => {
+      clothResolution = value;
+      initCloth();
+    });
+    gui.add({ object: 'Sphere' }, 'object', ['Sphere', 'Cube']).onChange(value => {
+      sphere.visible = value === 'Sphere';
+      cube.visible = value === 'Cube';
+    });
+    gui.add({ reset: initCloth }, 'reset');
+
+    // Animation loop
+    function animate() {
+      requestAnimationFrame(animate);
+      updateCloth();
+      renderer.render(scene, camera);
+    }
+    animate();
+
+  </script>
+</body>
+</html>
