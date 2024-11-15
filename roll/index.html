@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roll the Ball</title>
+  <style>
+    body {
+      margin: 0;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #222;
+    }
+    #ball {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: #09f;
+      position: absolute;
+    }
+  </style>
+</head>
+<body>
+  <div id="ball"></div>
+
+  <script>
+    // Initialize ball position and movement factors
+    const ball = document.getElementById("ball");
+    let posX = window.innerWidth / 2;
+    let posY = window.innerHeight / 2;
+    let velocityX = 0;
+    let velocityY = 0;
+    const friction = 0.98;
+
+    // Update ball position
+    function updateBallPosition() {
+      velocityX *= friction;
+      velocityY *= friction;
+
+      posX += velocityX;
+      posY += velocityY;
+
+      // Boundary conditions
+      if (posX < 0) { posX = 0; velocityX *= -0.5; }
+      if (posY < 0) { posY = 0; velocityY *= -0.5; }
+      if (posX > window.innerWidth - ball.offsetWidth) {
+        posX = window.innerWidth - ball.offsetWidth;
+        velocityX *= -0.5;
+      }
+      if (posY > window.innerHeight - ball.offsetHeight) {
+        posY = window.innerHeight - ball.offsetHeight;
+        velocityY *= -0.5;
+      }
+
+      ball.style.left = `${posX}px`;
+      ball.style.top = `${posY}px`;
+
+      requestAnimationFrame(updateBallPosition);
+    }
+
+    // Get sensor data and move the ball
+    if (window.DeviceOrientationEvent) {
+      window.addEventListener("deviceorientation", (event) => {
+        // Use the device orientation to change velocities
+        velocityX += event.gamma / 20;
+        velocityY += event.beta / 20;
+      });
+    }
+
+    // Start the animation
+    updateBallPosition();
+  </script>
+</body>
+</html>
