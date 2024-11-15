@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Infinite Bouncing Ball</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    canvas {
+      display: block;
+      background-color: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="myCanvas"></canvas>
+
+  <script>
+    // Set up the canvas
+    const canvas = document.getElementById('myCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Resize canvas to full window size
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    // Ball properties
+    const ballRadius = 20;
+    let x = canvas.width / 2;
+    let y = canvas.height / 2;
+    let dx = 4;  // Speed in the X direction
+    let dy = 4;  // Speed in the Y direction
+
+    // Function to draw the ball
+    function drawBall() {
+      ctx.beginPath();
+      ctx.arc(x, y, ballRadius, 0, Math.PI * 2);
+      ctx.fillStyle = "#0095DD";
+      ctx.fill();
+      ctx.closePath();
+    }
+
+    // Function to update ball's position and simulate physics
+    function updateBallPosition() {
+      // Bounce off left and right walls
+      if (x + dx > canvas.width - ballRadius || x + dx < ballRadius) {
+        dx = -dx;  // Reverse the X direction
+      }
+
+      // Bounce off top and bottom walls
+      if (y + dy > canvas.height - ballRadius || y + dy < ballRadius) {
+        dy = -dy;  // Reverse the Y direction
+      }
+
+      // Update the ball's position
+      x += dx;
+      y += dy;
+    }
+
+    // Main loop
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height); // Clear the canvas
+      drawBall();  // Draw the ball
+      updateBallPosition();  // Update the ball's position
+      requestAnimationFrame(draw);  // Call draw() repeatedly
+    }
+
+    draw();  // Start the animation
+  </script>
+</body>
+</html>
