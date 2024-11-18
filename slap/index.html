@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Box Slapping Simulator</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/142/three.min.js"></script>
+    <script>
+        // Scene, camera, and renderer setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        document.body.appendChild(renderer.domElement);
+
+        // Ground plane
+        const groundGeometry = new THREE.PlaneGeometry(100, 100);
+        const groundMaterial = new THREE.MeshStandardMaterial({ color: 0x555555 });
+        const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+        ground.rotation.x = -Math.PI / 2;
+        ground.receiveShadow = true;
+        scene.add(ground);
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0x404040, 1); // Soft ambient light
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        directionalLight.position.set(5, 10, 7.5);
+        directionalLight.castShadow = true;
+        directionalLight.shadow.mapSize.width = 2048;
+        directionalLight.shadow.mapSize.height = 2048;
+        scene.add(directionalLight);
+
+        // Load wooden crate texture
+        const textureLoader = new THREE.TextureLoader();
+        const crateTexture = textureLoader.load('https://threejs.org/examples/textures/crate.gif');
+
+        // Create a single box
+        const boxGeometry = new THREE.BoxGeometry(2, 2, 2);
+        const boxMaterial = new THREE.MeshStandardMaterial({ map: crateTexture });
+        let box = null;
+        let boxExists = false;
+
+        // Function to create and spawn a new box
+        function spawnBox() {
+            box = new THREE.Mesh(boxGeometry, boxMaterial);
+            box.castShadow = true;
+            box.position.set(0, 15, 0);
+            scene.add(box);
+            boxExists = true;
+        }
+
+        // Event listener for mouse click
+        window.addEventListener('click', (event) => {
+            if (!box) return;
+
+            // Raycaster for detecting clicks on the box
+            const mouse = new THREE.Vector2(
+                (event.clientX / window.innerWidth) * 2 - 1,
+                -(event.clientY / window.innerHeight) * 2 + 1
+            );
+
+            const raycaster = new THREE.Raycaster();
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObject(box);
+
+            if (intersects.length > 0) {
+                // Remove box when clicked
+                scene.remove(box);
+                box = null;
+                boxExists = false;
+
+                // Wait and spawn a new box
+                setTimeout(spawnBox, 1000); // Delay for better effect
+            }
+        });
+
+        // Camera positioning
+        camera.position.set(5, 5, 15);
+        camera.lookAt(0, 0, 0);
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Gravity effect
+            if (box && box.position.y > 1) {
+                box.position.y -= 0.1; // Simulating gravity
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        // Start with the first box
+        spawnBox();
+        animate();
+    </script>
+</body>
+</html>
