@@ -1,0 +1,87 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+}
+
+header {
+    text-align: center;
+    padding: 1rem;
+    background-color: #222;
+    color: white;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    margin: 2rem;
+}
+
+.product {
+    display: flex;
+    max-width: 800px;
+    gap: 2rem;
+}
+
+.description {
+    flex: 1;
+}
+
+.description ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.description li {
+    padding: 0.5rem 0;
+}
+
+.in-stock {
+    color: green;
+}
+
+.out-stock {
+    color: red;
+}
+
+.images {
+    flex: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.image-container {
+    height: 300px;
+    width: 300px;
+    overflow: hidden;
+    position: relative;
+}
+
+.image-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: transform 0.3s ease-in-out;
+}
+
+.dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.dots span {
+    width: 10px;
+    height: 10px;
+    background-color: #ccc;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.dots span.active {
+    background-color: #222;
+}
