@@ -150,18 +150,33 @@
     var sound = false
     let score = 0;
     let highScore = getCookie("highScore") || 0;
+    let broke = Number(getCookie("broke")) || 0;
     
     // Update high score
     scoreDisplay.textContent = `Score: ${score} | High Score: ${highScore}`;
 
-    function pullsfx() {
-        const sfx = document.getElementById("pull-audio");
+    function handleBroke() {
+      result.textContent = "No score left. Come back later.";
+      slotMachine.style.boxShadow = "0 0 20px blue";
+      setTimeout(() => slotMachine.style.boxShadow = "", 500);
+    }
+    
+    if (broke === 0) {
+      // Give credit for gambling
+      score += 300;
+    } else {
+      handleBroke();
+    }
+      
 
-        if (sound === "0") {
-          sfx.pause();
-        } else if (sound === "1") {
-          sfx.play();
-        }
+    function pullsfx() {
+      const sfx = document.getElementById("pull-audio");
+
+      if (sound === "0") {
+        sfx.pause();
+      } else if (sound === "1") {
+        sfx.play();
+      }
     }
     
     function spin() {
@@ -180,7 +195,9 @@
 
       const spinButton = document.getElementById("spin-button");
       spinButton.disabled = true;
-    
+
+      if (score < 10) { handleBroke(); }
+        
       if (emoji1 === emoji2 && emoji2 === emoji3) {
         result.textContent = "🎉 Jackpot! 🎉";
         slotMachine.style.boxShadow = "0 0 20px gold";
@@ -206,6 +223,8 @@
         result.textContent = "Try Again!";
         slotMachine.style.boxShadow = "0 0 20px red";
         setTimeout(() => slotMachine.style.boxShadow = "", 500);
+        score -= 10;
+        updateBrokeScore();
       }
 
       setTimeout(() => spinButton.disabled = false, 800);
@@ -219,6 +238,22 @@
         setCookie("highScore", highScore, 365);
       }
     }
+
+    function updateBrokeScore() {
+      if (score < 10) {
+        broke = 1;
+
+        const now = new Date();
+        const midnight = new Date(now);
+        midnight.setHours(24, 0, 0, 0); // Set time to 12:00 AM
+
+        // Set the cookie to expire at midnight
+        document.cookie = `broke=1; expires=${midnight.toUTCString()}; path=/;`;
+
+        console.log('Cookie "broke" set with value 1, expires at midnight.');
+      }
+    }
+
 
     function toggleAudio() {
       const bgm = document.getElementById("background-audio");
