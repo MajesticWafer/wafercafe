@@ -246,7 +246,9 @@
         updateBrokeScore();
       }
 
-      setTimeout(() => spinButton.disabled = false, 800);
+      if (broke === 0) {
+        setTimeout(() => spinButton.disabled = false, 800);
+      }
 
       scoreDisplay.textContent = `Score: ${score} | High Score: ${highScore}`;
     }
