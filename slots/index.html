@@ -152,8 +152,7 @@
     const moneyRainDiv = document.getElementById("money-rain");
     const scoreDisplay = document.getElementById("score");
     var sound = false
-    // credit for gambling
-    let score = 300;
+    let score = 0;
     let highScore = getCookie("highScore") || 0;
     let broke = Number(getCookie("broke")) || 0;
     
@@ -182,7 +181,9 @@
     }
 
     function checkBroke() {
-      if (broke === 1) {
+      if (broke === 0) {
+        score += 300;
+      } else {
         handleBroke();
       }
     }      
