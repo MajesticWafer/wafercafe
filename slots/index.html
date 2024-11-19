@@ -108,7 +108,7 @@
     }
   </style>
 </head>
-<body>
+<body onload="checkBroke();">
   <div class="score" id="score">Score: 0 | High Score: 0</div>
 
   <div class="controls">
@@ -159,15 +159,19 @@
       result.textContent = "No score left. Come back later.";
       slotMachine.style.boxShadow = "0 0 20px blue";
       setTimeout(() => slotMachine.style.boxShadow = "", 500);
-    }
-    
-    if (broke === 0) {
-      // Give credit for gambling
-      score += 300;
-    } else {
-      handleBroke();
-    }
       
+      const spinButton = document.getElementById("spin-button");
+      spinButton.disabled = true;
+    }
+
+    function checkBroke() {
+      if (broke === 0) {
+        // Give credit for gambling
+        score += 300;
+      } else {
+        handleBroke();
+      }
+    }      
 
     function pullsfx() {
       const sfx = document.getElementById("pull-audio");
