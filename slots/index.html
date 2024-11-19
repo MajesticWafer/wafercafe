@@ -143,6 +143,10 @@
   <div class="money-rain" id="money-rain"></div>
 
   <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      checkBroke();
+    });
+
     const emojis = ["🍒", "🍋", "🍉", "🍇", "🔔", "⭐", "💎"];
     const slotMachine = document.getElementById("slot-machine");
     const moneyRainDiv = document.getElementById("money-rain");
