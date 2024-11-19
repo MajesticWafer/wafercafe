@@ -152,7 +152,7 @@
     const moneyRainDiv = document.getElementById("money-rain");
     const scoreDisplay = document.getElementById("score");
     var sound = false
-    let score = 0;
+    let score = 300;
     let highScore = getCookie("highScore") || 0;
     let broke = Number(getCookie("broke")) || 0;
     
@@ -160,6 +160,18 @@
     scoreDisplay.textContent = `Score: ${score} | High Score: ${highScore}`;
 
     function handleBroke() {
+      broke = 1;
+      score = 0;
+
+      const now = new Date();
+      const midnight = new Date(now);
+      midnight.setHours(24, 0, 0, 0); // Set time to 12:00 AM
+
+      // Set the cookie to expire at midnight
+      document.cookie = `broke=1; expires=${midnight.toUTCString()}; path=/;`;
+
+      console.log('Cookie "broke" set with value 1, expires at midnight.');
+      
       result.textContent = "No score left. Come back later.";
       slotMachine.style.boxShadow = "0 0 20px blue";
       setTimeout(() => slotMachine.style.boxShadow = "", 500);
@@ -249,16 +261,7 @@
 
     function updateBrokeScore() {
       if (score < 10) {
-        broke = 1;
-
-        const now = new Date();
-        const midnight = new Date(now);
-        midnight.setHours(24, 0, 0, 0); // Set time to 12:00 AM
-
-        // Set the cookie to expire at midnight
-        document.cookie = `broke=1; expires=${midnight.toUTCString()}; path=/;`;
-
-        console.log('Cookie "broke" set with value 1, expires at midnight.');
+        handleBroke();
       }
     }
 
