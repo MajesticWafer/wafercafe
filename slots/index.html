@@ -107,19 +107,18 @@
       top: 10px;
     }
     .stat {
-      font-size: 1rem;
-      position: absolute;
+      font-size: 1.25rem;
+      font-weight: bold;
       text-align: center;
       margin-top: 10px;
-      opacity: 0; /* Initially hidden */
-      transition: opacity 1s ease-in-out;
+      opacity: 0;
+      transition: opacity 2s ease-in-out;
     }
 
     .stat.flash-green {
-      background-color: green;
-      color: white;
-      opacity: 1; /* Show the element */
-      animation: fade-out 3s forwards; /* Start fading out */
+      color: green;
+      opacity: 1;
+      animation: fade-out 2s forwards;
     }
 
     @keyframes fade-out {
@@ -134,7 +133,7 @@
 </head>
 <body>
   <div class="score" id="score">Score: 300 | High Score: 0</div>
-  <div class="stat" id="stat">Here's $300, have a gamble.<</div>
+  <div class="stat" id="stat">Here's $300, have a gamble.</div>
 
 
   <div class="controls">
