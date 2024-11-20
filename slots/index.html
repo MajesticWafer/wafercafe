@@ -106,10 +106,36 @@
       text-align: center;
       top: 10px;
     }
+    .stat {
+      font-size: 1rem;
+      position: absolute;
+      text-align: center;
+      margin-top: 10px;
+      opacity: 0; /* Initially hidden */
+      transition: opacity 1s ease-in-out;
+    }
+
+    .stat.flash-green {
+      background-color: green;
+      color: white;
+      opacity: 1; /* Show the element */
+      animation: fade-out 3s forwards; /* Start fading out */
+    }
+
+    @keyframes fade-out {
+      0% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+      }
+    }
   </style>
 </head>
 <body>
   <div class="score" id="score">Score: 300 | High Score: 0</div>
+  <div class="stat" id="stat">Here's $300, have a gamble.<</div>
+
 
   <div class="controls">
     <div class="control-button" onclick="toggleAudio()">
@@ -145,8 +171,18 @@
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       checkBroke();
+      flashStat();
     });
 
+    function flashStat() {
+      const statElement = document.getElementById('stat');
+      statElement.classList.add('flash-green');
+  
+      setTimeout(() => {
+        statElement.classList.remove('flash-green');
+      }, 3000);
+    }
+    
     const emojis = ["🍒", "🍋", "🍉", "🍇", "🔔", "⭐", "💎"];
     const slotMachine = document.getElementById("slot-machine");
     const moneyRainDiv = document.getElementById("money-rain");
