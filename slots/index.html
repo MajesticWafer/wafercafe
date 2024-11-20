@@ -108,7 +108,7 @@
     }
   </style>
 </head>
-<body onload="checkBroke();">
+<body>
   <div class="score" id="score">Score: 300 | High Score: 0</div>
 
   <div class="controls">
@@ -183,6 +183,7 @@
     function checkBroke() {
       if (broke === 0) {
         score += 300;
+        scoreDisplay.textContent = `Score: ${score} | High Score: ${highScore}`;
       } else {
         handleBroke();
       }
