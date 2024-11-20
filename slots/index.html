@@ -112,22 +112,14 @@
       text-align: center;
       margin-top: 10px;
       opacity: 0;
+      color: white;
       transition: opacity 2s ease-in-out;
     }
 
     .stat.flash-green {
       color: green;
       opacity: 1;
-      animation: fade-out 2s forwards;
-    }
-
-    @keyframes fade-out {
-      0% {
-        opacity: 1;
-      }
-      100% {
-        opacity: 0;
-      }
+      animation: fadeOut 2s forwards;
     }
   </style>
 </head>
@@ -179,7 +171,7 @@
   
       setTimeout(() => {
         statElement.classList.remove('flash-green');
-      }, 3000);
+      }, 2000);
     }
     
     const emojis = ["🍒", "🍋", "🍉", "🍇", "🔔", "⭐", "💎"];
