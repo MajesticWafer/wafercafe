@@ -164,13 +164,12 @@
       score = 0;
 
       const now = new Date();
-      const midnight = new Date(now);
-      midnight.setHours(24, 0, 0, 0); // Set time to 12:00 AM
+      const oneHourLater = new Date(now.getTime() + 60 * 60 * 1000); // Add 1 hour in milliseconds
 
-      // Set the cookie to expire at midnight
-      document.cookie = `broke=1; expires=${midnight.toUTCString()}; path=/;`;
+      // Set the cookie to expire in 1 hour
+      document.cookie = `broke=1; expires=${oneHourLater.toUTCString()}; path=/;`;
 
-      console.log('Cookie "broke" set with value 1, expires at midnight.');
+      console.log('Cookie "broke" set with value 1, expires in 1 hour.');
       
       result.textContent = "No score left. Come back later.";
       slotMachine.style.boxShadow = "0 0 20px blue";
