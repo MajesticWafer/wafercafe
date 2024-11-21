@@ -130,6 +130,10 @@
     <p id="result">Take a spin!</p>
   </div>
 
+  <button id="clear-broke">
+    <i class="bi-x-circle"></i> Clear Broke
+  </button>
+
   <audio id="background-audio" loop>
      <source src="casino-theme.mp3"></source>
      Your browser does not support the audio element.
@@ -155,10 +159,18 @@
     let score = 0;
     let highScore = getCookie("highScore") || 0;
     let broke = Number(getCookie("broke")) || 0;
-    
+
+    document.getElementById("clear-broke").addEventListener("click", function () {
+      const icon = this.querySelector("i");
+      icon.classList.toggle("bi-x-circle");
+      icon.classList.toggle("bi-x-circle-fill");
+
+      document.cookie = "broke=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    });
+
     // Update high score
     scoreDisplay.textContent = `Score: ${score} | High Score: ${highScore}`;
-
+    
     function handleBroke() {
       broke = 1;
       score = 0;
