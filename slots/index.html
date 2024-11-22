@@ -164,6 +164,10 @@
   <div class="score" id="score">Score: 300 | High Score: 0</div>
 
   <div class="controls">
+    <label class="switch">
+      <input id="double" type="checkbox">
+      <span class="slider round">DoN</span>
+    </label>
     <div class="control-button" onclick="toggleAudio()">
       <i id="audio-icon" class="bi bi-volume-mute-fill"></i>
     </div>
@@ -179,11 +183,6 @@
     <div class="buttons">
       <button id="spin-button" class="btn" onclick="spin(); pullsfx();">Spin</button>
     </div>
-    <label class="switch">
-      <input id="double" type="checkbox">
-      <span class="slider round"></span>
-      <p>Double-or-Nothing</p>
-    </label>
     <p id="result">Take a spin!</p>
   </div>
 
@@ -322,7 +321,7 @@
         result.textContent = "Try Again!";
         slotMachine.style.boxShadow = "0 0 20px red";
         setTimeout(() => slotMachine.style.boxShadow = "", 500);
-        score -= 10;
+        score -= double ? 20 : 10;
         updateBrokeScore();
       }
 
