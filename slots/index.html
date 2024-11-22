@@ -166,7 +166,7 @@
   <div class="controls">
     <label class="switch">
       <input id="double" type="checkbox">
-      <span class="slider round">DoN</span>
+      <span id="doubleText" class="slider round"><i class="bi-cash"></i></span>
     </label>
     <div class="control-button" onclick="toggleAudio()">
       <i id="audio-icon" class="bi bi-volume-mute-fill"></i>
@@ -204,9 +204,18 @@
 
       // Add an event listener to the "double" checkbox
       const doubleSwitch = document.getElementById("double");
+      const doubleText = document.getElementById("doubleText");
       doubleSwitch.addEventListener("change", () => {
         double = doubleSwitch.checked; // Set the "double" variable based on the checkbox state
         console.log("Double mode:", double);
+
+        if (doubleSwitch.checked) {
+          // change to cash stack
+          doubleText.innerHTML = `<i class="bi-cash-stack"></i>`;
+        } else {
+          // change to cash
+          doubleText.innerHTML = `<i class="bi-cash"></i>`;
+        }
       });
     });
     
