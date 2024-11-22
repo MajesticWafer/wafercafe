@@ -109,11 +109,9 @@
     /* The switch - the box around the slider */
     .switch {
       position: relative;
+      display: inline-block;
       width: 60px;
       height: 34px;
-      display: flex;
-      flex-direction: column; /* Stack children vertically */
-      align-items: center; /* Center-align content */
     }
     /* Hide default HTML checkbox */
     .switch input {
@@ -123,8 +121,6 @@
     }
     .icon {
       color: black;
-      /* margin-bottom: 5px;
-      font-size: 1.5em; */
     }
     .slider {
       position: absolute;
@@ -172,9 +168,8 @@
 
   <div class="controls">
     <label class="switch">
-      <span id="doubleText" class="icon"><i class="bi-cash"></i></span>
       <input id="double" type="checkbox">
-      <span class="slider round"></span>
+      <span id="doubleText" class="slider round"><i class="bi-cash icon"></i></span>
     </label>
     <div class="control-button" onclick="toggleAudio()">
       <i id="audio-icon" class="bi bi-volume-mute-fill"></i>
@@ -219,10 +214,10 @@
 
         if (doubleSwitch.checked) {
           // change to cash stack
-          doubleText.innerHTML = `<i class="bi-cash-stack"></i>`;
+          doubleText.innerHTML = `<i class="bi-cash-stack icon"></i>`;
         } else {
           // change to cash
-          doubleText.innerHTML = `<i class="bi-cash"></i>`;
+          doubleText.innerHTML = `<i class="bi-cash icon"></i>`;
         }
       });
     });
