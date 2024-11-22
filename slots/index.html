@@ -119,10 +119,6 @@
       width: 0;
       height: 0;
     }
-    .icon {
-      color: black;
-      margin: 4px;
-    }
     .slider {
       position: absolute;
       cursor: pointer;
@@ -144,6 +140,9 @@
       background-color: white;
       -webkit-transition: .4s;
       transition: .4s;
+    }
+    .slider:before. i {
+      color: black;
     }
     input:checked + .slider {
       background-color: #2196F3;
@@ -170,8 +169,11 @@
   <div class="controls">
     <label class="switch">
       <input id="double" type="checkbox">
-      <span id="doubleText" class="slider round"><i class="bi-cash icon"></i></span>
+      <span id="doubleText" class="slider round">
+        <i class="bi-cash"></i>
+      </span>
     </label>
+
     <div class="control-button" onclick="toggleAudio()">
       <i id="audio-icon" class="bi bi-volume-mute-fill"></i>
     </div>
