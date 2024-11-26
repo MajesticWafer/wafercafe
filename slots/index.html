@@ -171,7 +171,7 @@
 
       console.log('Cookie "broke" set with value 1, expires in 1 hour.');
       
-      result.textContent = "No score left. Come back later.";
+      result.textContent = `No score left. Come back at ${oneHourLater.toUTCString()}`;
       slotMachine.style.boxShadow = "0 0 20px blue";
       setTimeout(() => slotMachine.style.boxShadow = "", 500);
       
