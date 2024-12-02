@@ -1,6 +1,7 @@
 {
   "games": {
     "Webcore": "webcore",
+    "Chat": "chat",
     "Slots": "slots",
     "Monkey Mart": "monkeymart",
     "Jetpack Joyride": "jetpackjoyride",
