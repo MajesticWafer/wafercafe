@@ -1,141 +1,120 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plate Tectonics Simulation</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background-color: #f5f5f5;
-        }
-        header {
-            background-color: #003366;
-            color: white;
-            width: 100%;
-            padding: 1em;
-            text-align: center;
-            font-size: 1.5em;
-        }
-        .simulation-container {
-            position: relative;
-            width: 80%;
-            max-width: 800px;
-            height: 400px;
-            margin: 2em 0;
-            background-color: #e6e6e6;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        .plate {
-            position: absolute;
-            height: 100%;
-            width: 50%;
-            top: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-        .plate:hover {
-            background-color: rgba(0, 51, 102, 0.1);
-        }
-        .plate.left {
-            left: 0;
-            background-color: #4c9aff;
-        }
-        .plate.right {
-            right: 0;
-            background-color: #ff944d;
-        }
-        .info-box {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            background-color: white;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            padding: 1em;
-            border-radius: 8px;
-            display: none;
-        }
-        .info-box h3 {
-            margin: 0 0 0.5em;
-            font-size: 1.2em;
-        }
-        .info-box p {
-            margin: 0;
-            font-size: 0.9em;
-        }
-        .slider-container {
-            margin-top: 1em;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .slider {
-            width: 300px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Converging Plates Simulation</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background: linear-gradient(to bottom, #e0f7fa, #ffffff);
+      color: #333;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    .container {
+      position: relative;
+      width: 80%;
+      max-width: 800px;
+      height: 400px;
+      border: 2px solid #ccc;
+      background: #f5f5f5;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+    .plate {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #fff;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .plate.indo-australian {
+      left: 0;
+      background: #00796b;
+    }
+    .plate.eurasian {
+      right: 0;
+      background: #c2185b;
+    }
+    .slider {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: #333;
+      transform: translateY(-50%);
+      z-index: 1;
+    }
+    .info-box {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      width: 300px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    .info-box h3 {
+      margin-top: 0;
+    }
+    .info-box p {
+      margin: 0;
+    }
+    .info-box.active {
+      opacity: 1;
+      visibility: visible;
+    }
+  </style>
 </head>
 <body>
-
-<header>
-    Plate Tectonics Simulation
-</header>
-
-<div class="simulation-container" id="simulation">
-    <div class="plate left" data-info="Indo-Australian Plate">
-        Indo-Australian Plate
-    </div>
-    <div class="plate right" data-info="Eurasian Plate">
-        Eurasian Plate
-    </div>
-    <div class="info-box" id="infoBox">
-        <h3 id="infoTitle">Title</h3>
-        <p id="infoText">Details about the selected plate will appear here.</p>
-    </div>
-</div>
-
-<div class="slider-container">
-    <label for="plateSlider">Convergence Progress:</label>
-    <input type="range" id="plateSlider" class="slider" min="0" max="100" value="0">
-</div>
-
-<script>
-    const leftPlate = document.querySelector('.plate.left');
-    const rightPlate = document.querySelector('.plate.right');
-    const slider = document.getElementById('plateSlider');
+  <h1>Converging Plates Simulation</h1>
+  <div class="container">
+    <div class="slider"></div>
+    <div class="plate indo-australian" data-info="The Indo-Australian Plate is one of Earth's major tectonic plates. It is converging with the Eurasian Plate, forming islands like Sumatra and the Indonesian Archipelago.">Indo-Australian Plate</div>
+    <div class="plate eurasian" data-info="The Eurasian Plate is moving toward the Indo-Australian Plate, causing tectonic activity that shapes the Indonesian islands, including Sumatra.">Eurasian Plate</div>
+  </div>
+  <div class="info-box" id="infoBox">
+    <h3>Plate Information</h3>
+    <p id="infoText">Click a plate to learn more.</p>
+  </div>
+  <script>
+    const plates = document.querySelectorAll('.plate');
     const infoBox = document.getElementById('infoBox');
-    const infoTitle = document.getElementById('infoTitle');
     const infoText = document.getElementById('infoText');
 
-    // Update plates position based on slider
-    slider.addEventListener('input', () => {
-        const value = slider.value;
-        leftPlate.style.transform = `translateX(${value / 2}px)`;
-        rightPlate.style.transform = `translateX(-${value / 2}px)`;
+    plates.forEach(plate => {
+      plate.addEventListener('click', () => {
+        const info = plate.getAttribute('data-info');
+        infoText.textContent = info;
+        infoBox.classList.add('active');
+      });
     });
 
-    // Show info box on hover
-    [leftPlate, rightPlate].forEach(plate => {
-        plate.addEventListener('mouseenter', () => {
-            const info = plate.getAttribute('data-info');
-            infoTitle.textContent = info;
-            infoText.textContent = `You are hovering over the ${info}. This plate is significant to the formation of the Indonesian islands, including Sumatra.`;
-            infoBox.style.display = 'block';
-        });
-        plate.addEventListener('mouseleave', () => {
-            infoBox.style.display = 'none';
-        });
+    document.querySelector('.container').addEventListener('mouseleave', () => {
+      infoBox.classList.remove('active');
     });
-</script>
-
+  </script>
 </body>
 </html>
