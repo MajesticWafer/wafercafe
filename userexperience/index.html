@@ -13,17 +13,22 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
+        html, body {
+            height: 100%;
+            overflow: hidden; /* Prevent scrolling */
+        }
+
         body {
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             background: linear-gradient(145deg, #f3f6f9, #e2e8ed);
-            overflow: none;
         }
 
         .quiz-container {
             width: 400px;
+            max-width: 95%; /* Adjust for smaller screens */
             background: white;
             box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1), inset 0px 2px 2px rgba(255, 255, 255, 0.5);
             border-radius: 10px;
@@ -46,11 +51,13 @@
         .question {
             font-size: 1.1rem;
             margin-bottom: 10px;
+            text-align: center;
         }
 
         .options {
             list-style: none;
             margin-bottom: 20px;
+            padding: 0;
         }
 
         .options li {
@@ -60,10 +67,12 @@
             border: 1px solid #d0d7de;
             border-radius: 5px;
             cursor: pointer;
+            text-align: center;
             transition: background 0.3s ease, transform 0.2s ease;
         }
 
-        .options li:hover {
+        .options li:hover,
+        .options li.active { /* Active state for selected option */
             background: #0078d4;
             color: white;
             transform: scale(1.03);
@@ -114,7 +123,7 @@
 <body>
     <div class="quiz-container">
         <div class="header">
-            Sumatra Quiz
+            Windows 11 Quiz
         </div>
         <div class="content">
             <div id="question-container">
@@ -154,24 +163,32 @@
                     ${questionData.answers
                         .map(
                             (answer, index) =>
-                                `<li onclick="selectAnswer(${index})">${answer}</li>`
+                                `<li onclick="selectAnswer(${index}, this)">${answer}</li>`
                         )
                         .join("")}
                 </ul>
             `;
         }
 
-        function selectAnswer(selectedIndex) {
+        function selectAnswer(selectedIndex, element) {
+            // Set the clicked option as active
+            const options = document.querySelectorAll(".options li");
+            options.forEach(option => option.classList.remove("active")); // Reset active states
+            element.classList.add("active");
+
             const questionData = questions[currentQuestion];
             if (selectedIndex === questionData.correct) {
                 score++;
             }
+
             currentQuestion++;
-            if (currentQuestion < questions.length) {
-                loadQuestion();
-            } else {
-                showResult();
-            }
+            setTimeout(() => {
+                if (currentQuestion < questions.length) {
+                    loadQuestion();
+                } else {
+                    showResult();
+                }
+            }, 300); // Add slight delay for better user experience
         }
 
         function showResult() {
