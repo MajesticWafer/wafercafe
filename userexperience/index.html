@@ -1,133 +1,196 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Interactive Objects</title>
-  <style>
-    /* General Reset */
-    body {
-      margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f3f3f3;
-      overflow: hidden;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz App</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
 
-    /* Main container */
-    .container {
-      position: relative;
-      width: 100vw;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(145deg, #f3f6f9, #e2e8ed);
+        }
 
-    /* Brown objects */
-    .object {
-      width: 100px;
-      height: 150px;
-      background: linear-gradient(to bottom, #6b4f36, #8a6d48, #d9c6a1);
-      border-radius: 10px;
-      position: relative;
-      margin: 0 20px;
-      cursor: pointer;
-      box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
-    }
+        .quiz-container {
+            width: 400px;
+            background: white;
+            box-shadow: 0px 10px 15px rgba(0, 0, 0, 0.1), inset 0px 2px 2px rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+            overflow: hidden;
+            animation: fadeIn 1s ease-in-out;
+        }
 
-    /* Grass on top */
-    .object::before {
-      content: '';
-      width: 120%;
-      height: 30px;
-      background: linear-gradient(to bottom, #6ab04c, #4caf50);
-      border-radius: 20px 20px 0 0;
-      position: absolute;
-      top: -10px;
-      left: -10%;
-      z-index: 1;
-    }
+        .header {
+            background: #0078d4;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 1.5rem;
+        }
 
-    /* Stones and layers */
-    .object::after {
-      content: '';
-      width: 100%;
-      height: 20px;
-      position: absolute;
-      bottom: 10px;
-      left: 0;
-      background: repeating-linear-gradient(
-        to right,
-        #b49b83 0%,
-        #b49b83 20%,
-        #8a6d48 20%,
-        #8a6d48 40%
-      );
-      clip-path: polygon(5% 50%, 15% 20%, 25% 50%, 40% 10%, 60% 50%, 75% 20%, 95% 50%);
-    }
+        .content {
+            padding: 20px;
+        }
 
-    /* Info Box */
-    .info-box {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 250px;
-      padding: 15px;
-      background: #ffffff;
-      border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-      border: 1px solid #e0e0e0;
-      display: none;
-    }
+        .question {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
 
-    .info-box.active {
-      display: block;
-    }
+        .options {
+            list-style: none;
+            margin-bottom: 20px;
+        }
 
-    .info-box h4 {
-      margin: 0;
-      font-size: 1.2em;
-    }
+        .options li {
+            background: #f3f6f9;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #d0d7de;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
 
-    .info-box p {
-      margin: 5px 0 0;
-      font-size: 0.9em;
-      color: #555;
-    }
-  </style>
+        .options li:hover {
+            background: #0078d4;
+            color: white;
+            transform: scale(1.03);
+        }
+
+        .result {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .button {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .button button {
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            background: #0078d4;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .button button:hover {
+            background: #005fa2;
+            transform: scale(1.05);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <div class="object" id="object1"></div>
-    <div class="object" id="object2"></div>
-  </div>
+    <div class="quiz-container">
+        <div class="header">
+            Windows 11 Quiz
+        </div>
+        <div class="content">
+            <div id="question-container">
+                <!-- Questions will go here -->
+            </div>
+            <div class="result" id="result">
+                Your score is <span id="score"></span>/5
+            </div>
+            <div class="button">
+                <button id="restart" style="display: none;">Restart Quiz</button>
+            </div>
+        </div>
+    </div>
 
-  <div class="info-box" id="infoBox">
-    <h4>Object Info</h4>
-    <p id="infoText">Click an object to see details here!</p>
-  </div>
+    <script>
+        const questions = [
+            { question: "What is the capital of France?", answers: ["Paris", "London", "Berlin", "Madrid"], correct: 0 },
+            { question: "What is 5 + 3?", answers: ["5", "8", "10", "15"], correct: 1 },
+            { question: "Which language is used for web development?", answers: ["Python", "HTML", "C++", "Swift"], correct: 1 },
+            { question: "Which planet is known as the Red Planet?", answers: ["Mars", "Jupiter", "Venus", "Saturn"], correct: 0 },
+            { question: "What is the chemical symbol for water?", answers: ["H2O", "O2", "NaCl", "CO2"], correct: 0 }
+        ];
 
-  <script>
-    // JavaScript for Interactions
-    const objects = document.querySelectorAll('.object');
-    const infoBox = document.getElementById('infoBox');
-    const infoText = document.getElementById('infoText');
+        const questionContainer = document.getElementById("question-container");
+        const result = document.getElementById("result");
+        const scoreSpan = document.getElementById("score");
+        const restartButton = document.getElementById("restart");
 
-    objects.forEach((object, index) => {
-      object.addEventListener('click', () => {
-        // Show Info Box with data
-        infoText.textContent = `You clicked on Object ${index + 1}`;
-        infoBox.classList.add('active');
-      });
-    });
+        let currentQuestion = 0;
+        let score = 0;
 
-    // Hide the info box if clicked anywhere else
-    document.addEventListener('click', (event) => {
-      if (!event.target.classList.contains('object') && event.target !== infoBox) {
-        infoBox.classList.remove('active');
-      }
-    });
-  </script>
+        function loadQuestion() {
+            const questionData = questions[currentQuestion];
+            questionContainer.innerHTML = `
+                <div class="question">${questionData.question}</div>
+                <ul class="options">
+                    ${questionData.answers
+                        .map(
+                            (answer, index) =>
+                                `<li onclick="selectAnswer(${index})">${answer}</li>`
+                        )
+                        .join("")}
+                </ul>
+            `;
+        }
+
+        function selectAnswer(selectedIndex) {
+            const questionData = questions[currentQuestion];
+            if (selectedIndex === questionData.correct) {
+                score++;
+            }
+            currentQuestion++;
+            if (currentQuestion < questions.length) {
+                loadQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            questionContainer.style.display = "none";
+            result.style.display = "block";
+            scoreSpan.textContent = score;
+            restartButton.style.display = "inline-block";
+        }
+
+        restartButton.addEventListener("click", () => {
+            currentQuestion = 0;
+            score = 0;
+            questionContainer.style.display = "block";
+            result.style.display = "none";
+            restartButton.style.display = "none";
+            loadQuestion();
+        });
+
+        // Load the first question on page load
+        loadQuestion();
+    </script>
 </body>
 </html>
-
