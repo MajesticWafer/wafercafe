@@ -168,6 +168,9 @@
                         .join("")}
                 </ul>
             `;
+
+            const newOptions = document.querySelectorAll(".options li");
+            newOptions.forEach(option => option.classList.remove("active"));
         }
 
         function selectAnswer(selectedIndex, element) {
@@ -185,9 +188,6 @@
             setTimeout(() => {
                 if (currentQuestion < questions.length) {
                     loadQuestion();
-
-                    const newOptions = document.querySelectorAll(".options li");
-                    newOptions.forEach(option => option.classList.remove("active"));
                 } else {
                     showResult();
                 }
