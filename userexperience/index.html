@@ -174,7 +174,10 @@
             // Set the clicked option as active
             const options = document.querySelectorAll(".options li");
             options.forEach(option => option.classList.remove("active")); // Reset active states
-            element.classList.remove("active");
+            element.classList.add("active");
+
+            // Automatically deselect (blur) the selected option for mobile
+            element.blur();
 
             const questionData = questions[currentQuestion];
             if (selectedIndex === questionData.correct) {
@@ -182,14 +185,13 @@
             }
 
             currentQuestion++;
-            element.classList.remove("active");
             setTimeout(() => {
                 if (currentQuestion < questions.length) {
                     loadQuestion();
                 } else {
                     showResult();
                 }
-            }, 300);
+            }, 300); // Add slight delay for better user experience
         }
 
         function showResult() {
