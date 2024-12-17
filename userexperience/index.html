@@ -157,8 +157,6 @@
 
         function loadQuestion() {
             const questionData = questions[currentQuestion];
-
-            questionContainer.innerHTML = "";
             questionContainer.innerHTML = `
                 <div class="question">${questionData.question}</div>
                 <ul class="options">
@@ -172,41 +170,31 @@
             `;
         }
 
-        function clearOptions() {
-            const options = document.querySelectorAll(".options li");
-            options.forEach(option => {
-                option.remove(); // Completely remove all <li> elements
-            });
-        }
-
         function selectAnswer(selectedIndex, element) {
-    try {
-        // Highlight the selected option
-        const options = document.querySelectorAll(".options li");
-        options.forEach(option => option.classList.remove("active")); // Clear active states
-        element.classList.add("active");
+            // Highlight the selected option
+            const options = document.querySelectorAll(".options li");
+            options.forEach(option => option.classList.remove("active")); // Clear active states
+            element.classList.add("active");
 
-        const questionData = questions[currentQuestion];
-        if (selectedIndex === questionData.correct) {
-            score++;
-        }
-
-        currentQuestion++;
-
-        setTimeout(() => {
-            if (currentQuestion < questions.length) {
-                clearOptions(); // Clear DOM before rendering
-                loadQuestion(); // Load next question
-            } else {
-                showResult();
+            const questionData = questions[currentQuestion];
+            if (selectedIndex === questionData.correct) {
+                score++;
             }
-        }, 300);
-    } catch (error) {
-        alert(`Error processing answer: ${error.message}`);
-        console.error(error); // Log the error to the console for debugging
-    }
-}
+            if (selectedIndex) {
+                element.classList.remove("active");
+                options.forEach(option => option.classList.remove("active")); // Clear active states
+            }
 
+            currentQuestion++;
+
+            setTimeout(() => {
+                if (currentQuestion < questions.length) {
+                    loadQuestion(); // Load next question
+                } else {
+                    showResult();
+                }
+            }, 300);
+        }
 
         function showResult() {
             questionContainer.style.display = "none";
