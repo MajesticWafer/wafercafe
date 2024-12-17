@@ -174,26 +174,26 @@
             // Highlight the selected option
             const options = document.querySelectorAll(".options li");
             options.forEach(option => option.classList.remove("active")); // Clear active states
-            element.classList.add("active");
+            element.classList.remove("active");
 
             const questionData = questions[currentQuestion];
             if (selectedIndex === questionData.correct) {
                 score++;
             }
-            if (selectedIndex) {
-                element.classList.remove("active");
-                options.forEach(option => option.classList.remove("active")); // Clear active states
-            }
 
             currentQuestion++;
-
+            element.classList.remove("active");
             setTimeout(() => {
+                element.classList.remove("active");
                 if (currentQuestion < questions.length) {
+                    element.classList.remove("active");
                     loadQuestion(); // Load next question
+                    element.classList.remove("active");
                 } else {
                     showResult();
                 }
             }, 300);
+            element.classList.remove("active");
         }
 
         function showResult() {
