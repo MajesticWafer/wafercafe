@@ -180,26 +180,33 @@
         }
 
         function selectAnswer(selectedIndex, element) {
-            // Set the clicked option as active
-            const options = document.querySelectorAll(".options li");
-            options.forEach(option => option.classList.remove("active"));
-            element.classList.add("active");
+    try {
+        // Highlight the selected option
+        const options = document.querySelectorAll(".options li");
+        options.forEach(option => option.classList.remove("active")); // Clear active states
+        element.classList.add("active");
 
-            const questionData = questions[currentQuestion];
-            if (selectedIndex === questionData.correct) {
-                score++;
-            }
-
-            currentQuestion++;
-            setTimeout(() => {
-                if (currentQuestion < questions.length) {
-                    clearOptions();
-                    loadQuestion();
-                } else {
-                    showResult();
-                }
-            }, 300); // Add slight delay for better user experience
+        const questionData = questions[currentQuestion];
+        if (selectedIndex === questionData.correct) {
+            score++;
         }
+
+        currentQuestion++;
+
+        setTimeout(() => {
+            if (currentQuestion < questions.length) {
+                clearOptions(); // Clear DOM before rendering
+                loadQuestion(); // Load next question
+            } else {
+                showResult();
+            }
+        }, 300);
+    } catch (error) {
+        alert(`Error processing answer: ${error.message}`);
+        console.error(error); // Log the error to the console for debugging
+    }
+}
+
 
         function showResult() {
             questionContainer.style.display = "none";
