@@ -172,6 +172,13 @@
             `;
         }
 
+        function clearOptions() {
+            const options = document.querySelectorAll(".options li");
+            options.forEach(option => {
+                option.remove(); // Completely remove all <li> elements
+            });
+        }
+
         function selectAnswer(selectedIndex, element) {
             // Set the clicked option as active
             const options = document.querySelectorAll(".options li");
@@ -186,6 +193,7 @@
             currentQuestion++;
             setTimeout(() => {
                 if (currentQuestion < questions.length) {
+                    clearOptions();
                     loadQuestion();
                 } else {
                     showResult();
