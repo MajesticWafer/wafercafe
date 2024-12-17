@@ -168,15 +168,12 @@
                         .join("")}
                 </ul>
             `;
-
-            const newOptions = document.querySelectorAll(".options li");
-            newOptions.forEach(option => option.classList.remove("active"));
         }
 
         function selectAnswer(selectedIndex, element) {
             // Set the clicked option as active
             const options = document.querySelectorAll(".options li");
-            options.forEach(option => option.classList.remove("active")); // Reset active states
+            options.forEach(option => option.classList.remove("active"));
             element.classList.add("active");
 
             const questionData = questions[currentQuestion];
