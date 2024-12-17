@@ -174,7 +174,7 @@
             // Set the clicked option as active
             const options = document.querySelectorAll(".options li");
             options.forEach(option => option.classList.remove("active")); // Reset active states
-            // element.classList.add("active");
+            element.classList.remove("active");
 
             const questionData = questions[currentQuestion];
             if (selectedIndex === questionData.correct) {
