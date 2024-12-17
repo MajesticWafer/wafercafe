@@ -157,6 +157,8 @@
 
         function loadQuestion() {
             const questionData = questions[currentQuestion];
+
+            questionContainer.innerHTML = "";
             questionContainer.innerHTML = `
                 <div class="question">${questionData.question}</div>
                 <ul class="options">
