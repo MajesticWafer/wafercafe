@@ -126,9 +126,12 @@
             Sample Quiz
         </div>
         <div class="content">
-            <div id="question-container">
-                <!-- Questions will go here -->
-            </div>
+            <!-- Five question containers -->
+            <div id="question-container-1" class="question-container"></div>
+            <div id="question-container-2" class="question-container" style="display: none;"></div>
+            <div id="question-container-3" class="question-container" style="display: none;"></div>
+            <div id="question-container-4" class="question-container" style="display: none;"></div>
+            <div id="question-container-5" class="question-container" style="display: none;"></div>
             <div class="result" id="result">
                 Your score is <span id="score"></span>/5
             </div>
@@ -147,32 +150,39 @@
             { question: "What is the chemical symbol for water?", answers: ["H2O", "O2", "NaCl", "CO2"], correct: 0 }
         ];
 
-        const questionContainer = document.getElementById("question-container");
-        const result = document.getElementById("result");
         const scoreSpan = document.getElementById("score");
         const restartButton = document.getElementById("restart");
-
         let currentQuestion = 0;
         let score = 0;
 
         function loadQuestion() {
+            // Hide all question containers
+            document.querySelectorAll(".question-container").forEach(container => {
+                container.style.display = "none";
+            });
+
+            // Show the current question container
+            const currentContainer = document.getElementById(`question-container-${currentQuestion + 1}`);
+            currentContainer.style.display = "block";
+
+            // Load the question content into the correct container
             const questionData = questions[currentQuestion];
-            questionContainer.innerHTML = `
+            currentContainer.innerHTML = `
                 <div class="question">${questionData.question}</div>
                 <ul class="options">
                     ${questionData.answers
                         .map(
                             (answer, index) =>
-                                `<li onclick="selectAnswer(${index}, this)">${answer}</li>`
+                                `<li onclick="selectAnswer(${index})">${answer}</li>`
                         )
                         .join("")}
                 </ul>
             `;
         }
 
-        function selectAnswer(selectedIndex, element) {
+        function selectAnswer(selectedIndex) {
             const questionData = questions[currentQuestion];
-            
+
             if (selectedIndex === questionData.correct) {
                 score++;
             }
@@ -180,7 +190,7 @@
             currentQuestion++;
             setTimeout(() => {
                 if (currentQuestion < questions.length) {
-                    loadQuestion(); // Load next question
+                    loadQuestion();
                 } else {
                     showResult();
                 }
@@ -188,7 +198,11 @@
         }
 
         function showResult() {
-            questionContainer.style.display = "none";
+            document.querySelectorAll(".question-container").forEach(container => {
+                container.style.display = "none";
+            });
+
+            const result = document.getElementById("result");
             result.style.display = "block";
             scoreSpan.textContent = score;
             restartButton.style.display = "inline-block";
@@ -197,8 +211,7 @@
         restartButton.addEventListener("click", () => {
             currentQuestion = 0;
             score = 0;
-            questionContainer.style.display = "block";
-            result.style.display = "none";
+            document.getElementById("result").style.display = "none";
             restartButton.style.display = "none";
             loadQuestion();
         });
