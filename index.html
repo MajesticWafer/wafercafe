@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="emulator, games, unblocked, gaming, game website, nintendo ds emulator">
+    <meta name="description" content="Welcome to Wafer Café, your go-to destination for playing unblocked games and emulators online. Enjoy a variety of games with a sleek interface and engaging features.">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>Wafer Café - Play Your Favorite Games</title>
+    
+    <!-- Styles and Fonts -->
+    <link rel="stylesheet" href="head/styles.css">
+    <link rel="stylesheet" href="head/context-menu.css">
+    <link rel="icon" type="image/jpeg" href="head/favicon.jpeg">
+    
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3575178423806487" crossorigin="anonymous"></script>
+    
+    <style>
+      #particles-js {
+        position: absolute;
+        width: 100vw;
+        height: 100vh;
+        top: 0;
+        left: 0;
+        z-index: -2;
+        overflow: hidden;
+      }
+
+      #particles-fade {
+        position: absolute;
+        top: 8vw;
+        background-image: linear-gradient(rgba(0, 0, 0, 0), var(--background-color));
+        width: 100vw;
+        height: 92vh;
+        z-index: -1;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="contextMenu" class="menu">
+    <ul>
+      <li id="cloakTab">Cloak Tab</li>
+      <li id="removeCloak">Remove Cloak</li>
+      <hr>
+      <li id="changeTheme">Change Theme</li>
+    </ul>
+    </div>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const adSlot = document.getElementById("ad-slot");
+            let adblockDetected = false;
+
+            // Method 1: Check if ad script runs
+            try {
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            } catch (e) {
+                adblockDetected = true;
+            }
+
+            // Method 2: Check ad slot visibility (backup for stricter network blocks)
+            setTimeout(() => {
+                if (adSlot.offsetHeight === 0) {
+                    adblockDetected = true;
+                }
+
+                if (adblockDetected) {
+                  if (sessionStorage.getItem("ad-warning") === "false") {
+                    console.log("Ads warning already shown this browser session. Dismissing popup.");
+                  } else {
+                    Swal.fire({
+                        title: "Ad Blocker Detected!",
+                        text: "Our site relies on ads to stay free. Please consider disabling your ad blocker for the best experience.",
+                        icon: "warning",
+                        confirmButtonText: "Okay, I’ll disable it",
+                        showCancelButton: true,
+                        cancelButtonText: "Continue with Ads Blocked"
+                    }).then((result) => {
+                        if (result.dismiss === Swal.DismissReason.cancel) {
+                            // will clear the value after browser session is closed
+                            sessionStorage.setItem("ad-warning", "false");
+                        }
+                    });
+                  }
+                }
+            }, 2000); // delay to allow ad slot to load
+
+      // |------------|
+      // |Context Menu|
+      // |------------|
+      const contextMenu = document.getElementById("contextMenu");
+      const cloakTab = document.getElementById("cloakTab");
+      const removeCloak = document.getElementById("removeCloak");
+      let originalTitle = document.title; // Save the original title
+
+      // Function to hide the context menu
+      function hideContextMenu() {
+        contextMenu.style.display = "none";
+      }
+
+      // Event listener for right-click to show the context menu
+      document.addEventListener("contextmenu", (event) => {
+        event.preventDefault(); // Prevent default context menu
+
+        // Position the custom menu using Popper.js
+        contextMenu.style.display = "block";
+        Popper.createPopper(event.target, contextMenu, {
+          placement: 'bottom-start',
+          modifiers: [
+            {
+              name: 'offset',
+              options: { offset: [event.clientX, event.clientY] },
+            },
+          ],
+        });
+      });
+
+      // Event listener for click outside the menu to hide it
+      document.addEventListener("click", () => hideContextMenu());
+
+      // Hide menu when clicking a menu item
+      contextMenu.addEventListener("click", hideContextMenu);
+
+      // Cloak the tab title with the custom input name from the prompt
+      cloakTab.addEventListener("click", () => {
+        const customName = prompt("Enter a custom cloak name:"); // Show prompt to enter a name
+        if (customName && customName.trim() !== "") {
+          originalTitle = document.title; // Store the original title before cloaking
+          document.title = customName.trim(); // Set the tab title to the custom name
+        } else if (customName === null) {
+          // User clicked cancel on the prompt
+          alert("You canceled the cloak tab action.");
+        } else {
+          alert("Please enter a valid cloak name!");
+        }
+      });
+
+      // Remove the cloak from the tab title
+      removeCloak.addEventListener("click", () => {
+        document.title = originalTitle; // Restore the original title
+      });
+    });
+    </script>
+    
+    <!-- CP Footer Bar -->
+    <div id="cp-footer">
+      <i class="bi bi-cookie"></i>
+      <p>By clicking “Accept all cookies”, you agree Wafer Café can store cookies on your device. <button id="agree-btn">Accept all cookies</button>
+      </p>
+    </div>
+    
+    <script>
+      window.onload = function() {
+        // Check if CP has been accepted
+        const cpAccepted = localStorage.getItem('cpAccepted');
+        if (!cpAccepted) {
+          // Show the CP footer if not accepted
+          document.getElementById('cp-footer').style.display = 'block';
+        }
+        // Handle the "Allow all cookies" button
+        document.getElementById('agree-btn').addEventListener('click', function() {
+          localStorage.setItem('cpAccepted', 'true');
+          document.getElementById('cp-footer').style.display = 'none';
+        });
+        // Load game buttons dynamically from games.json
+        fetch('head/games.json').then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+          }
+          return response.json();
+        }).then(data => {
+          const games = data.games;
+          const container = document.querySelector('.container');
+          Object.keys(games).forEach(gameName => {
+            const gameLink = games[gameName];
+            const buttonContainer = document.createElement('div');
+            buttonContainer.classList.add('button-container');
+            buttonContainer.setAttribute('onclick', `location.href='${gameLink}/'`);
+            const img = document.createElement('img');
+            img.src = `/${gameLink}/img.jpeg`;
+            img.alt = gameName;
+            const span = document.createElement('span');
+            span.classList.add('button-text');
+            span.textContent = gameName;
+            buttonContainer.appendChild(img);
+            buttonContainer.appendChild(span);
+            container.appendChild(buttonContainer);
+          });
+        }).catch(error => {
+          console.error('There was a problem with the fetch operation:', error);
+        });
+      };
+    </script>
+    
+    <!-- Particle container -->
+    <div id="particles-js"></div>    
+    <div id="particles-fade"></div>
+    
+    <!-- Header and Navigation -->
+    <div id="header">
+      <h1>The Wafer Café</h1>
+      
+      <div class="nav-links">
+        <a href="#games">Games</a>
+        <a href="https://github.com/MajesticWafer/wafercafe/blob/main/faq.md">FAQ</a>
+        <a href="https://github.com/MajesticWafer/wafercafe/blob/main/changelog.md">Changelog</a>
+        
+        <div class="search-container">
+          <input type="text" id="search" placeholder="Search for a game...">
+          <i class="bi bi-search"></i>
+        </div>
+        
+        <button id="theme-toggle">
+          <i class="bi bi-sun"></i>
+        </button>
+      </div>
+    </div>
+    
+    <div class="container"></div>
+
+    <!-- Ad Container -->
+    <div id="ad-slot" style="width: 300px; height: 250px;">
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const particlesToggle = document.getElementById('particles-toggle');
+        const particlesContainer = document.getElementById('particles-js');
+        const themeToggle = document.getElementById('theme-toggle');
+        const changeTheme = document.getElementById('changeTheme');
+        // Load and save particles setting in localStorage
+        const savedParticlesSetting = JSON.parse(localStorage.getItem('particlesEnabled')) ?? true;
+    
+        // Function to load particles based on theme
+        function loadParticles(theme) {
+          const particlesConfig = theme === 'light-mode' ? 'dark-particles.json' : 'light-particles.json';
+          particlesJS.load('particles-js', `head/${particlesConfig}`, function() {
+            console.log(`Particles.js config (${particlesConfig}) loaded`);
+          });
+        }
+        
+        // Theme toggle functionality
+        const savedTheme = localStorage.getItem('theme') || 'dark-mode';
+        const context = document.getElementById("contextMenu");
+        document.body.classList.add(savedTheme);
+        context.classList.add(savedTheme);
+        themeToggle.innerHTML = savedTheme === 'light-mode' ? '<i class="bi bi-moon"></i>' : '<i class="bi bi-sun"></i>';
+        loadParticles(savedTheme);
+        
+        themeToggle.addEventListener('click', function() {
+          const isLightMode = document.body.classList.toggle('light-mode');
+          const newTheme = isLightMode ? 'light-mode' : 'dark-mode';
+          localStorage.setItem('theme', newTheme);
+          themeToggle.innerHTML = isLightMode ? '<i class="bi bi-moon"></i>' : '<i class="bi bi-sun"></i>';
+          loadParticles(newTheme);
+        });
+        
+        changeTheme.addEventListener('click', function() {
+          const isLightMode = document.body.classList.toggle('light-mode');
+          const newTheme = isLightMode ? 'light-mode' : 'dark-mode';
+          localStorage.setItem('theme', newTheme);
+          loadParticles(newTheme);
+        });
+      });
+    </script>
+  </body>
+</html>
