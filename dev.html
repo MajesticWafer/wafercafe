@@ -268,6 +268,21 @@
           loadParticles(newTheme);
         });
       });
+
+      let isUsingMouse = false;
+
+      function detectMouse() {
+          isUsingMouse = true;
+          console.log("User is using a mouse, switching to desktop experience.");
+          // Remove the event listener to avoid unnecessary checks
+          window.removeEventListener("mousemove", detectMouse);
+
+          const spans = document.querySelectorAll('.button-container span');
+          spans.style.opacity = '0';
+      }
+
+      // Add event listener to detect mouse usage
+      window.addEventListener("mousemove", detectMouse);
     </script>
   </body>
 </html>
