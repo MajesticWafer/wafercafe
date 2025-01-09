@@ -65,18 +65,18 @@
             logMessage("Starting to load game...");
 
             const urlParams = new URLSearchParams(window.location.search);
-            let gameName = urlParams.get("game");
-            logMessage("URL parameter 'game' value: " + gameName);
+            let gameParam = urlParams.get("game");
+            logMessage("URL parameter 'game' value: " + gameParam);
 
-            if (!gameName) {
+            if (!gameParam) {
                 document.getElementById("game-container").innerText = "No game specified.";
                 logMessage("No game specified in URL.");
                 return;
             }
 
             // Replace underscores with spaces and make it case-insensitive
-            gameName = decodeURIComponent(gameName.replace(/_/g, " ")).toLowerCase();
-            logMessage("Processed game name after decoding and replacing underscores: " + gameName);
+            gameParam = decodeURIComponent(gameParam.replace(/_/g, " ")).toLowerCase();
+            logMessage("Processed game parameter: " + gameParam);
 
             try {
                 logMessage("Fetching games.json...");
@@ -90,21 +90,22 @@
                 const games = data.games;  // Access the "games" object within the JSON
                 logMessage("Games loaded from games.json: " + JSON.stringify(games));
 
-                // Search for the game name case-insensitively within games
-                const foundGame = Object.keys(games).find(key => key.toLowerCase() === gameName);
-                logMessage("Found game path in games.json: " + (foundGame ? games[foundGame] : "Game not found"));
+                // Search for the game name case-insensitively within the keys of "games"
+                const foundGame = Object.entries(games).find(
+                    ([key, value]) => value.toLowerCase() === gameParam
+                );
 
                 if (foundGame) {
-                    const gameDisplayName = games[foundGame].name || foundGame;  // Use the display name if available
-                    document.getElementById("title").innerText = gameDisplayName;
-                    document.title = gameDisplayName; // Update the page title
+                    const [displayName, gamePath] = foundGame;
+                    document.getElementById("title").innerText = displayName;
+                    document.title = displayName; // Update the page title
 
-                    const gamePath = `../${games[foundGame].path}/index.html`;
-                    logMessage("Embedding game from path: " + gamePath);
-                    document.getElementById("game-container").innerHTML = `<iframe src="${gamePath}" class="iframe" width="100%" height="100%"></iframe>`;
+                    const gameFullPath = `../${gamePath}/index.html`;
+                    logMessage("Embedding game from path: " + gameFullPath);
+                    document.getElementById("game-container").innerHTML = `<iframe src="${gameFullPath}" class="iframe" width="100%" height="100%"></iframe>`;
                 } else {
                     document.getElementById("game-container").innerText = "Game not found.";
-                    logMessage("Game not found in games.json for name: " + gameName);
+                    logMessage("Game not found in games.json for parameter: " + gameParam);
                 }
             } catch (error) {
                 logMessage("Error loading game data: " + error);
