@@ -1,11 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../head/styles.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <title>Wafer Café</title>
     <style>
         @font-face {
@@ -14,79 +12,63 @@
         }
 
         body {
-            font-family: 'Segoe UI Variable', Arial, sans-serif;
+            font-family: 'Segoe UI Variable', sans-serif;
         }
 
-        #game-title,
-        #game-container {
+        #game-title {
             width: calc(100vw / 5 * 2.95);
             height: auto;
             margin: 1vw;
             border-radius: 10px;
-            border: 1px solid #ccc;
+            border: 1px #ccc;
             padding: 20px;
             background-color: #c3c3c3;
             font-size: 1.5rem;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+        }
+        
+        #game-container {
+            width: calc(100vw / 5 * 2.95);
+            height: auto;
+            aspect-ratio: 4 / 3;
+            margin: 1vw;
+            border-radius: 10px;
+            border: 1px #ccc;
+            padding: 20px;
+            background-color: #c3c3c3;
         }
 
         #games {
             width: calc(100vw / 5 * 1.95);
             height: 99vh;
             margin: 1vw;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
         }
 
         .iframe {
             border: none;
             margin: 0 auto;
             padding: 0;
-        }
-
-        .fullscreen-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: #ffffff;
-            border: none;
-            border-radius: 50%;
-            padding: 10px;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-            cursor: pointer;
-        }
-
-        .fullscreen-btn:hover {
-            background-color: #e0e0e0;
-        }
-
-        #log-container {
-            padding: 10px;
-            background-color: #f0f0f0;
-            font-family: monospace;
-            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
         }
     </style>
 </head>
-
 <body>
     <div id="game-title">
         <p id="title"></p> <!-- Game name will be placed here -->
-        <button class="fullscreen-btn" onclick="toggleFullscreen()">
-            <i class="bi bi-fullscreen"></i>
-        </button>
     </div>
-
+    
     <div id="game-container">
         <!-- Game content will be embedded here -->
     </div>
 
-    <div id="log-container">
+    <!--
+    <div id="log-container" style="padding: 10px; background-color: #f0f0f0; font-family: monospace;">
         <strong>Log Output:</strong><br>
     </div>
+    -->
 
     <script>
         function logMessage(message) {
-            console.log(message); // Still logs to console
+            console.log(message);  // Still logs to console
             const logContainer = document.getElementById("log-container");
             logContainer.innerHTML += message + "<br>";
         }
@@ -104,21 +86,23 @@
                 return;
             }
 
+            // Replace underscores with spaces and make it case-insensitive
             gameParam = decodeURIComponent(gameParam.replace(/_/g, " ")).toLowerCase();
             logMessage("Processed game parameter: " + gameParam);
 
             try {
                 logMessage("Fetching games.json...");
                 const response = await fetch("../head/games.json");
-
+                
                 if (!response.ok) {
                     throw new Error(`Failed to fetch games.json. Status: ${response.status}`);
                 }
 
                 const data = await response.json();
-                const games = data.games; // Access the "games" object within the JSON
+                const games = data.games;  // Access the "games" object within the JSON
                 logMessage("Games loaded from games.json: " + JSON.stringify(games));
 
+                // Search for the game name case-insensitively within the keys of "games"
                 const foundGame = Object.entries(games).find(
                     ([key, value]) => value.toLowerCase() === gameParam
                 );
@@ -141,19 +125,7 @@
             }
         }
 
-        function toggleFullscreen() {
-            const gameContainer = document.getElementById("game-container");
-            if (!document.fullscreenElement) {
-                gameContainer.requestFullscreen().catch(err => {
-                    console.error(`Error attempting to enable fullscreen: ${err.message}`);
-                });
-            } else {
-                document.exitFullscreen();
-            }
-        }
-
         loadGame();
     </script>
 </body>
-
 </html>
