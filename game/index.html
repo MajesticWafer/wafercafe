@@ -60,6 +60,10 @@
         <!-- Game content will be embedded here -->
     </div>
 
+    <div id="games">
+        <!-- Games will be randomly recommended here -->
+    </div>
+
     <div hidden id="log-container" style="padding: 10px; background-color: #f0f0f0; font-family: monospace;">
         <strong>Log Output:</strong><br>
     </div>
@@ -124,6 +128,45 @@
         }
 
         loadGame();
+
+        async function loadRecommendedGames() {
+            try {
+                const response = await fetch('../head/games.json');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+
+                const data = await response.json();
+                const games = data.games;
+                const gamesContainer = document.getElementById('games');
+
+                Object.keys(games).forEach(gameName => {
+                    const gameLink = games[gameName];
+
+                    const buttonContainer = document.createElement('div');
+                    buttonContainer.classList.add('button-container');
+                    buttonContainer.setAttribute('onclick', `location.href='${gameLink}/'`);
+
+                    const img = document.createElement('img');
+                    img.src = `/${gameLink}/img.jpeg`;
+                    img.alt = gameName;
+
+                    const span = document.createElement('span');
+                    span.classList.add('button-text');
+                    span.textContent = gameName;
+
+                    buttonContainer.appendChild(img);
+                    buttonContainer.appendChild(span);
+                    gamesContainer.appendChild(buttonContainer);
+                });
+            } catch (error) {
+                console.error('There was a problem with fetching the recommended games:', error);
+                const gamesContainer = document.getElementById('games');
+                gamesContainer.innerHTML = '<p>Error loading recommended games. Please try again later.</p>';
+            }
+        }
+
+        loadRecommendedGames();
     </script>
 </body>
 </html>
