@@ -16,7 +16,8 @@
         }
 
         #game-title {
-            width: calc(100vw / 5 * 2.95);
+            /* width: calc(100vw / 5 * 2.95); */
+            width: calc(100vw - 2vw /* minus margin */);
             height: auto;
             margin: 1vw;
             border-radius: 10px;
@@ -27,7 +28,8 @@
         }
         
         #game-container {
-            width: calc(100vw / 5 * 2.95);
+            /* width: calc(100vw / 5 * 2.95); */
+            width: calc(100vw - 2vw /* minus margin */);
             height: auto;
             aspect-ratio: 4 / 3;
             margin: 1vw;
@@ -38,14 +40,14 @@
         }
 
         #games {
-            width: calc(100vw / 5 * 1.95);
+            /* width: calc(100vw / 5 * 1.95); */
+            width: calc(100vw - 2vw /* minus margin */);
             height: 99vh;
             margin: 1vw;
             border-radius: 10px;
             border: 1px #ccc;
             padding: 20px;
             background-color: #c3c3c3;
-            flex-shrink: 0; /* Prevent #games from shrinking */
         }
 
         .iframe {
@@ -54,31 +56,23 @@
             padding: 0;
             border-radius: 10px;
         }
-
-        #main-container {
-            display: flex;
-            align-items: flex-start; /* Align items to the top */
-            justify-content: space-between; /* Add space between the elements */
-        }
     </style>
 </head>
 <body>
-    <div id="main-container">
-        <div id="game-title">
-            <p id="title"></p> <!-- Game name will be placed here -->
-        </div>
+    <div id="game-title">
+        <p id="title"></p> <!-- Game name here -->
+    </div>
     
-        <div id="game-container">
-            <!-- Game content will be embedded here -->
-        </div>
+    <div id="game-container">
+        <!-- Game content here -->
+    </div>
 
-        <div id="games">
-            <!-- Games will be randomly recommended here -->
-        </div>
+    <div id="games">
+        <!-- Games randomly recommended here -->
+    </div>
 
-        <div hidden id="log-container" style="padding: 10px; background-color: #f0f0f0; font-family: monospace;">
-            <strong>Log Output:</strong><br>
-        </div>
+    <div hidden id="log-container" style="padding: 10px; background-color: #f0f0f0; font-family: monospace;">
+        <strong>Log Output:</strong><br>
     </div>
     <script>
         function logMessage(message) {
