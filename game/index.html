@@ -17,7 +17,7 @@
 
         #game-title {
             /* width: calc(100vw / 5 * 2.95); */
-            width: calc(100vw - 2vw /* minus margin */);
+            width: calc(100% - 2vw /* minus margin */);
             height: auto;
             margin: 1vw;
             border-radius: 10px;
@@ -29,7 +29,7 @@
         
         #game-container {
             /* width: calc(100vw / 5 * 2.95); */
-            width: calc(100vw - 2vw /* minus margin */);
+            width: calc(100% - 2vw /* minus margin */);
             height: auto;
             aspect-ratio: 4 / 3;
             margin: 1vw;
@@ -41,13 +41,14 @@
 
         #games {
             /* width: calc(100vw / 5 * 1.95); */
-            width: calc(100vw - 2vw /* minus margin */);
+            width: calc(100% - 2vw /* minus margin */);
             height: 99vh;
             margin: 1vw;
             border-radius: 10px;
             border: 1px var(--button-border);
             padding: 20px;
             background-color: var(--button-background);
+            display: flex;
         }
 
         .iframe {
