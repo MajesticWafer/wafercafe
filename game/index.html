@@ -25,8 +25,8 @@
             padding: 20px;
             background-color: var(--button-background);
             font-size: 1.5rem;
-            max-width: 100%; /* Prevent it from growing too large */
-            overflow: hidden; /* Stop content overflow */
+            max-width: calc(100% - 2vw);
+            overflow: none;
         }
         
         #game-container {
@@ -39,8 +39,8 @@
             border: 1px var(--button-border);
             padding: 20px;
             background-color: var(--button-background);
-            max-width: 100%; /* Prevent it from growing too large */
-            overflow: hidden; /* Stop content overflow */
+            max-width: calc(100% - 2vw);
+            overflow: none;
         }
 
         #games {
@@ -53,10 +53,10 @@
             padding: 20px;
             background-color: var(--button-background);
             display: flex;
-            gap: 10px;
+            gap: 5px;
             flex-wrap: wrap;
-            max-width: 100%; /* Prevent it from growing too large */
-            overflow: hidden; /* Stop content overflow */
+            max-width: calc(100% - 2vw);
+            overflow: none;
         }
 
         .iframe {
