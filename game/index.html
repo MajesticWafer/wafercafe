@@ -25,6 +25,8 @@
             padding: 20px;
             background-color: var(--button-background);
             font-size: 1.5rem;
+            max-width: 100%; /* Prevent it from growing too large */
+            overflow: hidden; /* Stop content overflow */
         }
         
         #game-container {
@@ -37,6 +39,8 @@
             border: 1px var(--button-border);
             padding: 20px;
             background-color: var(--button-background);
+            max-width: 100%; /* Prevent it from growing too large */
+            overflow: hidden; /* Stop content overflow */
         }
 
         #games {
@@ -51,6 +55,8 @@
             display: flex;
             gap: 10px;
             flex-wrap: wrap;
+            max-width: 100%; /* Prevent it from growing too large */
+            overflow: hidden; /* Stop content overflow */
         }
 
         .iframe {
