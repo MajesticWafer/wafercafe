@@ -212,14 +212,14 @@
         const infoBox = document.getElementById('info-box');
         const closeButton = document.getElementById('close-info');
 
-        if (localStorage.getItem('infoBoxDismissed') === 'true') {
+        if (sessionStorage.getItem('infoBoxDismissed') === 'true') {
             infoBox.style.display = 'none';
         }
 
         // Close info box and save dismissal in localStorage
         closeButton.addEventListener('click', () => {
             infoBox.style.display = 'none';
-            localStorage.setItem('infoBoxDismissed', 'true');
+            sessionStorage.setItem('infoBoxDismissed', 'true');
         });
 
         // Initialize the info box suggestion
