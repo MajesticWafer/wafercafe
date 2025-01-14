@@ -76,6 +76,27 @@
             padding: 0;
             border-radius: 10px;
         }
+
+        #info-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #f5c6cb;
+            border-radius: 5px;
+        }
+
+        #info-box i {
+            font-size: 1.5rem;
+        }
+
+        #info-box p {
+            margin: 0;
+            font-size: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -163,7 +184,26 @@
     <div hidden id="log-container" style="padding: 10px; background-color: #f0f0f0; font-family: monospace;">
         <strong>Log Output:</strong><br>
     </div>
+
+    <div id="info-box">
+        <i class="bi bi-info-circle-fill"></i>
+        <p id="info-text">Game not working? Try closing your browser or switching to <span id="suggested-mode"></span> mode.</p>
+    </div>
     <script>
+        function detectMode() {
+            const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+            return isMobile ? 'mobile' : 'desktop';
+        }
+
+        function suggestOppositeMode() {
+            const currentMode = detectMode();
+            const oppositeMode = currentMode === 'mobile' ? 'desktop' : 'mobile';
+            document.getElementById('suggested-mode').textContent = oppositeMode;
+        }
+
+        // Initialize the info box suggestion
+        suggestOppositeMode();
+        
         function logMessage(message) {
             console.log(message);  // Still logs to console
             const logContainer = document.getElementById("log-container");
