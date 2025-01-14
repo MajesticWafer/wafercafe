@@ -194,6 +194,7 @@
     <div id="info-box">
         <i class="bi bi-info-circle-fill"></i>
         <p id="info-text">Game not working? Try closing your browser or switching to <span id="suggested-mode"></span> mode.</p>
+        <i class="bi bi-x-circle-fill" id="close-info" style="margin-left:auto; cursor:pointer;"></i>
     </div>
     <script>
         function detectMode() {
@@ -206,6 +207,20 @@
             const oppositeMode = currentMode === 'mobile' ? 'desktop' : 'mobile';
             document.getElementById('suggested-mode').textContent = oppositeMode;
         }
+
+        // Hide info box if dismissed before
+        const infoBox = document.getElementById('info-box');
+        const closeButton = document.getElementById('close-info');
+
+        if (localStorage.getItem('infoBoxDismissed') === 'true') {
+            infoBox.style.display = 'none';
+        }
+
+        // Close info box and save dismissal in localStorage
+        closeButton.addEventListener('click', () => {
+            infoBox.style.display = 'none';
+            localStorage.setItem('infoBoxDismissed', 'true');
+        });
 
         // Initialize the info box suggestion
         suggestOppositeMode();
