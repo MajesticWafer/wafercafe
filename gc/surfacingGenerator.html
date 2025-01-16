@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Surfacing G-Code Generator</title>
+	</head>
+	<body>
+		<h1>Surfacing G-Code Generator</h1>
+		<br>		
+		<label for="units">Units:</label>
+		<input type="radio" id="mm" name="units" value="mm" checked>
+		<label for="mm">mm</label>
+		<input type="radio" id="in" name="units" value="in" >
+		<label for="in">in</label>
+		<br>
+		<label for="tool_diameter">Tool Diameter (mm or in):</label>
+		<input type="number" id="tool_diameter" name="tool_diameter" step="0.01" value="19.05" min="0" required>
+		<br>
+		<label for="stock_size_x">Stock Size X (mm or in):</label>
+		<input type="number" id="stock_size_x" name="stock_size_x" step=".001" value="100" min="0" required>
+		<br>
+		<label for="stock_size_y">Stock Size Y (mm or in):</label>
+		<input type="number" id="stock_size_y" name="stock_size_y" step=".001" value="100" min="0" required>
+		<br>
+		<label for="feedrate">Feedrate (mm/min or in/min):</label>
+		<input type="number" id="feedrate" name="feedrate" step="1" value="2500" min="0" required>
+		<br>
+		<label for="spindle_speed">Spindle Speed (RPM):</label>
+		<input type="number" id="spindle_speed" name="spindle_speed" step="1" value="12000" min="0" required>
+		<br>
+		<label for="depth_of_cut">Depth of Cut / Depth per Pass (mm or in):</label>
+		<input type="number" id="depth_of_cut" name="depth_of_cut" step=".001" value="0.5" min="0" required>
+		<br>
+		<label for="max_depth">Maximum Depth (mm or in):</label>
+		<input type="number" id="max_depth" name="max_depth" step=".001" value="2" min="0" required>
+		<br>
+		<label for="angle">Toolpath Direction:</label>
+		<input type="radio" id="angle_x" name="angle" value="x" checked>
+		<label for="angle_x">Along X</label>
+		<input type="radio" id="angle_y" name="angle" value="y">
+		<label for="angle_y">Along Y</label>
+		<br>
+		<label for="xy_zero_point">XY Zero Point:</label>
+		<input type="radio" id="lower_left" name="xy_zero_point" value="lower_left" checked>
+		<label for="lower_left">Lower Left</label>
+		<input type="radio" id="lower_right" name="xy_zero_point" value="lower_right">
+		<label for="lower_right">Lower Right</label>
+		<input type="radio" id="upper_left" name="xy_zero_point" value="upper_left">
+		<label for="upper_left">Upper Left</label>
+		<input type="radio" id="upper_right" name="xy_zero_point" value="upper_right">
+		<label for="upper_right">Upper Right</label>
+		<input type="radio" id="center" name="xy_zero_point" value="center">
+		<label for="center">Center</label>
+		<br>
+		<label for="cutting_mode">Cutting Direction:</label>
+		<input type="radio" id="positive" name="cutting_mode" value="positive" checked>
+		<label for="positive">Positive</label>
+		<input type="radio" id="negative" name="cutting_mode" value="negative">
+		<label for="negative">Negative</label>
+		<input type="radio" id="both" name="cutting_mode" value="both">
+		<label for="both">Both</label>
+		<br>
+		<label for="stepover_percentage">Stepover Percentage:</label>
+		<input type="number" id="stepover_percentage" name="stepover" step="0.1" value="90">
+		<br>
+		<label for="retract_height">Safe Retract Height (mm or in):</label>
+		<input type="number" id="retract_height" name="retract_height" step="1" value="10">
+		<br>
+		<br>
+		<button onclick="generateGCode()">Generate G-Code</button>		
+		<br>
+		<label for="gcodeOutput">G-Code:</label>
+		<textarea id="gcodeOutput" name="gcodeOutput" rows="10" cols="50" readonly></textarea>
+		<br>
+		<br>
+		<button id="copyButton" onclick="copyGCode()" style="display: none;">Copy</button>
+		<br>
+		<button id="downloadButton" onclick="downloadNCFile()" style="display: none;">Download NC file</button>
+		<script>
+			// Declare global variables
+			   let toolDiameter, stockSizeX, stockSizeY, feedrate, spindleSpeed, depthOfCut, maxDepth, currentDepth, angle, xyZeroPoint, cuttingMode, stepoverPercentage, units;
+			   let xZero, yZero, maximumX, maximumY;
+			//Code by Neil Ferreri
+
+			//Function to clear the gcode output
+			function clearGCode() {
+				const gcodeOutput = document.getElementById("gcodeOutput");
+				gcodeOutput.value = "";
+				// Hide the copy and download buttons
+				const copyButton = document.getElementById("copyButton");
+				copyButton.style.display = "none";
+				const downloadButton = document.getElementById("downloadButton");
+				downloadButton.style.display = "none";
+			}	
+
+			//Function to generate the G-Code for surfacing
+			function generateGCode() {
+				// Get the input values
+				toolDiameter = parseFloat(document.getElementById("tool_diameter").value);
+				stockSizeX = parseFloat(document.getElementById("stock_size_x").value);
+				stockSizeY = parseFloat(document.getElementById("stock_size_y").value);
+				feedrate = parseFloat(document.getElementById("feedrate").value);
+				spindleSpeed = parseFloat(document.getElementById("spindle_speed").value);
+				depthOfCut = parseFloat(document.getElementById("depth_of_cut").value);
+				maxDepth = parseFloat(document.getElementById("max_depth").value);
+				angle = document.querySelector('input[name="angle"]:checked').value;
+				xyZeroPoint = document.querySelector('input[name="xy_zero_point"]:checked').value;
+				cuttingMode = document.querySelector('input[name="cutting_mode"]:checked').value;
+				stepoverPercentage = parseFloat(document.getElementById("stepover_percentage").value);
+				retractHeight = parseFloat(document.getElementById("retract_height").value);
+				units = document.querySelector('input[name="units"]:checked').value;
+				
+				clearGCode();
+				
+				//Check values are positive 
+				if (toolDiameter <= 0 || stockSizeX <= 0 || stockSizeY <= 0 || feedrate <= 0 || spindleSpeed < 0 || depthOfCut <= 0 || maxDepth <= 0 || stepoverPercentage <= 0) {
+					alert('Please enter positive values for all parameters.');
+					return;
+					}
+
+				//Check that maximum depth is not < DOC
+				if (maxDepth < depthOfCut) {
+					alert('Maximum depth should be greater than or equal to the depth of cut.');
+					return;
+					}
+				
+				
+				// Initialize the G-Code
+			   let gcode = "";
+			   gcode += "G90\n"; // Absolute positioning
+			   gcode += `G${units === "in" ? 20 : 21}\n`; // Units in mm or inches
+
+			   gcode += `G0 Z${retractHeight.toFixed(3)}\n`; // Move to safe Z height
+			   gcode += `M3 S${spindleSpeed.toFixed(0)}\n`;	// Start Spindle at defined speed
+			
+			   // Loop over the depth of cut until reaching maxDepth
+			   
+				if(angle === "y"){
+				// Generate the toolpath based on cutting mode
+					if (cuttingMode === "positive") {
+					gcode += getCuttingToolpathPositive(angle, stockSizeX, stockSizeY, depthOfCut, feedrate, stepoverPercentage);
+					} else if (cuttingMode === "negative") {
+					gcode += getCuttingToolpathNegative(angle, stockSizeX, stockSizeY, depthOfCut, feedrate, stepoverPercentage);
+					} else if (cuttingMode === "both") {
+					gcode += getCuttingToolpathBoth(angle, stockSizeX, stockSizeY, depthOfCut, feedrate);
+					}
+				}
+				else{
+					if (cuttingMode === "positive") {
+					gcode += getCuttingToolpathPositiveX(angle, stockSizeX, stockSizeY, depthOfCut, feedrate, stepoverPercentage);
+					} else if (cuttingMode === "negative") {
+					gcode += getCuttingToolpathNegativeX(angle, stockSizeX, stockSizeY, depthOfCut, feedrate, stepoverPercentage);
+					} else if (cuttingMode === "both") {
+					gcode += getCuttingToolpathBothX(angle, stockSizeX, stockSizeY, depthOfCut, feedrate);
+					}
+				}
+			
+			   gcode += `G0 Z${retractHeight.toFixed(3)}\n`; // Move to safe Z height after finishing
+
+			   gcode += "M5\n"; //Stop Spindle			   
+			
+			   gcode += "G0 X0 Y0\n"; // Move to origin
+			
+			   // Display the G-Code
+			   const gcodeOutput = document.getElementById("gcodeOutput");
+			   gcodeOutput.value = gcode.trim();
+			   // Show the copy button
+			   const copyButton = document.getElementById("copyButton");
+			   copyButton.style.display = "block";
+			   // Show the download button
+			   const downloadButton = document.getElementById("downloadButton");
+			   downloadButton.style.display = "block";
+			}
+			// Function to copy the G-Code to the clipboard
+			function copyGCode() {
+				const gcodeOutput = document.getElementById("gcodeOutput");
+				gcodeOutput.select();
+				document.execCommand("copy");
+			}
+			// Function to download the G-Code as a file
+			function downloadNCFile() {
+				let gcode = document.getElementById('gcodeOutput').value;
+				if(!gcode) {
+					console.log('Gcode string is empty');
+					return;
+				}
+				const blob = new Blob([gcode], {
+					type: 'text/plain'
+				});
+				const url = URL.createObjectURL(blob);
+				const a = document.createElement('a');
+				a.style.display = 'none';
+				a.href = url;
+				a.download = 'surfacing.nc';
+				document.body.appendChild(a);
+				a.click();
+				window.URL.revokeObjectURL(url);
+			}
+			// Function to get the rapid move to the starting point based on XY zero point
+			function getRapidMoveToStartingPoint(xyZeroPoint, stockSizeX, stockSizeY) {
+				if(xyZeroPoint === "lower_left") {
+					xZero = 0;
+					yZero = 0;
+					maximumX = stockSizeX;
+					maximumY = stockSizeY;
+				} else if(xyZeroPoint === "lower_right") {
+					xZero = -stockSizeX;
+					yZero = 0;
+					maximumX = 0;
+					maximumY = stockSizeY;
+				} else if(xyZeroPoint === "upper_left") {
+					xZero = 0;
+					yZero = -stockSizeY;
+					maximumX = stockSizeX;
+					maximumY = 0;
+				} else if(xyZeroPoint === "upper_right") {
+					xZero = -stockSizeX;
+					yZero = -stockSizeY;
+					maximumX = 0;
+					maximumY = 0;
+				} else if(xyZeroPoint === "center") {
+					xZero = -stockSizeX / 2;
+					yZero = -stockSizeY / 2;
+					maximumX = stockSizeX / 2;
+					maximumY = stockSizeY / 2;
+				}
+				//return `G0 X${xZero.toFixed(3)} Y${yZero.toFixed(3)}\n`;
+			}
+			// Function to get the toolpath for positive cutting mode
+			function getCuttingToolpathPositive(angle, stockSizeX, stockSizeY, depthOfCut, feedrate) {
+				const stepover = toolDiameter * (stepoverPercentage / 100);
+				let gcode = "";
+				
+				for (currentDepth = 0; currentDepth < maxDepth; currentDepth += depthOfCut) {
+					gcode += `G0 Z${retractHeight.toFixed(3)}\n`; // Move to safe Z height
+					getRapidMoveToStartingPoint(xyZeroPoint, stockSizeX, stockSizeY);
+					gcode += `G0 X${xZero.toFixed(3)} Y${yZero.toFixed(3)}\n`// Rapid move to starting point
+					 
+					if(currentDepth + depthOfCut <= maxDepth)
+						gcode += `G1 Z${(0-currentDepth - depthOfCut).toFixed(3)} F${feedrate}\n`; // Plunge to depth
+					else
+						gcode += `G1 Z${(0 - maxDepth).toFixed(3)} F${feedrate}\n`; // Plunge to depth
+						
+					for(let x = xZero; x <= stockSizeX+xZero; x += stepover) {
+						gcode += `G1 Y${(stockSizeY+yZero).toFixed(3)} F${feedrate}\n`; // Cut along Y
+						gcode += `G0 Z${retractHeight.toFixed(3)}\n`; // Retract
+						if(x + stepover < stockSizeX+xZero)
+						{
+							gcode += `G0 X${(x + stepover).toFixed(3)} Y${yZero.toFixed(3)}\n`; // Move over on X
+							if(currentDepth + depthOfCut <= maxDepth)
+								gcode += `G1 Z${(0-currentDepth - depthOfCut).toFixed(3)} F${feedrate}\n`; // Plunge to depth
+							else
+								gcode += `G1 Z${(0 - maxDepth).toFixed(3)} F${feedrate}\n`; // Plunge to depth				
+						}
+					}
+				}
+				return gcode;
+			}
+			// Function to get the toolpath for negative cutting mode
+			function getCuttingToolpathNegative(angle, stockSizeX, stockSizeY, depthOfCut, feedrate) {
+				const stepover = toolDiameter * (stepoverPercentage / 100);
+				let gcode = "";
+				
+				for (currentDepth = 0; currentDepth < maxDepth; currentDepth += depthOfCut) {
+					gcode += `G0 Z${retractHeight.toFixed(3)}\n`; // Move to safe Z height
+					getRapidMoveToStartingPoint(xyZeroPoint, stockSizeX, stockSizeY);
+					gcode +=  `G0 X${(stockSizeX+xZero).toFixed(3)} Y${(stockSizeY+yZero).toFixed(3)}\n`// Rapid move to starting point
+					if(currentDepth + depthOfCut <= maxDepth)
+						gcode += `G1 Z${(0-currentDepth - depthOfCut).toFixed(3)} F${feedrate}\n`; // Plunge to depth
+					else
+						gcode += `G1 Z${(0 - maxDepth).toFixed(3)} F${feedrate}\n`; // Plunge to depth
+						
+					for(let x = stockSizeX+xZero; x >= xZero; x -= stepover) {
+						gcode += `G1 Y${(yZero).toFixed(3)} F${feedrate}\n`; // Cut along Y
+						gcode += `G0 Z${retractHeight.toFixed(3)}\n`; // Retract
+						if(x - stepover > xZero)
+						{
+							gcode += `G0 X${(x - stepover).toFixed(3)} Y${(stockSizeY+yZero).toFixed(3)}\n`; // Move over on X
+							if(currentDepth + depthOfCut <= maxDepth)
+								gcode += `G1 Z${(0-currentDepth - depthOfCut).toFixed(3)} F${feedrate}\n`; // Plunge to depth
+							else
+								gcode += `G1 Z${(0 - maxDepth).toFixed(3)} F${feedrate}\n`; // Plunge to depth				
+						}
+					}
+				}
+				return gcode;
+			}
+			function getCuttingToolpathBoth(angle, stockSizeX, stockSizeY, depthOfCut, feedrate) {
+				const stepover = toolDiameter * (stepoverPercentage / 100);
+				let gcode = "";
+				
+				for (currentDepth = 0; currentDepth < maxDepth; currentDepth += depthOfCut) {
+					gcode += `G0 Z${retractHeight.toFixed(3)}\n`; // Move to safe Z height
+					getRapidMoveToStartingPoint(xyZeroPoint, stockSizeX, stockSizeY);
+					gcode +=  `G0 X${(xZero).toFixed(3)} Y${(yZero).toFixed(3)}\n`// Rapid move to starting point
+					if(currentDepth + depthOfCut <= maxDepth)
+						gcode += `G1 Z${(0-currentDepth - depthOfCut).toFixed(3)} F${feedrate}\n`; // Plunge to depth
+					else
+						gcode += `G1 Z${(0 - maxDepth).toFixed(3)} F${feedrate}\n`; // Plunge to depth
+						
+					for(let x = xZero; x <= maximumX; x += stepover) {
+						gcode += `G1 Y${(stockSizeY+yZero).toFixed(3)} F${feedrate}\n`; // Cut along Y
+						if(x + stepover < maximumX)
+						{							
+							gcode += `G1 X${(x + stepover).toFixed(3)}\n`; // Move over on X
+			
+						}
+						gcode += `G1 Y${(yZero).toFixed(3)} F${feedrate}\n`; // Cut along Y
+						x += stepover;
+						if(x + (stepover) < maximumX)
+						{							
+							gcode += `G1 X${(x + (stepover)).toFixed(3)}\n`; // Move over on X
+			
+						}
+					}
+				}
+				return gcode;
+			}
+			
+			
+			
+			 // Function to get the toolpath for positive cutting mode
+			 function getCuttingToolpathPositiveX(angle, stockSizeX, stockSizeY, depthOfCut, feedrate, stepoverPercentage) {
+			     const stepover = toolDiameter * (stepoverPercentage / 100);
+			     let gcode = "";
+			
+			     for (currentDepth = 0; currentDepth < maxDepth; currentDepth += depthOfCut) {
+			         gcode += `G0 Z${retractHeight.toFixed(3)}\n`; // Move to safe Z height
+			         getRapidMoveToStartingPoint(xyZeroPoint, stockSizeX, stockSizeY);
+			         gcode += `G0 X${xZero.toFixed(3)} Y${yZero.toFixed(3)}\n`; // Rapid move to starting point
+			
+			         if (currentDepth + depthOfCut <= maxDepth)
+			             gcode += `G1 Z${(0 - currentDepth - depthOfCut).toFixed(3)} F${feedrate}\n`; // Plunge to depth
+			         else
+			             gcode += `G1 Z${(0 - maxDepth).toFixed(3)} F${feedrate}\n`; // Plunge to depth
+			
+			         for (let y = yZero; y <= stockSizeY + yZero; y += stepover) {
+			             gcode += `G1 X${(stockSizeX + xZero).toFixed(3)} F${feedrate}\n`; // Cut along X
+			             gcode += `G0 Z${retractHeight.toFixed(3)}\n`; // Retract
+			             if (y + stepover < stockSizeY + yZero) {
+			                 gcode += `G0 Y${(y + stepover).toFixed(3)} X${xZero.toFixed(3)}\n`; // Move over on Y
+			                 if (currentDepth + depthOfCut <= maxDepth)
+			                     gcode += `G1 Z${(0 - currentDepth - depthOfCut).toFixed(3)} F${feedrate}\n`; // Plunge to depth
+			                 else
+			                     gcode += `G1 Z${(0 - maxDepth).toFixed(3)} F${feedrate}\n`; // Plunge to depth
+			             }
+			         }
+			     }
+			     return gcode;
+			 }
+			
+			 // Function to get the toolpath for negative cutting mode
+			 function getCuttingToolpathNegativeX(angle, stockSizeX, stockSizeY, depthOfCut, feedrate, stepoverPercentage) {
+			     const stepover = toolDiameter * (stepoverPercentage / 100);
+			     let gcode = "";
+			
+			     for (currentDepth = 0; currentDepth < maxDepth; currentDepth += depthOfCut) {
+			         gcode += `G0 Z${retractHeight.toFixed(3)}\n`; // Move to safe Z height
+			         getRapidMoveToStartingPoint(xyZeroPoint, stockSizeX, stockSizeY);
+			         gcode += `G0 X${(stockSizeX + xZero).toFixed(3)} Y${(stockSizeY + yZero).toFixed(3)}\n`; // Rapid move to starting point
+			         if (currentDepth + depthOfCut <= maxDepth)
+			             gcode += `G1 Z${(0 - currentDepth - depthOfCut).toFixed(3)} F${feedrate}\n`; // Plunge to depth
+			         else
+			             gcode += `G1 Z${(0 - maxDepth).toFixed(3)} F${feedrate}\n`; // Plunge to depth
+			
+			         for (let y = stockSizeY + yZero; y >= yZero; y -= stepover) {
+			             gcode += `G1 X${xZero.toFixed(3)} F${feedrate}\n`; // Cut along X
+			             gcode += `G0 Z${retractHeight.toFixed(3)}\n`; // Retract
+			             if (y - stepover > yZero) {
+			                 gcode += `G0 Y${(y - stepover).toFixed(3)} X${(stockSizeX + xZero).toFixed(3)}\n`; // Move over on Y
+			                 if (currentDepth + depthOfCut <= maxDepth)
+			                     gcode += `G1 Z${(0 - currentDepth - depthOfCut).toFixed(3)} F${feedrate}\n`; // Plunge to depth
+			                 else
+			                     gcode += `G1 Z${(0 - maxDepth).toFixed(3)} F${feedrate}\n`; // Plunge to depth
+			             }
+			         }
+			     }
+			     return gcode;
+			 }
+			
+			 function getCuttingToolpathBothX(angle, stockSizeX, stockSizeY, depthOfCut, feedrate) {
+			     const stepover = toolDiameter * (stepoverPercentage / 100);
+			     let gcode = "";
+			
+			     for (currentDepth = 0; currentDepth < maxDepth; currentDepth += depthOfCut) {
+			         gcode += `G0 Z${retractHeight.toFixed(3)}\n`; // Move to safe Z height
+			         getRapidMoveToStartingPoint(xyZeroPoint, stockSizeX, stockSizeY);
+			         gcode += `G0 X${xZero.toFixed(3)} Y${yZero.toFixed(3)}\n`; // Rapid move to starting point
+			         if (currentDepth + depthOfCut <= maxDepth)
+			             gcode += `G1 Z${(0 - currentDepth - depthOfCut).toFixed(3)} F${feedrate}\n`; // Plunge to depth
+			         else
+			             gcode += `G1 Z${(0 - maxDepth).toFixed(3)} F${feedrate}\n`; // Plunge to depth
+			
+			         for (let y = yZero; y <= maximumY; y += stepover) {
+			             gcode += `G1 X${(stockSizeX + xZero).toFixed(3)} F${feedrate}\n`; // Cut along X
+			             if (y + stepover < maximumY) {
+			                 gcode += `G1 Y${(y + stepover).toFixed(3)}\n`; // Move over on Y
+			             }
+			             gcode += `G1 X${xZero.toFixed(3)}F${feedrate}\n`; // Move back on X
+				y += stepover;
+			             if (y + stepover < maximumY) {
+			                 gcode += `G0 Y${(y + stepover).toFixed(3)}\n`; // Move over on Y
+			                 
+			             }
+			         }
+			     }
+			     return gcode;
+			 }
+
+			 // Clear the gcode output on input change
+			 document.querySelectorAll('input').forEach(input => {
+				input.addEventListener('input', clearGCode);
+			 });
+			
+			
+		</script>
+	</body>
+</html>

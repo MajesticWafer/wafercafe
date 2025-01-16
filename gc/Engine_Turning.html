@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Ferreri Engine Turning G-Code Generator</title>
+	</head>
+	<body>
+		<h1>Ferreri Engine Turning G-Code Generator</h1>
+		<h3>Experiment in generating gcode for Engine Turning, but I guess it could be used to generate gcode for any grid-like drilling.</h3>
+		<!--
+		<div style="float: right;">
+			<img src="https://d31sxl6qgne2yj.cloudfront.net/wordpress/wp-content/uploads/20190102102121/Turned-Silver-Leaf.jpg" width="800" height="800" alt="image">
+		</div>
+		-->
+		<br>
+		<label for="tool_diameter">Tool Diameter (mm or in):</label>
+		<input type="number" id="tool_diameter" name="tool_diameter" step="0.1" value="6.35">
+		<br>
+		<!--
+    <label for="percent_overlap">Percent Overlap:</label><input type="number" id="percent_overlap" name="percent_overlap" step="0.01" value="50" title = "Default is 50 which is pretty standard"><br>
+	-->
+		<label for="x_overlap">Percent X Overlap:</label>
+		<input type="number" id="x_overlap" name="x_overlap" step="0.01" value="50" title="Default is 50 which is pretty standard">
+		<br>
+		<label for="y_overlap">Percent Y Overlap:</label>
+		<input type="number" id="y_overlap" name="y_overlap" step="0.01" value="50" title="Default is 50 which is pretty standard">
+		<br>
+		<label for="total_width">Total X Width (mm or in):</label>
+		<input type="number" id="total_width" name="total_width" step="1" value="100">
+		<br>
+		<label for="total_depth">Total Y Depth (mm or in):</label>
+		<input type="number" id="total_depth" name="total_depth" step="1" value="100">
+		<br>
+		<label for="plunge_depth">Plunge Depth (mm or in):</label>
+		<input type="number" id="plunge_depth" name="plunge_depth" step="0.1" value="0.5" title="This is the depth below Z-zero you want to 'cut'.">
+		<br>
+		<label for="retract_height">Retract Height (mm or in):</label>
+		<input type="number" id="retract_height" name="retract_height" step="1" value="3" title="Height above Z0 for moves to next plunge">
+		<br>
+		<label for="plunge_speed">Plunge Feedrate (mm/min or in/min):</label>
+		<input type="number" id="plunge_speed" name="plunge_speed" step="1" value="555">
+		<br>
+		<label for="dwell">Dwell Time (s):</label>
+		<input type="number" id="dwell" name="dwell" step="0.1" value="0.8" title="The time to keep the tool down on material">
+		<br>
+		<label for="safe_z">Safe Z Height (mm or in):</label>
+		<input type="number" id="safe_z" name="safe_z" step="1" value="10" title="Safe Z for initial move to XY0">
+		<br>
+		<label for="units">Units:</label>
+		<input type="radio" id="mm" name="units" value="mm" checked>
+		<label for="mm">mm</label>
+		<input type="radio" id="in" name="units" value="in">
+		<label for="in">in</label>
+		<br>
+		<button onclick="generateGCode()">Generate G-Code</button>
+		<br>
+		<label for="gcodeOutput">G-Code:</label>
+		<textarea id="gcodeOutput" name="gcodeOutput" rows="10" cols="50" readonly></textarea>
+		<br>
+		<br>
+		<button id="copyButton" onclick="copyGCode()" style="display: none;">Copy</button>
+		<br>
+		<button id="downloadButton" onclick="downloadNCFile()" style="display: none;">Download NC file</button>
+		<script>
+			// Function to generate the G-Code
+			function generateGCode() {
+				// Get the input values
+				const toolDiameter = parseFloat(document.getElementById("tool_diameter").value);
+				//const percentOverlap = parseFloat(document.getElementById("percent_overlap").value);
+				const totalWidth = parseFloat(document.getElementById("total_width").value);
+				const totalDepth = parseFloat(document.getElementById("total_depth").value);
+				const plungeDepth = parseFloat(document.getElementById("plunge_depth").value);
+				const retractHeight = parseFloat(document.getElementById("retract_height").value);
+				const plungeSpeed = parseFloat(document.getElementById("plunge_speed").value);
+				const dwell = parseFloat(document.getElementById("dwell").value);
+				const safeZ = parseFloat(document.getElementById("safe_z").value);
+				const units = document.querySelector('input[name="units"]:checked').value;
+				const xOverlap = parseFloat(document.getElementById("x_overlap").value);
+				const yOverlap = parseFloat(document.getElementById("y_overlap").value);
+				// Convert inputs to mm if necessary
+				if (units === "in") {
+					toolDiameter *= 25.4;
+					totalWidth *= 25.4;
+					totalDepth *= 25.4;
+					plungeDepth *= 25.4;
+					retractHeight *= 25.4;
+					safeZ *= 25.4;
+				}
+				// Calculate overlap distance and step size
+				const xOverlapDistance = xOverlap * toolDiameter / 100;
+				const yOverlapDistance = yOverlap * toolDiameter / 100;
+				const stepX = toolDiameter - xOverlapDistance;
+				const stepY = toolDiameter - yOverlapDistance;
+				// Initialize the G-Code
+				let gcode = "";
+				gcode += "G90\n"; // Absolute positioning
+				gcode += `G21\n`; // Units in mm
+				gcode += `G0 Z${safeZ.toFixed(2)}\n`; // Move to safe Z height
+				gcode += "G0 X0 Y0\n"; // Move to origin
+				let row = 1;
+				// Generate the toolpath
+				for (let y = toolDiameter / 2; y < totalDepth; y += stepY) {
+					let x = row % 2 === 0 ? xOverlapDistance / 2 : 0;
+					row++;
+					gcode += `G0 Z${retractHeight.toFixed(2)}\n`; // Rapid to retract height
+					gcode += `G0 X${x.toFixed(2)} Y${y.toFixed(2)}\n`; // Rapid to starting point
+					gcode += `G1 Z${(plungeDepth * -1).toFixed(2)} F${plungeSpeed}\n`; // Plunge to depth
+					gcode += `G4 P${dwell.toFixed(2)}\n`; // Dwell for specified time
+					gcode += `G0 Z${retractHeight.toFixed(2)}\n`; // Rapid retract
+					while (x < totalWidth) {
+						x += stepX;
+						gcode += `G0 X${x.toFixed(2)} Y${y.toFixed(2)}\n`; // Rapid to next point
+						gcode += `G1 Z${(plungeDepth * -1).toFixed(2)} F${plungeSpeed}\n`; // Plunge to depth
+						gcode += `G4 P${dwell.toFixed(2)}\n`; // Dwell for specified time
+						gcode += `G0 Z${retractHeight.toFixed(2)}\n`;
+					}
+				}
+				gcode += `G0 Z${safeZ.toFixed(2)}\n`; // Move to safe Z height
+				gcode += "G0 X0 Y0\n"; // Move to origin
+				// Display the G-Code
+				const gcodeOutput = document.getElementById("gcodeOutput");
+				gcodeOutput.value = gcode.trim();
+				// Show the copy button
+				const copyButton = document.getElementById("copyButton");
+				copyButton.style.display = "block";
+				// Show the download button
+				const downloadButton = document.getElementById("downloadButton");
+				downloadButton.style.display = "block";
+			}
+			// Function to copy the G-Code to the clipboard
+			function copyGCode() {
+				const gcodeOutput = document.getElementById("gcodeOutput");
+				gcodeOutput.select();
+				document.execCommand("copy");
+			}
+
+			function downloadNCFile() {
+				let gcode = document.getElementById('gcodeOutput').value;
+				if (!gcode) {
+					console.log('Gcode string is empty');
+					return;
+				}
+				const blob = new Blob([gcode], {
+					type: 'text/plain'
+				});
+				const url = URL.createObjectURL(blob);
+				const a = document.createElement('a');
+				a.style.display = 'none';
+				a.href = url;
+				a.download = 'engineTurning.nc';
+				document.body.appendChild(a);
+				a.click();
+				window.URL.revokeObjectURL(url);
+			}
+		</script>
+	</body>
+</html>
