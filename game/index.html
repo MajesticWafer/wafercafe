@@ -173,6 +173,9 @@
     </div>
     
     <div id="game-head">
+        <button style="aspect-ratio: 1 / 1; margin-left: auto;" id="back">
+          <i class="glyphicon glyphicon-chevron-left"></i>
+        </button>
         <p id="title"></p> <!-- Game name here -->
         <button style="aspect-ratio: 1 / 1; margin-left: auto;" id="theme-toggle">
           <i class="bi bi-sun"></i>
@@ -224,6 +227,11 @@
 
         // Initialize the info box suggestion
         suggestOppositeMode();
+
+        const backButton = document.getElementById("back")
+        backButton.addEventListener('click', () =>  {
+            location.href = "https://wafercafe.com/";
+        }
         
         function logMessage(message) {
             console.log(message);  // Still logs to console
