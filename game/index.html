@@ -281,6 +281,21 @@
                     const gameFullPath = `../${gamePath}/index.html`;
                     logMessage("Embedding game from path: " + gameFullPath);
                     document.getElementById("game-container").innerHTML += `<iframe src="${gameFullPath}" class="iframe" width="100%" height="100%" id="game-iframe"></iframe>`;
+                    
+                    const fullscreenBtn = document.getElementById('fullscreen-btn');
+                    const gameIframe = document.getElementById('game-iframe');
+        
+                    fullscreenBtn.addEventListener('click', () => {
+                        if (gameIframe.requestFullscreen) {
+                            gameIframe.requestFullscreen();
+                        } else if (gameIframe.mozRequestFullScreen) { /* Firefox */
+                            gameIframe.mozRequestFullScreen();
+                        } else if (gameIframe.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+                            gameIframe.webkitRequestFullscreen();
+                        } else if (gameIframe.msRequestFullscreen) { /* IE/Edge */
+                            gameIframe.msRequestFullscreen();
+                        }
+                    });
                 } else {
                     document.getElementById("game-container").innerText = "Game not found.";
                     logMessage("Game not found in games.json for parameter: " + gameParam);
@@ -356,21 +371,6 @@
           localStorage.setItem('theme', newTheme);
         });
       });
-
-      const fullscreenBtn = document.getElementById('fullscreen-btn');
-      const gameIframe = document.getElementById('game-iframe');
-        
-      fullscreenBtn.addEventListener('click', () => {
-          if (gameIframe.requestFullscreen) {
-              gameIframe.requestFullscreen();
-          } else if (gameIframe.mozRequestFullScreen) { /* Firefox */
-              gameIframe.mozRequestFullScreen();
-          } else if (gameIframe.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
-              gameIframe.webkitRequestFullscreen();
-          } else if (gameIframe.msRequestFullscreen) { /* IE/Edge */
-              gameIframe.msRequestFullscreen();
-          }
-        });
     </script>
 </body>
 </html>
