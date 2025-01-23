@@ -43,7 +43,7 @@
             /* width: calc(100vw / 5 * 2.95); */
             width: calc(100% - 8vw /* minus margin */);
             height: auto;
-            /* aspect-ratio: 4 / 3; */
+            aspect-ratio: 4 / 3;
             margin: 1vw auto;
             border-radius: 10px;
             border: 1px var(--button-border);
@@ -75,9 +75,6 @@
             margin: 0 auto;
             padding: 0;
             border-radius: 10px;
-            z-index: 1;
-            width: 100%;
-            height: 100%;
         }
 
         #info-box {
@@ -288,7 +285,7 @@
 
                     const gameFullPath = `../${gamePath}/index.html`;
                     logMessage("Embedding game from path: " + gameFullPath);
-                    document.getElementById("game-container").innerHTML += `<iframe src="${gameFullPath}" class="iframe" id="game-iframe"></iframe>`;
+                    document.getElementById("game-container").innerHTML += `<iframe src="${gameFullPath}" class="iframe" width="100%" height="100%" id="game-iframe"></iframe>`;
                     
                     const fullscreenBtn = document.getElementById('fullscreen-btn');
                     const gameIframe = document.getElementById('game-iframe');
