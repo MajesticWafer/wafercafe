@@ -3,163 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Realistic Fluid Sim</title>
+    <title>Water Simulation</title>
     <style>
-        body { margin: 0; overflow: hidden; background: black; font-family: Arial, sans-serif; }
-        canvas { display: block; }
-        #controls {
-            position: absolute; top: 10px; left: 10px; color: white; 
-            background: rgba(0, 0, 0, 0.5); padding: 10px; border-radius: 5px;
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #f0f0f0;
+        }
+        canvas {
+            display: block;
         }
     </style>
 </head>
 <body>
-    <canvas id="fluidCanvas"></canvas>
-    <div id="controls">
-        <label for="quality">Quality:</label>
-        <input type="range" id="quality" min="64" max="512" value="128" step="64">
-        <span id="qualityValue">128</span>
-    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
     <script>
-        const canvas = document.getElementById('fluidCanvas');
-        const ctx = canvas.getContext('2d');
-        const qualitySlider = document.getElementById('quality');
-        const qualityValue = document.getElementById('qualityValue');
+        // Module aliases
+        const { Engine, Render, Runner, World, Bodies, Mouse, MouseConstraint } = Matter;
 
-        let gridSize = parseInt(qualitySlider.value);
-        let sim, width, height, cells, prevX, prevY;
+        // Create engine
+        const engine = Engine.create();
+        const { world } = engine;
 
-        function init() {
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-            cells = gridSize;
-            sim = new FluidSimulation(cells);
-        }
-
-        class FluidSimulation {
-            constructor(size) {
-                this.size = size;
-                this.velocityX = new Float32Array(size * size);
-                this.velocityY = new Float32Array(size * size);
-                this.density = new Float32Array(size * size);
+        // Create renderer
+        const render = Render.create({
+            element: document.body,
+            engine: engine,
+            options: {
+                width: window.innerWidth,
+                height: window.innerHeight,
+                wireframes: false,
+                background: '#ffffff'
             }
-
-            addDensity(x, y, amount) {
-                const index = x + y * this.size;
-                if (index < this.density.length) {
-                    this.density[index] += amount;
-                }
-            }
-
-            addVelocity(x, y, amountX, amountY) {
-                const index = x + y * this.size;
-                if (index < this.velocityX.length) {
-                    this.velocityX[index] += amountX;
-                    this.velocityY[index] += amountY;
-                }
-            }
-
-            diffuse(b, field, diff, dt) {
-                let a = dt * diff * (this.size - 2) * (this.size - 2);
-                for (let k = 0; k < 20; k++) {
-                    for (let i = 1; i < this.size - 1; i++) {
-                        for (let j = 1; j < this.size - 1; j++) {
-                            field[i + j * this.size] = 
-                                (field[i + j * this.size] + a * (
-                                    field[(i - 1) + j * this.size] +
-                                    field[(i + 1) + j * this.size] +
-                                    field[i + (j - 1) * this.size] +
-                                    field[i + (j + 1) * this.size]
-                                )) / (1 + 4 * a);
-                        }
-                    }
-                }
-            }
-
-            advect(b, d, d0, velocX, velocY, dt) {
-                let N = this.size;
-                for (let i = 1; i < N - 1; i++) {
-                    for (let j = 1; j < N - 1; j++) {
-                        let x = i - dt * velocX[i + j * N];
-                        let y = j - dt * velocY[i + j * N];
-
-                        x = Math.max(0.5, Math.min(N - 1.5, x));
-                        y = Math.max(0.5, Math.min(N - 1.5, y));
-
-                        let i0 = Math.floor(x);
-                        let i1 = i0 + 1;
-                        let j0 = Math.floor(y);
-                        let j1 = j0 + 1;
-
-                        let s1 = x - i0;
-                        let s0 = 1 - s1;
-                        let t1 = y - j0;
-                        let t0 = 1 - t1;
-
-                        d[i + j * N] =
-                            s0 * (t0 * d0[i0 + j0 * N] + t1 * d0[i0 + j1 * N]) +
-                            s1 * (t0 * d0[i1 + j0 * N] + t1 * d0[i1 + j1 * N]);
-                    }
-                }
-            }
-
-            step(dt) {
-                this.diffuse(1, this.velocityX, 0.0001, dt);
-                this.diffuse(2, this.velocityY, 0.0001, dt);
-
-                this.advect(1, this.velocityX, this.velocityX, this.velocityX, this.velocityY, dt);
-                this.advect(2, this.velocityY, this.velocityY, this.velocityX, this.velocityY, dt);
-                this.advect(0, this.density, this.density, this.velocityX, this.velocityY, dt);
-            }
-
-            render() {
-                const imageData = ctx.getImageData(0, 0, width, height);
-                const data = imageData.data;
-                for (let i = 0; i < this.size; i++) {
-                    for (let j = 0; j < this.size; j++) {
-                        const density = this.density[i + j * this.size] * 255;
-                        const pixelIndex = (i * 4) + (j * width * 4);
-                        data[pixelIndex] = density;
-                        data[pixelIndex + 1] = density * 0.5;
-                        data[pixelIndex + 2] = 255;
-                        data[pixelIndex + 3] = 255;
-                    }
-                }
-                ctx.putImageData(imageData, 0, 0);
-            }
-        }
-
-        function loop() {
-            sim.step(0.1);
-            sim.render();
-            requestAnimationFrame(loop);
-        }
-
-        canvas.addEventListener('mousemove', (e) => {
-            const x = Math.floor(e.clientX / (width / cells));
-            const y = Math.floor(e.clientY / (height / cells));
-            if (prevX !== undefined && prevY !== undefined) {
-                sim.addDensity(x, y, 10);
-                sim.addVelocity(x, y, (e.clientX - prevX) * 0.5, (e.clientY - prevY) * 0.5);
-            }
-            prevX = e.clientX;
-            prevY = e.clientY;
         });
 
-        canvas.addEventListener('mouseleave', () => {
-            prevX = prevY = undefined;
+        Render.run(render);
+
+        // Create runner
+        const runner = Runner.create();
+        Runner.run(runner, engine);
+
+        // Add walls
+        const walls = [
+            Bodies.rectangle(window.innerWidth / 2, 0, window.innerWidth, 50, { isStatic: true }),
+            Bodies.rectangle(window.innerWidth / 2, window.innerHeight, window.innerWidth, 50, { isStatic: true }),
+            Bodies.rectangle(window.innerWidth, window.innerHeight / 2, 50, window.innerHeight, { isStatic: true }),
+            Bodies.rectangle(0, window.innerHeight / 2, 50, window.innerHeight, { isStatic: true })
+        ];
+        World.add(world, walls);
+
+        // Create water particles
+        const particles = [];
+        const particleOptions = {
+            frictionAir: 0.02,
+            restitution: 0.6,
+            density: 0.001,
+            render: { fillStyle: '#3498db' }
+        };
+
+        for (let i = 0; i < 100; i++) {
+            const particle = Bodies.circle(
+                window.innerWidth / 2 + Math.random() * 200 - 100,
+                100 + Math.random() * 50,
+                5,
+                particleOptions
+            );
+            particles.push(particle);
+        }
+        World.add(world, particles);
+
+        // Add mouse interaction
+        const mouse = Mouse.create(render.canvas);
+        const mouseConstraint = MouseConstraint.create(engine, {
+            mouse: mouse,
+            constraint: {
+                stiffness: 0.2,
+                render: { visible: false }
+            }
         });
 
-        qualitySlider.addEventListener('input', () => {
-            gridSize = parseInt(qualitySlider.value);
-            qualityValue.textContent = gridSize;
-            init();
+        World.add(world, mouseConstraint);
+        render.mouse = mouse;
+
+        // Resize canvas dynamically
+        window.addEventListener('resize', () => {
+            render.canvas.width = window.innerWidth;
+            render.canvas.height = window.innerHeight;
+            Matter.Body.setPosition(walls[0], { x: window.innerWidth / 2, y: 0 });
+            Matter.Body.setPosition(walls[1], { x: window.innerWidth / 2, y: window.innerHeight });
+            Matter.Body.setPosition(walls[2], { x: window.innerWidth, y: window.innerHeight / 2 });
+            Matter.Body.setPosition(walls[3], { x: 0, y: window.innerHeight / 2 });
         });
 
-        window.addEventListener('resize', init);
-
-        init();
-        loop();
+        // Start simulation
+        Engine.run(engine);
+        Render.run(render);
     </script>
 </body>
 </html>
