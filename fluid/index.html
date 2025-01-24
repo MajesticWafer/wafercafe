@@ -3,78 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fluid Sim</title>
+    <title>Realistic Fluid Sim</title>
     <style>
-        body { margin: 0; overflow: hidden; font-family: Arial, sans-serif; }
-        canvas { display: block; background: black; }
-        #controls { position: absolute; top: 10px; left: 10px; color: white; }
+        body { margin: 0; overflow: hidden; background: black; font-family: Arial, sans-serif; }
+        canvas { display: block; }
+        #controls {
+            position: absolute; top: 10px; left: 10px; color: white; 
+            background: rgba(0, 0, 0, 0.5); padding: 10px; border-radius: 5px;
+        }
     </style>
 </head>
 <body>
     <canvas id="fluidCanvas"></canvas>
     <div id="controls">
         <label for="quality">Quality:</label>
-        <input type="range" id="quality" min="32" max="512" value="128" step="32">
+        <input type="range" id="quality" min="64" max="512" value="128" step="64">
         <span id="qualityValue">128</span>
     </div>
     <script>
         const canvas = document.getElementById('fluidCanvas');
         const ctx = canvas.getContext('2d');
-        const qualityInput = document.getElementById('quality');
+        const qualitySlider = document.getElementById('quality');
         const qualityValue = document.getElementById('qualityValue');
 
-        let resolution = parseInt(qualityInput.value);
-        let cols, rows, field;
+        let gridSize = parseInt(qualitySlider.value);
+        let sim, width, height, cells, prevX, prevY;
 
         function init() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            cols = Math.floor(canvas.width / resolution);
-            rows = Math.floor(canvas.height / resolution);
-            field = new Array(cols).fill().map(() => new Array(rows).fill({ vx: 0, vy: 0 }));
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+            cells = gridSize;
+            sim = new FluidSimulation(cells);
         }
 
-        function draw() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let x = 0; x < cols; x++) {
-                for (let y = 0; y < rows; y++) {
-                    let cell = field[x][y];
-                    ctx.fillStyle = `rgba(0, 255, 255, ${Math.abs(cell.vx + cell.vy) * 0.2})`;
-                    ctx.fillRect(x * resolution, y * resolution, resolution, resolution);
+        class FluidSimulation {
+            constructor(size) {
+                this.size = size;
+                this.velocityX = new Float32Array(size * size);
+                this.velocityY = new Float32Array(size * size);
+                this.density = new Float32Array(size * size);
+            }
+
+            addDensity(x, y, amount) {
+                const index = x + y * this.size;
+                if (index < this.density.length) {
+                    this.density[index] += amount;
                 }
             }
-        }
 
-        function update() {
-            for (let x = 0; x < cols; x++) {
-                for (let y = 0; y < rows; y++) {
-                    let cell = field[x][y];
-                    cell.vx += (Math.random() - 0.5) * 0.1;
-                    cell.vy += (Math.random() - 0.5) * 0.1;
-                    field[x][y] = { vx: cell.vx * 0.99, vy: cell.vy * 0.99 };
+            addVelocity(x, y, amountX, amountY) {
+                const index = x + y * this.size;
+                if (index < this.velocityX.length) {
+                    this.velocityX[index] += amountX;
+                    this.velocityY[index] += amountY;
                 }
+            }
+
+            diffuse(b, field, diff, dt) {
+                let a = dt * diff * (this.size - 2) * (this.size - 2);
+                for (let k = 0; k < 20; k++) {
+                    for (let i = 1; i < this.size - 1; i++) {
+                        for (let j = 1; j < this.size - 1; j++) {
+                            field[i + j * this.size] = 
+                                (field[i + j * this.size] + a * (
+                                    field[(i - 1) + j * this.size] +
+                                    field[(i + 1) + j * this.size] +
+                                    field[i + (j - 1) * this.size] +
+                                    field[i + (j + 1) * this.size]
+                                )) / (1 + 4 * a);
+                        }
+                    }
+                }
+            }
+
+            advect(b, d, d0, velocX, velocY, dt) {
+                let N = this.size;
+                for (let i = 1; i < N - 1; i++) {
+                    for (let j = 1; j < N - 1; j++) {
+                        let x = i - dt * velocX[i + j * N];
+                        let y = j - dt * velocY[i + j * N];
+
+                        x = Math.max(0.5, Math.min(N - 1.5, x));
+                        y = Math.max(0.5, Math.min(N - 1.5, y));
+
+                        let i0 = Math.floor(x);
+                        let i1 = i0 + 1;
+                        let j0 = Math.floor(y);
+                        let j1 = j0 + 1;
+
+                        let s1 = x - i0;
+                        let s0 = 1 - s1;
+                        let t1 = y - j0;
+                        let t0 = 1 - t1;
+
+                        d[i + j * N] =
+                            s0 * (t0 * d0[i0 + j0 * N] + t1 * d0[i0 + j1 * N]) +
+                            s1 * (t0 * d0[i1 + j0 * N] + t1 * d0[i1 + j1 * N]);
+                    }
+                }
+            }
+
+            step(dt) {
+                this.diffuse(1, this.velocityX, 0.0001, dt);
+                this.diffuse(2, this.velocityY, 0.0001, dt);
+
+                this.advect(1, this.velocityX, this.velocityX, this.velocityX, this.velocityY, dt);
+                this.advect(2, this.velocityY, this.velocityY, this.velocityX, this.velocityY, dt);
+                this.advect(0, this.density, this.density, this.velocityX, this.velocityY, dt);
+            }
+
+            render() {
+                const imageData = ctx.getImageData(0, 0, width, height);
+                const data = imageData.data;
+                for (let i = 0; i < this.size; i++) {
+                    for (let j = 0; j < this.size; j++) {
+                        const density = this.density[i + j * this.size] * 255;
+                        const pixelIndex = (i * 4) + (j * width * 4);
+                        data[pixelIndex] = density;
+                        data[pixelIndex + 1] = density * 0.5;
+                        data[pixelIndex + 2] = 255;
+                        data[pixelIndex + 3] = 255;
+                    }
+                }
+                ctx.putImageData(imageData, 0, 0);
             }
         }
 
         function loop() {
-            update();
-            draw();
+            sim.step(0.1);
+            sim.render();
             requestAnimationFrame(loop);
         }
 
-        qualityInput.addEventListener('input', () => {
-            resolution = parseInt(qualityInput.value);
-            qualityValue.textContent = resolution;
-            init();
+        canvas.addEventListener('mousemove', (e) => {
+            const x = Math.floor(e.clientX / (width / cells));
+            const y = Math.floor(e.clientY / (height / cells));
+            if (prevX !== undefined && prevY !== undefined) {
+                sim.addDensity(x, y, 10);
+                sim.addVelocity(x, y, (e.clientX - prevX) * 0.5, (e.clientY - prevY) * 0.5);
+            }
+            prevX = e.clientX;
+            prevY = e.clientY;
         });
 
-        canvas.addEventListener('mousemove', (e) => {
-            let x = Math.floor(e.clientX / resolution);
-            let y = Math.floor(e.clientY / resolution);
-            if (field[x] && field[x][y]) {
-                field[x][y].vx += 1;
-                field[x][y].vy += 1;
-            }
+        canvas.addEventListener('mouseleave', () => {
+            prevX = prevY = undefined;
+        });
+
+        qualitySlider.addEventListener('input', () => {
+            gridSize = parseInt(qualitySlider.value);
+            qualityValue.textContent = gridSize;
+            init();
         });
 
         window.addEventListener('resize', init);
