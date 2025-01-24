@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fluid Sim</title>
+    <style>
+        body { margin: 0; overflow: hidden; font-family: Arial, sans-serif; }
+        canvas { display: block; background: black; }
+        #controls { position: absolute; top: 10px; left: 10px; color: white; }
+    </style>
+</head>
+<body>
+    <canvas id="fluidCanvas"></canvas>
+    <div id="controls">
+        <label for="quality">Quality:</label>
+        <input type="range" id="quality" min="32" max="512" value="128" step="32">
+        <span id="qualityValue">128</span>
+    </div>
+    <script>
+        const canvas = document.getElementById('fluidCanvas');
+        const ctx = canvas.getContext('2d');
+        const qualityInput = document.getElementById('quality');
+        const qualityValue = document.getElementById('qualityValue');
+
+        let resolution = parseInt(qualityInput.value);
+        let cols, rows, field;
+
+        function init() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            cols = Math.floor(canvas.width / resolution);
+            rows = Math.floor(canvas.height / resolution);
+            field = new Array(cols).fill().map(() => new Array(rows).fill({ vx: 0, vy: 0 }));
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let x = 0; x < cols; x++) {
+                for (let y = 0; y < rows; y++) {
+                    let cell = field[x][y];
+                    ctx.fillStyle = `rgba(0, 255, 255, ${Math.abs(cell.vx + cell.vy) * 0.2})`;
+                    ctx.fillRect(x * resolution, y * resolution, resolution, resolution);
+                }
+            }
+        }
+
+        function update() {
+            for (let x = 0; x < cols; x++) {
+                for (let y = 0; y < rows; y++) {
+                    let cell = field[x][y];
+                    cell.vx += (Math.random() - 0.5) * 0.1;
+                    cell.vy += (Math.random() - 0.5) * 0.1;
+                    field[x][y] = { vx: cell.vx * 0.99, vy: cell.vy * 0.99 };
+                }
+            }
+        }
+
+        function loop() {
+            update();
+            draw();
+            requestAnimationFrame(loop);
+        }
+
+        qualityInput.addEventListener('input', () => {
+            resolution = parseInt(qualityInput.value);
+            qualityValue.textContent = resolution;
+            init();
+        });
+
+        canvas.addEventListener('mousemove', (e) => {
+            let x = Math.floor(e.clientX / resolution);
+            let y = Math.floor(e.clientY / resolution);
+            if (field[x] && field[x][y]) {
+                field[x][y].vx += 1;
+                field[x][y].vy += 1;
+            }
+        });
+
+        window.addEventListener('resize', init);
+
+        init();
+        loop();
+    </script>
+</body>
+</html>
