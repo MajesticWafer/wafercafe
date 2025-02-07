@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Slots</title>
+  <!-- Bootstrap CSS (for the switch styling) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
   <style>
     body {
@@ -65,11 +67,21 @@
       right: 10px;
       display: flex;
       gap: 10px;
+      align-items: center;
     }
     .control-button {
       font-size: 1.5rem;
       cursor: pointer;
       color: #fff;
+    }
+    /* Custom switch styling */
+    .form-check-input {
+      background-color: grey;
+      border-color: grey;
+    }
+    .form-check-input:checked {
+      background-color: blue;
+      border-color: blue;
     }
     .money-rain {
       position: fixed;
@@ -81,7 +93,7 @@
       font-size: 2rem;
       position: absolute;
       opacity: 1;
-      animation: fall 4s linear forwards, fadeOut 2s ease-out 3s; /* Fade starts after falling */
+      animation: fall 4s linear forwards, fadeOut 2s ease-out 3s;
     }
     .money.cash {
       animation: featherFall 4s ease-in-out forwards, fadeOut 2s ease-out 3s;
@@ -112,8 +124,14 @@
   <div class="score" id="score">Score: 300 | High Score: 0</div>
 
   <div class="controls">
+    <!-- Audio toggle -->
     <div class="control-button" onclick="toggleAudio()">
       <i id="audio-icon" class="bi bi-volume-mute-fill"></i>
+    </div>
+    <!-- Spin Delay switch -->
+    <div class="form-check form-switch">
+      <input class="form-check-input" type="checkbox" id="spinDelaySwitch" checked>
+      <label class="form-check-label" for="spinDelaySwitch" style="color: white;">Spin Delay</label>
     </div>
   </div>
   
@@ -131,12 +149,12 @@
   </div>
 
   <audio id="background-audio" loop>
-     <source src="casino-theme.mp3"></source>
+     <source src="casino-theme.mp3">
      Your browser does not support the audio element.
   </audio>
 
   <audio id="pull-audio">
-     <source src="pull.mp3"></source>
+     <source src="pull.mp3">
      Your browser does not support the audio element.
   </audio>
 
@@ -145,13 +163,25 @@
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       checkBroke();
+      // Set spin delay switch state from storage (default is true)
+      const spinDelaySwitch = document.getElementById("spinDelaySwitch");
+      const savedSpinDelay = localStorage.getItem("spinDelayEnabled");
+      if (savedSpinDelay !== null) {
+        spinDelaySwitch.checked = savedSpinDelay === "true";
+      } else {
+        spinDelaySwitch.checked = true;
+      }
+      // Save preference when toggled
+      spinDelaySwitch.addEventListener("change", (event) => {
+        localStorage.setItem("spinDelayEnabled", event.target.checked);
+      });
     });
     
     const emojis = ["🍒", "🍋", "🍉", "🍇", "🔔", "⭐", "💎"];
     const slotMachine = document.getElementById("slot-machine");
     const moneyRainDiv = document.getElementById("money-rain");
     const scoreDisplay = document.getElementById("score");
-    var sound = false
+    var sound = false;
     let score = 0;
     let highScore = getCookie("highScore") || 0;
     let broke = Number(getCookie("broke")) || 0;
@@ -164,9 +194,8 @@
       score = 0;
 
       const now = new Date();
-      const oneHourLater = new Date(now.getTime() + 60 * 60 * 1000); // Add 1 hour in milliseconds
+      const oneHourLater = new Date(now.getTime() + 60 * 60 * 1000); // 1 hour later
 
-      // Set the cookie to expire in 1 hour
       document.cookie = `broke=1; expires=${oneHourLater.toUTCString()}; path=/;`;
 
       console.log('Cookie "broke" set with value 1, expires in 1 hour.');
@@ -203,7 +232,16 @@
       const slot2 = document.getElementById("slot2");
       const slot3 = document.getElementById("slot3");
       const result = document.getElementById("result");
-
+      const spinButton = document.getElementById("spin-button");
+      // Check the state of the spin delay switch
+      const spinDelaySwitch = document.getElementById("spinDelaySwitch");
+      const delayEnabled = spinDelaySwitch ? spinDelaySwitch.checked : true;
+      
+      // Only disable the spin button if delay is enabled
+      if (delayEnabled) {
+        spinButton.disabled = true;
+      }
+      
       const emoji1 = emojis[Math.floor(Math.random() * emojis.length)];
       const emoji2 = emojis[Math.floor(Math.random() * emojis.length)];
       const emoji3 = emojis[Math.floor(Math.random() * emojis.length)];
@@ -212,9 +250,6 @@
       slot2.textContent = emoji2;
       slot3.textContent = emoji3;
 
-      const spinButton = document.getElementById("spin-button");
-      spinButton.disabled = true;
-      
       if (score < 10) { handleBroke(); }
         
       if (emoji1 === emoji2 && emoji2 === emoji3) {
@@ -256,8 +291,13 @@
         updateBrokeScore();
       }
 
+      // Re-enable the spin button based on the switch setting
       if (broke === 0) {
-        setTimeout(() => spinButton.disabled = false, 800);
+        if (delayEnabled) {
+          setTimeout(() => spinButton.disabled = false, 800);
+        } else {
+          spinButton.disabled = false;
+        }
       }
 
       scoreDisplay.textContent = `Score: ${score} | High Score: ${highScore}`;
@@ -276,7 +316,6 @@
       }
     }
 
-
     function toggleAudio() {
       const bgm = document.getElementById("background-audio");
       const audioIcon = document.getElementById("audio-icon");
@@ -293,7 +332,7 @@
     }
 
     function moneyRain() {
-      moneyRainDiv.innerHTML = ""; // Clear previous money rain
+      moneyRainDiv.innerHTML = ""; // Clear previous rain
 
       for (let i = 0; i < 20; i++) {
         const money = document.createElement("div");
@@ -301,16 +340,15 @@
 
         if (Math.random() > 0.5) {
           money.textContent = "💵";
-          money.classList.add("cash"); // Feather-like physics for cash
+          money.classList.add("cash");
         } else {
-          money.textContent = "💰"; // Normal physics for bags
+          money.textContent = "💰";
         }
 
         money.style.left = Math.random() * 100 + "vw";
-        money.style.animationDuration = (Math.random() * 1 + 4) + "s"; // Random fall duration
+        money.style.animationDuration = (Math.random() * 1 + 4) + "s";
         moneyRainDiv.appendChild(money);
 
-        // Remove each money symbol after animation completes
         setTimeout(() => money.remove(), 5000);
       }
     }
