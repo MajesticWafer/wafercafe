@@ -74,14 +74,15 @@
       cursor: pointer;
       color: #fff;
     }
-    /* Custom switch styling */
+    /* Custom switch styling with smooth transition */
     .form-check-input {
       background-color: grey;
       border-color: grey;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
     }
     .form-check-input:checked {
-      background-color: blue;
-      border-color: blue;
+      background-color: #87CEEB; /* sky blue */
+      border-color: #87CEEB;
     }
     .money-rain {
       position: fixed;
@@ -124,14 +125,14 @@
   <div class="score" id="score">Score: 300 | High Score: 0</div>
 
   <div class="controls">
-    <!-- Audio toggle -->
-    <div class="control-button" onclick="toggleAudio()">
-      <i id="audio-icon" class="bi bi-volume-mute-fill"></i>
-    </div>
-    <!-- Spin Delay switch -->
+    <!-- Spin Delay switch comes first -->
     <div class="form-check form-switch">
       <input class="form-check-input" type="checkbox" id="spinDelaySwitch" checked>
       <label class="form-check-label" for="spinDelaySwitch" style="color: white;">Spin Delay</label>
+    </div>
+    <!-- Audio toggle -->
+    <div class="control-button" onclick="toggleAudio()">
+      <i id="audio-icon" class="bi bi-volume-mute-fill"></i>
     </div>
   </div>
   
