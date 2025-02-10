@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Slots</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #222;
+      color: #fff;
+      overflow: hidden;
+      flex-direction: column;
+    }
+    .slot-machine {
+      text-align: center;
+      padding: 20px;
+      border-radius: 10px;
+      background-color: #111;
+      border: 4px solid #444;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+      transition: box-shadow 0.3s;
+    }
+    .slots {
+      font-size: 3rem;
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin: 20px 0;
+    }
+    .slot {
+      width: 80px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #333;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+    .buttons {
+      margin-top: 20px;
+    }
+    .btn {
+      padding: 10px 20px;
+      font-size: 1rem;
+      cursor: pointer;
+      background-color: #28a745;
+      border: none;
+      color: #fff;
+      border-radius: 5px;
+    }
+    .btn:hover {
+      background-color: #218838;
+    }
+    .controls {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      gap: 10px;
+    }
+    .control-button {
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #fff;
+    }
+    .money-rain {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      pointer-events: none;
+    }
+    .money {
+      font-size: 2rem;
+      position: absolute;
+      opacity: 1;
+      animation: fall 4s linear forwards, fadeOut 2s ease-out 3s; /* Fade starts after falling */
+    }
+    .money.cash {
+      animation: featherFall 4s ease-in-out forwards, fadeOut 2s ease-out 3s;
+    }
+    @keyframes fall {
+      0% { transform: translateY(-100vh); }
+      100% { transform: translateY(100vh); }
+    }
+    @keyframes featherFall {
+      0% { transform: translateY(-100vh) rotate(0deg); }
+      50% { transform: translateY(50vh) rotate(180deg); }
+      100% { transform: translateY(100vh) rotate(360deg); }
+    }
+    @keyframes fadeOut {
+      0% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+    .score {
+      font-size: 1.25rem;
+      font-weight: bold;
+      position: absolute;
+      text-align: center;
+      top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="score" id="score">Score: 300 | High Score: 0</div>
+
+  <div class="controls">
+    <div class="control-button" onclick="toggleAudio()">
+      <i id="audio-icon" class="bi bi-volume-mute-fill"></i>
+    </div>
+  </div>
+  
+  <div class="slot-machine" id="slot-machine">
+    <h1>🎰 Slot Machine 🎰</h1>
+    <div class="slots">
+      <div class="slot" id="slot1">🍒</div>
+      <div class="slot" id="slot2">🍋</div>
+      <div class="slot" id="slot3">🍉</div>
+    </div>
+    <div class="buttons">
+      <button id="spin-button" class="btn" onclick="spin(); pullsfx();">Spin</button>
+    </div>
+    <p id="result">Take a spin!</p>
+  </div>
+
+  <audio id="background-audio" loop>
+     <source src="casino-theme.mp3"></source>
+     Your browser does not support the audio element.
+  </audio>
+
+  <audio id="pull-audio">
+     <source src="pull.mp3"></source>
+     Your browser does not support the audio element.
+  </audio>
+
+  <div class="money-rain" id="money-rain"></div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      checkBroke();
+    });
+    
+    const emojis = ["🍒", "🍋", "🍉", "🍇", "🔔", "⭐", "💎"];
+    const slotMachine = document.getElementById("slot-machine");
+    const moneyRainDiv = document.getElementById("money-rain");
+    const scoreDisplay = document.getElementById("score");
+    var sound = false
+    let score = 0;
+    let highScore = getCookie("highScore") || 0;
+    let broke = Number(getCookie("broke")) || 0;
+
+    // Update high score
+    scoreDisplay.textContent = `Score: ${score} | High Score: ${highScore}`;
+    
+    function handleBroke() {
+      broke = 1;
+      score = 0;
+
+      const now = new Date();
+      const oneHourLater = new Date(now.getTime() + 60 * 60 * 1000); // Add 1 hour in milliseconds
+
+      // Set the cookie to expire in 1 hour
+      document.cookie = `broke=1; expires=${oneHourLater.toUTCString()}; path=/;`;
+
+      console.log('Cookie "broke" set with value 1, expires in 1 hour.');
+      
+      result.textContent = "No score left. Come back later";
+      slotMachine.style.boxShadow = "0 0 20px blue";
+      setTimeout(() => slotMachine.style.boxShadow = "", 500);
+      
+      const spinButton = document.getElementById("spin-button");
+      spinButton.disabled = true;
+    }
+
+    function checkBroke() {
+      if (broke === 0) {
+        score += 300;
+        scoreDisplay.textContent = `Score: ${score} | High Score: ${highScore}`;
+      } else {
+        handleBroke();
+      }
+    }      
+
+    function pullsfx() {
+      const sfx = document.getElementById("pull-audio");
+
+      if (sound === "0") {
+        sfx.pause();
+      } else if (sound === "1") {
+        sfx.play();
+      }
+    }
+    
+    function spin() {
+      const slot1 = document.getElementById("slot1");
+      const slot2 = document.getElementById("slot2");
+      const slot3 = document.getElementById("slot3");
+      const result = document.getElementById("result");
+
+      const emoji1 = emojis[Math.floor(Math.random() * emojis.length)];
+      const emoji2 = emojis[Math.floor(Math.random() * emojis.length)];
+      const emoji3 = emojis[Math.floor(Math.random() * emojis.length)];
+
+      slot1.textContent = emoji1;
+      slot2.textContent = emoji2;
+      slot3.textContent = emoji3;
+
+      const spinButton = document.getElementById("spin-button");
+      spinButton.disabled = true;
+      
+      if (score < 10) { handleBroke(); }
+        
+      if (emoji1 === emoji2 && emoji2 === emoji3) {
+        result.textContent = "🎉 Jackpot! 🎉";
+        slotMachine.style.boxShadow = "0 0 20px gold";
+        moneyRain();
+        setTimeout(() => slotMachine.style.boxShadow = "", 500);
+
+        switch (emoji1) {
+          case "🍒":
+            score += 200;
+            break;
+          case "🍋":
+            score += 250;
+            break;
+          case "🍉":
+            score += 300;
+            break;
+          case "🍇":
+            score += 350;
+            break;
+          case "🔔":
+            score += 400;
+            break;
+          case "⭐":
+            score += 450;
+            break;
+          case "💎":
+            score += 500;
+            break;
+        }
+        
+        updateHighScore();
+      } else {
+        result.textContent = "Try Again!";
+        slotMachine.style.boxShadow = "0 0 20px red";
+        setTimeout(() => slotMachine.style.boxShadow = "", 500);
+        score -= 10;
+        updateBrokeScore();
+      }
+
+      if (broke === 0) {
+        setTimeout(() => spinButton.disabled = false, 800);
+      }
+
+      scoreDisplay.textContent = `Score: ${score} | High Score: ${highScore}`;
+    }
+
+    function updateHighScore() {
+      if (score > highScore) {
+        highScore = score;
+        setCookie("highScore", highScore, 365);
+      }
+    }
+
+    function updateBrokeScore() {
+      if (score < 10) {
+        handleBroke();
+      }
+    }
+
+
+    function toggleAudio() {
+      const bgm = document.getElementById("background-audio");
+      const audioIcon = document.getElementById("audio-icon");
+      
+      if (bgm.paused) {
+        bgm.play();
+        sound = "1";
+        audioIcon.classList.replace("bi-volume-mute-fill", "bi-volume-up-fill");
+      } else {
+        bgm.pause();
+        sound = "0";
+        audioIcon.classList.replace("bi-volume-up-fill", "bi-volume-mute-fill");
+      }
+    }
+
+    function moneyRain() {
+      moneyRainDiv.innerHTML = ""; // Clear previous money rain
+
+      for (let i = 0; i < 20; i++) {
+        const money = document.createElement("div");
+        money.classList.add("money");
+
+        if (Math.random() > 0.5) {
+          money.textContent = "💵";
+          money.classList.add("cash"); // Feather-like physics for cash
+        } else {
+          money.textContent = "💰"; // Normal physics for bags
+        }
+
+        money.style.left = Math.random() * 100 + "vw";
+        money.style.animationDuration = (Math.random() * 1 + 4) + "s"; // Random fall duration
+        moneyRainDiv.appendChild(money);
+
+        // Remove each money symbol after animation completes
+        setTimeout(() => money.remove(), 5000);
+      }
+    }
+
+    // Cookie functions to get and set high score
+    function setCookie(name, value, days) {
+      const expires = new Date();
+      expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+      document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+    }
+
+    function getCookie(name) {
+      const nameEQ = name + "=";
+      const ca = document.cookie.split(';');
+      for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+      }
+      return null;
+    }
+  </script>
+</body>
+</html>
