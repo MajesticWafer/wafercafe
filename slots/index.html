@@ -72,36 +72,15 @@
       cursor: pointer;
       color: #fff;
     }
-    /* Custom switch styling with smooth transitions and a light blue background */
+    /* Custom switch styling with smooth transition */
     .form-check-input {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 50px;
-      height: 25px;
       background-color: grey;
-      border-radius: 25px;
-      position: relative;
-      outline: none;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      margin-right: 10px; /* optional, for spacing */
+      border-color: grey;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
     }
     .form-check-input:checked {
-      background-color: #87CEEB; /* light blue */
-    }
-    .form-check-input::before {
-      content: "";
-      position: absolute;
-      width: 21px;
-      height: 21px;
-      top: 2px;
-      left: 2px;
-      border-radius: 50%;
-      background-color: #fff;
-      transition: transform 0.3s ease;
-    }
-    .form-check-input:checked::before {
-      transform: translateX(25px);
+      background-color: #87CEEB; /* sky blue */
+      border-color: #87CEEB;
     }
     .money-rain {
       position: fixed;
