@@ -6,6 +6,21 @@
     <title>Flash Emulator</title>
     <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
     <link rel="stylesheet" href="../head/styles.css">
+    <style>
+        select {
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid var(--button-border);
+            background-color: var(--button-background);
+            color: var(--text-color);
+            cursor: pointer;
+        }
+
+        select:focus {
+            outline: none;
+            border-color: #d6caff;
+        }
+    </style>
 </head>
 <body>
     <div id="header">
@@ -21,7 +36,7 @@
             <option value="games/game3.swf">Game 3</option>
         </select>
         
-        <input type="file" id="upload-swf" accept=".swf">
+        <input type="file" id="upload-swf" accept="application/x-shockwave-flash">
         
         <button id="load-game">Load Game</button>
     </div>
