@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flash Emulator</title>
+    <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="header">
+        <h1>Flash Emulator</h1>
+    </div>
+    
+    <div class="container">
+        <label for="game-select">Choose a game:</label>
+        <select id="game-select">
+            <option value="">-- Select a Game --</option>
+            <option value="games/game1.swf">Game 1</option>
+            <option value="games/game2.swf">Game 2</option>
+            <option value="games/game3.swf">Game 3</option>
+        </select>
+        
+        <input type="file" id="upload-swf" accept=".swf">
+        
+        <button id="load-game">Load Game</button>
+    </div>
+    
+    <div id="flash-container">
+        <object id="flash-player" width="800" height="600"></object>
+    </div>
+    
+    <script>
+        document.getElementById("load-game").addEventListener("click", function() {
+            const select = document.getElementById("game-select");
+            const fileInput = document.getElementById("upload-swf");
+            const flashPlayer = document.getElementById("flash-player");
+            let swfUrl = "";
+
+            if (fileInput.files.length > 0) {
+                swfUrl = URL.createObjectURL(fileInput.files[0]);
+            } else if (select.value) {
+                swfUrl = select.value;
+            }
+            
+            if (swfUrl) {
+                flashPlayer.setAttribute("data", swfUrl);
+            }
+        });
+    </script>
+</body>
+</html>
