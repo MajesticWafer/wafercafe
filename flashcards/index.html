@@ -47,6 +47,9 @@
             cursor: pointer;
             font-size: 18px;
         }
+        h3 {
+            margin-top: 20px;
+        }
         ul {
             text-align: left;
         }
@@ -56,14 +59,15 @@
     <div class="container">
         <h1>Flashcard Quiz</h1>
 
-        <div id="add-card">
+        <div id="main-menu">
+            <h3>Add Flashcards</h3>
             <input type="text" id="question" placeholder="Enter question">
             <input type="text" id="answer" placeholder="Enter answer">
             <button onclick="addCard()">Add Card</button>
             <button onclick="startQuiz()">Start Quiz</button>
+
+            <h3>Manage Flashcards</h3>
             <button onclick="saveFlashcards()">Save Flashcards</button>
-            
-            <h3>Load Flashcards</h3>
             <input type="file" id="fileInput" onchange="loadFlashcards()">
             <textarea id="jsonInput" placeholder="Paste JSON here"></textarea>
             <button onclick="loadFromText()">Load from Text</button>
@@ -73,14 +77,15 @@
             <div id="flashcard" onclick="showAnswer()">Click to Reveal Answer</div>
             <button onclick="gradeAnswer(true)">Right</button>
             <button onclick="gradeAnswer(false)">Wrong</button>
-            <button onclick="nextCard()">Next</button>
         </div>
 
         <div id="results" class="hidden">
             <h2>Quiz Results</h2>
             <p id="score"></p>
-            <h3>Missed Questions</h3>
-            <ul id="missed-questions"></ul>
+            <div id="missed-container">
+                <h3>Missed Questions</h3>
+                <ul id="missed-questions"></ul>
+            </div>
             <button onclick="restartQuiz()">Restart</button>
         </div>
     </div>
@@ -108,7 +113,7 @@
             quizIndex = 0;
             score = 0;
             missed = [];
-            document.getElementById("add-card").classList.add("hidden");
+            document.getElementById("main-menu").classList.add("hidden");
             document.getElementById("quiz").classList.remove("hidden");
             loadCard();
         }
@@ -128,9 +133,6 @@
         function gradeAnswer(correct) {
             if (!correct) missed.push(shuffledCards[quizIndex]);
             else score++;
-        }
-
-        function nextCard() {
             quizIndex++;
             loadCard();
         }
@@ -140,18 +142,25 @@
             document.getElementById("results").classList.remove("hidden");
             document.getElementById("score").textContent = `Score: ${score} / ${flashcards.length}`;
 
+            let missedContainer = document.getElementById("missed-container");
             let missedList = document.getElementById("missed-questions");
             missedList.innerHTML = "";
-            missed.forEach(card => {
-                let li = document.createElement("li");
-                li.textContent = `${card.question} → ${card.answer}`;
-                missedList.appendChild(li);
-            });
+
+            if (missed.length === 0) {
+                missedContainer.style.display = "none";
+            } else {
+                missedContainer.style.display = "block";
+                missed.forEach(card => {
+                    let li = document.createElement("li");
+                    li.textContent = `${card.question} → ${card.answer}`;
+                    missedList.appendChild(li);
+                });
+            }
         }
 
         function restartQuiz() {
             document.getElementById("results").classList.add("hidden");
-            document.getElementById("add-card").classList.remove("hidden");
+            document.getElementById("main-menu").classList.remove("hidden");
         }
 
         function saveFlashcards() {
