@@ -20,7 +20,7 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        input, button {
+        input, button, textarea {
             display: block;
             width: 100%;
             margin: 10px 0;
@@ -62,7 +62,11 @@
             <button onclick="addCard()">Add Card</button>
             <button onclick="startQuiz()">Start Quiz</button>
             <button onclick="saveFlashcards()">Save Flashcards</button>
+            
+            <h3>Load Flashcards</h3>
             <input type="file" id="fileInput" onchange="loadFlashcards()">
+            <textarea id="jsonInput" placeholder="Paste JSON here"></textarea>
+            <button onclick="loadFromText()">Load from Text</button>
         </div>
 
         <div id="quiz" class="hidden">
@@ -164,9 +168,26 @@
 
             let reader = new FileReader();
             reader.onload = function(event) {
-                flashcards = JSON.parse(event.target.result);
+                try {
+                    flashcards = JSON.parse(event.target.result);
+                    alert("Flashcards loaded successfully!");
+                } catch (e) {
+                    alert("Invalid JSON file.");
+                }
             };
             reader.readAsText(file);
+        }
+
+        function loadFromText() {
+            let jsonText = document.getElementById("jsonInput").value.trim();
+            if (!jsonText) return alert("Enter JSON first!");
+
+            try {
+                flashcards = JSON.parse(jsonText);
+                alert("Flashcards loaded successfully!");
+            } catch (e) {
+                alert("Invalid JSON format.");
+            }
         }
     </script>
 </body>
