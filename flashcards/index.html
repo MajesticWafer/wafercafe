@@ -3,146 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flash Card Creator</title>
+    <title>Flashcard Quiz</title>
     <style>
-        body { font-family: Arial, sans-serif; text-align: center; }
-        .card { border: 1px solid #000; padding: 20px; margin: 20px auto; width: 300px; cursor: pointer; }
-        .hidden { display: none; }
-        .buttons { margin-top: 10px; }
-        .score { font-size: 20px; margin-top: 20px; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f9f9f9;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input, button {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .hidden {
+            display: none;
+        }
+        #flashcard {
+            background: #f1f1f1;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+        ul {
+            text-align: left;
+        }
     </style>
 </head>
 <body>
-    <div id="createSection">
-        <h2>Create Flash Card</h2>
-        <input type="text" id="question" placeholder="Enter Question">
-        <input type="text" id="answer" placeholder="Enter Answer">
-        <button onclick="addCard()">Add Another</button>
-        <button onclick="saveCards()">Save Cards</button>
-    </div>
-    
-    <div id="editSection" class="hidden">
-        <h2>Edit Flash Cards</h2>
-        <div id="cardList"></div>
-        <button onclick="startQuiz()">Start Quiz</button>
-    </div>
-    
-    <div id="quizSection" class="hidden">
-        <div id="flashCard" class="card" onclick="showAnswer()"></div>
-        <div class="buttons">
-            <button onclick="prevCard()">Back</button>
+    <div class="container">
+        <h1>Flashcard Quiz</h1>
+
+        <div id="add-card">
+            <input type="text" id="question" placeholder="Enter question">
+            <input type="text" id="answer" placeholder="Enter answer">
+            <button onclick="addCard()">Add Card</button>
+            <button onclick="startQuiz()">Start Quiz</button>
+            <button onclick="saveFlashcards()">Save Flashcards</button>
+            <input type="file" id="fileInput" onchange="loadFlashcards()">
+        </div>
+
+        <div id="quiz" class="hidden">
+            <div id="flashcard" onclick="showAnswer()">Click to Reveal Answer</div>
+            <button onclick="gradeAnswer(true)">Right</button>
+            <button onclick="gradeAnswer(false)">Wrong</button>
             <button onclick="nextCard()">Next</button>
         </div>
-        <div class="buttons">
-            <button onclick="gradeCard(true)">Right</button>
-            <button onclick="gradeCard(false)">Wrong</button>
+
+        <div id="results" class="hidden">
+            <h2>Quiz Results</h2>
+            <p id="score"></p>
+            <h3>Missed Questions</h3>
+            <ul id="missed-questions"></ul>
+            <button onclick="restartQuiz()">Restart</button>
         </div>
     </div>
-    
-    <div id="scoreSection" class="hidden">
-        <h2>Results</h2>
-        <div class="score" id="score"></div>
-        <div id="reviewList"></div>
-        <button onclick="restart()">Restart</button>
-    </div>
-    
+
     <script>
-        let cards = JSON.parse(localStorage.getItem('flashCards')) || [];
-        let currentCard = 0;
-        let correct = 0;
-        let incorrectCards = [];
+        let flashcards = [];
+        let quizIndex = 0;
+        let score = 0;
+        let missed = [];
+        let shuffledCards = [];
 
         function addCard() {
-            let question = document.getElementById("question").value;
-            let answer = document.getElementById("answer").value;
+            let question = document.getElementById("question").value.trim();
+            let answer = document.getElementById("answer").value.trim();
             if (question && answer) {
-                cards.push({ question, answer });
+                flashcards.push({ question, answer });
                 document.getElementById("question").value = "";
                 document.getElementById("answer").value = "";
             }
         }
 
-        function saveCards() {
-            localStorage.setItem('flashCards', JSON.stringify(cards));
-            showEditScreen();
-        }
-
-        function showEditScreen() {
-            document.getElementById("createSection").classList.add("hidden");
-            document.getElementById("editSection").classList.remove("hidden");
-            let cardList = document.getElementById("cardList");
-            cardList.innerHTML = "";
-            cards.forEach((card, index) => {
-                cardList.innerHTML += `<div>${card.question} <button onclick="editCard(${index})">Edit</button></div>`;
-            });
-        }
-
-        function editCard(index) {
-            let newQuestion = prompt("Edit Question", cards[index].question);
-            let newAnswer = prompt("Edit Answer", cards[index].answer);
-            if (newQuestion !== null && newAnswer !== null) {
-                cards[index] = { question: newQuestion, answer: newAnswer };
-                saveCards();
-            }
-        }
-
         function startQuiz() {
-            cards = cards.sort(() => Math.random() - 0.5);
-            document.getElementById("editSection").classList.add("hidden");
-            document.getElementById("quizSection").classList.remove("hidden");
-            currentCard = 0;
-            correct = 0;
-            incorrectCards = [];
-            showQuestion();
+            if (flashcards.length === 0) return alert("Add some flashcards first!");
+            shuffledCards = [...flashcards].sort(() => Math.random() - 0.5);
+            quizIndex = 0;
+            score = 0;
+            missed = [];
+            document.getElementById("add-card").classList.add("hidden");
+            document.getElementById("quiz").classList.remove("hidden");
+            loadCard();
         }
 
-        function showQuestion() {
-            document.getElementById("flashCard").textContent = cards[currentCard].question;
+        function loadCard() {
+            if (quizIndex < shuffledCards.length) {
+                document.getElementById("flashcard").textContent = shuffledCards[quizIndex].question;
+            } else {
+                endQuiz();
+            }
         }
 
         function showAnswer() {
-            document.getElementById("flashCard").textContent = cards[currentCard].answer;
+            document.getElementById("flashcard").textContent = shuffledCards[quizIndex].answer;
+        }
+
+        function gradeAnswer(correct) {
+            if (!correct) missed.push(shuffledCards[quizIndex]);
+            else score++;
         }
 
         function nextCard() {
-            if (currentCard < cards.length - 1) {
-                currentCard++;
-                showQuestion();
-            } else {
-                showResults();
-            }
+            quizIndex++;
+            loadCard();
         }
 
-        function prevCard() {
-            if (currentCard > 0) {
-                currentCard--;
-                showQuestion();
-            }
-        }
+        function endQuiz() {
+            document.getElementById("quiz").classList.add("hidden");
+            document.getElementById("results").classList.remove("hidden");
+            document.getElementById("score").textContent = `Score: ${score} / ${flashcards.length}`;
 
-        function gradeCard(correctAnswer) {
-            if (!correctAnswer) {
-                incorrectCards.push(cards[currentCard]);
-            } else {
-                correct++;
-            }
-            nextCard();
-        }
-
-        function showResults() {
-            document.getElementById("quizSection").classList.add("hidden");
-            document.getElementById("scoreSection").classList.remove("hidden");
-            document.getElementById("score").textContent = `Score: ${correct} / ${cards.length}`;
-            let reviewList = document.getElementById("reviewList");
-            reviewList.innerHTML = "";
-            incorrectCards.forEach(card => {
-                reviewList.innerHTML += `<div>${card.question} - ${card.answer}</div>`;
+            let missedList = document.getElementById("missed-questions");
+            missedList.innerHTML = "";
+            missed.forEach(card => {
+                let li = document.createElement("li");
+                li.textContent = `${card.question} → ${card.answer}`;
+                missedList.appendChild(li);
             });
         }
 
-        function restart() {
-            document.getElementById("scoreSection").classList.add("hidden");
-            document.getElementById("createSection").classList.remove("hidden");
+        function restartQuiz() {
+            document.getElementById("results").classList.add("hidden");
+            document.getElementById("add-card").classList.remove("hidden");
+        }
+
+        function saveFlashcards() {
+            let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(flashcards));
+            let dlAnchor = document.createElement("a");
+            dlAnchor.setAttribute("href", dataStr);
+            dlAnchor.setAttribute("download", "flashcards.json");
+            dlAnchor.click();
+        }
+
+        function loadFlashcards() {
+            let file = document.getElementById("fileInput").files[0];
+            if (!file) return;
+
+            let reader = new FileReader();
+            reader.onload = function(event) {
+                flashcards = JSON.parse(event.target.result);
+            };
+            reader.readAsText(file);
         }
     </script>
 </body>
