@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flash Card Creator</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; }
+        .card { border: 1px solid #000; padding: 20px; margin: 20px auto; width: 300px; cursor: pointer; }
+        .hidden { display: none; }
+        .buttons { margin-top: 10px; }
+        .score { font-size: 20px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div id="createSection">
+        <h2>Create Flash Card</h2>
+        <input type="text" id="question" placeholder="Enter Question">
+        <input type="text" id="answer" placeholder="Enter Answer">
+        <button onclick="addCard()">Add Another</button>
+        <button onclick="saveCards()">Save Cards</button>
+    </div>
+    
+    <div id="editSection" class="hidden">
+        <h2>Edit Flash Cards</h2>
+        <div id="cardList"></div>
+        <button onclick="startQuiz()">Start Quiz</button>
+    </div>
+    
+    <div id="quizSection" class="hidden">
+        <div id="flashCard" class="card" onclick="showAnswer()"></div>
+        <div class="buttons">
+            <button onclick="prevCard()">Back</button>
+            <button onclick="nextCard()">Next</button>
+        </div>
+        <div class="buttons">
+            <button onclick="gradeCard(true)">Right</button>
+            <button onclick="gradeCard(false)">Wrong</button>
+        </div>
+    </div>
+    
+    <div id="scoreSection" class="hidden">
+        <h2>Results</h2>
+        <div class="score" id="score"></div>
+        <div id="reviewList"></div>
+        <button onclick="restart()">Restart</button>
+    </div>
+    
+    <script>
+        let cards = JSON.parse(localStorage.getItem('flashCards')) || [];
+        let currentCard = 0;
+        let correct = 0;
+        let incorrectCards = [];
+
+        function addCard() {
+            let question = document.getElementById("question").value;
+            let answer = document.getElementById("answer").value;
+            if (question && answer) {
+                cards.push({ question, answer });
+                document.getElementById("question").value = "";
+                document.getElementById("answer").value = "";
+            }
+        }
+
+        function saveCards() {
+            localStorage.setItem('flashCards', JSON.stringify(cards));
+            showEditScreen();
+        }
+
+        function showEditScreen() {
+            document.getElementById("createSection").classList.add("hidden");
+            document.getElementById("editSection").classList.remove("hidden");
+            let cardList = document.getElementById("cardList");
+            cardList.innerHTML = "";
+            cards.forEach((card, index) => {
+                cardList.innerHTML += `<div>${card.question} <button onclick="editCard(${index})">Edit</button></div>`;
+            });
+        }
+
+        function editCard(index) {
+            let newQuestion = prompt("Edit Question", cards[index].question);
+            let newAnswer = prompt("Edit Answer", cards[index].answer);
+            if (newQuestion !== null && newAnswer !== null) {
+                cards[index] = { question: newQuestion, answer: newAnswer };
+                saveCards();
+            }
+        }
+
+        function startQuiz() {
+            cards = cards.sort(() => Math.random() - 0.5);
+            document.getElementById("editSection").classList.add("hidden");
+            document.getElementById("quizSection").classList.remove("hidden");
+            currentCard = 0;
+            correct = 0;
+            incorrectCards = [];
+            showQuestion();
+        }
+
+        function showQuestion() {
+            document.getElementById("flashCard").textContent = cards[currentCard].question;
+        }
+
+        function showAnswer() {
+            document.getElementById("flashCard").textContent = cards[currentCard].answer;
+        }
+
+        function nextCard() {
+            if (currentCard < cards.length - 1) {
+                currentCard++;
+                showQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function prevCard() {
+            if (currentCard > 0) {
+                currentCard--;
+                showQuestion();
+            }
+        }
+
+        function gradeCard(correctAnswer) {
+            if (!correctAnswer) {
+                incorrectCards.push(cards[currentCard]);
+            } else {
+                correct++;
+            }
+            nextCard();
+        }
+
+        function showResults() {
+            document.getElementById("quizSection").classList.add("hidden");
+            document.getElementById("scoreSection").classList.remove("hidden");
+            document.getElementById("score").textContent = `Score: ${correct} / ${cards.length}`;
+            let reviewList = document.getElementById("reviewList");
+            reviewList.innerHTML = "";
+            incorrectCards.forEach(card => {
+                reviewList.innerHTML += `<div>${card.question} - ${card.answer}</div>`;
+            });
+        }
+
+        function restart() {
+            document.getElementById("scoreSection").classList.add("hidden");
+            document.getElementById("createSection").classList.remove("hidden");
+        }
+    </script>
+</body>
+</html>
