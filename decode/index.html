@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Letter Decoder</title>
+</head>
+<body>
+    <h1>Letter Decoder</h1>
+    <label for="inputLetter">Enter a letter (A-Z): </label>
+    <input type="text" id="inputLetter" maxlength="1">
+    <br><br>
+    <label for="decoderSetting">Choose a decoding setting: </label>
+    <select id="decoderSetting">
+        <option value="W">A = W</option>
+        <option value="O">A = O</option>
+        <option value="R">A = R</option>
+        <option value="D">A = D</option>
+        <option value="L">A = L</option>
+    </select>
+    <br><br>
+    <button onclick="decodeLetter()">Decode</button>
+    <p id="result"></p>
+
+    <script>
+        function decodeLetter() {
+            const inputLetter = document.getElementById("inputLetter").value.toUpperCase();
+            const decoderSetting = document.getElementById("decoderSetting").value;
+            
+            if (inputLetter !== 'A') {
+                document.getElementById("result").innerText = "Only the letter 'A' is supported for decoding!";
+                return;
+            }
+
+            document.getElementById("result").innerText = `Decoded letter: ${decoderSetting}`;
+        }
+    </script>
+</body>
+</html>
