@@ -1,0 +1,108 @@
+/* General button styles */
+.gba-button {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background-color: #d3d3d3; /* GBA button gray */
+    color: #808080; /* Darker gray for text */
+    border: 2px solid #a9a9a9; /* Slightly darker border */
+    border-radius: 50%;
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    line-height: 60px;
+    cursor: pointer;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Button shadow */
+    user-select: none;
+}
+
+.gba-button:active {
+    background-color: #a9a9a9; /* Darker gray when pressed */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); /* Reduced shadow */
+}
+
+/* D-pad styles */
+.dpad {
+    position: absolute;
+}
+
+.dpad-up {
+    position: absolute;
+    top: 125px;
+    left: 75px;
+}
+
+.dpad-down {
+    position: absolute;
+    top: 225px;
+    left: 75px;
+}
+
+.dpad-left {
+    position: absolute;
+    top: 175px;
+    left: 25px;
+}
+
+.dpad-right {
+    position: absolute;
+    top: 175px;
+    left: 125px;
+}
+
+/* A and B buttons */
+.button-a {
+    position: absolute;
+    top: 150px;
+    right: 50px;
+}
+
+.button-b {
+    position: absolute;
+    top: 200px;
+    right: 100px;
+}
+
+/* Shoulder buttons */
+.button-l {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 80px;
+    height: 40px;
+    border-radius: 10px;
+    line-height: 40px;
+}
+
+.button-r {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 80px;
+    height: 40px;
+    border-radius: 10px;
+    line-height: 40px;
+}
+
+/* Start and Select buttons */
+.button-start {
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(20px);
+    width: 80px;
+    height: 40px;
+    border-radius: 10px;
+    line-height: 40px;
+}
+
+.button-select {
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-100px);
+    width: 80px;
+    height: 40px;
+    border-radius: 10px;
+    line-height: 40px;
+}
