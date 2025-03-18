@@ -24,7 +24,7 @@ Please star if you fork, or simply find this useful!
 
 While the Wafer Café is intended to be be a game center, I also ocasionally run my school projects on this domain.
 
-Created by MajesticWafer, 2023-2025
+Created by MajesticWafer/LutraVibes, 2023-2025
 
 ## Contribution
 
