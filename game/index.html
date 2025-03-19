@@ -106,7 +106,7 @@
             font-size: 1rem;
         }
 
-        .fullscreen {
+        .fullscreen, .pop {
             z-index: 999;
             aspect-ratio: 1 / 1;
             background-color: transparent;
@@ -114,26 +114,11 @@
             margin: 10px;
             right: 0;
             bottom: 0;
-            position: fixed;
+            left: 100vw;
             color: white;
         }
 
-        .fullscreen.light-mode {
-            color: black;
-        }
-
-        .pop {
-            z-index: 999;
-            aspect-ratio: 1 / 1;
-            background-color: transparent;
-            border: none;
-            margin: 10px;
-            right: 0;
-            bottom: 0;
-            color: white;
-        }
-
-        .pop.light-mode {
+        .fullscreen.light-mode, .pop.light-mode {
             color: black;
         }
     </style>
