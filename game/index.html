@@ -121,6 +121,22 @@
         .fullscreen.light-mode {
             color: black;
         }
+
+        .pop {
+            z-index: 999;
+            aspect-ratio: 1 / 1;
+            background-color: transparent;
+            border: none;
+            margin: 10px;
+            right: 0;
+            bottom: 0;
+            position: fixed;
+            color: white;
+        }
+
+        .pop.light-mode {
+            color: black;
+        }
     </style>
 </head>
 <body>
@@ -292,8 +308,9 @@
                     logMessage("Embedding game from path: " + gameFullPath);
                     document.getElementById("game-container").innerHTML += `<iframe src="${gameFullPath}" class="iframe" id="game-iframe"></iframe>`;
                     document.getElementById("game-container").innerHTML += `<button class="fullscreen" id="fullscreen-btn"><i class="bi bi-fullscreen"></i></button>`;
-                    
+                    document.getElementById("game-container").innerHTML += `<button class="pop" id="pop-btn"><i class="bi bi-arrow-up-right-square"></i></button>`;
                     const fullscreenBtn = document.getElementById('fullscreen-btn');
+                    const popBtn = document.getElementById('pop-btn');
                     const gameIframe = document.getElementById('game-iframe');
         
                     fullscreenBtn.addEventListener('click', () => {
@@ -306,6 +323,10 @@
                         } else if (gameIframe.msRequestFullscreen) { /* IE/Edge */
                             gameIframe.msRequestFullscreen();
                         }
+                    });
+
+                    popBtn.addEventListener('click', () => {
+                        location.href = 'https://wafercafe.com/' + gameParam;
                     });
                 } else {
                     document.getElementById("game-container").innerText = "Game not found.";
