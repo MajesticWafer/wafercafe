@@ -1,100 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MP4/MOV to MP3/M4A Converter</title>
-    <!-- Reference the locally hosted FFmpeg.wasm script -->
-    <script src="/libs/ffmpeg/ffmpeg-core.js"></script>
-    <style>
-        #progress-container {
-            width: 100%;
-            background-color: #f3f3f3;
-            border-radius: 8px;
-            height: 20px;
-        }
-        #progress-bar {
-            width: 0%;
-            height: 100%;
-            background-color: #4caf50;
-            border-radius: 8px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Video to Audio Converter</title>
+  <style>
+    #progress-container {
+      width: 100%;
+      background-color: #f3f3f3;
+      border: 1px solid #ccc;
+      margin-top: 10px;
+    }
+    #progress-bar {
+      width: 0%;
+      height: 20px;
+      background-color: #4caf50;
+    }
+  </style>
 </head>
 <body>
-    <h1>MP4/MOV to MP3/M4A Converter</h1>
-    
-    <input type="file" id="inputFile" accept="video/mp4,video/mov">
-    <button onclick="convertFile()">Convert to MP3/M4A</button>
-    
-    <br><br>
-    
-    <h2>Progress:</h2>
-    <div id="progress-container">
-        <div id="progress-bar"></div>
-    </div>
-    
-    <h2>Download Converted File:</h2>
-    <a id="downloadLink" style="display:none" download="converted_audio.mp3">Download</a>
-    
-    <script>
-        const { createFFmpeg, fetchFile } = FFmpeg;
+  <h1>Video to Audio Converter</h1>
+  <input type="file" id="videoFile" accept="video/*">
+  <div id="progress-container">
+    <div id="progress-bar"></div>
+  </div>
+  <p id="status"></p>
+  <a id="downloadLink" style="display: none;">Download Audio</a>
 
-        let ffmpeg;
-        let progressBar = document.getElementById('progress-bar');
+  <!-- Include FFmpeg library -->
+  <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.15/dist/ffmpeg.min.js"></script>
+  <script>
+    const { createFFmpeg, fetchFile } = FFmpeg;
+    const ffmpeg = createFFmpeg({ log: true });
 
-        const initializeFFmpeg = async () => {
-            ffmpeg = createFFmpeg({ log: true, corePath: '/libs/ffmpeg/ffmpeg-core.js' });
-            await ffmpeg.load();
-        };
+    document.getElementById('videoFile').addEventListener('change', async (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
 
-        const convertFile = async () => {
-            const inputFile = document.getElementById('inputFile').files[0];
-            if (!inputFile) return alert('Please select a file to convert');
+      const status = document.getElementById('status');
+      const progressBar = document.getElementById('progress-bar');
+      const downloadLink = document.getElementById('downloadLink');
 
-            const fileName = inputFile.name;
-            const fileExtension = fileName.split('.').pop().toLowerCase();
-            if (!['mp4', 'mov'].includes(fileExtension)) {
-                return alert('Only MP4 and MOV files are supported');
-            }
+      status.textContent = 'Loading FFmpeg...';
+      progressBar.style.width = '0%';
 
-            const fileBuffer = await inputFile.arrayBuffer();
-            await ffmpeg.FS('writeFile', fileName, new Uint8Array(fileBuffer));
+      if (!ffmpeg.isLoaded()) {
+        await ffmpeg.load();
+      }
 
-            const outputFileName = fileExtension === 'mp4' ? 'output.mp3' : 'output.m4a';
-            const outputFileExtension = fileExtension === 'mp4' ? 'mp3' : 'm4a';
+      status.textContent = 'Converting...';
 
-            // Reset progress bar
-            progressBar.style.width = '0%';
+      // Read the file as an array buffer
+      const data = await fetchFile(file);
+      ffmpeg.FS('writeFile', 'input.mp4', data);
 
-            // Convert and track progress
-            await ffmpeg.run('-i', fileName, `output.${outputFileExtension}`, {
-                print: (message) => {
-                    // Extract progress info from the FFmpeg log
-                    const match = message.match(/time=(\d+:\d+:\d+\.\d+)/);
-                    if (match) {
-                        const time = match[1]; // e.g., "00:00:12.45"
-                        const [hours, minutes, seconds] = time.split(':').map(parseFloat);
-                        const totalSeconds = hours * 3600 + minutes * 60 + seconds;
-                        const duration = ffmpeg.FS('stat', fileName).size / 1000000; // Approximate file size for progress
-                        const progress = (totalSeconds / duration) * 100;
-                        progressBar.style.width = `${progress.toFixed(2)}%`;
-                    }
-                }
-            });
+      ffmpeg.setProgress(({ ratio }) => {
+        const percentage = Math.round(ratio * 100);
+        progressBar.style.width = `${percentage}%`;
+      });
 
-            // Once the conversion is complete, prepare the file for download
-            const data = ffmpeg.FS('readFile', `output.${outputFileExtension}`);
-            const audioBlob = new Blob([data.buffer], { type: `audio/${outputFileExtension}` });
-            const audioUrl = URL.createObjectURL(audioBlob);
+      await ffmpeg.run('-i', 'input.mp4', 'output.mp3');
 
-            const downloadLink = document.getElementById('downloadLink');
-            downloadLink.href = audioUrl;
-            downloadLink.style.display = 'block';
-            downloadLink.download = outputFileName;
-        };
+      const audioData = ffmpeg.FS('readFile', 'output.mp3');
+      const audioBlob = new Blob([audioData.buffer], { type: 'audio/mpeg' });
+      const audioUrl = URL.createObjectURL(audioBlob);
 
-        initializeFFmpeg();
-    </script>
+      downloadLink.href = audioUrl;
+      downloadLink.download = 'output.mp3';
+      downloadLink.style.display = 'block';
+      downloadLink.textContent = 'Download Audio';
+
+      status.textContent = 'Conversion completed!';
+    });
+  </script>
 </body>
 </html>
