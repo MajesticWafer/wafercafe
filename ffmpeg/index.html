@@ -4,15 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Media Converter</title>
-    <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.6"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        input, select, button {
+            margin: 10px;
+        }
+        #downloadLink {
+            display: none;
+            margin-top: 20px;
+        }
+    </style>
+    <!-- Include VideoConverter.js -->
+    <script src="https://bgrins.github.io/videoconverter.js/videoconverter.js"></script>
 </head>
 <body>
     <h1>Media Converter</h1>
 
-    <label for="inputFile">Upload File:</label>
     <input type="file" id="inputFile" accept="video/*,audio/*">
 
-    <br><br>
+    <br>
 
     <label for="inputFormat">Input Format:</label>
     <select id="inputFormat">
@@ -34,18 +48,15 @@
         <option value="mov">MOV</option>
     </select>
 
-    <br><br>
+    <br>
 
     <button id="convertBtn">Convert</button>
     <p id="status"></p>
     
-    <a id="downloadLink" style="display: none;" download>Download Converted File</a>
+    <a id="downloadLink" download>Download Converted File</a>
 
     <script>
-        const { createFFmpeg, fetchFile } = FFmpeg;
-        const ffmpeg = createFFmpeg({ log: true });
-
-        let convertingVideoToAudio = true; 
+        let convertingVideoToAudio = true;
 
         document.getElementById("switchBtn").addEventListener("click", () => {
             convertingVideoToAudio = !convertingVideoToAudio;
@@ -56,13 +67,30 @@
             const inputFormat = document.getElementById("inputFormat");
             const outputFormat = document.getElementById("outputFormat");
 
-            inputFormat.innerHTML = convertingVideoToAudio ? 
-                `<option value="mp4">MP4</option><option value="mov">MOV</option><option value="mkv">MKV</option><option value="avi">AVI</option>` : 
-                `<option value="mp3">MP3</option><option value="m4a">M4A</option><option value="wav">WAV</option>`;
-
-            outputFormat.innerHTML = convertingVideoToAudio ? 
-                `<option value="mp3">MP3</option><option value="m4a">M4A</option><option value="wav">WAV</option>` : 
-                `<option value="mp4">MP4</option><option value="mov">MOV</option><option value="avi">AVI</option>`;
+            if (convertingVideoToAudio) {
+                inputFormat.innerHTML = `
+                    <option value="mp4">MP4</option>
+                    <option value="mov">MOV</option>
+                    <option value="mkv">MKV</option>
+                    <option value="avi">AVI</option>
+                `;
+                outputFormat.innerHTML = `
+                    <option value="mp3">MP3</option>
+                    <option value="m4a">M4A</option>
+                    <option value="wav">WAV</option>
+                `;
+            } else {
+                inputFormat.innerHTML = `
+                    <option value="mp3">MP3</option>
+                    <option value="m4a">M4A</option>
+                    <option value="wav">WAV</option>
+                `;
+                outputFormat.innerHTML = `
+                    <option value="mp4">MP4</option>
+                    <option value="mov">MOV</option>
+                    <option value="avi">AVI</option>
+                `;
+            }
         }
 
         document.getElementById("convertBtn").addEventListener("click", async () => {
@@ -74,27 +102,37 @@
 
             const inputExt = document.getElementById("inputFormat").value;
             const outputExt = document.getElementById("outputFormat").value;
-            const inputName = `input.${inputExt}`;
             const outputName = `output.${outputExt}`;
 
-            document.getElementById("status").textContent = "Loading FFmpeg...";
-            if (!ffmpeg.isLoaded()) await ffmpeg.load();
-
-            ffmpeg.FS("writeFile", inputName, await fetchFile(inputFile));
             document.getElementById("status").textContent = "Converting...";
 
-            await ffmpeg.run("-i", inputName, outputName);
-            const data = ffmpeg.FS("readFile", outputName);
-
-            const blob = new Blob([data.buffer], { type: `video/${outputExt}` });
-            const url = URL.createObjectURL(blob);
-            const downloadLink = document.getElementById("downloadLink");
-            downloadLink.href = url;
-            downloadLink.download = outputName;
-            downloadLink.style.display = "block";
-            downloadLink.textContent = "Download " + outputName;
-            document.getElementById("status").textContent = "Conversion complete!";
+            try {
+                const reader = new FileReader();
+                reader.onload = async function(event) {
+                    const result = await convertVideo(event.target.result, outputExt);
+                    const blob = new Blob([result], { type: `video/${outputExt}` });
+                    const url = URL.createObjectURL(blob);
+                    const downloadLink = document.getElementById("downloadLink");
+                    downloadLink.href = url;
+                    downloadLink.download = outputName;
+                    downloadLink.style.display = "block";
+                    downloadLink.textContent = "Download " + outputName;
+                    document.getElementById("status").textContent = "Conversion complete!";
+                };
+                reader.readAsArrayBuffer(inputFile);
+            } catch (error) {
+                document.getElementById("status").textContent = "Conversion failed: " + error.message;
+            }
         });
+
+        async function convertVideo(data, format) {
+            const result = await VideoConverter.convert({
+                type: 'arrayBuffer',
+                data: data,
+                format: format
+            });
+            return result.data;
+        }
 
         updateFormatOptions();
     </script>
