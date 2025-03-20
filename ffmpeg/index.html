@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Converter</title>
+    <script src="https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.11.6"></script>
+</head>
+<body>
+    <h1>Media Converter</h1>
+
+    <label for="inputFile">Upload File:</label>
+    <input type="file" id="inputFile" accept="video/*,audio/*">
+
+    <br><br>
+
+    <label for="inputFormat">Input Format:</label>
+    <select id="inputFormat">
+        <option value="mp4">MP4</option>
+        <option value="mov">MOV</option>
+        <option value="mp3">MP3</option>
+        <option value="m4a">M4A</option>
+        <option value="wav">WAV</option>
+    </select>
+
+    <button id="switchBtn">Switch</button>
+
+    <label for="outputFormat">Output Format:</label>
+    <select id="outputFormat">
+        <option value="mp3">MP3</option>
+        <option value="m4a">M4A</option>
+        <option value="wav">WAV</option>
+        <option value="mp4">MP4</option>
+        <option value="mov">MOV</option>
+    </select>
+
+    <br><br>
+
+    <button id="convertBtn">Convert</button>
+    <p id="status"></p>
+    
+    <a id="downloadLink" style="display: none;" download>Download Converted File</a>
+
+    <script>
+        const { createFFmpeg, fetchFile } = FFmpeg;
+        const ffmpeg = createFFmpeg({ log: true });
+
+        let convertingVideoToAudio = true; 
+
+        document.getElementById("switchBtn").addEventListener("click", () => {
+            convertingVideoToAudio = !convertingVideoToAudio;
+            updateFormatOptions();
+        });
+
+        function updateFormatOptions() {
+            const inputFormat = document.getElementById("inputFormat");
+            const outputFormat = document.getElementById("outputFormat");
+
+            inputFormat.innerHTML = convertingVideoToAudio ? 
+                `<option value="mp4">MP4</option><option value="mov">MOV</option><option value="mkv">MKV</option><option value="avi">AVI</option>` : 
+                `<option value="mp3">MP3</option><option value="m4a">M4A</option><option value="wav">WAV</option>`;
+
+            outputFormat.innerHTML = convertingVideoToAudio ? 
+                `<option value="mp3">MP3</option><option value="m4a">M4A</option><option value="wav">WAV</option>` : 
+                `<option value="mp4">MP4</option><option value="mov">MOV</option><option value="avi">AVI</option>`;
+        }
+
+        document.getElementById("convertBtn").addEventListener("click", async () => {
+            const inputFile = document.getElementById("inputFile").files[0];
+            if (!inputFile) {
+                alert("Please select a file.");
+                return;
+            }
+
+            const inputExt = document.getElementById("inputFormat").value;
+            const outputExt = document.getElementById("outputFormat").value;
+            const inputName = `input.${inputExt}`;
+            const outputName = `output.${outputExt}`;
+
+            document.getElementById("status").textContent = "Loading FFmpeg...";
+            if (!ffmpeg.isLoaded()) await ffmpeg.load();
+
+            ffmpeg.FS("writeFile", inputName, await fetchFile(inputFile));
+            document.getElementById("status").textContent = "Converting...";
+
+            await ffmpeg.run("-i", inputName, outputName);
+            const data = ffmpeg.FS("readFile", outputName);
+
+            const blob = new Blob([data.buffer], { type: `video/${outputExt}` });
+            const url = URL.createObjectURL(blob);
+            const downloadLink = document.getElementById("downloadLink");
+            downloadLink.href = url;
+            downloadLink.download = outputName;
+            downloadLink.style.display = "block";
+            downloadLink.textContent = "Download " + outputName;
+            document.getElementById("status").textContent = "Conversion complete!";
+        });
+
+        updateFormatOptions();
+    </script>
+</body>
+</html>
