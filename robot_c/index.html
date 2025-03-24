@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Robot Simulation</title>
+    <style>
+        body {
+            display: flex;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        #codeViewport {
+            width: 50%;
+            padding: 10px;
+            box-sizing: border-box;
+            background-color: #f0f0f0;
+        }
+        #robotViewport {
+            width: 50%;
+            position: relative;
+            background-color: #ddd;
+            overflow: hidden;
+        }
+        #robot {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        #runButton {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="codeViewport">
+        <h3>Code</h3>
+        <textarea id="codeEditor" rows="20" style="width: 100%;"></textarea>
+        <button id="runButton">Run Code</button>
+    </div>
+    <div id="robotViewport">
+        <div id="robot"></div>
+    </div>
+
+    <script>
+        const robot = document.getElementById("robot");
+
+        document.getElementById("runButton").addEventListener("click", function() {
+            // Example robot movement based on hardcoded instructions
+            const commands = ["up", "up", "left", "down", "right"];
+            let index = 0;
+
+            const interval = setInterval(() => {
+                if (index >= commands.length) {
+                    clearInterval(interval);
+                    return;
+                }
+                const command = commands[index];
+                moveRobot(command);
+                index++;
+            }, 500);
+        });
+
+        function moveRobot(command) {
+            const step = 10;
+            const robotStyle = window.getComputedStyle(robot);
+            let top = parseInt(robotStyle.top);
+            let left = parseInt(robotStyle.left);
+
+            switch (command) {
+                case "up": top -= step; break;
+                case "down": top += step; break;
+                case "left": left -= step; break;
+                case "right": left += step; break;
+            }
+
+            robot.style.top = `${top}px`;
+            robot.style.left = `${left}px`;
+        }
+    </script>
+</body>
+</html>
