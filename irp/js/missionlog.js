@@ -15,7 +15,7 @@ export class MissionLog {
   // Load mission events from JSON
   async loadEvents() {
     try {
-      const response = await fetch('/mission.json');
+      const response = await fetch('../mission.json');
       const data = await response.json();
       data.events.forEach(event => {
         this.events[event.id] = event;
@@ -194,4 +194,5 @@ export class MissionLog {
       ctx.restore();
     });
   }
+
 }
