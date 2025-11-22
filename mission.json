@@ -1,0 +1,78 @@
+{
+  "events": [
+    {
+      "id": "start",
+      "message": "Mission 1: Collect all 3 astrophage clouds",
+      "triggers": "gameStart"
+    },
+    {
+      "id": "mission2_start",
+      "message": "Mission 2: Receive alien canisters - dodge asteroids",
+      "triggers": "mission2Start"
+    },
+    {
+      "id": "mission2_complete",
+      "message": "MISSION 2 COMPLETE!",
+      "triggers": "mission2Complete"
+    },
+    {
+      "id": "wave1",
+      "message": "Wave 1 Start",
+      "triggers": "asteroidSpawn"
+    },
+    {
+      "id": "wave2",
+      "message": "Wave 2 Start",
+      "triggers": "asteroidSpawn",
+      "condition": "asteroidCount>10"
+    },
+    {
+      "id": "wave3",
+      "message": "Wave 3 Start",
+      "triggers": "asteroidSpawn",
+      "condition": "asteroidCount>20"
+    },
+    {
+      "id": "lowfuel",
+      "message": "WARNING: Fuel critical!",
+      "triggers": "lowFuel",
+      "condition": "fuel<5"
+    },
+    {
+      "id": "highscore",
+      "message": "Asteroids destroyed: ",
+      "triggers": "scoreUpdate"
+    },
+    {
+      "id": "gameover",
+      "message": "Mission Failed",
+      "triggers": "gameOver"
+    },
+    {
+      "id": "survival",
+      "message": "Survival milestone reached!",
+      "triggers": "timeUpdate",
+      "condition": "time%30==0"
+    },
+    {
+      "id": "cleared",
+      "message": "Wave cleared! Prepare for next wave...",
+      "triggers": "waveClear"
+    },
+    {
+      "id": "bonus",
+      "message": "Bonus points for rapid destruction!",
+      "triggers": "bonusPoints"
+    },
+    {
+      "id": "cloud_sampled",
+      "message": "Sample collected!",
+      "triggers": "cloudHit"
+    },
+    {
+      "id": "mission_complete",
+      "message": "MISSION COMPLETE!",
+      "triggers": "missionComplete"
+    }
+  ]
+}
