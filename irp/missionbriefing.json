@@ -1,0 +1,47 @@
+{
+  "missions": [
+    {
+      "id": 1,
+      "name": "Astrophage Collection - Mission 1",
+      "objective": "Collect Astrophage samples from 3 clouds",
+      "targets": 3,
+      "events": [
+        {
+          "id": "mission_start",
+          "message": "MISSION BRIEF: Sample 3 Astrophage clouds",
+          "triggers": "gameStart"
+        },
+        {
+          "id": "cloud_detected",
+          "message": "Astrophage cloud detected",
+          "triggers": "cloudSpawn"
+        },
+        {
+          "id": "cloud_sampled",
+          "message": "Sample collected!",
+          "triggers": "cloudHit"
+        },
+        {
+          "id": "mission_progress",
+          "message": "Samples collected: ",
+          "triggers": "scoreUpdate"
+        },
+        {
+          "id": "mission_complete",
+          "message": "MISSION COMPLETE: Return to base",
+          "triggers": "missionComplete"
+        },
+        {
+          "id": "mission_failed",
+          "message": "MISSION FAILED",
+          "triggers": "gameOver"
+        },
+        {
+          "id": "danger_incoming",
+          "message": "Danger: Asteroid field detected!",
+          "triggers": "asteroidWarning"
+        }
+      ]
+    }
+  ]
+}

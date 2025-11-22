@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>IRP - Project Hail Mary</title>
+  <style>
+    * { margin: 0; padding: 0; }
+    body { background: black; display: flex; justify-content: center; align-items: center; height: 100vh; width: 100vw; overflow: hidden; }
+    canvas { background: black; display: block; image-rendering: pixelated; }
+  </style>
+</head>
+<body>
+  <canvas id="gameCanvas" width="800" height="600"></canvas>
+  <script type="module" src="js/main.js"></script>
+  <script>
+    function resizeCanvas(){
+      const canvas=document.getElementById('gameCanvas');
+      const maxWidth=window.innerWidth;
+      const maxHeight=window.innerHeight;
+      const scale=Math.min(maxWidth/800,maxHeight/600);
+      canvas.style.width=(800*scale)+'px';
+      canvas.style.height=(600*scale)+'px';
+    }
+    resizeCanvas();
+    window.addEventListener('resize',resizeCanvas);
+  </script>
+</body>
+</html>
